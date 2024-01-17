@@ -1,4 +1,9 @@
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <string>
+
+#define TINYOBJLOADER_IMPLEMENTATION
+#include "tiny_obj_loader.h"
 
 #define _USE_MATH_DEFINES
 #include <cmath>
@@ -26,6 +31,46 @@ int main(void)
 
     /* Make the window's context current */
     glfwMakeContextCurrent(window);
+    gladLoadGL();
+
+    std::string path = "3D/bunny.obj";
+    std::vector<tinyobj::shape_t> shapes;
+    std::vector<tinyobj::material_t> material;
+    std::string warning, error;
+
+    tinyobj::attrib_t attributes;
+
+    bool success = tinyobj::LoadObj(&attributes, &shapes, &material, &warning, &error, path.c_str());
+    std::vector<GLuint> mesh_indices;
+    for (size_t m_i = 0; m_i < shapes[0].mesh.indices.size(); m_i++)
+    {
+        mesh_indices.push_back(shapes[0].mesh.indices[m_i].vertex_index);
+    }
+
+    GLuint VAO, VBO, EBO;
+    glGenVertexArrays(1, &VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+
+    glBindVertexArray(VAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER,
+        sizeof(GL_FLOAT) * attributes.vertices.size(),
+        attributes.vertices.data(),
+        GL_STATIC_DRAW);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+        sizeof(GLuint) * mesh_indices.size(),
+        mesh_indices.data(),
+        GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
@@ -33,23 +78,8 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glBegin(GL_POLYGON);
-        
-        auto vertexCount = 5;
-        auto shapeSize = (win_x < win_y) ? win_x : win_y;
-        auto offsetRad = M_PI * 0.5f;
-
-        for (size_t v_i = 0; v_i < vertexCount; v_i++)
-        {
-            auto t = (float)v_i / vertexCount;
-            auto rad = (t * M_PI * 2) + offsetRad;
-            auto v_x = cosf(rad) * shapeSize;
-            auto v_y = sinf(rad) * shapeSize;
-
-            pixelPerfectGLV2F(v_x, v_y);
-        }
-
-        glEnd();
+        glBindVertexArray(VAO);
+        glDrawElements(GL_TRIANGLES, mesh_indices.size(), GL_UNSIGNED_INT, 0);
 
         /* Swap front and back buffers */
         glfwSwapBuffers(window);
@@ -57,6 +87,10 @@ int main(void)
         /* Poll for and process events */
         glfwPollEvents();
     }
+
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);
 
     glfwTerminate();
     return 0;
