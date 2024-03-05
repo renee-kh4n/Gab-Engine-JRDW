@@ -106,7 +106,7 @@ public:
 
 class GLobject {
 public:
-    glm::vec3 pos = glm::vec3(0,0,-5);
+    glm::vec3 pos = glm::vec3(0,0,0);
     glm::vec3 scale = glm::vec3(1);
     glm::vec3 rot = glm::vec3(0);
 
@@ -254,9 +254,9 @@ int main(void)
     auto swordTex = new Texture("Tex/partenza.jpg");
     auto cubeaccaTex = new Texture("Tex/cubeacca.jpg");
 
-    glm::vec3 lightPos = glm::vec3(-5, 5, 10);
-    glm::vec3 lightColor = glm::vec3(1, 1, 1);
-    glm::vec3 ambientLightColor = glm::vec3(1, 0, 0);
+    glm::vec3 pLightPos = glm::vec3(0, 1, 1);
+    glm::vec3 pLightColor = glm::vec3(1, 1, 1) * 3.0f;
+    glm::vec3 ambientLightColor = glm::vec3(0.3, 0.2, 0.05);
     float ambientLightIntensity = 0.2f;
 #pragma endregion
 
@@ -338,14 +338,14 @@ int main(void)
             setMat("transform_model", tmat);
             setMat("transform_projection", tmat_PVM);
 
-            setVec3("lightPos", lightPos);
-            setVec3("lightColor", lightColor);
+            setVec3("pLightPos", pLightPos);
+            setVec3("pLightColor", pLightColor);
             setVec3("ambientLightColor", ambientLightColor);
             setFloat("ambientLightIntensity", ambientLightIntensity);
 
             setVec3("cameraPos", mView.cameraPos);
-            setFloat("specStrength", 1.0f);
-            setFloat("specPhong", 5);
+            setFloat("specStrength", 0.4f);
+            setFloat("specPhong", 9);
 
             glUniform1i(tex0Address, 0);
 
