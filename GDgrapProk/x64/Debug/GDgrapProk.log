@@ -1,1 +1,4 @@
-﻿  GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\x64\Debug\GDgrapProk.exe
+﻿  GDgrapProk.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(267,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(358,73): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\x64\Debug\GDgrapProk.exe

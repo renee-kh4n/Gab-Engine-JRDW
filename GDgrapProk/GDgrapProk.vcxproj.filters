@@ -21,6 +21,18 @@
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GDShader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GDutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="tiny_obj_loader.h">
@@ -29,24 +41,46 @@
     <ClInclude Include="stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GDutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CopyFileToFolders Include="Shaders\sample.frag" />
-    <CopyFileToFolders Include="Shaders\sample.vert" />
+    <CopyFileToFolders Include="Shaders\lit.frag" />
+    <CopyFileToFolders Include="Shaders\lit.vert" />
     <CopyFileToFolders Include="3D\djSword.obj" />
     <CopyFileToFolders Include="3D\myCube.obj" />
-    <CopyFileToFolders Include="Tex\ayaya.png">
+    <CopyFileToFolders Include="Shaders\skybox.frag" />
+    <CopyFileToFolders Include="Shaders\skybox.vert" />
+    <CopyFileToFolders Include="3D\quiz.obj" />
+    <CopyFileToFolders Include="3D\bunny.obj" />
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_bk.png">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\cubeacca.jpg">
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_dn.png">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\partenza.jpg">
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_ft.png">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_lf.png">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_rt.png">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_up.png">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
     <Image Include="Tex\partenza.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Tex\cubeacca.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Tex\ayaya.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

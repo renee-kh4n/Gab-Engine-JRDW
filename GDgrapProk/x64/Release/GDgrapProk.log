@@ -1,1 +1,13 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppCommon.targets(2625,5): error MSB3030: Could not copy the file "C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\Tex\partenza.jpg" because it was not found.
+﻿  GDgrapProk.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(267,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(358,73): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  GDShader.cpp
+  GDTexture.cpp
+  GDutil.cpp
+  GDObject.cpp
+  glad.c
+  Generating code
+  Previous IPDB not found, fall back to full compilation.
+  All 2259 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\x64\Release\GDgrapProk.exe

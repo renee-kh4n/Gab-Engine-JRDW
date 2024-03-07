@@ -1,11 +1,4 @@
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
-#include <string>
-#include <iostream>
+#include "GDutil.h"
 
 #define TINYOBJLOADER_IMPLEMENTATION
 #include "tiny_obj_loader.h"
@@ -13,100 +6,74 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#define _USE_MATH_DEFINES
-#include <cmath>
+#include "GDShader.cpp"
+#include "GDTexture.cpp"
+#include "GDObject.cpp"
 
-std::string LoadTxtFile(std::string path) {
-    std::fstream fsrc(path);
-    std::stringstream fbuff;
-    fbuff << fsrc.rdbuf();
-
-    return fbuff.str();
-}
-
-GLuint TryCompileShader(std::string path, int compile_type) {
-    auto shaderStr = LoadTxtFile(path);
-    const char* shaderptr = shaderStr.c_str();
-
-    GLuint shaderint = glCreateShader(compile_type);
-    glShaderSource(shaderint, 1, &shaderptr, NULL);
-    glCompileShader(shaderint);
-
-    GLint isCompiled = 0;
-    glGetShaderiv(shaderint, GL_COMPILE_STATUS, &isCompiled);
-
-    if (isCompiled == GL_FALSE) {
-        GLint maxLength = 0;
-        glGetShaderiv(shaderint, GL_INFO_LOG_LENGTH, &maxLength);
-
-        std::vector<GLchar> errorLog(maxLength);
-        glGetShaderInfoLog(shaderint, maxLength, &maxLength, &errorLog[0]);
-
-        for (size_t e_i = 0; e_i < errorLog.size(); e_i++)
-        {
-            std::cout << errorLog[e_i];
-        }
-
-        glDeleteShader(shaderint);
-    }
-
-    return shaderint;
-}
-void check_attached_shaders(GLuint program)
-{
-    GLsizei count = 0;
-    GLuint shaders[] = { 0, 0, 0, 0 };
-    glGetAttachedShaders(program, 4, &count, shaders);
-    printf("\tnumber of shaders: %d\n", count);
-    for (int i = 0; i < count; i++) printf("\tshader_id: %d\n", shaders[i]);
-}
-
-struct Texture {
-    GLuint texID;
-    stbi_uc* tex_bytes;
-    int img_width;
-    int img_height;
-    int colorchannels;
-
-    Texture(const char* path) {
-        std::string pathstr = path;
-
-        stbi_set_flip_vertically_on_load(true);
-        tex_bytes = stbi_load(path, &img_width, &img_height, &colorchannels, 0);
-        glGenTextures(1, &texID);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texID);
-
-        if(pathstr.substr(pathstr.size() - 4, 4).compare(".jpg") == 0)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img_width, img_height, 0, GL_RGB, GL_UNSIGNED_BYTE, tex_bytes);
-        if (pathstr.substr(pathstr.size() - 4, 4).compare(".png") == 0)
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, img_width, img_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex_bytes);
-
-        glGenerateMipmap(GL_TEXTURE_2D);
-        stbi_image_free(tex_bytes);
-    }
-};
-
-class Shader {
+class GLskybox {
 public:
-    GLuint shaderID;
+    Shader* shader;
+    TextureCubeMap* textureCubeMap;
 
-    Shader(std::string vert, std::string frag) {
-        auto vertShader = TryCompileShader(vert, GL_VERTEX_SHADER);
-        auto fragShader = TryCompileShader(frag, GL_FRAGMENT_SHADER);
+    GLuint VAO, VBO, EBO;
 
-        shaderID = glCreateProgram();
-        glAttachShader(shaderID, vertShader);
-        glAttachShader(shaderID, fragShader);
-        check_attached_shaders(shaderID);
+    float skyboxVertices[36]{
+        -1.f, -1.f, 1.f, //0
+        1.f, -1.f, 1.f,  //1
+        1.f, -1.f, -1.f, //2
+        -1.f, -1.f, -1.f,//3
+        -1.f, 1.f, 1.f,  //4
+        1.f, 1.f, 1.f,   //5
+        1.f, 1.f, -1.f,  //6
+        -1.f, 1.f, -1.f  //7
+    };
 
-        glLinkProgram(shaderID);
+    //Skybox Indices
+    unsigned int skyboxIndices[36]{
+        1,2,6,
+        6,5,1,
+
+        0,4,7,
+        7,3,0,
+
+        4,5,6,
+        6,7,4,
+
+        0,3,2,
+        2,1,0,
+
+        0,1,5,
+        5,4,0,
+
+        3,7,6,
+        6,2,3
+    };
+
+    GLskybox() {
+        glGenVertexArrays(1, &VAO);
+        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &EBO);
+
+        glBindVertexArray(VAO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GL_INT) * 36, &skyboxIndices, GL_STATIC_DRAW);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 };
 
 class GLobject {
 public:
-    glm::vec3 pos = glm::vec3(0,0,0);
+    glm::vec3 pos = glm::vec3(0, 0, 0);
     glm::vec3 scale = glm::vec3(1);
     glm::vec3 rot = glm::vec3(0);
 
@@ -142,8 +109,14 @@ public:
                 fullVertexData.push_back(0);
             }
 
-            fullVertexData.push_back(attributes.texcoords[(vData.texcoord_index * 2)]);
-            fullVertexData.push_back(attributes.texcoords[(vData.texcoord_index * 2) + 1]);
+            if (attributes.texcoords.size() > 0) {
+                fullVertexData.push_back(attributes.texcoords[(vData.texcoord_index * 2)]);
+                fullVertexData.push_back(attributes.texcoords[(vData.texcoord_index * 2) + 1]);
+            }
+            else {
+                fullVertexData.push_back(0.5f);
+                fullVertexData.push_back(0.5f);
+            }
         }
 
         glGenVertexArrays(1, &VAO);
@@ -170,6 +143,7 @@ public:
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 };
+
 static std::vector<GLobject*> objs;
 
 static struct Window {
@@ -193,12 +167,12 @@ static struct Window {
 static struct View {
     glm::mat4 proj_ortho;
     glm::mat4 proj_pers;
-    float curFOV = 60.0f;
+    float curFOV = 90.0f;
     void setPerspectiveFOV(float angles) {
         curFOV = angles;
         proj_pers = glm::perspective(glm::radians(angles), (float)mWindow->win_y / mWindow->win_x, 0.1f, 100.0f);
     }
-    glm::vec3 cameraPos = glm::vec3(0, 0, 10.0f);
+    glm::vec3 cameraPos = glm::vec3(0, 0, 12.0f);
     glm::vec3 WorldUp = glm::vec3(0, 1, 0);
 
     glm::vec3 CamF = glm::vec3(0, 0, -1);
@@ -250,19 +224,31 @@ int main(void)
     glEnable(GL_DEPTH_TEST);
 
 #pragma region Other object setup
-    auto sampleShader = new Shader("Shaders/sample.vert", "Shaders/sample.frag");
+    //Shaders
+    auto litShader = new Shader("Shaders/lit.vert", "Shaders/lit.frag");
+
+    //Textures
     auto swordTex = new Texture("Tex/partenza.jpg");
     auto cubeaccaTex = new Texture("Tex/cubeacca.jpg");
 
+    //Light setup
     glm::vec3 pLightPos = glm::vec3(0, 1, 1);
-    glm::vec3 pLightColor = glm::vec3(1, 1, 1) * 3.0f;
+    glm::vec3 pLightColor = glm::vec3(1, 1, 1) * 0.0f;
+    glm::vec3 dLightDir = glm::vec3(-1, -1, 0);
+    glm::vec3 dLightColor = glm::vec3(0, 1, 0) * 1.0f;
     glm::vec3 ambientLightColor = glm::vec3(0.3, 0.2, 0.05);
-    float ambientLightIntensity = 0.2f;
+    float ambientLightIntensity = 0.5f;
 #pragma endregion
 
 #pragma region Object setup
-    auto swordObj = new GLobject("3D/djSword.obj");
-    swordObj->shader = sampleShader;
+    //Skybox setup
+    auto skyboxObj = new GLskybox();
+    skyboxObj->shader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
+    skyboxObj->textureCubeMap = new TextureCubeMap("Tex/Skybox/rainbow");
+    
+    //Sword and cube setup
+    auto swordObj = new GLobject("3D/quiz.obj");
+    swordObj->shader = litShader;
     swordObj->texture = swordTex;
     swordObj->scale *= 0.1f;
     objs.push_back(swordObj);
@@ -272,32 +258,22 @@ int main(void)
     auto lastFrameT = 0.0f;
     auto currentFrameT = 0.0f;
     auto deltaTime = 0.0f;
-
-    auto summonCD = 0.0f;
 #pragma endregion
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(mWindow->window))
     {
-#pragma region Programming Challenge 1 Code
-        summonCD -= deltaTime;
-
-        if (summonCD <= 0 && glfwGetKey(mWindow->window, GLFW_KEY_SPACE) == GLFW_PRESS) {
-            auto swordObj = new GLobject("3D/djSword.obj");
-            swordObj->shader = sampleShader;
-            swordObj->texture = swordTex;
-            swordObj->pos = mView.cameraPos + (mView.CamF * 5.0f);
-            swordObj->scale *= 0.1f;
-            objs.push_back(swordObj);
-
-            summonCD = 3.0f;
-        }
-#pragma endregion
-
         //Update Time
         currentFrameT = glfwGetTime();
         deltaTime = currentFrameT - lastFrameT;
         lastFrameT = currentFrameT;
+
+#pragma region Quiz 2 Code
+        for (auto obj : objs)
+        {
+            obj->rot.x += deltaTime * 180;
+        }
+#pragma endregion
 
 #pragma region Camera
         CameraControl(deltaTime * 20);
@@ -309,11 +285,40 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+        //skybox
+        glDepthMask(GL_FALSE);
+        glDepthFunc(GL_LEQUAL);
+        glUseProgram(skyboxObj->shader->shaderID);
+
+        glm::mat4 sky_view = glm::mat4(1.f);
+        sky_view = glm::mat4(glm::mat3(viewMat));
+
+        glUniformMatrix4fv(glGetUniformLocation(skyboxObj->shader->shaderID, "view"), 1, GL_FALSE, glm::value_ptr(sky_view));
+        glUniformMatrix4fv(glGetUniformLocation(skyboxObj->shader->shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(mView.proj_pers));
+
+        //something wrong here
+        glBindVertexArray(skyboxObj->VAO);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxObj->textureCubeMap->texID);
+        glUniform1i(glGetUniformLocation(skyboxObj->shader->shaderID, "skybox"), 0);
+
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_LESS);
+
         for (auto obj : objs)
         {
             glUseProgram(obj->shader->shaderID);
+
+            glActiveTexture(GL_TEXTURE1);
             GLuint tex0Address = glGetUniformLocation(obj->shader->shaderID, "tex0");
             glBindTexture(GL_TEXTURE_2D, obj->texture->texID);
+            glUniform1i(tex0Address, 1);
+
+            glActiveTexture(GL_TEXTURE0);
+            GLuint skyboxAddress = glGetUniformLocation(obj->shader->shaderID, "skybox");
+            glBindTexture(GL_TEXTURE_2D, skyboxObj->textureCubeMap->texID);
+            glUniform1i(skyboxAddress, 0);
 
             auto setFloat = [obj](const char* id, float value) {
                 unsigned int xLoc = glGetUniformLocation(obj->shader->shaderID, id);
@@ -338,16 +343,16 @@ int main(void)
             setMat("transform_model", tmat);
             setMat("transform_projection", tmat_PVM);
 
+            setVec3("dLightDir", dLightDir);
+            setVec3("dLightColor", dLightColor);
             setVec3("pLightPos", pLightPos);
             setVec3("pLightColor", pLightColor);
             setVec3("ambientLightColor", ambientLightColor);
             setFloat("ambientLightIntensity", ambientLightIntensity);
 
             setVec3("cameraPos", mView.cameraPos);
-            setFloat("specStrength", 0.4f);
-            setFloat("specPhong", 9);
-
-            glUniform1i(tex0Address, 0);
+            setFloat("specStrength", 0.9f);
+            setFloat("specPhong", 12);
 
             glBindVertexArray(obj->VAO);
             glDrawArrays(GL_TRIANGLES, 0, obj->fullVertexData.size() / 8);
