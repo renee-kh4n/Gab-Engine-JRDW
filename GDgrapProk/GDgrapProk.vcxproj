@@ -134,16 +134,25 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="GDgrapProk.cpp" />
-    <ClCompile Include="GDShader.cpp" />
-    <ClCompile Include="GDTexture.cpp" />
-    <ClCompile Include="GDutil.cpp" />
-    <ClCompile Include="glad.c" />
-    <ClCompile Include="GDObject.cpp" />
+    <ClCompile Include="GD_Graphics\GDCamera.cpp" />
+    <ClCompile Include="GD_Graphics\GDShader.cpp" />
+    <ClCompile Include="GD_Graphics\GDSkybox.cpp" />
+    <ClCompile Include="GD_Graphics\GDTexture.cpp" />
+    <ClCompile Include="GD_Graphics\GDutil.cpp" />
+    <ClCompile Include="GD_Graphics\GDWindow.cpp" />
+    <ClCompile Include="GD_Graphics\glad.c" />
+    <ClCompile Include="GD_Graphics\GDObject.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="GDutil.h" />
-    <ClInclude Include="stb_image.h" />
-    <ClInclude Include="tiny_obj_loader.h" />
+    <ClInclude Include="GD_Graphics\GDCamera.h" />
+    <ClInclude Include="GD_Graphics\GDObject.h" />
+    <ClInclude Include="GD_Graphics\GDShader.h" />
+    <ClInclude Include="GD_Graphics\GDSkybox.h" />
+    <ClInclude Include="GD_Graphics\GDTexture.h" />
+    <ClInclude Include="GD_Graphics\GDutil.h" />
+    <ClInclude Include="GD_Graphics\GDWindow.h" />
+    <ClInclude Include="GD_Graphics\stb_image.h" />
+    <ClInclude Include="GD_Graphics\tiny_obj_loader.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Shaders\lit.frag">
@@ -260,6 +269,22 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="3D\bunny.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="3D\sub1.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="3D\sub2.obj">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <FileType>Document</FileType>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>

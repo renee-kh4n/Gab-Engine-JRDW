@@ -1,11 +1,7 @@
-﻿  GDgrapProk.cpp
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(267,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(358,73): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  GDShader.cpp
-  GDTexture.cpp
-  GDutil.cpp
-  GDObject.cpp
-  glad.c
+﻿  GDObject.cpp
+  GDgrapProk.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(191,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(282,73): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   Generating code
   Previous IPDB not found, fall back to full compilation.
   All 2259 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.

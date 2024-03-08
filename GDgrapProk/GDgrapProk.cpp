@@ -1,216 +1,74 @@
-#include "GDutil.h"
-
-#define TINYOBJLOADER_IMPLEMENTATION
-#include "tiny_obj_loader.h"
-
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#define TINYOBJLOADER_IMPLEMENTATION
 
-#include "GDShader.cpp"
-#include "GDTexture.cpp"
-#include "GDObject.cpp"
+#include "GD_Graphics/GDutil.h"
+#include "GD_Graphics/GDShader.h"
+#include "GD_Graphics/GDTexture.h"
+#include "GD_Graphics/GDObject.h"
+#include "GD_Graphics/GDWindow.h"
+#include "GD_Graphics/GDCamera.h"
+#include "GD_Graphics/GDSkybox.h"
 
-class GLskybox {
-public:
-    Shader* shader;
-    TextureCubeMap* textureCubeMap;
 
-    GLuint VAO, VBO, EBO;
 
-    float skyboxVertices[36]{
-        -1.f, -1.f, 1.f, //0
-        1.f, -1.f, 1.f,  //1
-        1.f, -1.f, -1.f, //2
-        -1.f, -1.f, -1.f,//3
-        -1.f, 1.f, 1.f,  //4
-        1.f, 1.f, 1.f,   //5
-        1.f, 1.f, -1.f,  //6
-        -1.f, 1.f, -1.f  //7
-    };
+static GDObject* playerObj;
+static glm::vec3 playerVelocity;
 
-    //Skybox Indices
-    unsigned int skyboxIndices[36]{
-        1,2,6,
-        6,5,1,
+static std::vector<GDObject*> objs;
 
-        0,4,7,
-        7,3,0,
+static GDWindow* mWindow;
+static GDCamera* mCamera;
+static GDSkybox* mSkybox;
 
-        4,5,6,
-        6,7,4,
-
-        0,3,2,
-        2,1,0,
-
-        0,1,5,
-        5,4,0,
-
-        3,7,6,
-        6,2,3
-    };
-
-    GLskybox() {
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-        glGenBuffers(1, &EBO);
-
-        glBindVertexArray(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GL_INT) * 36, &skyboxIndices, GL_STATIC_DRAW);
-        glEnableVertexAttribArray(0);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
-};
-
-class GLobject {
-public:
-    glm::vec3 pos = glm::vec3(0, 0, 0);
-    glm::vec3 scale = glm::vec3(1);
-    glm::vec3 rot = glm::vec3(0);
-
-    Shader* shader;
-    Texture* texture;
-
-    GLuint VAO, VBO;
-    tinyobj::attrib_t attributes;
-    std::vector<tinyobj::shape_t> shapes;
-    std::vector<tinyobj::material_t> material;
-    std::string warning, error;
-
-    std::vector<GLfloat> fullVertexData;
-
-    GLobject(std::string path) {
-        bool success = tinyobj::LoadObj(&attributes, &shapes, &material, &warning, &error, path.c_str());
-        for (size_t m_i = 0; m_i < shapes[0].mesh.indices.size(); m_i++)
-        {
-            tinyobj::index_t vData = shapes[0].mesh.indices[m_i];
-
-            fullVertexData.push_back(attributes.vertices[(vData.vertex_index * 3)]);
-            fullVertexData.push_back(attributes.vertices[(vData.vertex_index * 3) + 1]);
-            fullVertexData.push_back(attributes.vertices[(vData.vertex_index * 3) + 2]);
-
-            if (attributes.normals.size() > 0) {
-                fullVertexData.push_back(attributes.normals[(vData.normal_index * 3)]);
-                fullVertexData.push_back(attributes.normals[(vData.normal_index * 3) + 1]);
-                fullVertexData.push_back(attributes.normals[(vData.normal_index * 3) + 2]);
-            }
-            else {
-                fullVertexData.push_back(0);
-                fullVertexData.push_back(0);
-                fullVertexData.push_back(0);
-            }
-
-            if (attributes.texcoords.size() > 0) {
-                fullVertexData.push_back(attributes.texcoords[(vData.texcoord_index * 2)]);
-                fullVertexData.push_back(attributes.texcoords[(vData.texcoord_index * 2) + 1]);
-            }
-            else {
-                fullVertexData.push_back(0.5f);
-                fullVertexData.push_back(0.5f);
-            }
-        }
-
-        glGenVertexArrays(1, &VAO);
-        glGenBuffers(1, &VBO);
-
-        glBindVertexArray(VAO);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fullVertexData.size(), fullVertexData.data(), GL_DYNAMIC_DRAW);
-
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
-        glEnableVertexAttribArray(0);
-
-        GLintptr normalPtr = 3 * sizeof(float);
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)normalPtr);
-        glEnableVertexAttribArray(1);
-
-        GLintptr uvPtr = 6 * sizeof(float);
-        glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)uvPtr);
-        glEnableVertexAttribArray(2);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    }
-};
-
-static std::vector<GLobject*> objs;
-
-static struct Window {
-    GLFWwindow* window;
-    int win_x = 700;
-    int win_y = 700;
-
-    Window() {
-        /* Create a windowed mode window and its OpenGL context */
-        window = glfwCreateWindow(win_x, win_y, "Sword summoner", NULL, NULL);
-        if (!window)
-        {
-            glfwTerminate();
-        }
-
-        /* Make the window's context current */
-        glfwMakeContextCurrent(window);
-    }
-}*mWindow;
-
-static struct View {
-    glm::mat4 proj_ortho;
-    glm::mat4 proj_pers;
-    float curFOV = 90.0f;
-    void setPerspectiveFOV(float angles) {
-        curFOV = angles;
-        proj_pers = glm::perspective(glm::radians(angles), (float)mWindow->win_y / mWindow->win_x, 0.1f, 100.0f);
-    }
-    glm::vec3 cameraPos = glm::vec3(0, 0, 12.0f);
-    glm::vec3 WorldUp = glm::vec3(0, 1, 0);
-
-    glm::vec3 CamF = glm::vec3(0, 0, -1);
-    glm::vec3 CamR() {
-        return glm::cross(CamF, WorldUp);
-    }
-
-    void RotateCam(float degree, glm::vec3 axis) {
-        CamF = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), mView.CamF), glm::radians(degree), axis) * glm::vec4(mView.CamF, 0));
-    }
-} mView;
+static glm::vec3 camFollowOffset = glm::vec3(0, 2, 0);
+static float camDistance = 10;
+static glm::vec2 camOrbitalPos = glm::vec2(0, 0);
 
 void CameraControl(float speed)
 {
-    if (glfwGetKey(mWindow->window, GLFW_KEY_W) == GLFW_PRESS)
-        mView.cameraPos += mView.CamF * (0.5f * speed);
-    if (glfwGetKey(mWindow->window, GLFW_KEY_S) == GLFW_PRESS)
-        mView.cameraPos -= mView.CamF * (0.5f * speed);
-    if (glfwGetKey(mWindow->window, GLFW_KEY_A) == GLFW_PRESS)
-        mView.cameraPos -= mView.CamR() * (0.5f * speed);
-    if (glfwGetKey(mWindow->window, GLFW_KEY_D) == GLFW_PRESS)
-        mView.cameraPos += mView.CamR() * (0.5f * speed);
-    if (glfwGetKey(mWindow->window, GLFW_KEY_Q) == GLFW_PRESS)
-        mView.cameraPos -= mView.WorldUp * 0.5f * speed;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_E) == GLFW_PRESS)
-        mView.cameraPos += mView.WorldUp * 0.5f * speed;
+    auto camLookAtPos = playerObj->pos + camFollowOffset;
+    auto maxYDiff = 1;
+
     if (glfwGetKey(mWindow->window, GLFW_KEY_UP) == GLFW_PRESS)
-        mView.RotateCam(2 * speed, mView.CamR());
+        camOrbitalPos.y += speed;
     if (glfwGetKey(mWindow->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        mView.RotateCam(-2 * speed, mView.CamR());
+        camOrbitalPos.y -= speed;
     if (glfwGetKey(mWindow->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        mView.RotateCam(2 * speed, mView.WorldUp);
+        camOrbitalPos.x += speed;
     if (glfwGetKey(mWindow->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        mView.RotateCam(-2 * speed, mView.WorldUp);
-    if (glfwGetKey(mWindow->window, GLFW_KEY_Z) == GLFW_PRESS)
-        mView.setPerspectiveFOV(mView.curFOV - (0.1f * speed));
-    if (glfwGetKey(mWindow->window, GLFW_KEY_C) == GLFW_PRESS)
-        mView.setPerspectiveFOV(mView.curFOV + (0.1f * speed));
+        camOrbitalPos.x -= speed;
+
+    camOrbitalPos.y = glm::clamp(camOrbitalPos.y, -45.0f, 45.0f);
+
+    auto dollyVector = glm::vec3(0, 0, 1) * camDistance;
+    dollyVector = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), dollyVector), glm::radians(camOrbitalPos.y), glm::vec3(-1, 0, 0)) * glm::vec4(dollyVector, 0));
+    dollyVector = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), dollyVector), glm::radians(camOrbitalPos.x), glm::vec3(0, 1, 0)) * glm::vec4(dollyVector, 0));
+
+    mCamera->cameraPos = playerObj->pos + dollyVector;
+    mCamera->CamF = glm::normalize(camLookAtPos - mCamera->cameraPos);
+}
+
+void MovementControl(float acceleration) {
+
+    auto playerForward = glm::vec3(0, 0, -1);
+    playerForward = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), playerForward), glm::radians(playerObj->rot.y), glm::vec3(-1, 0, 0)) * glm::vec4(playerForward, 0));
+    playerForward = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), playerForward), glm::radians(playerObj->rot.x), glm::vec3(0, 1, 0)) * glm::vec4(playerForward, 0));
+
+    if (glfwGetKey(mWindow->window, GLFW_KEY_W) == GLFW_PRESS)
+        playerVelocity += playerForward * acceleration;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_S) == GLFW_PRESS)
+        playerVelocity -= playerForward * acceleration;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+        playerVelocity -= glm::vec3(0, 1, 0) * acceleration;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        playerVelocity += glm::vec3(0, 1, 0) * acceleration;
+}
+
+void TurnControl(float acceleration) {
+    if (glfwGetKey(mWindow->window, GLFW_KEY_A) == GLFW_PRESS)
+        playerObj->rot.x += acceleration;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_D) == GLFW_PRESS)
+        playerObj->rot.x -= acceleration;
 }
 
 int main(void)
@@ -218,40 +76,46 @@ int main(void)
     /* Initialize the library */
     if (!glfwInit())
         return -1;
-    mWindow = new Window();
+    mWindow = new GDWindow();
+    mCamera = new GDCamera(mWindow);
 
     gladLoadGL();
     glEnable(GL_DEPTH_TEST);
 
-#pragma region Other object setup
+#pragma region Others setup
     //Shaders
-    auto litShader = new Shader("Shaders/lit.vert", "Shaders/lit.frag");
-
-    //Textures
-    auto swordTex = new Texture("Tex/partenza.jpg");
-    auto cubeaccaTex = new Texture("Tex/cubeacca.jpg");
+    auto litShader = new GDShader("Shaders/lit.vert", "Shaders/lit.frag");
 
     //Light setup
     glm::vec3 pLightPos = glm::vec3(0, 1, 1);
     glm::vec3 pLightColor = glm::vec3(1, 1, 1) * 0.0f;
-    glm::vec3 dLightDir = glm::vec3(-1, -1, 0);
-    glm::vec3 dLightColor = glm::vec3(0, 1, 0) * 1.0f;
-    glm::vec3 ambientLightColor = glm::vec3(0.3, 0.2, 0.05);
-    float ambientLightIntensity = 0.5f;
+    glm::vec3 dLightDir = glm::vec3(1, -1, 0);
+    glm::vec3 dLightColor = glm::vec3(0.7, 0.6, 1) * 1.0f;
+    glm::vec3 ambientLightColor = glm::vec3(0.5, 0.4, 0.05);
+    float ambientLightIntensity = 0.3f;
 #pragma endregion
 
 #pragma region Object setup
     //Skybox setup
-    auto skyboxObj = new GLskybox();
-    skyboxObj->shader = new Shader("Shaders/skybox.vert", "Shaders/skybox.frag");
-    skyboxObj->textureCubeMap = new TextureCubeMap("Tex/Skybox/rainbow");
+    mSkybox = new GDSkybox();
+    mSkybox->shader = new GDShader("Shaders/skybox.vert", "Shaders/skybox.frag");
+    mSkybox->textureCubeMap = new GDTextureCubeMap("Tex/Skybox/rainbow");
     
-    //Sword and cube setup
-    auto swordObj = new GLobject("3D/quiz.obj");
-    swordObj->shader = litShader;
-    swordObj->texture = swordTex;
-    swordObj->scale *= 0.1f;
-    objs.push_back(swordObj);
+    //Submarines setup
+    playerObj = new GDObject("3D/sub1.obj");
+    playerObj->shader = litShader;
+    playerObj->texturediff = new GDTexture("Tex/sub1/diff.png");
+    playerObj->texturenormal = new GDTexture("Tex/sub1/norm.png");
+    playerObj->scale *= 0.4f;
+    objs.push_back(playerObj);
+
+    auto sub2 = new GDObject("3D/sub2.obj");
+    sub2->shader = litShader;
+    sub2->texturediff = new GDTexture("Tex/sub2/diff.jpg");
+    sub2->texturenormal = new GDTexture("Tex/sub2/norm.png");
+    sub2->scale *= 0.1f;
+    sub2->pos = glm::vec3(0, 0, -10);
+    objs.push_back(sub2);
 #pragma endregion
 
 #pragma region Time
@@ -268,56 +132,59 @@ int main(void)
         deltaTime = currentFrameT - lastFrameT;
         lastFrameT = currentFrameT;
 
-#pragma region Quiz 2 Code
-        for (auto obj : objs)
-        {
-            obj->rot.x += deltaTime * 180;
-        }
-#pragma endregion
+#pragma region Player/Camera Control
+        MovementControl(deltaTime * 0.001f);
+        TurnControl(deltaTime * 20);
+        CameraControl(deltaTime * 40);
 
-#pragma region Camera
-        CameraControl(deltaTime * 20);
+        playerVelocity -= (playerVelocity * 0.1f) * (deltaTime * 10);
+        playerObj->pos += playerVelocity;
 
-        mView.setPerspectiveFOV(60.0f);
-        glm::mat4 viewMat = glm::lookAt(mView.cameraPos, mView.CamF + mView.cameraPos, mView.WorldUp);
+        mCamera->setPerspectiveFOV(60.0f);
+        glm::mat4 viewMat = glm::lookAt(mCamera->cameraPos, mCamera->CamF + mCamera->cameraPos, mCamera->WorldUp);
 #pragma endregion
 
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        //skybox
+#pragma region Skybox
         glDepthMask(GL_FALSE);
         glDepthFunc(GL_LEQUAL);
-        glUseProgram(skyboxObj->shader->shaderID);
+        glUseProgram(mSkybox->shader->shaderID);
 
         glm::mat4 sky_view = glm::mat4(1.f);
         sky_view = glm::mat4(glm::mat3(viewMat));
 
-        glUniformMatrix4fv(glGetUniformLocation(skyboxObj->shader->shaderID, "view"), 1, GL_FALSE, glm::value_ptr(sky_view));
-        glUniformMatrix4fv(glGetUniformLocation(skyboxObj->shader->shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(mView.proj_pers));
+        glUniformMatrix4fv(glGetUniformLocation(mSkybox->shader->shaderID, "view"), 1, GL_FALSE, glm::value_ptr(sky_view));
+        glUniformMatrix4fv(glGetUniformLocation(mSkybox->shader->shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(mCamera->proj_pers));
 
-        //something wrong here
-        glBindVertexArray(skyboxObj->VAO);
+        glBindVertexArray(mSkybox->VAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxObj->textureCubeMap->texID);
-        glUniform1i(glGetUniformLocation(skyboxObj->shader->shaderID, "skybox"), 0);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, mSkybox->textureCubeMap->texID);
+        glUniform1i(glGetUniformLocation(mSkybox->shader->shaderID, "skybox"), 0);
 
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
         glDepthMask(GL_TRUE);
         glDepthFunc(GL_LESS);
+#pragma endregion
 
         for (auto obj : objs)
         {
             glUseProgram(obj->shader->shaderID);
 
             glActiveTexture(GL_TEXTURE1);
-            GLuint tex0Address = glGetUniformLocation(obj->shader->shaderID, "tex0");
-            glBindTexture(GL_TEXTURE_2D, obj->texture->texID);
-            glUniform1i(tex0Address, 1);
+            GLuint texdiffAddress = glGetUniformLocation(obj->shader->shaderID, "texdiffuse");
+            glBindTexture(GL_TEXTURE_2D, obj->texturediff->texID);
+            glUniform1i(texdiffAddress, 1);
+
+            glActiveTexture(GL_TEXTURE2);
+            GLuint texnormalAddress = glGetUniformLocation(obj->shader->shaderID, "texnormal");
+            glBindTexture(GL_TEXTURE_2D, obj->texturenormal->texID);
+            glUniform1i(texnormalAddress, 2);
 
             glActiveTexture(GL_TEXTURE0);
             GLuint skyboxAddress = glGetUniformLocation(obj->shader->shaderID, "skybox");
-            glBindTexture(GL_TEXTURE_2D, skyboxObj->textureCubeMap->texID);
+            glBindTexture(GL_TEXTURE_2D, mSkybox->textureCubeMap->texID);
             glUniform1i(skyboxAddress, 0);
 
             auto setFloat = [obj](const char* id, float value) {
@@ -339,7 +206,7 @@ int main(void)
             tmat = glm::rotate(tmat, glm::radians(obj->rot.x), glm::vec3(0, 1, 0));
             tmat = glm::rotate(tmat, glm::radians(obj->rot.y), glm::vec3(1, 0, 0));
             glm::mat4 tmat_VM = tmat;
-            glm::mat4 tmat_PVM = mView.proj_pers * viewMat * tmat;
+            glm::mat4 tmat_PVM = mCamera->proj_pers * viewMat * tmat;
             setMat("transform_model", tmat);
             setMat("transform_projection", tmat_PVM);
 
@@ -350,7 +217,7 @@ int main(void)
             setVec3("ambientLightColor", ambientLightColor);
             setFloat("ambientLightIntensity", ambientLightIntensity);
 
-            setVec3("cameraPos", mView.cameraPos);
+            setVec3("cameraPos", mCamera->cameraPos);
             setFloat("specStrength", 0.9f);
             setFloat("specPhong", 12);
 

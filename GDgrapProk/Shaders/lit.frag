@@ -5,7 +5,9 @@ in vec2 texCoord;
 in vec3 normCoord;
 in vec3 fragPos;
 
-uniform sampler2D tex0;
+//TEXTURES
+uniform sampler2D texdiffuse;
+uniform sampler2D texnormal;
 
 //SKYBOX AMBIENT LIGHT
 uniform samplerCube skybox;
@@ -36,6 +38,7 @@ out vec4 FragColor;
 void main(){
 	//Directional Vectors
 	vec3 normal = normalize(normCoord);
+	//normal = normalize(texture(texnormal, texCoord).xyz * 2.0f - 1.0f); //SOON
 	vec3 viewDir = normalize(cameraPos - fragPos);
 
 	//Directional light set-up
@@ -45,7 +48,7 @@ void main(){
 	//Point light set-up + intensity calculation from distance
 	vec3 pLightOffset = pLightPos - fragPos;
 	vec3 pLightDir = normalize(pLightOffset);
-	float pLightIntensity = min(1 / (pow(pLightOffset.x, 2) + pow(pLightOffset.y, 2)), 1);
+	float pLightIntensity = 1 / (1 + length(pLightOffset) + (pow(pLightOffset.x, 2) + pow(pLightOffset.y, 2)));
 	vec3 pLightFinalColor = pLightColor * pLightIntensity;
 	vec3 pDiffuse = max(dot(normal, pLightDir), 0.0f) * pLightFinalColor;
 
@@ -63,6 +66,6 @@ void main(){
 	vec3 specColor = spec * specStrength * pLightFinalColor;
 
 	//Combine all light sources
-	FragColor = vec4(diffuse + ambient + specColor, 1.0f) * max(texture(tex0, texCoord), 0.2);
+	FragColor = vec4(diffuse + ambient + specColor, 1.0f) * max(texture(texdiffuse, texCoord), 0.2);
 	//FragColor = vec4(normal, 1.0f);
 }

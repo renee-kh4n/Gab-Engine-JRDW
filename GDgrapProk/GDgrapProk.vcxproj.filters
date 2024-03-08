@@ -18,30 +18,57 @@
     <ClCompile Include="GDgrapProk.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="glad.c">
+    <ClCompile Include="GD_Graphics\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GDShader.cpp">
+    <ClCompile Include="GD_Graphics\GDShader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GDTexture.cpp">
+    <ClCompile Include="GD_Graphics\GDTexture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GDObject.cpp">
+    <ClCompile Include="GD_Graphics\GDObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GDutil.cpp">
+    <ClCompile Include="GD_Graphics\GDutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GD_Graphics\GDWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GD_Graphics\GDSkybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GD_Graphics\GDCamera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="tiny_obj_loader.h">
+    <ClInclude Include="GD_Graphics\tiny_obj_loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="stb_image.h">
+    <ClInclude Include="GD_Graphics\stb_image.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GDutil.h">
+    <ClInclude Include="GD_Graphics\GDutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GD_Graphics\GDObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GD_Graphics\GDShader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GD_Graphics\GDTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GD_Graphics\GDWindow.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GD_Graphics\GDSkybox.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GD_Graphics\GDCamera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -72,6 +99,8 @@
     <CopyFileToFolders Include="Tex\Skybox\rainbow_up.png">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
+    <CopyFileToFolders Include="3D\sub1.obj" />
+    <CopyFileToFolders Include="3D\sub2.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Tex\partenza.jpg">
