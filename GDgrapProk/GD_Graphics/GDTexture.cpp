@@ -14,14 +14,14 @@ GDTexture::GDTexture(const char* path) {
 	stbi_image_free(tex_bytes);
 }
 
-GDTextureCubeMap::GDTextureCubeMap(std::string semiPath) {
+GDTextureCubeMap::GDTextureCubeMap(std::string semiPath, std::string fileExtension) {
 	std::string texPaths[6]{
-		"Tex/Skybox/rainbow_rt.png",
-		"Tex/Skybox/rainbow_lf.png",
-		"Tex/Skybox/rainbow_up.png",
-		"Tex/Skybox/rainbow_dn.png",
-		"Tex/Skybox/rainbow_ft.png",
-		"Tex/Skybox/rainbow_bk.png"
+		semiPath + "_rt." + fileExtension,
+		semiPath + "_lf." + fileExtension,
+		semiPath + "_up." + fileExtension,
+		semiPath + "_dn." + fileExtension,
+		semiPath + "_ft." + fileExtension,
+		semiPath + "_bk." + fileExtension
 	};
 
 	glGenTextures(1, &texID);

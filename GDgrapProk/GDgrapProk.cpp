@@ -8,164 +8,318 @@
 #include "GD_Graphics/GDWindow.h"
 #include "GD_Graphics/GDCamera.h"
 #include "GD_Graphics/GDSkybox.h"
+#include "GD_Graphics/GDLight.h"
+#include "GD_Graphics/GDFramebuffer.h"
 
+auto lastFrameT = 0.0f;
+auto currentFrameT = 0.0f;
+auto deltaTime = 0.0f;
 
+glm::dvec2 lastFrameMousePos;
+glm::dvec2 currentFrameMousePos;
+glm::dvec2 mouseDelta;
 
-static GDObject* playerObj;
-static glm::vec3 playerVelocity;
+static class Player {
+public:
+    int lastKnownDepth = 9999;
+    GDObject* Obj;
+    glm::vec3 Velocity;
+} mPlayer;
 
 static std::vector<GDObject*> objs;
 
 static GDWindow* mWindow;
-static GDCamera* mCamera;
+static GDCamera* mCamera3rd;
+static GDCamera* mCamera1st;
+static GDCamera* mCameraOrtho;
+static GDCamera* activeCamera;
 static GDSkybox* mSkybox;
 
-static glm::vec3 camFollowOffset = glm::vec3(0, 2, 0);
+static glm::vec3 cam3rdOffset = glm::vec3(0, 2, 0);
+static glm::vec3 cam1stOffset = glm::vec3(0, 0, 3);
+static glm::vec3 camOrthoOffset = glm::vec3(0, 40, 0);
+static glm::vec3 camOrthoCenter = glm::vec3(0, 0, 0);
 static float camDistance = 10;
-static glm::vec2 camOrbitalPos = glm::vec2(0, 0);
+static glm::vec2 cam3rdOrbitalPos = glm::vec2(0, 0);
+static glm::vec2 camOrthoOrbitalPos = glm::vec2(-0.01f, 0);
+
+bool queue_cam1switch = false;
+bool queue_cam2switch = false;
+bool queue_lightswitch = false;
 
 void CameraControl(float speed)
 {
-    auto camLookAtPos = playerObj->pos + camFollowOffset;
-    auto maxYDiff = 1;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_1) == GLFW_PRESS)
+        queue_cam1switch = true;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_1) == GLFW_RELEASE && queue_cam1switch) {
+        queue_cam1switch = false;
 
-    if (glfwGetKey(mWindow->window, GLFW_KEY_UP) == GLFW_PRESS)
-        camOrbitalPos.y += speed;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        camOrbitalPos.y -= speed;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        camOrbitalPos.x += speed;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        camOrbitalPos.x -= speed;
+        if (activeCamera != mCamera1st)
+            activeCamera = mCamera1st;
+        else
+            activeCamera = mCamera3rd;
+    }
 
-    camOrbitalPos.y = glm::clamp(camOrbitalPos.y, -45.0f, 45.0f);
+    if (glfwGetKey(mWindow->window, GLFW_KEY_2) == GLFW_PRESS)
+        queue_cam2switch = true;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_2) == GLFW_RELEASE && queue_cam2switch) {
+        queue_cam2switch = false;
 
-    auto dollyVector = glm::vec3(0, 0, 1) * camDistance;
-    dollyVector = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), dollyVector), glm::radians(camOrbitalPos.y), glm::vec3(-1, 0, 0)) * glm::vec4(dollyVector, 0));
-    dollyVector = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), dollyVector), glm::radians(camOrbitalPos.x), glm::vec3(0, 1, 0)) * glm::vec4(dollyVector, 0));
+        if (activeCamera != mCameraOrtho) {
+            activeCamera = mCameraOrtho;
+            camOrthoCenter = mPlayer.Obj->pos;
+            camOrthoCenter.y = 0;
+            camOrthoOrbitalPos = glm::vec2(-0.01f, 0);
+        }
+        else
+            activeCamera = mCamera3rd;
+    }
 
-    mCamera->cameraPos = playerObj->pos + dollyVector;
-    mCamera->CamF = glm::normalize(camLookAtPos - mCamera->cameraPos);
+    if (activeCamera == mCamera3rd) {
+        auto camLookAtPos = mPlayer.Obj->pos + cam3rdOffset;
+
+        cam3rdOrbitalPos += mouseDelta;
+
+        cam3rdOrbitalPos.y = glm::clamp(cam3rdOrbitalPos.y, -45.0f, 45.0f);
+
+        auto dollyVector = EulerToVec(glm::vec3(0, 0, 1), cam3rdOrbitalPos) * camDistance;
+        mCamera3rd->cameraPos = mPlayer.Obj->pos + dollyVector;
+        mCamera3rd->CamF = glm::normalize(camLookAtPos - mCamera3rd->cameraPos);
+    }
+
+    auto playerForward = EulerToVec(glm::vec3(0, 0, 1), mPlayer.Obj->rot);
+    mCamera1st->cameraPos = mPlayer.Obj->pos + EulerToVec(cam1stOffset, mPlayer.Obj->rot);
+    mCamera1st->CamF = playerForward;
+
+    if (activeCamera == mCameraOrtho) {
+        float orthoDragMult = 0.4f * speed;
+        
+        if (glfwGetKey(mWindow->window, GLFW_KEY_UP) == GLFW_PRESS)
+            camOrthoCenter += glm::vec3(0, 0, -1) * orthoDragMult;
+        if (glfwGetKey(mWindow->window, GLFW_KEY_DOWN) == GLFW_PRESS)
+            camOrthoCenter += glm::vec3(0, 0, 1) * orthoDragMult;
+        if (glfwGetKey(mWindow->window, GLFW_KEY_LEFT) == GLFW_PRESS)
+            camOrthoCenter += glm::vec3(-1, 0, 0) * orthoDragMult;
+        if (glfwGetKey(mWindow->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+            camOrthoCenter += glm::vec3(1, 0, 0) * orthoDragMult;
+
+        auto camLookAtPos = camOrthoCenter;
+        //camOrthoOrbitalPos.x += mouseDelta.x;
+        
+        if (glfwGetMouseButton(mWindow->window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
+            camOrthoOrbitalPos.y += mouseDelta.y * 0.5f;
+            camOrthoOrbitalPos.x += -mouseDelta.x * 0.5f;
+        }
+
+        camOrthoOrbitalPos.y = glm::clamp(camOrthoOrbitalPos.y, -160.0f, -0.01f);
+
+        auto dollyVector = RotVec(-camOrthoOffset, glm::vec3(-1, 0, 0), camOrthoOrbitalPos.y);
+        dollyVector = RotVec(dollyVector, glm::vec3(0, 1, 0), camOrthoOrbitalPos.x);
+        mCameraOrtho->cameraPos = camOrthoCenter - dollyVector;
+        mCameraOrtho->CamF = glm::normalize(camLookAtPos - mCameraOrtho->cameraPos);
+    }
 }
 
 void MovementControl(float acceleration) {
 
-    auto playerForward = glm::vec3(0, 0, -1);
-    playerForward = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), playerForward), glm::radians(playerObj->rot.y), glm::vec3(-1, 0, 0)) * glm::vec4(playerForward, 0));
-    playerForward = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), playerForward), glm::radians(playerObj->rot.x), glm::vec3(0, 1, 0)) * glm::vec4(playerForward, 0));
+    auto playerForward = EulerToVec(glm::vec3(0, 0, 1), mPlayer.Obj->rot);
 
     if (glfwGetKey(mWindow->window, GLFW_KEY_W) == GLFW_PRESS)
-        playerVelocity += playerForward * acceleration;
+        mPlayer.Velocity += playerForward * acceleration;
     if (glfwGetKey(mWindow->window, GLFW_KEY_S) == GLFW_PRESS)
-        playerVelocity -= playerForward * acceleration;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
-        playerVelocity -= glm::vec3(0, 1, 0) * acceleration;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_SPACE) == GLFW_PRESS)
-        playerVelocity += glm::vec3(0, 1, 0) * acceleration;
+        mPlayer.Velocity -= playerForward * acceleration;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_Q) == GLFW_PRESS)
+        mPlayer.Velocity -= glm::vec3(0, 1, 0) * acceleration;
+    if (glfwGetKey(mWindow->window, GLFW_KEY_E) == GLFW_PRESS)
+        mPlayer.Velocity += glm::vec3(0, 1, 0) * acceleration;
 }
 
 void TurnControl(float acceleration) {
     if (glfwGetKey(mWindow->window, GLFW_KEY_A) == GLFW_PRESS)
-        playerObj->rot.x += acceleration;
+        mPlayer.Obj->rot.x += acceleration;
     if (glfwGetKey(mWindow->window, GLFW_KEY_D) == GLFW_PRESS)
-        playerObj->rot.x -= acceleration;
+        mPlayer.Obj->rot.x -= acceleration;
 }
+
+
 
 int main(void)
 {
+    std::cout << "ToDo : Print depth and limit depth to max=0" << std::endl;
+    std::cout << "ToDo : Normal map player ship" << std::endl;
+    std::cout << "ToDo : Post process mono shading" << std::endl;
+
     /* Initialize the library */
     if (!glfwInit())
         return -1;
     mWindow = new GDWindow();
-    mCamera = new GDCamera(mWindow);
 
     gladLoadGL();
     glEnable(GL_DEPTH_TEST);
 
 #pragma region Others setup
-    //Shaders
-    auto litShader = new GDShader("Shaders/lit.vert", "Shaders/lit.frag");
-
-    //Light setup
-    glm::vec3 pLightPos = glm::vec3(0, 1, 1);
-    glm::vec3 pLightColor = glm::vec3(1, 1, 1) * 0.0f;
-    glm::vec3 dLightDir = glm::vec3(1, -1, 0);
-    glm::vec3 dLightColor = glm::vec3(0.7, 0.6, 1) * 1.0f;
-    glm::vec3 ambientLightColor = glm::vec3(0.5, 0.4, 0.05);
-    float ambientLightIntensity = 0.3f;
-#pragma endregion
-
-#pragma region Object setup
     //Skybox setup
     mSkybox = new GDSkybox();
     mSkybox->shader = new GDShader("Shaders/skybox.vert", "Shaders/skybox.frag");
-    mSkybox->textureCubeMap = new GDTextureCubeMap("Tex/Skybox/rainbow");
+    mSkybox->textureCubeMap = new GDTextureCubeMap("Tex/Skybox/uw", "jpg");
     
-    //Submarines setup
-    playerObj = new GDObject("3D/sub1.obj");
-    playerObj->shader = litShader;
-    playerObj->texturediff = new GDTexture("Tex/sub1/diff.png");
-    playerObj->texturenormal = new GDTexture("Tex/sub1/norm.png");
-    playerObj->scale *= 0.4f;
-    objs.push_back(playerObj);
+    //Shaders
+    auto litShader = new GDShader("Shaders/lit.vert", "Shaders/lit.frag");
+    auto Cam3rdPPShader = new GDShader("Shaders/camshader.vert", "Shaders/camshader.frag");
+    auto Cam1stPPShader = new GDShader("Shaders/camshader.vert", "Shaders/camshader.frag");
+    auto CamOrthoPPShader = new GDShader("Shaders/camshader.vert", "Shaders/camshader.frag");
+    
+    //Framebuffer
+    auto mFrameBuffer = new GDFramebuffer(mWindow);
 
-    auto sub2 = new GDObject("3D/sub2.obj");
-    sub2->shader = litShader;
-    sub2->texturediff = new GDTexture("Tex/sub2/diff.jpg");
-    sub2->texturenormal = new GDTexture("Tex/sub2/norm.png");
-    sub2->scale *= 0.1f;
-    sub2->pos = glm::vec3(0, 0, -10);
-    objs.push_back(sub2);
+    //Camera Setup
+    mCamera3rd = new GDCamera(mWindow, Cam3rdPPShader);
+    glUseProgram(Cam3rdPPShader->shaderID);
+    glUniform1f(glGetUniformLocation(Cam3rdPPShader->shaderID, "saturation"), 0.8f);
+    glUniform1f(glGetUniformLocation(Cam3rdPPShader->shaderID, "blur"), 0.01f);
+    glUniform4fv(glGetUniformLocation(Cam3rdPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1) * 0.7f));
+    mCamera3rd->setPerspectiveFOV(80.0f, 20);
+
+    mCamera1st = new GDCamera(mWindow, Cam1stPPShader);
+    glUseProgram(Cam1stPPShader->shaderID);
+    glUniform1f(glGetUniformLocation(Cam1stPPShader->shaderID, "saturation"), 0.0f);
+    glUniform4fv(glGetUniformLocation(Cam1stPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(0, 1, 0, 1)));
+    mCamera1st->setPerspectiveFOV(80.0f, 100);
+
+    mCameraOrtho = new GDCamera(mWindow, CamOrthoPPShader);
+    glUseProgram(CamOrthoPPShader->shaderID);
+    glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 0.0f);
+    glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(0, 1, 0, 1)));
+    auto orthoRange = 30.0f;
+    mCameraOrtho->proj = glm::ortho(-orthoRange, orthoRange, -orthoRange, orthoRange, 0.01f, 100.0f);
+    mCameraOrtho->cameraPos = glm::vec3(0, 40, 0);
+    mCameraOrtho->CamF = glm::vec3(0, -1, 0);
+    mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
+
+    activeCamera = mCamera3rd;
+
+    //Light setup
+    GDPointLight playerPointLight;
+    playerPointLight.color = glm::vec3(0.5, 1, 0.5);
+    playerPointLight.intensity = 30;
+    GDDirLight dirLight;
+    dirLight.dir = glm::vec3(0.3, -1, 0);
+    dirLight.color= glm::vec3(0.7, 0.6, 1) * 0.6f;
 #pragma endregion
 
-#pragma region Time
-    auto lastFrameT = 0.0f;
-    auto currentFrameT = 0.0f;
-    auto deltaTime = 0.0f;
+#pragma region Object setup
+    //Submarines setup
+    mPlayer.Obj = new GDObject("3D/sub1.obj");
+    mPlayer.Obj->shader = litShader;
+    mPlayer.Obj->texturediff = new GDTexture("Tex/sub1/diff.png");
+    mPlayer.Obj->pos = glm::vec3(0, -10, 0);
+    mPlayer.Obj->scale *= 0.2f;
+    objs.push_back(mPlayer.Obj);
+
+    GDObject* newsub;
+
+    newsub = new GDObject("3D/sub2.obj");
+    newsub->shader = litShader;
+    newsub->texturediff = new GDTexture("Tex/sub2/diff.jpg");
+    newsub->scale *= 0.3f;
+    newsub->pos = glm::vec3(-15, -17, -30);
+    newsub->rot = glm::vec3(-50, 0, 0);
+    objs.push_back(newsub);
+
+    newsub = new GDObject("3D/sub3.obj");
+    newsub->shader = litShader;
+    newsub->texturediff = new GDTexture("Tex/sub3/diff.png");
+    newsub->scale *= 3.0f;
+    newsub->pos = glm::vec3(30, -6, -7);
+    newsub->rot = glm::vec3(50, 0, 0);
+    objs.push_back(newsub);
+
+    newsub = new GDObject("3D/sub4.obj");
+    newsub->shader = litShader;
+    newsub->texturediff = new GDTexture("Tex/sub4/diff.jpg");
+    newsub->scale *= 2.0f;
+    newsub->pos = glm::vec3(-15, -30, 15);
+    newsub->rot = glm::vec3(220, 0, 0);
+    objs.push_back(newsub);
+
+    auto sub2 = new GDObject("3D/sub5.obj");
+    sub2->shader = litShader;
+    sub2->texturediff = new GDTexture("Tex/sub5/diff.png");
+    sub2->scale *= 2.0f;
+    sub2->pos = glm::vec3(-15, -10, 15);
+    objs.push_back(sub2);
+
+    newsub = new GDObject("3D/sub6.obj");
+    newsub->shader = litShader;
+    newsub->texturediff = new GDTexture("Tex/sub6/diff.png");
+    newsub->scale *= 0.05f;
+    newsub->pos = glm::vec3(10, -20, 13);
+    newsub->rot = glm::vec3(-30, 0, 0);
+    objs.push_back(newsub);
+
+    newsub = new GDObject("3D/sub7.obj");
+    newsub->shader = litShader;
+    newsub->texturediff = new GDTexture("Tex/sub7/diff.png");
+    newsub->scale *= 3.0f;
+    newsub->pos = glm::vec3(-20, -10, -12);
+    newsub->rot = glm::vec3(40, 0, 0);
+    objs.push_back(newsub);
 #pragma endregion
 
     /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(mWindow->window))
     {
-        //Update Time
+        //Update Updatables
         currentFrameT = glfwGetTime();
         deltaTime = currentFrameT - lastFrameT;
         lastFrameT = currentFrameT;
 
+        glfwGetCursorPos(mWindow->window, &currentFrameMousePos.x, &currentFrameMousePos.y);
+        mouseDelta = currentFrameMousePos - lastFrameMousePos;
+        lastFrameMousePos = currentFrameMousePos;
+
 #pragma region Player/Camera Control
-        MovementControl(deltaTime * 0.001f);
-        TurnControl(deltaTime * 20);
-        CameraControl(deltaTime * 40);
+        CameraControl(deltaTime * 20);
+        
+        if (activeCamera != mCameraOrtho) {
+            TurnControl(deltaTime * 20);
+            MovementControl(deltaTime * 0.004f);
+        }
 
-        playerVelocity -= (playerVelocity * 0.1f) * (deltaTime * 10);
-        playerObj->pos += playerVelocity;
+        mPlayer.Velocity -= (mPlayer.Velocity * 0.1f) * (deltaTime * 10);
+        mPlayer.Obj->pos += mPlayer.Velocity;
+        mPlayer.Obj->pos.y = fmin(mPlayer.Obj->pos.y, 0);
 
-        mCamera->setPerspectiveFOV(60.0f);
-        glm::mat4 viewMat = glm::lookAt(mCamera->cameraPos, mCamera->CamF + mCamera->cameraPos, mCamera->WorldUp);
+        if (mPlayer.lastKnownDepth != (int)mPlayer.Obj->pos.y) {
+            mPlayer.lastKnownDepth = (int)mPlayer.Obj->pos.y;
+            std::cout << "Current submarine depth: " << mPlayer.lastKnownDepth << std::endl;
+        }
+
+        //Player Light Control
+        playerPointLight.pos = mPlayer.Obj->pos + EulerToVec(cam1stOffset, mPlayer.Obj->rot);
+        if (glfwGetKey(mWindow->window, GLFW_KEY_F) == GLFW_PRESS)
+            queue_lightswitch = true;
+        if (glfwGetKey(mWindow->window, GLFW_KEY_F) == GLFW_RELEASE && queue_lightswitch) {
+            queue_lightswitch = false;
+
+            playerPointLight.intensity += 20;
+            playerPointLight.intensity = (int)playerPointLight.intensity % 60;
+        }
+
+        glm::mat4 viewMat = glm::lookAt(activeCamera->cameraPos, activeCamera->CamF + activeCamera->cameraPos, activeCamera->WorldUp);
 #pragma endregion
 
-        /* Render here */
+        /* =============== Render here =============== */
+
+        glBindFramebuffer(GL_FRAMEBUFFER, mFrameBuffer->framebuffer);
+        glEnable(GL_DEPTH_TEST); //Enable depthtest again
+        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-#pragma region Skybox
-        glDepthMask(GL_FALSE);
-        glDepthFunc(GL_LEQUAL);
-        glUseProgram(mSkybox->shader->shaderID);
+        if (activeCamera != mCameraOrtho) {
+            mSkybox->Render(viewMat, activeCamera->proj);
+        }
 
-        glm::mat4 sky_view = glm::mat4(1.f);
-        sky_view = glm::mat4(glm::mat3(viewMat));
-
-        glUniformMatrix4fv(glGetUniformLocation(mSkybox->shader->shaderID, "view"), 1, GL_FALSE, glm::value_ptr(sky_view));
-        glUniformMatrix4fv(glGetUniformLocation(mSkybox->shader->shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(mCamera->proj_pers));
-
-        glBindVertexArray(mSkybox->VAO);
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, mSkybox->textureCubeMap->texID);
-        glUniform1i(glGetUniformLocation(mSkybox->shader->shaderID, "skybox"), 0);
-
-        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-        glDepthMask(GL_TRUE);
-        glDepthFunc(GL_LESS);
 #pragma endregion
 
         for (auto obj : objs)
@@ -177,10 +331,12 @@ int main(void)
             glBindTexture(GL_TEXTURE_2D, obj->texturediff->texID);
             glUniform1i(texdiffAddress, 1);
 
+            /*
             glActiveTexture(GL_TEXTURE2);
             GLuint texnormalAddress = glGetUniformLocation(obj->shader->shaderID, "texnormal");
             glBindTexture(GL_TEXTURE_2D, obj->texturenormal->texID);
             glUniform1i(texnormalAddress, 2);
+            */
 
             glActiveTexture(GL_TEXTURE0);
             GLuint skyboxAddress = glGetUniformLocation(obj->shader->shaderID, "skybox");
@@ -206,24 +362,34 @@ int main(void)
             tmat = glm::rotate(tmat, glm::radians(obj->rot.x), glm::vec3(0, 1, 0));
             tmat = glm::rotate(tmat, glm::radians(obj->rot.y), glm::vec3(1, 0, 0));
             glm::mat4 tmat_VM = tmat;
-            glm::mat4 tmat_PVM = mCamera->proj_pers * viewMat * tmat;
+            glm::mat4 tmat_PVM = activeCamera->proj * viewMat * tmat;
             setMat("transform_model", tmat);
             setMat("transform_projection", tmat_PVM);
 
-            setVec3("dLightDir", dLightDir);
-            setVec3("dLightColor", dLightColor);
-            setVec3("pLightPos", pLightPos);
-            setVec3("pLightColor", pLightColor);
-            setVec3("ambientLightColor", ambientLightColor);
-            setFloat("ambientLightIntensity", ambientLightIntensity);
+            setVec3("dLightDir", dirLight.dir);
+            setVec3("dLightColor", dirLight.color);
+            setVec3("pLightPos", playerPointLight.pos);
+            setVec3("pLightColor", playerPointLight.color * playerPointLight.intensity);
+            setFloat("ambientLightIntensity", 0.2f);
 
-            setVec3("cameraPos", mCamera->cameraPos);
+            setVec3("cameraPos", activeCamera->cameraPos);
             setFloat("specStrength", 0.9f);
             setFloat("specPhong", 12);
 
             glBindVertexArray(obj->VAO);
             glDrawArrays(GL_TRIANGLES, 0, obj->fullVertexData.size() / 8);
         }
+
+        // second pass
+        glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        glUseProgram(activeCamera->mShader->shaderID);
+        glBindVertexArray(mFrameBuffer->quadVAO);
+        glDisable(GL_DEPTH_TEST); //Temporarily disable depth test
+        glBindTexture(GL_TEXTURE_2D, mFrameBuffer->textureColorbuffer);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
 
         glfwSwapBuffers(mWindow->window);
         /* Poll for and process events */

@@ -4,6 +4,7 @@
 in vec2 texCoord;
 in vec3 normCoord;
 in vec3 fragPos;
+in mat3 TBN;
 
 //TEXTURES
 uniform sampler2D texdiffuse;
@@ -22,7 +23,6 @@ uniform vec3 pLightPos;
 uniform vec3 pLightColor;
 
 //AMBIENT LIGHT
-uniform vec3 ambientLightColor;
 uniform float ambientLightIntensity;
 
 //CAMERA
@@ -38,12 +38,12 @@ out vec4 FragColor;
 void main(){
 	//Directional Vectors
 	vec3 normal = normalize(normCoord);
-	//normal = normalize(texture(texnormal, texCoord).xyz * 2.0f - 1.0f); //SOON
+	normal = -normalize(TBN * (texture(texnormal, texCoord).xyz * 2.0f - 1.0f));
 	vec3 viewDir = normalize(cameraPos - fragPos);
 
 	//Directional light set-up
 	vec3 dirLightDir = normalize(dLightDir);
-	vec3 dDiffuse = max(dot(normal, dirLightDir), 0.0f) * dLightColor;
+	vec3 dDiffuse = max(dot(normal, -dirLightDir), 0.0f) * dLightColor;
 
 	//Point light set-up + intensity calculation from distance
 	vec3 pLightOffset = pLightPos - fragPos;

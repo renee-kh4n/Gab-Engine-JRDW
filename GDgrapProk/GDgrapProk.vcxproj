@@ -138,13 +138,14 @@
     <ClCompile Include="GD_Graphics\GDShader.cpp" />
     <ClCompile Include="GD_Graphics\GDSkybox.cpp" />
     <ClCompile Include="GD_Graphics\GDTexture.cpp" />
-    <ClCompile Include="GD_Graphics\GDutil.cpp" />
     <ClCompile Include="GD_Graphics\GDWindow.cpp" />
     <ClCompile Include="GD_Graphics\glad.c" />
     <ClCompile Include="GD_Graphics\GDObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GD_Graphics\GDCamera.h" />
+    <ClInclude Include="GD_Graphics\GDFramebuffer.h" />
+    <ClInclude Include="GD_Graphics\GDLight.h" />
     <ClInclude Include="GD_Graphics\GDObject.h" />
     <ClInclude Include="GD_Graphics\GDShader.h" />
     <ClInclude Include="GD_Graphics\GDSkybox.h" />
@@ -199,6 +200,19 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Tex\</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Tex\</DestinationFolders>
     </Image>
+    <Image Include="Tex\sub1\diff.png" />
+    <Image Include="Tex\sub1\gloss.png" />
+    <Image Include="Tex\sub1\norm.png" />
+    <Image Include="Tex\sub2\diff.jpg" />
+    <Image Include="Tex\sub2\norm.png" />
+    <Image Include="Tex\sub3\default_Normal_OpenGL.png" />
+    <Image Include="Tex\sub3\diff.png" />
+    <Image Include="Tex\sub4\diff.jpg" />
+    <Image Include="Tex\sub4\Metal003_2K_Normal.jpg" />
+    <Image Include="Tex\sub5\diff.png" />
+    <Image Include="Tex\sub6\diff.png" />
+    <Image Include="Tex\sub6\SubLow0Smooth_DefaultMaterial_Normal.png" />
+    <Image Include="Tex\sub7\diff.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Tex\partenza.jpg">
@@ -290,6 +304,59 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="3D\sub3.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="3D\sub4.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="3D\sub5.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="3D\sub6.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="3D\sub7.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\camshader.frag">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Shaders\camshader.vert">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

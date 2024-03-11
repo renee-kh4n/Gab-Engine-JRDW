@@ -15,5 +15,5 @@ struct GDTexture {
 
 struct GDTextureCubeMap {
     GLuint texID;
-    GDTextureCubeMap(std::string semiPath);
+    GDTextureCubeMap(std::string semiPath, std::string fileExtension);
 };

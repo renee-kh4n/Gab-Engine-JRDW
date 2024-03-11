@@ -44,4 +44,5 @@ public:
     };
 
     GDSkybox();
+    void Render(glm::mat4 viewMat, glm::mat4 proj);
 };

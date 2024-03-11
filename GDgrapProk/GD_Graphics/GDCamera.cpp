@@ -1,14 +1,15 @@
 #include "GDCamera.h"
 
-GDCamera::GDCamera(GDWindow* mWindow)
+GDCamera::GDCamera(GDWindow* mWindow, GDShader* mShader)
 {
 	this->mWindow = mWindow;
+    this->mShader = mShader;
 }
 
-void GDCamera::setPerspectiveFOV(float angles)
+void GDCamera::setPerspectiveFOV(float angles, float range)
 {
     curFOV = angles;
-    proj_pers = glm::perspective(glm::radians(angles), (float)mWindow->win_y / mWindow->win_x, 0.1f, 100.0f);
+    proj = glm::perspective(glm::radians(angles), (float)mWindow->win_y / mWindow->win_x, 0.1f, range);
 }
 
 glm::vec3 GDCamera::CamUp()
