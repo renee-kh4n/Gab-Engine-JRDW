@@ -10,17 +10,14 @@ uniform mat4 transform_projection;
 
 out vec2 texCoord;
 out vec3 normCoord;
+out vec3 tanCoord;
 out vec3 fragPos;
-out mat3 TBN;
 
 void main(){
 	gl_Position = transform_projection * vec4(aPos, 1.0);
 	texCoord = aTex;
 
 	fragPos = vec3(transform_model * vec4(aPos, 1.0));
-	normCoord = vec3(transform_model * vec4(aNormal, 0.0));
-
-	vec3 T = vec3(transform_model * vec4(aTan,   0.0));
-	vec3 N = vec3(transform_model * vec4(aNormal,    0.0));
-	mat3 TBN = mat3(T, cross(N, T), N);
+	normCoord = normalize(vec3(transform_model * vec4(aNormal, 0.0)));
+	tanCoord = normalize(vec3(transform_model * vec4(aTan, 0.0)));
 }

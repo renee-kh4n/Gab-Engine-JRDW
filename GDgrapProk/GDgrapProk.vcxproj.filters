@@ -77,7 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Shaders\lit.frag" />
-    <CopyFileToFolders Include="Shaders\lit.vert" />
+    <CopyFileToFolders Include="Shaders\object.vert" />
     <CopyFileToFolders Include="3D\djSword.obj" />
     <CopyFileToFolders Include="3D\myCube.obj" />
     <CopyFileToFolders Include="Shaders\skybox.frag" />
@@ -137,7 +137,7 @@
     <Image Include="Tex\sub2\norm.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Tex\sub3\default_Normal_OpenGL.png">
+    <Image Include="Tex\sub3\norm.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Tex\sub3\diff.png">
@@ -146,7 +146,7 @@
     <Image Include="Tex\sub4\diff.jpg">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Tex\sub4\Metal003_2K_Normal.jpg">
+    <Image Include="Tex\sub4\norm.jpg">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Tex\sub5\diff.png">
@@ -155,11 +155,23 @@
     <Image Include="Tex\sub6\diff.png">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="Tex\sub6\SubLow0Smooth_DefaultMaterial_Normal.png">
+    <Image Include="Tex\sub6\norm.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="Tex\sub7\diff.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="Tex\sub7\norm.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Tex\sub7\diff.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Tex\sub7\gloss.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Shaders\depth.frag" />
   </ItemGroup>
 </Project>

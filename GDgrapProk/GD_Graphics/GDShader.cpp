@@ -13,13 +13,16 @@ GDShader::GDShader(std::string vert, std::string frag) {
 }
 
 GLuint GDShader::TryCompileShader(std::string path, int compile_type) {
+	//Load the text file
 	auto shaderStr = LoadTxtFile(path);
 	const char* shaderptr = shaderStr.c_str();
 
+	//Compile the shader through OpenGL
 	GLuint shaderint = glCreateShader(compile_type);
 	glShaderSource(shaderint, 1, &shaderptr, NULL);
 	glCompileShader(shaderint);
 
+	//Handle errors if there is any
 	GLint isCompiled = 0;
 	glGetShaderiv(shaderint, GL_COMPILE_STATUS, &isCompiled);
 

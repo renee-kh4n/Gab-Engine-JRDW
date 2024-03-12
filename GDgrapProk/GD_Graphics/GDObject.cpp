@@ -1,12 +1,25 @@
 #include "GDObject.h"
 
-GDObject::GDObject(std::string path) {
+GDObject::GDObject(std::string path, GDShader* shader, GDTexture* texturediff, GDTexture* texturenormal, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot) {
+    //Assign passed variables
+    this->shader = shader;
+    this->texturediff = texturediff;
+    this->texturenormal = texturenormal;
+    this->pos = pos;
+    this->scale = scale;
+    this->rot = rot;
+    
+    //Specify the data length of a singular vertex
     int totalVertexDataLength = 11;
 
+    //Load the obj file
     bool success = tinyobj::LoadObj(&attributes, &shapes, &material, &warning, &error, path.c_str());
+    //Loop per triangle
     for (size_t m_i = 0; m_i < shapes[0].mesh.indices.size(); m_i += 3)
     {
-
+        //Variables for tangent calculation
+        //Store vacant data indices for tangent calculation
+        std::vector<int> tanIndices = {};
         glm::vec3 vertices[3] = { glm::vec3(), glm::vec3(), glm::vec3() };
         glm::vec3 normal0;
 
@@ -24,6 +37,7 @@ GDObject::GDObject(std::string path) {
             fullVertexData.push_back(vertices[v_i].y);
             fullVertexData.push_back(vertices[v_i].z);
 
+            //Try insert normal data
             if (attributes.normals.size() > 0) {
                 if (v_i == 0) {
                     normal0 = glm::vec3(
@@ -43,6 +57,7 @@ GDObject::GDObject(std::string path) {
                 fullVertexData.push_back(0);
             }
 
+            //Try insert UV data
             if (attributes.texcoords.size() > 0) {
                 uvs[v_i].x = attributes.texcoords[(vData.texcoord_index * 2)];
                 uvs[v_i].y = attributes.texcoords[(vData.texcoord_index * 2) + 1];
@@ -55,41 +70,34 @@ GDObject::GDObject(std::string path) {
                 fullVertexData.push_back(0.5f);
             }
 
+            //Take note of the vacant slots for tangent data
+            tanIndices.push_back(fullVertexData.size());
             fullVertexData.push_back(0);
             fullVertexData.push_back(0);
             fullVertexData.push_back(0);
         }
 
-        glm::vec3 deltaPos;
-        if (vertices[0] == vertices[1])
-            deltaPos = vertices[2] - vertices[0];
-        else
-            deltaPos = vertices[1] - vertices[0];
+        //Calculate for the current triangle's tangent
+        auto deltaPos1 = vertices[1] - vertices[0];
+        auto deltaPos2 = vertices[2] - vertices[0];
 
         glm::vec2 deltaUV1 = uvs[1] - uvs[0];
         glm::vec2 deltaUV2 = uvs[2] - uvs[0];
 
-        glm::vec3 tan; // tangents
-        glm::vec3 bin; // binormal
+        float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+        glm::vec3 tan = (deltaPos1 * deltaUV2.y - deltaPos2 * deltaUV1.y) * r;
 
-        // avoid divion with 0
-        if (deltaUV1.s != 0)
-            tan = deltaPos / deltaUV1.s;
-        else
-            tan = deltaPos / 1.0f;
-
-        tan = glm::normalize(tan - glm::dot(normal0, tan) * normal0);
-        bin = glm::normalize(glm::cross(tan, normal0));
-
+        //Set the tangent for all 3 vertices
         for (size_t v_i = 0; v_i < 3; v_i++)
         {
-            fullVertexData[m_i + (v_i * totalVertexDataLength) + 8] = tan.x;
-            fullVertexData[m_i + (v_i * totalVertexDataLength) + 8 + 1] = tan.y;
-            fullVertexData[m_i + (v_i * totalVertexDataLength) + 8 + 2] = tan.z;
+            auto tanindex0 = tanIndices[v_i];
+            fullVertexData[tanindex0] = tan.x;
+            fullVertexData[tanindex0 + 1] = tan.y;
+            fullVertexData[tanindex0 + 2] = tan.z;
         }
     }
 
-
+    //OpenGL object loading
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -98,6 +106,7 @@ GDObject::GDObject(std::string path) {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fullVertexData.size(), fullVertexData.data(), GL_DYNAMIC_DRAW);
 
+    //Enable all vertex data inputs
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, totalVertexDataLength * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
@@ -113,6 +122,7 @@ GDObject::GDObject(std::string path) {
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, totalVertexDataLength * sizeof(float), (void*)tanPtr);
     glEnableVertexAttribArray(3);
 
+    //Finalize object load
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);

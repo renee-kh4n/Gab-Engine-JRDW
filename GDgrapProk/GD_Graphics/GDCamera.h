@@ -4,9 +4,11 @@
 #include "GDWindow.h"
 #include "GDShader.h"
 
+/// <summary>
+/// Generic camera class with assignable project matrix and utility functions for rendering.
+/// </summary>
 struct GDCamera {
     glm::mat4 proj;
-    float curFOV = 90.0f;
     GDWindow* mWindow;
     GDShader* mShader;
 

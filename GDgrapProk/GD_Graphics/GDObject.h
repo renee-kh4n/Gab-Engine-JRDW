@@ -22,5 +22,5 @@ public:
 
     std::vector<GLfloat> fullVertexData;
 
-    GDObject(std::string path);
+    GDObject(std::string path, GDShader* shader, GDTexture* texturediff, GDTexture* texturenormal, glm::vec3 pos, glm::vec3 scale, glm::vec3 rot = glm::vec3(0, 0, 0));
 };

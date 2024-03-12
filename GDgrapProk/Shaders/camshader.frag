@@ -3,9 +3,11 @@ out vec4 FragColor;
   
 in vec2 TexCoords;
 
-uniform sampler2D screenTexture;
+uniform sampler2D colorBufferTexture;
+uniform sampler2D depthBufferTexture;
 
 uniform float saturation;
+uniform vec2 blurFromTo;
 uniform float blur;
 uniform vec4 tint;
 
@@ -29,26 +31,36 @@ vec3 hsv2rgb(vec3 c)
 
 void main()
 {
-    vec4 color = texture(screenTexture, TexCoords);
+    vec4 color = texture(colorBufferTexture, TexCoords);
+    float depth = texture(depthBufferTexture, TexCoords).x;
 
     //BLUR EDITING
     float Pi = 6.28318530718;
 
-    float gblurDirs = 16.0;
-    float gblurQual = 3.0;
+    // Blur calculations
+    float blurLayersApplied = 0;
+    float blurAtDepth = smoothstep(blurFromTo.x, blurFromTo.y, depth) * blur;
+
+    float gblurDirs = 1 + (20.0 * (1 - blurAtDepth));
+    float gblurQual = 1 + (15.0 * (1 - blurAtDepth));
     vec4 gblurOutput = color;
 
-    // Blur calculations
-    for( float d=0.0; d<Pi; d+=Pi/gblurDirs)
+    for(float d = 0.0; d < Pi; d += Pi/gblurDirs)
     {
-		for(float i=1.0/gblurQual; i<=1.0; i+=1.0/gblurQual)
+		for(float i = 1.0/gblurQual; i <= 1.0; i += 1.0/gblurQual)
         {
-			gblurOutput += texture(screenTexture, TexCoords + vec2(cos(d),sin(d)) * blur * i);		
+            vec2 from_uv = TexCoords + (vec2(cos(d),sin(d)) * blurAtDepth * i);
+            float from_depth = texture(depthBufferTexture, from_uv).x;
+            float depth_difference = depth - from_depth;
+            float determinant = step(0.0, depth_difference);
+            blurLayersApplied += determinant;
+
+			gblurOutput += texture(colorBufferTexture, from_uv) * determinant;
         }
     }
     
     // Output to screen
-    gblurOutput /= gblurQual * gblurDirs - 15.0;
+    gblurOutput /= blurLayersApplied + 1;
     color = gblurOutput;
 
     //SATURATION EDITING
@@ -57,4 +69,6 @@ void main()
     color = vec4(hsv2rgb(hsv), color.w) * tint;
 
     FragColor = color;
+    //FragColor = vec4(smoothstep(0, 20, depth), smoothstep(20, 40, depth), smoothstep(40, 60, depth), 1.0f);
+    //FragColor = vec4(blurAtDepth,0 ,0 , 1.0f);
 }
