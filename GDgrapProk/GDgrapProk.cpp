@@ -46,9 +46,9 @@ static std::vector<GDObject*> ships;
 static std::vector<GDObject*> objs;
 
 static GDWindow* mWindow;
-static GDCamera* mCamera3rd;
-static GDCamera* mCamera1st;
-static GDCamera* mCameraOrtho;
+static GDPerspectiveCamera* mCamera3rd;
+static GDPerspectiveCamera* mCamera1st;
+static GDOrthographicCamera* mCameraOrtho;
 static GDCamera* activeCamera;
 static GDSkybox* mSkybox;
 
@@ -203,26 +203,28 @@ int main(void)
     auto mDepthFrameBuffer = new GDFramebuffer(mWindow);
 
     //Cameras and their postprocessing effects setup
-    mCamera3rd = new GDCamera(mWindow, Cam3rdPPShader);
+    mCamera3rd = new GDPerspectiveCamera(mWindow, Cam3rdPPShader);
     glUseProgram(Cam3rdPPShader->shaderID);
     glUniform1f(glGetUniformLocation(Cam3rdPPShader->shaderID, "saturation"), 0.6f);
     glUniform1f(glGetUniformLocation(Cam3rdPPShader->shaderID, "blur"), 0.4f);
     glUniform2fv(glGetUniformLocation(Cam3rdPPShader->shaderID, "blurFromTo"), 1, glm::value_ptr(glm::vec2(13, 20)));
     glUniform4fv(glGetUniformLocation(Cam3rdPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1) * 0.7f));
-    mCamera3rd->setPerspectiveFOV(80.0f, 25);
+    mCamera3rd->angles = 80.0f;
+    mCamera3rd->farClip = 25;
 
-    mCamera1st = new GDCamera(mWindow, Cam1stPPShader);
+    mCamera1st = new GDPerspectiveCamera(mWindow, Cam1stPPShader);
     glUseProgram(Cam1stPPShader->shaderID);
     glUniform1f(glGetUniformLocation(Cam1stPPShader->shaderID, "saturation"), 0.0f);
     glUniform4fv(glGetUniformLocation(Cam1stPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(0, 1, 0, 1)));
-    mCamera1st->setPerspectiveFOV(80.0f, 100);
+    mCamera1st->angles = 80.0f;
+    mCamera1st->farClip = 100;
 
-    mCameraOrtho = new GDCamera(mWindow, CamOrthoPPShader);
+    mCameraOrtho = new GDOrthographicCamera(mWindow, CamOrthoPPShader);
     glUseProgram(CamOrthoPPShader->shaderID);
     glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 0.0f);
     glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(0, 1, 0, 1)));
-    auto orthoRange = 50.0f;
-    mCameraOrtho->proj = glm::ortho(-orthoRange, orthoRange, -orthoRange, orthoRange, 1.0f, 200.0f);
+    mCameraOrtho->orthoRange = 50.0f;
+    mCameraOrtho->farClip = 200.0f;
     mCameraOrtho->cameraPos = glm::vec3(0, 40, 0);
     mCameraOrtho->CamF = glm::vec3(0, -1, 0);
     mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
@@ -450,7 +452,7 @@ int main(void)
 
             //Render the skybox if specified
             if (activeCamera != mCameraOrtho && !depthWritersOnly) {
-                mSkybox->Render(viewMat, activeCamera->proj);
+                mSkybox->Render(viewMat, activeCamera->getproj());
             }
 
             //Loop through all objects
@@ -518,7 +520,7 @@ int main(void)
                 tmat = glm::rotate(tmat, glm::radians(obj->rot.x), glm::vec3(1, 0, 0));
                 tmat = glm::rotate(tmat, glm::radians(obj->rot.y), glm::vec3(0, 1, 0));
                 glm::mat4 tmat_VM = tmat;
-                glm::mat4 tmat_PVM = activeCamera->proj * viewMat * tmat;
+                glm::mat4 tmat_PVM = activeCamera->getproj() * viewMat * tmat;
                 setMat("transform_model", tmat);
                 setMat("transform_projection", tmat_PVM);
                 setVec3("cameraPos", activeCamera->cameraPos);
