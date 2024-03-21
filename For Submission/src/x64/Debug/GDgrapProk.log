@@ -1,0 +1,36 @@
+﻿  GDgrapProk.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\For Submission\src\GDgrapProk.cpp(80,45): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=glm::f64
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\For Submission\src\GDgrapProk.cpp(81,45): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
+          with
+          [
+              T=glm::f64
+          ]
+          and
+          [
+              T=float
+          ]
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\For Submission\src\GDgrapProk.cpp(213,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\For Submission\src\GDgrapProk.cpp(361,9): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
+  GDCamera.cpp
+  GDShader.cpp
+  GDSkybox.cpp
+  GDTexture.cpp
+  GDWindow.cpp
+  GDObject.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\For Submission\src\GD_Graphics\GDObject.cpp(74,55): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+  Generating Code...
+  glad.c
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+  GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\For Submission\src\x64\Debug\GDgrapProk.exe

@@ -1,6 +1,5 @@
-﻿  GDCamera.cpp
-  GDgrapProk.cpp
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(106,45): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
+﻿  GDgrapProk.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(80,45): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=glm::f64
@@ -9,7 +8,7 @@ C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgr
           [
               T=float
           ]
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(107,45): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(81,45): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
           with
           [
               T=glm::f64
@@ -18,33 +17,6 @@ C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgr
           [
               T=float
           ]
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(125,50): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=glm::f64
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(126,51): warning C4244: '+=': conversion from 'T' to 'T', possible loss of data
-          with
-          [
-              T=glm::f64
-          ]
-          and
-          [
-              T=float
-          ]
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(346,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(382,34): warning C4244: '=': conversion from 'double' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(400,72): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(426,43): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(549,9): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  Generating Code...
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(213,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(361,9): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
   GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\x64\Debug\GDgrapProk.exe
