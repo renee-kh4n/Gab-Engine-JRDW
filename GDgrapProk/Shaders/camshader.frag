@@ -41,8 +41,8 @@ void main()
     float blurLayersApplied = 0;
     float blurAtDepth = smoothstep(blurFromTo.x, blurFromTo.y, depth) * blur;
 
-    float gblurDirs = 1 + (20.0 * (1 - blurAtDepth));
-    float gblurQual = 1 + (15.0 * (1 - blurAtDepth));
+    float gblurDirs = 16;
+    float gblurQual = 4;
     vec4 gblurOutput = color;
 
     for(float d = 0.0; d < Pi; d += Pi/gblurDirs)
