@@ -24,6 +24,7 @@
     <ProjectGuid>{e731ce27-f63b-4562-9bc0-f7beca18eb45}</ProjectGuid>
     <RootNamespace>GDgrapProk</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>GDPHYSX</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

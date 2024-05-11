@@ -19,115 +19,12 @@ glm::dvec2 lastFrameMousePos;
 glm::dvec2 currentFrameMousePos;
 glm::dvec2 mouseDelta;
 
-
-GDObject* mPlayer;
 static std::vector<GDObject*> objs;
 
 static GDWindow* mWindow;
-static GDPerspectiveCamera* mCamera3rd;
-static GDOrthographicCamera* mCameraOrtho;
 static GDCamera* activeCamera;
 static GDSkybox* mSkybox;
 
-//Pers cam
-static glm::vec3 cam3rdOffset = glm::vec3(0, 2, 0);
-static glm::vec2 cam3rdOrbitalPos = glm::vec2(0, 0);
-static float camDistance = 20;
-//Ortho cam
-static glm::vec3 camOrthoOffset = glm::vec3(0, 100, 0);
-static glm::vec3 camOrthoCenter = glm::vec3(0, 0, 0);
-//Plight
-GDPointLight mPLight;
-GDObject* mPLightObj;
-static glm::vec2 plightOrbitalPos = glm::vec2(0, 0);
-static float plightDistance = 10;
-//Dlight
-GDDirLight mDirLight;
-
-bool lightswitch = false;
-
-bool queue_cam1switch = false;
-bool queue_cam2switch = false;
-bool queue_lightswitch = false;
-bool queue_controlswitch = false;
-
-/// <summary>
-/// Logic to control the three cameras using GLFW's input system.
-/// </summary>
-/// <param name="speed">Control speed</param>
-void CameraControl(float speed)
-{
-    if (glfwGetKey(mWindow->window, GLFW_KEY_1) == GLFW_PRESS)
-        queue_cam1switch = true;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_1) == GLFW_RELEASE && queue_cam1switch) {
-        queue_cam1switch = false;
-
-        activeCamera = mCamera3rd;
-    }
-
-    if (glfwGetKey(mWindow->window, GLFW_KEY_2) == GLFW_PRESS)
-        queue_cam2switch = true;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_2) == GLFW_RELEASE && queue_cam2switch) {
-        queue_cam2switch = false;
-
-        activeCamera = mCameraOrtho;
-    }
-
-    if (activeCamera == mCamera3rd) {
-        auto camLookAtPos = cam3rdOffset;
-
-        if (glfwGetMouseButton(mWindow->window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
-            cam3rdOrbitalPos.x += mouseDelta.y;
-            cam3rdOrbitalPos.y += mouseDelta.x;
-        }
-
-        cam3rdOrbitalPos.x = glm::clamp(cam3rdOrbitalPos.x, -45.0f, 45.0f);
-
-        auto dollyVector = EulerToVec(glm::vec3(0, 0, 1), cam3rdOrbitalPos) * camDistance;
-        mCamera3rd->cameraPos = dollyVector;
-        mCamera3rd->CamF = glm::normalize(camLookAtPos - mCamera3rd->cameraPos);
-    }
-}
-
-void PlayerControl(float delta) {
-    if (glfwGetKey(mWindow->window, GLFW_KEY_A) == GLFW_PRESS)
-        mPlayer->rot.y += delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_D) == GLFW_PRESS)
-        mPlayer->rot.y += -delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_W) == GLFW_PRESS)
-        mPlayer->rot.x += delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_S) == GLFW_PRESS)
-        mPlayer->rot.x += -delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_Q) == GLFW_PRESS)
-        mPlayer->rot.z += delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_E) == GLFW_PRESS)
-        mPlayer->rot.z += -delta;
-}
-
-void LightControl(float delta) {
-    if (glfwGetKey(mWindow->window, GLFW_KEY_A) == GLFW_PRESS)
-        plightOrbitalPos.y += delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_D) == GLFW_PRESS)
-        plightOrbitalPos.y += -delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_W) == GLFW_PRESS)
-        plightOrbitalPos.x += delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_S) == GLFW_PRESS)
-        plightOrbitalPos.x += -delta;
-
-    auto dollyVector = EulerToVec(glm::vec3(0, 0, 1), plightOrbitalPos) * plightDistance;
-    mPLightObj->pos = dollyVector;
-}
-
-void BrightnessControl(float delta) {
-    if (glfwGetKey(mWindow->window, GLFW_KEY_UP) == GLFW_PRESS)
-        mPLight.intensity += delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_DOWN) == GLFW_PRESS)
-        mPLight.intensity += -delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-        mDirLight.intensity += delta;
-    if (glfwGetKey(mWindow->window, GLFW_KEY_LEFT) == GLFW_PRESS)
-        mDirLight.intensity += -delta;
-}
 
 int main(void)
 {
@@ -155,50 +52,26 @@ int main(void)
     auto mFrameBuffer = new GDFramebuffer(mWindow);
     auto mDepthFrameBuffer = new GDFramebuffer(mWindow);
 
-    //Cameras and their postprocessing effects setup
-    mCamera3rd = new GDPerspectiveCamera(mWindow, Cam3rdPPShader);
-    glUseProgram(Cam3rdPPShader->shaderID);
-    glUniform1f(glGetUniformLocation(Cam3rdPPShader->shaderID, "saturation"), 0.6f);
-    glUniform4fv(glGetUniformLocation(Cam3rdPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1) * 0.7f));
-    mCamera3rd->angles = 80.0f;
-    mCamera3rd->farClip = 200.0f;
-
-    mCameraOrtho = new GDOrthographicCamera(mWindow, CamOrthoPPShader);
+    auto mCameraOrtho = new GDOrthographicCamera(mWindow, CamOrthoPPShader);
     glUseProgram(CamOrthoPPShader->shaderID);
-    glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 0.0f);
-    glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(0, 1, 0, 1)));
-    mCameraOrtho->orthoRange = 25.0f;
+    glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 1.0f);
+    glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
+    mCameraOrtho->orthoRange = 5.0f;
     mCameraOrtho->farClip = 200.0f;
-    mCameraOrtho->cameraPos = glm::vec3(0, 40, 0);
-    mCameraOrtho->CamF = glm::vec3(0, -1, 0);
-    mCameraOrtho->WorldUp = glm::vec3(0, 0, 1);
+    mCameraOrtho->cameraPos = glm::vec3(0, 0, -50);
+    mCameraOrtho->CamF = glm::vec3(0, 0, 1);
+    mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
 
-    activeCamera = mCamera3rd;
-
-    //Lights setup
-    mPLight.color = glm::vec3(0.5, 1, 0.5);
-    mPLight.intensity = 30;
-    mDirLight.dir = glm::vec3(-4, 5, 0);
-    mDirLight.color= glm::vec3(0.7, 0.6, 1) * 0.8f;
+    activeCamera = mCameraOrtho;
 #pragma endregion
 
 #pragma region Object setup
-
-    //main mesh setup
-    mPlayer = new GDObject("3D/sub3.obj",
-        litShader,
-        new GDTexture("Tex/sub1/diff.png"),
-        new GDTexture("Tex/sub1/norm.png"),
-        glm::vec3(0, 0, 0), glm::vec3(0.5f)
-    );
-    objs.push_back(mPlayer);
-
     //light obj setup
-    mPLightObj = new GDObject("3D/sphere.obj",
+    auto mPLightObj = new GDObject("3D/sphere.obj",
         unlitShader,
         NULL,
         NULL,
-        glm::vec3(5, 5, 0)
+        glm::vec3(0, 0, 0)
         );
     objs.push_back(mPLightObj);
 
@@ -218,28 +91,6 @@ int main(void)
         glfwGetCursorPos(mWindow->window, &currentFrameMousePos.x, &currentFrameMousePos.y);
         mouseDelta = currentFrameMousePos - lastFrameMousePos;
         lastFrameMousePos = currentFrameMousePos;
-
-#pragma region Player/Camera Control
-        //Camera Control
-        CameraControl(deltaTime * 20);
-        BrightnessControl(deltaTime * 20);
-
-        if (lightswitch)
-            PlayerControl(deltaTime * 40);
-        else
-            LightControl(deltaTime * 40);
-
-        //Light Control
-        mPLight.pos = mPLightObj->pos;
-
-        if (glfwGetKey(mWindow->window, GLFW_KEY_SPACE) == GLFW_PRESS)
-            queue_controlswitch = true;
-        if (glfwGetKey(mWindow->window, GLFW_KEY_SPACE) == GLFW_RELEASE && queue_controlswitch) {
-            queue_controlswitch = false;
-
-            lightswitch = !lightswitch;
-        }
-#pragma endregion
 
 #pragma region Rendering
         /* =============== Render here =============== */
@@ -336,17 +187,11 @@ int main(void)
 
                 //Light data
                 if (obj->shader == litShader) {
-                    setVec3("dLightDir", mDirLight.dir);
-                    setVec3("dLightColor", mDirLight.color * mDirLight.intensity);
-                    setVec3("pLightPos", mPLight.pos);
-                    setVec3("pLightColor", mPLight.color * mPLight.intensity);
-                    setFloat("ambientLightIntensity", 0.3f);
-
                     setFloat("specStrength", 2.9f);
                     setFloat("specPhong", 7);
                 }
                 else if (obj->shader == unlitShader) {
-                    setVec3("color", mPLight.color);
+                    setVec3("color", glm::vec3(1, 0, 0));
                 }
 
                 //Draw the current object
