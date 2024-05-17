@@ -1,5 +1,0 @@
-﻿C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\Microsoft.CppBuild.targets(517,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (GDgrapProk.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  GDgrapProk.cpp
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(88,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\GDgrapProk.cpp(208,9): warning C4267: 'argument': conversion from 'size_t' to 'GLsizei', possible loss of data
-  GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDgrapProk\x64\Debug\GDPHYSX.exe
