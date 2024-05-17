@@ -12,6 +12,8 @@
 #include <GD_Graphics/RenderPipeline.h>
 #include <GD_Graphics/Mesh.h>
 
+#include <GD_Engine/Vector.h>
+
 using namespace gde;
 
 glm::dvec2 lastFrameMousePos;

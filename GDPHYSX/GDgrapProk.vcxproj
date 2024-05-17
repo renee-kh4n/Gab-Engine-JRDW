@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dependencies\include\GD_Engine\Vector.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Material.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Mesh.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\RenderPipeline.cpp" />
@@ -147,7 +148,8 @@
     <ClCompile Include="Dependencies\include\GD_Graphics\DrawCall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dependencies\include\GD_Engine\GDObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Object.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Vector.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Camera.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Framebuffer.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Light.h" />
