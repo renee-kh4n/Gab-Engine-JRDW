@@ -22,6 +22,7 @@ namespace gde {
 			float components[VECTORSIZE];
 		};
 
+		Vector3();
 		Vector3(float x, float y, float z);
 
 		float SqrMagnitude();
@@ -52,6 +53,10 @@ namespace gde {
 		Vector3 operator*(const float& right);
 		Vector3 operator+(const Vector3& right);
 		Vector3 operator-(const Vector3& right);
+
+		operator glm::vec3() const {
+			return glm::vec3(this->x, this->y, this->z);
+		}
 
 		std::string ToString();
 	};

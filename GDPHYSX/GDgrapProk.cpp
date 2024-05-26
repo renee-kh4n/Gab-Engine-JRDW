@@ -12,18 +12,18 @@
 #include <GD_Graphics/RenderPipeline.h>
 #include <GD_Graphics/Mesh.h>
 
+#include <GD_Engine/PhysicsPipeline.h>
 #include <GD_Engine/Vector.h>
+#include <GD_Engine/Time.h>
 
 using namespace gde;
-
-glm::dvec2 lastFrameMousePos;
-glm::dvec2 currentFrameMousePos;
-glm::dvec2 mouseDelta;
 
 static Window* mWindow;
 
 int main(void)
 {
+    auto mTime = new Time();
+
     /* Initialize GLFW*/
     if (!glfwInit())
         return -1;
@@ -47,14 +47,16 @@ int main(void)
     glUseProgram(CamOrthoPPShader->shaderID);
     glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 1.0f);
     glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
-    mCameraOrtho->orthoRange = 5.0f;
-    mCameraOrtho->farClip = 200.0f;
+    mCameraOrtho->orthoRange = 450;
+    mCameraOrtho->farClip = 1000.0f;
     mCameraOrtho->cameraPos = glm::vec3(0, 0, -50);
     mCameraOrtho->CamF = glm::vec3(0, 0, 1);
     mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
 
-    //pipeline setup
+    //RenderPipeline setup
     auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y), mCameraOrtho);
+    //PhysicsPipeline setup
+    auto mPhysicsPipeline = new PhysicsPipeline();
 #pragma endregion
 
 #pragma region Object setup
@@ -63,21 +65,27 @@ int main(void)
     auto sphere_material = new Material(unlitShader);
     sphere_material->setOverride<glm::vec3>("color", glm::vec3(1, 0, 0));
     auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
-
     mRenderPipeline->RegisterDrawCall(sphere_drawcall);
+
+    auto sphere_object = new Object();
+    sphere_object->scale = Vector3(1, 1, 1) * 20;
+    sphere_object->position.x = -400;
+    sphere_object->position.z = 600;
+    sphere_object->acceleration.y = -50;
+    sphere_object->velocity.x = 50;
+    sphere_object->velocity.y = 50;
+    sphere_object->velocity.z = 50;
+    sphere_object->mDrawCall = sphere_drawcall;
+    mPhysicsPipeline->Register(sphere_object);
 
 #pragma endregion
 
     /// <summary>
     /// MAIN GAME LOOP
     /// </summary>
+
     while (!glfwWindowShouldClose(mWindow->window))
     {
-        //Update delta mouse
-        glfwGetCursorPos(mWindow->window, &currentFrameMousePos.x, &currentFrameMousePos.y);
-        mouseDelta = currentFrameMousePos - lastFrameMousePos;
-        lastFrameMousePos = currentFrameMousePos;
-
         //Update pipeline
         mRenderPipeline->RenderFrame();
 
@@ -85,6 +93,14 @@ int main(void)
         glfwSwapBuffers(mWindow->window);
         /* Poll for and process events */
         glfwPollEvents();
+
+        double fixedTickDur = 0;
+
+        if (mTime->TickFixed(&fixedTickDur)) {
+            mPhysicsPipeline->Update(fixedTickDur);
+        }
+
+        std::cout << "Tick Dur : " << fixedTickDur << std::endl;
     }
     
     mRenderPipeline->CleanUp();

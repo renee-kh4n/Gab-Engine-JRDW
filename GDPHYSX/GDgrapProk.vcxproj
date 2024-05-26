@@ -134,6 +134,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dependencies\include\GD_Engine\Object.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\PhysicsPipeline.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Time.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Vector.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Material.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Mesh.cpp" />
@@ -149,6 +152,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Engine\Object.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\PhysicsPipeline.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Time.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Vector.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Camera.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Framebuffer.h" />
