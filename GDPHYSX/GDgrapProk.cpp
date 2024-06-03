@@ -69,9 +69,8 @@ int main(void)
 
     auto sphere_object = new Object();
     sphere_object->scale = Vector3(1, 1, 1) * 20;
-    sphere_object->position.x = -400;
+    sphere_object->position.x = 600;
     sphere_object->position.z = 600;
-    sphere_object->acceleration.y = -50;
     sphere_object->velocity.x = 50;
     sphere_object->velocity.y = 50;
     sphere_object->velocity.z = 50;
@@ -99,8 +98,6 @@ int main(void)
         if (mTime->TickFixed(&fixedTickDur)) {
             mPhysicsPipeline->Update(fixedTickDur);
         }
-
-        std::cout << "Tick Dur : " << fixedTickDur << std::endl;
     }
     
     mRenderPipeline->CleanUp();

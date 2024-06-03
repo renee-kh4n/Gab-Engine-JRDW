@@ -5,6 +5,8 @@
 
 namespace gde {
 	class Object {
+	private:
+		bool isDestroyed = false;
 	public:
 		Object();
 
@@ -19,5 +21,8 @@ namespace gde {
 		//Rigidbody stuff
 		Vector3 velocity;
 		Vector3 acceleration;
+
+		void Destroy();
+		bool get_isDestroyed();
 	};
 }

@@ -16,3 +16,13 @@ void gde::Object::UpdateDrawCall()
 	this->mDrawCall->scale = this->scale;
 	this->mDrawCall->rot = this->rotation;
 }
+
+void gde::Object::Destroy()
+{
+	this->isDestroyed = true;
+}
+
+bool gde::Object::get_isDestroyed()
+{
+	return this->isDestroyed;
+}

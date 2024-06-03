@@ -7,6 +7,10 @@ void gde::PhysicsPipeline::Register(Object* object)
 
 void gde::PhysicsPipeline::Update(double duration)
 {
+	this->registered_objects.remove_if([](Object* obj) {
+		return obj->get_isDestroyed();
+		});
+
 	for (auto object : this->registered_objects)
 	{
 		object->velocity += object->acceleration * duration;
