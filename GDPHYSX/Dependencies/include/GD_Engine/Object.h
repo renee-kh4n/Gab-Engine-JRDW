@@ -21,6 +21,7 @@ namespace gde {
 		//Rigidbody stuff
 		Vector3 velocity;
 		Vector3 acceleration;
+		float damping;
 
 		void Destroy();
 		bool get_isDestroyed();

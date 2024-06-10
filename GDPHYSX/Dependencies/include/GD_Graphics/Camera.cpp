@@ -39,7 +39,7 @@ namespace gde {
 
     glm::mat4 OrthographicCamera::getproj()
     {
-        return glm::ortho(-orthoRange, orthoRange, -orthoRange, orthoRange, this->nearClip, this->farClip);
+        return glm::ortho(orthoRange, -orthoRange, -orthoRange, orthoRange, this->nearClip, this->farClip);
     }
 
 }

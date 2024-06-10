@@ -14,6 +14,8 @@ void gde::PhysicsPipeline::Update(double duration)
 	for (auto object : this->registered_objects)
 	{
 		object->velocity += object->acceleration * duration;
+		object->velocity = object->velocity * powf(object->damping, duration);
+
 		object->position = object->position + (object->velocity * duration) + ((object->acceleration * (duration * duration)) * (1.0f / 2.0f));
 
 		object->UpdateDrawCall();

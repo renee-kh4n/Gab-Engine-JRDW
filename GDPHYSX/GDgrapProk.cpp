@@ -68,12 +68,13 @@ int main(void)
     mRenderPipeline->RegisterDrawCall(sphere_drawcall);
 
     auto sphere_object = new Object();
-    sphere_object->scale = Vector3(1, 1, 1) * 20;
-    sphere_object->position.x = 600;
-    sphere_object->position.z = 600;
+    sphere_object->scale = Vector3(1, 1, 1) * 5;
+    sphere_object->position.x = 0;
+    sphere_object->position.z = 0;
     sphere_object->velocity.x = 50;
     sphere_object->velocity.y = 50;
     sphere_object->velocity.z = 50;
+    sphere_object->damping = 0.6f;
     sphere_object->mDrawCall = sphere_drawcall;
     mPhysicsPipeline->Register(sphere_object);
 
