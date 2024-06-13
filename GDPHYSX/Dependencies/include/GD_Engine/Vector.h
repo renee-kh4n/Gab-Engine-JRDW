@@ -59,5 +59,8 @@ namespace gde {
 		}
 
 		std::string ToString();
+
+		//constants
+		static const Vector3 zero;
 	};
 }

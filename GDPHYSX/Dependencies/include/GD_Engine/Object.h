@@ -19,9 +19,14 @@ namespace gde {
 		void UpdateDrawCall();
 
 		//Rigidbody stuff
+		float mass;
 		Vector3 velocity;
+		Vector3 frame_impule_force;
+		Vector3 frame_continuous_force;
 		Vector3 acceleration;
 		float damping;
+
+		void AddForce(Vector3 force, bool continuous = false);
 
 		void Destroy();
 		bool get_isDestroyed();

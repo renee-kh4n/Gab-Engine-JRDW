@@ -71,9 +71,7 @@ int main(void)
     sphere_object->scale = Vector3(1, 1, 1) * 5;
     sphere_object->position.x = 0;
     sphere_object->position.z = 0;
-    sphere_object->velocity.x = 50;
-    sphere_object->velocity.y = 50;
-    sphere_object->velocity.z = 50;
+    sphere_object->AddForce(Vector3(50, 50, 0));
     sphere_object->damping = 0.6f;
     sphere_object->mDrawCall = sphere_drawcall;
     mPhysicsPipeline->Register(sphere_object);
