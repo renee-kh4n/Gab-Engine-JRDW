@@ -54,6 +54,11 @@ namespace gde {
 		Vector3 operator+(const Vector3& right);
 		Vector3 operator-(const Vector3& right);
 
+		Vector3(glm::vec3 glmvec) {
+			this->x = glmvec.x;
+			this->y = glmvec.y;
+			this->z = glmvec.z;
+		}
 		operator glm::vec3() const {
 			return glm::vec3(this->x, this->y, this->z);
 		}

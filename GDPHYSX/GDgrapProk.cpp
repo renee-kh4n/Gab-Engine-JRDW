@@ -13,6 +13,8 @@
 #include <GD_Graphics/Mesh.h>
 
 #include <GD_Engine/PhysicsPipeline.h>
+#include <GD_Engine/Objects/Objects.h>
+#include <GD_Engine/UpdateType/UpdateType.h>
 #include <GD_Engine/Vector.h>
 #include <GD_Engine/Time.h>
 
@@ -60,21 +62,28 @@ int main(void)
 #pragma endregion
 
 #pragma region Object setup
+    //root
+    auto root_object = new Object();
+
     //sphere setup
     auto sphere_mesh = new Mesh("3D/sphere.obj");
     auto sphere_material = new Material(unlitShader);
     sphere_material->setOverride<glm::vec3>("color", glm::vec3(1, 0, 0));
     auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
     mRenderPipeline->RegisterDrawCall(sphere_drawcall);
+    auto sphere_renderobject = new RenderObject(sphere_drawcall);
 
-    auto sphere_object = new Object();
-    sphere_object->scale = Vector3(1, 1, 1) * 5;
-    sphere_object->position.x = 0;
-    sphere_object->position.z = 0;
-    sphere_object->AddForce(Vector3(50, 50, 0));
-    sphere_object->damping = 0.6f;
-    sphere_object->mDrawCall = sphere_drawcall;
-    mPhysicsPipeline->Register(sphere_object);
+    auto system = new Object();
+    system->SetParent(root_object);
+
+    auto sphere_rigidobject = new RigidObject();
+    sphere_rigidobject->Scale(Vector3(1, 1, 1) * 5);
+    sphere_rigidobject->AddForce(Vector3(50, 50, 0));
+    sphere_rigidobject->damping = 0.6f;
+    mPhysicsPipeline->Register(sphere_rigidobject);
+    sphere_rigidobject->SetParent(system);
+
+    sphere_renderobject->SetParent(sphere_rigidobject);
 
 #pragma endregion
 
@@ -84,6 +93,16 @@ int main(void)
 
     while (!glfwWindowShouldClose(mWindow->window))
     {
+        //Early update
+        auto InvokeEarlyUpdate = [](Object* object) {
+            EarlyUpdate* updater = dynamic_cast<EarlyUpdate*>(object);
+
+            if (updater != nullptr) {
+                updater->InvokeEarlyUpdate();
+            }
+        };
+        root_object->CallRecursively(InvokeEarlyUpdate);
+
         //Update pipeline
         mRenderPipeline->RenderFrame();
 
@@ -97,6 +116,25 @@ int main(void)
         if (mTime->TickFixed(&fixedTickDur)) {
             mPhysicsPipeline->Update(fixedTickDur);
         }
+
+        //Normal Update
+        auto InvokeNormalUpdate = [](Object* object) {
+            Update* updater = dynamic_cast<Update*>(object);
+
+            if (updater != nullptr) {
+                updater->InvokeUpdate();
+            }
+        };
+        root_object->CallRecursively(InvokeNormalUpdate);
+        //Late Update
+        auto InvokeLateUpdate = [](Object* object) {
+            LateUpdate* updater = dynamic_cast<LateUpdate*>(object);
+
+            if (updater != nullptr) {
+                updater->InvokeLateUpdate();
+            }
+        };
+        root_object->CallRecursively(InvokeLateUpdate);
     }
     
     mRenderPipeline->CleanUp();

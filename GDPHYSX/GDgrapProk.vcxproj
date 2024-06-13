@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -134,10 +134,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Dependencies\include\GD_Engine\Object.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\PhysicsPipeline.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Time.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Vector.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\DrawCall.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Material.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Mesh.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\RenderPipeline.cpp" />
@@ -148,19 +151,29 @@
     <ClCompile Include="Dependencies\include\GD_Graphics\Texture.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Window.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\glad.c" />
-    <ClCompile Include="Dependencies\include\GD_Graphics\DrawCall.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Dependencies\include\GD_Engine\Object.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Component\Transform.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Object.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Objects.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Physics.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Rendering.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\PhysicsPipeline.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Time.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\EarlyUpdate.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\LateUpdate.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\Update.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\UpdateType.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Vector.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Camera.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\DrawCall.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Framebuffer.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Light.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Material.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Mesh.h" />
-    <ClInclude Include="Dependencies\include\GD_Graphics\DrawCall.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\RenderPipeline.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Shader.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Skybox.h" />

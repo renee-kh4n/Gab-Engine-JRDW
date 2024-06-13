@@ -1,14 +1,14 @@
 #pragma once
 
 #include <list>
-#include "Object.h"
+#include "Objects/Physics/Physics.h"
 
 namespace gde {
 	class PhysicsPipeline {
 	private:
-		std::list<Object*> registered_objects;
+		std::list<RigidObject*> registered_objects;
 	public:
-		void Register(Object* object);
+		void Register(RigidObject* object);
 		void Update(double duration);
 	};
 }
