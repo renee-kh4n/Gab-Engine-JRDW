@@ -1,7 +1,7 @@
 #pragma once
 
 namespace gde {
-	class EarlyUpdate {
+	class EarlyUpdate{
 	public:
 		virtual void InvokeEarlyUpdate() = 0;
 	};

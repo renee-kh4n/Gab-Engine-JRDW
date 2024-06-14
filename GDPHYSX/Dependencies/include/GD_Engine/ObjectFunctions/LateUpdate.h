@@ -3,6 +3,6 @@
 namespace gde {
 	class LateUpdate {
 	public:
-		virtual void InvokeLateUpdate() = 0;
+		virtual void InvokeLateUpdate(float deltatime) = 0;
 	};
 }

@@ -8,6 +8,8 @@ namespace gde {
 	private:
 		std::list<RigidObject*> registered_objects;
 	public:
+		static PhysicsPipeline* main;
+
 		void Register(RigidObject* object);
 		void Update(double duration);
 	};

@@ -90,45 +90,43 @@ void gde::RenderPipeline::RenderFrame()
             }
 
             //Pass the necessary CPU-computed data to the object shader
-            //Transform data
-            glm::mat4 tmat = glm::mat4(1.0f);
-            tmat = glm::translate(tmat, obj->pos);
-            tmat = glm::scale(tmat, obj->scale);
-            tmat = glm::rotate(tmat, glm::radians(obj->rot.y), glm::vec3(0, 1, 0));
-            tmat = glm::rotate(tmat, glm::radians(obj->rot.x), glm::vec3(1, 0, 0));
-            tmat = glm::rotate(tmat, glm::radians(obj->rot.z), glm::vec3(0, 0, 1));
-            glm::mat4 tmat_VM = tmat;
-            glm::mat4 tmat_PVM = activeCamera->getproj() * viewMat * tmat;
-            setMat4("transform_model", tmat);
-            setMat4("transform_projection", tmat_PVM);
-            setVec3("cameraPos", activeCamera->cameraPos);
+            
+            for (auto& call : obj->calls) {
+                //Transform data
+                glm::mat4 tmat = call.second;
+                glm::mat4 tmat_VM = tmat;
+                glm::mat4 tmat_PVM = activeCamera->getproj() * viewMat * tmat;
+                setMat4("transform_model", tmat);
+                setMat4("transform_projection", tmat_PVM);
+                setVec3("cameraPos", activeCamera->cameraPos);
 
-            for (auto& iterator : obj->m_material->overrides) {
-                switch (iterator.second.type)
-                {
-                case BOOL:
-                    setBool(iterator.first, iterator.second.value_bool);
-                    break;
-                case FLOAT:
-                    setFloat(iterator.first, iterator.second.value_float);
-                    break;
-                case VEC2:
-                    setVec2(iterator.first, iterator.second.value_vec2);
-                    break;
-                case VEC3:
-                    setVec3(iterator.first, iterator.second.value_vec3);
-                    break;
-                case MAT4:
-                    setMat4(iterator.first, iterator.second.value_mat4);
-                    break;
-                default:
-                    break;
+                for (auto& iterator : obj->m_material->overrides) {
+                    switch (iterator.second.type)
+                    {
+                    case BOOL:
+                        setBool(iterator.first, iterator.second.value_bool);
+                        break;
+                    case FLOAT:
+                        setFloat(iterator.first, iterator.second.value_float);
+                        break;
+                    case VEC2:
+                        setVec2(iterator.first, iterator.second.value_vec2);
+                        break;
+                    case VEC3:
+                        setVec3(iterator.first, iterator.second.value_vec3);
+                        break;
+                    case MAT4:
+                        setMat4(iterator.first, iterator.second.value_mat4);
+                        break;
+                    default:
+                        break;
+                    }
                 }
-            }
 
-            //Draw the current object
-            glBindVertexArray(obj->m_mesh->VAO);
-            glDrawArrays(GL_TRIANGLES, 0, obj->m_mesh->fullVertexData.size() / 8);
+                //Draw the current object
+                glBindVertexArray(obj->m_mesh->VAO);
+                glDrawArrays(GL_TRIANGLES, 0, obj->m_mesh->fullVertexData.size() / 8);
+            }
         }
 
         //De-initialize the current frame buffer

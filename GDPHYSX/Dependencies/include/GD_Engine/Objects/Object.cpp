@@ -11,7 +11,7 @@ gde::Object::~Object()
 {
 }
 
-gde::Transform* gde::Object::World()
+glm::mat4 gde::Object::GetWorldSpaceMatrix()
 {
 	glm::mat4 trans_mat = glm::mat4(1.0f);
 	Object* current = this;
@@ -21,6 +21,13 @@ gde::Transform* gde::Object::World()
 		trans_mat *= current->transform;
 		current = current->parent;
 	}
+
+	return trans_mat;
+}
+
+gde::Transform* gde::Object::World()
+{
+	auto trans_mat = this->GetWorldSpaceMatrix();
 
 	glm::vec3 scale;
 	glm::quat rotation;

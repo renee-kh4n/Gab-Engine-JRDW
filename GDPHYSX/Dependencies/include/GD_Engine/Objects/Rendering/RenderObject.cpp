@@ -4,17 +4,10 @@
 gde::RenderObject::RenderObject(DrawCall* mDrawCall)
 {
 	this->mDrawCall = mDrawCall;
+	this->mDrawCall->calls.insert_or_assign(this, this->GetWorldSpaceMatrix());
 }
 
 gde::RenderObject::~RenderObject()
 {
-}
-
-void gde::RenderObject::InvokeEarlyUpdate()
-{
-	auto transform = this->World();// your transformation matrix.
-
-	this->mDrawCall->pos = transform->position;
-	this->mDrawCall->scale = transform->scale;
-	this->mDrawCall->rot = transform->rotation;
+	this->mDrawCall->calls.erase(this);
 }

@@ -2,9 +2,9 @@
 
 #include "../Vector.h"
 #include "../Component/Transform.h"
-#include <GD_Graphics/DrawCall.h>
 #include <list>
 #include <functional>
+#include <glm/mat4x4.hpp>
 
 namespace gde {
 	class Object {
@@ -21,6 +21,7 @@ namespace gde {
 		Object();
 		virtual ~Object();
 
+		glm::mat4 GetWorldSpaceMatrix();
 
 		Transform* World();
 		Transform* Local();

@@ -3,15 +3,33 @@
 #include "../Object.h"
 #include "RigidObject.h"
 
+#include "ParticleSystem/VectorParameter.h"
+#include "ParticleSystem/FloatParameter.h"
+
+#include "../../ObjectFunctions/Update.h"
+
 namespace gde {
-	class ParticleSystem : public Object
+	using namespace particlesystem;
+
+	class ParticleSystem : public Object, public Update
 	{
-	public:
-
-
 	private:
+		RigidObject particle;
+
+		float time_last_spawned;
+	public:
 		float spawns_per_sec;
-		RigidObject* particle;
 		bool world_space;
+
+		VectorParameter start_force;
+		FloatParameter start_speed;
+		FloatParameter start_lifetime;
+
+		ParticleSystem(RigidObject particle);
+
+		void Spawn();
+
+		// Inherited via Update
+		virtual void InvokeUpdate(float deltatime) override;
 	};
 }

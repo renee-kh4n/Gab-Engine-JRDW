@@ -1,5 +1,7 @@
 #include "PhysicsPipeline.h"
 
+gde::PhysicsPipeline* gde::PhysicsPipeline::main = nullptr;
+
 void gde::PhysicsPipeline::Register(RigidObject* object)
 {
 	this->registered_objects.push_back(object);

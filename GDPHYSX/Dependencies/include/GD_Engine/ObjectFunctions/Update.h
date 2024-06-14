@@ -3,6 +3,6 @@
 namespace gde {
 	class Update {
 	public:
-		virtual void InvokeUpdate() = 0;
+		virtual void InvokeUpdate(float deltatime) = 0;
 	};
 }
