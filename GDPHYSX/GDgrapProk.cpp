@@ -49,7 +49,7 @@ int main(void)
     glUseProgram(CamOrthoPPShader->shaderID);
     glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 1.0f);
     glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
-    mCameraOrtho->orthoRange = 450;
+    mCameraOrtho->orthoRange = 100;
     mCameraOrtho->farClip = 1000.0f;
     mCameraOrtho->cameraPos = glm::vec3(0, 0, -50);
     mCameraOrtho->CamF = glm::vec3(0, 0, 1);
@@ -70,6 +70,8 @@ int main(void)
     auto sphere_rigidobject = new RigidObject();
     sphere_rigidobject->Scale(Vector3(1, 1, 1) * 5);
     sphere_rigidobject->damping = 0.6f;
+    mPhysicsPipeline->Register(sphere_rigidobject);
+    sphere_rigidobject->SetParent(root_object);
 
     //sphere renderobject setup
     auto sphere_mesh = new Mesh("3D/sphere.obj");
@@ -80,7 +82,32 @@ int main(void)
     auto sphere_renderobject = new RenderObject(sphere_drawcall);
     sphere_renderobject->SetParent(sphere_rigidobject);
 
-    auto system = new Object();
+    sphere_rigidobject->AddForce(Vector3(50, 50, 0));
+
+    auto CreateParticleFunction = [unlitShader, mRenderPipeline, mPhysicsPipeline]() {
+        //sphere rigidobject setup
+        auto sphere_rigidobject = new RigidObject();
+        sphere_rigidobject->Scale(Vector3(1, 1, 1) * 5);
+        sphere_rigidobject->damping = 0.6f;
+        mPhysicsPipeline->Register(sphere_rigidobject);
+
+        //sphere renderobject setup
+        auto sphere_mesh = new Mesh("3D/sphere.obj");
+        auto sphere_material = new Material(unlitShader);
+        sphere_material->setOverride<glm::vec3>("color", glm::vec3(1, 0, 0));
+        auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
+        mRenderPipeline->RegisterDrawCall(sphere_drawcall);
+        auto sphere_renderobject = new RenderObject(sphere_drawcall);
+        sphere_renderobject->SetParent(sphere_rigidobject);
+
+        return sphere_rigidobject;
+    };
+
+    //particle system setup
+    auto system = new ParticleSystem(CreateParticleFunction);
+    system->start_force.random_between_two = true;
+    system->start_force.valueA = Vector3(-1, 1, -1);
+    system->start_force.valueB = Vector3(1, 10, 1);
     system->SetParent(root_object);
 
 

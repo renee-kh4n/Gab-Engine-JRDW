@@ -14,18 +14,18 @@ namespace gde {
 	class ParticleSystem : public Object, public Update
 	{
 	private:
-		RigidObject particle;
+		std::function<RigidObject*(void)> particle_function;
 
-		float time_last_spawned;
+		float time_last_spawned = 0;
 	public:
-		float spawns_per_sec;
+		float spawns_per_sec = 1;
 		bool world_space;
 
 		VectorParameter start_force;
 		FloatParameter start_speed;
 		FloatParameter start_lifetime;
 
-		ParticleSystem(RigidObject particle);
+		ParticleSystem(std::function<RigidObject* (void)> particle_function);
 
 		void Spawn();
 

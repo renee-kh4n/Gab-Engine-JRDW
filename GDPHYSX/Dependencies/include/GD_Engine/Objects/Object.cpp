@@ -1,6 +1,11 @@
 #include "Object.h"
 #include <glm/gtx/matrix_decompose.hpp>
 
+gde::Object* gde::Object::Copy_self()
+{
+	return new Object(*this);
+}
+
 gde::Object::Object()
 {
 	this->transform = glm::mat4(1.0f);
@@ -9,6 +14,19 @@ gde::Object::Object()
 
 gde::Object::~Object()
 {
+}
+
+gde::Object* gde::Object::Copy()
+{
+	auto copy = this->Copy_self();
+	copy->children.clear();
+
+	for (auto child : this->children)
+	{
+		copy->children.push_back(child->Copy());
+	}
+
+	return copy;
 }
 
 glm::mat4 gde::Object::GetWorldSpaceMatrix()

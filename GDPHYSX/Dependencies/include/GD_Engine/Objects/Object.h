@@ -7,6 +7,7 @@
 #include <glm/mat4x4.hpp>
 
 namespace gde {
+
 	class Object {
 	private:
 		bool isDestroyed = false;
@@ -17,9 +18,13 @@ namespace gde {
 		Transform world;
 		Transform local;
 		glm::mat4 transform;
+	protected:
+		virtual Object* Copy_self();
 	public:
 		Object();
 		virtual ~Object();
+
+		virtual Object* Copy();
 
 		glm::mat4 GetWorldSpaceMatrix();
 

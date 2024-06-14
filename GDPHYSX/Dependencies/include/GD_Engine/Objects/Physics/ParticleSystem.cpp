@@ -1,17 +1,23 @@
 #include "ParticleSystem.h"
 #include "../../PhysicsPipeline.h"
 
-gde::ParticleSystem::ParticleSystem(RigidObject particle)
+#include <iostream>
+
+gde::ParticleSystem::ParticleSystem(std::function<RigidObject* (void)> particle_function)
 {
-	this->particle = particle;
+	this->particle_function = particle_function;
 }
 
 void gde::ParticleSystem::Spawn()
 {
-	auto newparticle = new RigidObject(this->particle);
-	PhysicsPipeline::main->Register(newparticle);
+	auto newparticle = this->particle_function();
+	auto new_start_force = this->start_force.GetValue();
+	newparticle->AddForce(new_start_force);
 
-	newparticle->AddForce(this->start_force.GetValue());
+
+
+	std::cout << new_start_force.ToString() << std::endl;
+	std::cout << newparticle->velocity.ToString() << std::endl;
 }
 
 void gde::ParticleSystem::InvokeUpdate(float deltatime)

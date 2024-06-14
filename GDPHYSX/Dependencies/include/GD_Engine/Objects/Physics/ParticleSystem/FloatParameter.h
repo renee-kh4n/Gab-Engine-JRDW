@@ -1,16 +1,16 @@
 #pragma once
 
-#include "../ParticleSystem.h"
+#include <cstdlib>
 #include "LerpableParameter.h"
 
 namespace gde {
 	namespace particlesystem {
 		class FloatParameter : public LerpableParameter<float> {
-		public:
-			bool random_between_two;
-
 		protected:
-			virtual float GetRandomValue() override;
+			float GetRandomValue() override {
+				auto range = this->valueB - this->valueA;
+				return ((float)rand() / RAND_MAX) * range;
+			}
 		};
 	}
 }

@@ -66,6 +66,15 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h">
@@ -128,13 +137,13 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\EarlyUpdate.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\EarlyUpdate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\Update.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\Update.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\LateUpdate.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\LateUpdate.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Component\Transform.h">
@@ -149,10 +158,19 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Rendering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\UpdateType\UpdateType.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\ObjectFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\LerpableParameter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
