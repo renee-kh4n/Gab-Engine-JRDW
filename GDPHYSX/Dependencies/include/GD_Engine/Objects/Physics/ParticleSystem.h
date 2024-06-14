@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 #include "../Object.h"
 #include "RigidObject.h"
 
@@ -14,6 +16,8 @@ namespace gde {
 	class ParticleSystem : public Object, public Update
 	{
 	private:
+		std::unordered_map<RigidObject*, float> particles;
+
 		std::function<RigidObject*(void)> particle_function;
 
 		float time_last_spawned = 0;

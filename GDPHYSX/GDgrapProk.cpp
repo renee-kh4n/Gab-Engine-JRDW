@@ -12,7 +12,7 @@
 #include <GD_Graphics/RenderPipeline.h>
 #include <GD_Graphics/Mesh.h>
 
-#include <GD_Engine/PhysicsPipeline.h>
+#include <GD_Engine/ObjectHandlers/ObjectHandlers.h>
 #include <GD_Engine/Objects/Objects.h>
 #include <GD_Engine/ObjectFunctions/ObjectFunctions.h>
 #include <GD_Engine/Vector.h>
@@ -49,7 +49,7 @@ int main(void)
     glUseProgram(CamOrthoPPShader->shaderID);
     glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 1.0f);
     glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
-    mCameraOrtho->orthoRange = 100;
+    mCameraOrtho->orthoRange = 30;
     mCameraOrtho->farClip = 1000.0f;
     mCameraOrtho->cameraPos = glm::vec3(0, 0, -50);
     mCameraOrtho->CamF = glm::vec3(0, 0, 1);
@@ -57,39 +57,22 @@ int main(void)
 
     //RenderPipeline setup
     auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y), mCameraOrtho);
-    //PhysicsPipeline setup
-    auto mPhysicsPipeline = new PhysicsPipeline();
-    PhysicsPipeline::main = mPhysicsPipeline;
+
+    //Object handlers setup
+
+    auto mPhysicsHandler = new PhysicsHandler();
 #pragma endregion
 
 #pragma region Object setup
     //root
-    auto root_object = new Object();
+    auto root_object = new Root();
+    root_object->RegisterHandler(mPhysicsHandler);
 
-    //sphere rigidobject setup
-    auto sphere_rigidobject = new RigidObject();
-    sphere_rigidobject->Scale(Vector3(1, 1, 1) * 5);
-    sphere_rigidobject->damping = 0.6f;
-    mPhysicsPipeline->Register(sphere_rigidobject);
-    sphere_rigidobject->SetParent(root_object);
-
-    //sphere renderobject setup
-    auto sphere_mesh = new Mesh("3D/sphere.obj");
-    auto sphere_material = new Material(unlitShader);
-    sphere_material->setOverride<glm::vec3>("color", glm::vec3(1, 0, 0));
-    auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
-    mRenderPipeline->RegisterDrawCall(sphere_drawcall);
-    auto sphere_renderobject = new RenderObject(sphere_drawcall);
-    sphere_renderobject->SetParent(sphere_rigidobject);
-
-    sphere_rigidobject->AddForce(Vector3(50, 50, 0));
-
-    auto CreateParticleFunction = [unlitShader, mRenderPipeline, mPhysicsPipeline]() {
+    auto CreateParticleFunction = [root_object, unlitShader, mRenderPipeline]() {
         //sphere rigidobject setup
         auto sphere_rigidobject = new RigidObject();
-        sphere_rigidobject->Scale(Vector3(1, 1, 1) * 5);
-        sphere_rigidobject->damping = 0.6f;
-        mPhysicsPipeline->Register(sphere_rigidobject);
+        sphere_rigidobject->damping = 1.0f;
+        sphere_rigidobject->SetParent(root_object);
 
         //sphere renderobject setup
         auto sphere_mesh = new Mesh("3D/sphere.obj");
@@ -98,6 +81,7 @@ int main(void)
         auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
         mRenderPipeline->RegisterDrawCall(sphere_drawcall);
         auto sphere_renderobject = new RenderObject(sphere_drawcall);
+        sphere_renderobject->Scale(Vector3(1, 1, 1) * 0.2f);
         sphere_renderobject->SetParent(sphere_rigidobject);
 
         return sphere_rigidobject;
@@ -105,11 +89,21 @@ int main(void)
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
+    system->spawns_per_sec = 30;
     system->start_force.random_between_two = true;
-    system->start_force.valueA = Vector3(-1, 1, -1);
-    system->start_force.valueB = Vector3(1, 10, 1);
+    system->start_force.valueA = Vector3(-1, 1, -1) * 200;
+    system->start_force.valueB = Vector3(1, 5, 1) * 200;
+    system->start_lifetime.valueA = 10;
     system->SetParent(root_object);
 
+    //physics force setup
+    auto gravity_volume = new ForceVolume();
+    gravity_volume->shape = ForceVolume::GLOBAL;
+    gravity_volume->mode = ForceVolume::DIRECTIONAL;
+    gravity_volume->vector = Vector3(0, -10, 0);
+    gravity_volume->forceMode = ForceVolume::VELOCITY;
+
+    gravity_volume->SetParent(root_object);
 
 #pragma endregion
 
@@ -119,47 +113,56 @@ int main(void)
 
     while (!glfwWindowShouldClose(mWindow->window))
     {
+        /* Poll for and process events */
+        glfwPollEvents();
+
         //Early update
-        auto InvokeEarlyUpdate = [](Object* object) {
+        root_object->CallRecursively([](Object* object) {
             EarlyUpdate* updater = dynamic_cast<EarlyUpdate*>(object);
 
             if (updater != nullptr) {
                 updater->InvokeEarlyUpdate();
             }
-        };
-        root_object->CallRecursively(InvokeEarlyUpdate);
+        });
 
         //Update pipeline
         mRenderPipeline->RenderFrame();
 
         //Update window
         glfwSwapBuffers(mWindow->window);
-        /* Poll for and process events */
-        glfwPollEvents();
 
-        double fixedTickDur = 0;
-
-        if (mTime->TickFixed(&fixedTickDur)) {
-            mPhysicsPipeline->Update(fixedTickDur);
+        mTime->TickFixed([mPhysicsHandler, root_object](double deltatime) {
+            mPhysicsHandler->Update(deltatime);
 
             //Normal Update
-            auto InvokeNormalUpdate = [fixedTickDur](Object* object) {
+            root_object->CallRecursively([deltatime](Object* object) {
                 Update* updater = dynamic_cast<Update*>(object);
 
                 if (updater != nullptr) {
-                    updater->InvokeUpdate(fixedTickDur);
+                    updater->InvokeUpdate(deltatime);
                 }
-            };
-            root_object->CallRecursively(InvokeNormalUpdate);
+            });
             //Late Update
-            auto InvokeLateUpdate = [fixedTickDur](Object* object) {
+            root_object->CallRecursively([deltatime](Object* object) {
                 LateUpdate* updater = dynamic_cast<LateUpdate*>(object);
 
                 if (updater != nullptr) {
-                    updater->InvokeLateUpdate(fixedTickDur);
+                    updater->InvokeLateUpdate(deltatime);
                 }
-            };
-            root_object->CallRecursively(InvokeLateUpdate);
+            });
+        });
+
+        std::list<Object*> toDelete;
+
+        root_object->CallRecursively([&toDelete](Object* object) {
+            if (object->get_isDestroyed()) {
+                toDelete.push_back(object);
+            }
+        });
+
+        for (auto deletee : toDelete)
+        {
+            delete deletee;
         }
     }
     

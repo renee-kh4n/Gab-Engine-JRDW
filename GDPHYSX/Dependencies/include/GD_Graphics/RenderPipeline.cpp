@@ -1,5 +1,7 @@
 #include "RenderPipeline.h"
 
+#include <glm/gtx/matrix_decompose.hpp>
+
 gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions, Camera* activeCamera)
 {
     //Skybox setup

@@ -1,7 +1,5 @@
 #include "Time.h"
 
-#include <iostream>
-
 gde::Time::Time()
 {
     using clock = std::chrono::high_resolution_clock;
@@ -10,7 +8,7 @@ gde::Time::Time()
     curr_ns = std::chrono::nanoseconds(0);
 }
 
-bool gde::Time::TickFixed(double* seconds)
+void gde::Time::TickFixed(std::function<void(double)> update_callback)
 {
     using clock = std::chrono::high_resolution_clock;
 
@@ -19,16 +17,13 @@ bool gde::Time::TickFixed(double* seconds)
     prev_time = curr_time;
 
     curr_ns += dur;
-    if (curr_ns >= timestep) {
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(curr_ns);
-        curr_ns -= curr_ns;
 
-        if (seconds != nullptr) {
-            *seconds = (double)ms.count() / 1000;
-        }
+    while (curr_ns >= timestep) {
 
-        return true;
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(timestep);
+        auto seconds = (double)ms.count() / 1000;
+        update_callback(seconds);
+
+        curr_ns -= timestep;
     }
-
-    return false;
 }

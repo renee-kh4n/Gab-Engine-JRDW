@@ -135,12 +135,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.cpp" />
-    <ClCompile Include="Dependencies\include\GD_Engine\PhysicsPipeline.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Root.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Time.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Vector.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\DrawCall.cpp" />
@@ -157,15 +159,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Engine\Component\Transform.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Root.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Object.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Objects.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\LerpableParameter.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Physics.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Rendering.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\PhysicsPipeline.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Time.h" />

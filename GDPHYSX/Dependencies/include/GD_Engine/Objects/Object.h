@@ -10,7 +10,7 @@ namespace gde {
 
 	class Object {
 	private:
-		bool isDestroyed = false;
+		bool isDestroyQueued = false;
 
 		Object* parent;
 		std::list<Object*> children;
@@ -23,18 +23,17 @@ namespace gde {
 	public:
 		Object();
 		virtual ~Object();
-
 		virtual Object* Copy();
 
 		glm::mat4 GetWorldSpaceMatrix();
-
 		Transform* World();
 		Transform* Local();
-
 		void Translate(Vector3 vector);
 		void Rotate(Vector3 vector);
 		void Scale(Vector3 vector);
 
+		virtual void OnEnterHierarchy(Object* newChild);
+		virtual void OnExitHierarchy(Object* newChild);
 		void SetParent(Object* newParent);
 		Object* GetChildAt(int i);
 		int GetChildCount();
@@ -43,12 +42,13 @@ namespace gde {
 		bool get_isDestroyed();
 
 		void CallRecursively(std::function<void(Object*)> action) {
-			action(this);
-
-			for (auto child : children)
+			int childcount = GetChildCount();
+			for (int i = 0; i < childcount; i++)
 			{
-				child->CallRecursively(action);
+				this->GetChildAt(i)->CallRecursively(action);
 			}
+
+			action(this);
 		}
 	};
 }

@@ -54,7 +54,7 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Time.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\PhysicsPipeline.cpp">
+    <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp">
@@ -73,6 +73,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Root.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -128,7 +134,7 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Time.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\PhysicsPipeline.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.h">
@@ -171,6 +177,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Root.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

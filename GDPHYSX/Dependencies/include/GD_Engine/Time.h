@@ -1,6 +1,7 @@
 #pragma once
 
 #include <chrono>
+#include <functional>
 using namespace std::chrono_literals;
 constexpr std::chrono::nanoseconds timestep(32ms);
 
@@ -15,6 +16,6 @@ namespace gde {
 		/// <summary>
 		/// Returns true if it is time to do a fixed update. Can only return true once per fixed update.
 		/// </summary>
-		bool TickFixed(double* seconds = nullptr);
+		void TickFixed(std::function<void(double)> update_callback);
 	};
 }

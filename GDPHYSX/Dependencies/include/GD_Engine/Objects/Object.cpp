@@ -12,8 +12,8 @@ gde::Object::Object()
 	this->parent = nullptr;
 }
 
-gde::Object::~Object()
-{
+gde::Object::~Object(){
+	this->SetParent(nullptr);
 }
 
 gde::Object* gde::Object::Copy()
@@ -31,16 +31,12 @@ gde::Object* gde::Object::Copy()
 
 glm::mat4 gde::Object::GetWorldSpaceMatrix()
 {
-	glm::mat4 trans_mat = glm::mat4(1.0f);
-	Object* current = this;
+	glm::mat4 parentmat = glm::mat4(1.0f);
 
-	while (current != nullptr)
-	{
-		trans_mat *= current->transform;
-		current = current->parent;
-	}
+	if (this->parent != nullptr)
+		parentmat = this->parent->GetWorldSpaceMatrix();
 
-	return trans_mat;
+	return parentmat * this->transform;
 }
 
 gde::Transform* gde::Object::World()
@@ -94,13 +90,58 @@ void gde::Object::Rotate(Vector3 vector)
 	this->transform = glm::rotate(this->transform, glm::radians(vector.z), glm::vec3(0, 0, 1));
 }
 
+void gde::Object::OnEnterHierarchy(Object* newChild)
+{
+	auto propagate_upwards = [this](Object* object) {
+		Object* current = this->parent;
+
+		while (current != nullptr)
+		{
+			current->OnEnterHierarchy(object);
+			current = current->parent;
+		}
+	};
+
+	for (auto subchild : newChild->children)
+	{
+		propagate_upwards(subchild);
+	}
+
+	propagate_upwards(newChild);
+}
+
+void gde::Object::OnExitHierarchy(Object* newChild)
+{
+	auto propagate_upwards = [this](Object* object) {
+		Object* current = this->parent;
+
+		while (current != nullptr)
+		{
+			current->OnExitHierarchy(object);
+			current = current->parent;
+		}
+	};
+
+	for (auto subchild : newChild->children)
+	{
+		propagate_upwards(subchild);
+	}
+
+	propagate_upwards(newChild);
+}
+
 void gde::Object::SetParent(Object* newParent)
 {
 	if (parent != nullptr) {
+		parent->OnExitHierarchy(this);
+
 		parent->children.remove_if([this](Object* child) {return child == this; });
 	}
 
-	newParent->children.push_back(this);
+	if (newParent != nullptr) {
+		newParent->OnEnterHierarchy(this);
+		newParent->children.push_back(this);
+	}
 
 	this->parent = newParent;
 }
@@ -122,10 +163,14 @@ int gde::Object::GetChildCount()
 
 void gde::Object::Destroy()
 {
-	this->isDestroyed = true;
+	this->isDestroyQueued = true;
+
+	for (auto child : this->children) {
+		child->Destroy();
+	}
 }
 
 bool gde::Object::get_isDestroyed()
 {
-	return this->isDestroyed;
+	return this->isDestroyQueued;
 }

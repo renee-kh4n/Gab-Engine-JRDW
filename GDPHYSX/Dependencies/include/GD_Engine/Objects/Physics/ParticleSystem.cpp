@@ -1,5 +1,4 @@
 #include "ParticleSystem.h"
-#include "../../PhysicsPipeline.h"
 
 #include <iostream>
 
@@ -14,15 +13,28 @@ void gde::ParticleSystem::Spawn()
 	auto new_start_force = this->start_force.GetValue();
 	newparticle->AddForce(new_start_force);
 
-
-
-	std::cout << new_start_force.ToString() << std::endl;
-	std::cout << newparticle->velocity.ToString() << std::endl;
+	this->particles.insert_or_assign(newparticle, this->start_lifetime.GetValue());
 }
 
 void gde::ParticleSystem::InvokeUpdate(float deltatime)
 {
 	this->time_last_spawned += deltatime;
+
+	std::list<RigidObject*> toRemove;
+
+	for (auto particle : this->particles)
+	{
+		particles[particle.first] -= deltatime;
+		if (particles[particle.first] < 0) {
+			particle.first->Destroy();
+			toRemove.push_back(particle.first);
+		}
+	}
+
+	for (auto removee : toRemove)
+	{
+		this->particles.erase(removee);
+	}
 
 	if (this->time_last_spawned > 1.0f / this->spawns_per_sec) {
 		this->time_last_spawned = 0;
