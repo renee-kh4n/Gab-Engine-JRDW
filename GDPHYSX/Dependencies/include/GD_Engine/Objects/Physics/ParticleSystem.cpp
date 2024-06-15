@@ -36,9 +36,10 @@ void gde::ParticleSystem::InvokeUpdate(float deltatime)
 		this->particles.erase(removee);
 	}
 
-	if (this->time_last_spawned > 1.0f / this->spawns_per_sec) {
-		this->time_last_spawned = 0;
+	auto time_per_spawn = 1.0f / this->spawns_per_sec;
 
+	while (this->time_last_spawned > time_per_spawn) {
+		this->time_last_spawned -= time_per_spawn;
 		this->Spawn();
 	}
 }

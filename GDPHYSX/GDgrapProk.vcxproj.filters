@@ -36,7 +36,7 @@
     <ClCompile Include="Dependencies\include\GD_Graphics\Skybox.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Graphics\Camera.cpp">
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Graphics\Material.cpp">
@@ -107,7 +107,7 @@
     <ClInclude Include="Dependencies\include\GD_Graphics\Skybox.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Graphics\Camera.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Graphics\Light.h">

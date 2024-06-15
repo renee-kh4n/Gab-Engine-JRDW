@@ -6,7 +6,6 @@
 #include "Texture.h"
 #include "DrawCall.h"
 #include "Window.h"
-#include "Camera.h"
 #include "Skybox.h"
 #include "Light.h"
 #include "Framebuffer.h"
@@ -24,12 +23,11 @@ namespace gde {
 
 		std::vector<DrawCall*> drawcalls;
 
-		Camera* activeCamera;
 		Skybox* mSkybox;
 	public:
-		RenderPipeline(glm::vec2, Camera*);
+		RenderPipeline(glm::vec2);
 		void RegisterDrawCall(DrawCall*);
-		void RenderFrame();
+		void RenderFrame(glm::vec3 from, glm::mat4 viewMat, glm::mat4 projMat, Shader* postprocess);
 		void CleanUp();
 	};
 }

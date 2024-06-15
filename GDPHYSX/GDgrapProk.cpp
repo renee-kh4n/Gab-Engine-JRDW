@@ -5,7 +5,6 @@
 #include <GD_Graphics/Shader.h>
 #include <GD_Graphics/Texture.h>
 #include <GD_Graphics/Window.h>
-#include <GD_Graphics/Camera.h>
 #include <GD_Graphics/Skybox.h>
 #include <GD_Graphics/Light.h>
 #include <GD_Graphics/Framebuffer.h>
@@ -51,15 +50,15 @@ int main(void)
     glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
     mCameraOrtho->orthoRange = 30;
     mCameraOrtho->farClip = 1000.0f;
-    mCameraOrtho->cameraPos = glm::vec3(0, 0, -50);
     mCameraOrtho->CamF = glm::vec3(0, 0, 1);
     mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
+    mCameraOrtho->Translate(glm::vec3(0, 0, -50));
 
     //RenderPipeline setup
-    auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y), mCameraOrtho);
+    Camera* active_camera = mCameraOrtho;
+    auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y));
 
     //Object handlers setup
-
     auto mPhysicsHandler = new PhysicsHandler();
 #pragma endregion
 
@@ -68,18 +67,20 @@ int main(void)
     auto root_object = new Root();
     root_object->RegisterHandler(mPhysicsHandler);
 
-    auto CreateParticleFunction = [root_object, unlitShader, mRenderPipeline]() {
+    //Mesh and material caching
+    auto sphere_mesh = new Mesh("3D/sphere.obj");
+    auto sphere_material = new Material(unlitShader);
+    sphere_material->setOverride<glm::vec3>("color", glm::vec3(1, 0, 0));
+    auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
+    mRenderPipeline->RegisterDrawCall(sphere_drawcall);
+
+    auto CreateParticleFunction = [sphere_drawcall, root_object, unlitShader, mRenderPipeline]() {
         //sphere rigidobject setup
         auto sphere_rigidobject = new RigidObject();
         sphere_rigidobject->damping = 1.0f;
         sphere_rigidobject->SetParent(root_object);
 
         //sphere renderobject setup
-        auto sphere_mesh = new Mesh("3D/sphere.obj");
-        auto sphere_material = new Material(unlitShader);
-        sphere_material->setOverride<glm::vec3>("color", glm::vec3(1, 0, 0));
-        auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
-        mRenderPipeline->RegisterDrawCall(sphere_drawcall);
         auto sphere_renderobject = new RenderObject(sphere_drawcall);
         sphere_renderobject->Scale(Vector3(1, 1, 1) * 0.2f);
         sphere_renderobject->SetParent(sphere_rigidobject);
@@ -89,7 +90,7 @@ int main(void)
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
-    system->spawns_per_sec = 30;
+    system->spawns_per_sec = 300;
     system->start_force.random_between_two = true;
     system->start_force.valueA = Vector3(-1, 1, -1) * 200;
     system->start_force.valueB = Vector3(1, 5, 1) * 200;
@@ -102,7 +103,6 @@ int main(void)
     gravity_volume->mode = ForceVolume::DIRECTIONAL;
     gravity_volume->vector = Vector3(0, -10, 0);
     gravity_volume->forceMode = ForceVolume::VELOCITY;
-
     gravity_volume->SetParent(root_object);
 
 #pragma endregion
@@ -126,7 +126,7 @@ int main(void)
         });
 
         //Update pipeline
-        mRenderPipeline->RenderFrame();
+        mRenderPipeline->RenderFrame(active_camera->World()->position, active_camera->GetViewMat(), active_camera->getproj(), active_camera->mShader);
 
         //Update window
         glfwSwapBuffers(mWindow->window);

@@ -2,7 +2,7 @@
 
 #include <glm/gtx/matrix_decompose.hpp>
 
-gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions, Camera* activeCamera)
+gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions)
 {
     //Skybox setup
     this->mSkybox = NULL;
@@ -11,11 +11,9 @@ gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions, Camera* activeCamera)
     depthShader = new Shader("Shaders/object.vert", "Shaders/depth.frag");
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
-
-    this->activeCamera = activeCamera;
 }
 
-void gde::RenderPipeline::RenderFrame()
+void gde::RenderPipeline::RenderFrame(glm::vec3 from, glm::mat4 viewMat, glm::mat4 projMat, Shader* postprocess)
 {
     //Update delta time
     currentFrameT = glfwGetTime();
@@ -24,9 +22,6 @@ void gde::RenderPipeline::RenderFrame()
 
 #pragma region Rendering
     /* =============== Render here =============== */
-    //Set up view matrix
-    glm::mat4 viewMat = glm::lookAt(activeCamera->cameraPos, activeCamera->CamF + activeCamera->cameraPos, activeCamera->WorldUp);
-
     //Function to draw all objects to a specified buffer
     auto DrawToBuffer = [=](Framebuffer* buffer, bool depthWritersOnly = false, Shader* overrideShader = NULL) {
         //Initialize the buffer
@@ -37,7 +32,7 @@ void gde::RenderPipeline::RenderFrame()
 
         //Render the skybox if specified
         if (!depthWritersOnly && mSkybox != NULL) {
-            mSkybox->Render(viewMat, activeCamera->getproj());
+            mSkybox->Render(viewMat, projMat);
         }
 
         //Loop through all objects
@@ -97,10 +92,10 @@ void gde::RenderPipeline::RenderFrame()
                 //Transform data
                 glm::mat4 tmat = call.second;
                 glm::mat4 tmat_VM = tmat;
-                glm::mat4 tmat_PVM = activeCamera->getproj() * viewMat * tmat;
+                glm::mat4 tmat_PVM = projMat * viewMat * tmat;
                 setMat4("transform_model", tmat);
                 setMat4("transform_projection", tmat_PVM);
-                setVec3("cameraPos", activeCamera->cameraPos);
+                setVec3("cameraPos", from);
 
                 for (auto& iterator : obj->m_material->overrides) {
                     switch (iterator.second.type)
@@ -143,7 +138,7 @@ void gde::RenderPipeline::RenderFrame()
     DrawToBuffer(mDepthFrameBuffer, true, depthShader);
 
     //Assign camera shader as post-processing
-    auto camShaderId = activeCamera->mShader->shaderID;
+    auto camShaderId = postprocess->shaderID;
     glUseProgram(camShaderId);
     glBindVertexArray(mFrameBuffer->quadVAO);
     glDisable(GL_DEPTH_TEST); //Temporarily disable depth test

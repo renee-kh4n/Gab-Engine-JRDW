@@ -150,7 +150,7 @@
     <ClCompile Include="Dependencies\include\GD_Graphics\Mesh.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\RenderPipeline.cpp" />
     <ClCompile Include="GDgrapProk.cpp" />
-    <ClCompile Include="Dependencies\include\GD_Graphics\Camera.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Shader.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Skybox.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Texture.cpp" />
@@ -180,7 +180,7 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\Update.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\ObjectFunctions.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Vector.h" />
-    <ClInclude Include="Dependencies\include\GD_Graphics\Camera.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\DrawCall.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Framebuffer.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Light.h" />

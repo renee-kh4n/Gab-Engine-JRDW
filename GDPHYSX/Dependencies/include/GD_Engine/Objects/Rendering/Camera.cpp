@@ -19,6 +19,12 @@ namespace gde {
         return glm::normalize(glm::cross(CamF, WorldUp));
     }
 
+    glm::mat4 Camera::GetViewMat()
+    {
+        auto this_pos = (glm::vec3)this->World()->position;
+        return glm::lookAt(this_pos, this->CamF + this_pos, this->WorldUp);
+    }
+
     void Camera::RotateCam(float degree, glm::vec3 axis)
     {
         CamF = glm::vec3(glm::rotate(glm::translate(glm::mat4(1), CamF), glm::radians(degree), axis) * glm::vec4(CamF, 0));
