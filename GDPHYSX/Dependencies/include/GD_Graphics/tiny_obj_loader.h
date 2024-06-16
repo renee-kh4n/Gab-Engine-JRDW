@@ -1413,8 +1413,8 @@ namespace tinyobj {
     }
 
     // code from https://wrf.ecse.rpi.edu//Research/Short_Notes/pnpoly.html
-    template <typename T>
-    static int pnpoly(int nvert, T* vertx, T* verty, T testx, T testy) {
+    template <typename TValue>
+    static int pnpoly(int nvert, TValue* vertx, TValue* verty, TValue testx, TValue testy) {
         int i, j, c = 0;
         for (i = 0, j = nvert - 1; i < nvert; j = i++) {
             if (((verty[i] > testy) != (verty[j] > testy)) &&

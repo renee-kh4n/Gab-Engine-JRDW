@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../../Vector.h"
+#include "../../../Datatypes/Vectors.h"
 #include "LerpableParameter.h"
 
 namespace gde {

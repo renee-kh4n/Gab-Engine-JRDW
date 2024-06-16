@@ -14,7 +14,7 @@
 #include <GD_Engine/ObjectHandlers/ObjectHandlers.h>
 #include <GD_Engine/Objects/Objects.h>
 #include <GD_Engine/ObjectFunctions/ObjectFunctions.h>
-#include <GD_Engine/Vector.h>
+#include <GD_Engine/Datatypes/Vectors.h>
 #include <GD_Engine/Time.h>
 
 using namespace gde;
@@ -41,31 +41,39 @@ int main(void)
     auto unlitShader = new Shader("Shaders/object.vert", "Shaders/unlit.frag");
     auto Cam3rdPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
     auto Cam1stPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
+    
     auto CamOrthoPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
-
-    //Camera setup
-    auto mCameraOrtho = new OrthographicCamera(mWindow, CamOrthoPPShader);
     glUseProgram(CamOrthoPPShader->shaderID);
     glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 1.0f);
     glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
-    mCameraOrtho->orthoRange = 30;
-    mCameraOrtho->farClip = 1000.0f;
-    mCameraOrtho->CamF = glm::vec3(0, 0, 1);
-    mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
-    mCameraOrtho->Translate(glm::vec3(0, 0, -50));
 
     //RenderPipeline setup
-    Camera* active_camera = mCameraOrtho;
+    Camera* active_camera = nullptr;
     auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y));
 
     //Object handlers setup
     auto mPhysicsHandler = new PhysicsHandler();
+    auto mInputHandler = new InputHandler();
 #pragma endregion
 
 #pragma region Object setup
     //root
     auto root_object = new Root();
     root_object->RegisterHandler(mPhysicsHandler);
+    root_object->RegisterHandler(mInputHandler);
+
+    //Camera setup
+    auto camera_dolly = new OrbitalControl();
+    camera_dolly->SetParent(root_object);
+
+    auto mCameraOrtho = new OrthographicCamera(mWindow, CamOrthoPPShader);
+    mCameraOrtho->orthoRange = 30;
+    mCameraOrtho->farClip = 1000.0f;
+    mCameraOrtho->CamF = glm::vec3(0, 0, 1);
+    mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
+    mCameraOrtho->Translate(glm::vec3(0, 0, -50));
+    mCameraOrtho->SetParent(camera_dolly);
+    active_camera = mCameraOrtho;
 
     //Mesh and material caching
     auto sphere_mesh = new Mesh("3D/sphere.obj");
@@ -90,7 +98,7 @@ int main(void)
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
-    system->spawns_per_sec = 300;
+    system->spawns_per_sec = 200;
     system->start_force.random_between_two = true;
     system->start_force.valueA = Vector3(-1, 1, -1) * 200;
     system->start_force.valueB = Vector3(1, 5, 1) * 200;

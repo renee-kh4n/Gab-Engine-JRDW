@@ -2,22 +2,22 @@
 
 namespace gde {
 	namespace particlesystem {
-		template <typename T>
+		template <typename TValue>
 		class LerpableParameter {
 		public:
 			bool random_between_two;
 
-			T valueA;
-			T valueB;
+			TValue valueA;
+			TValue valueB;
 
-			T GetValue() {
+			TValue GetValue() {
 				if (random_between_two == false)
 					return valueA;
 
 				return GetRandomValue();
 			}
 		protected:
-			virtual T GetRandomValue() = 0;
+			virtual TValue GetRandomValue() = 0;
 		};
 	}
 }

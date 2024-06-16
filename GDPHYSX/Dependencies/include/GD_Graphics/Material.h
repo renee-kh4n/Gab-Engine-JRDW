@@ -38,8 +38,8 @@ namespace gde {
 
 		Material(Shader*);
 			
-		template <typename T>
-		void setOverride(const char* id, T value) {}
+		template <typename TValue>
+		void setOverride(const char* id, TValue value) {}
 
 		template<>
 		void setOverride<bool>(const char* id, bool value) {

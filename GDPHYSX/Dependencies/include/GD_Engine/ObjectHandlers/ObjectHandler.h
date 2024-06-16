@@ -12,25 +12,25 @@ namespace gde {
 		virtual bool TryAdd(Object* object) = 0;
 	};
 
-	template<class T>
+	template<class TValue>
 	class ObjectHandler : public Handler {
 	protected:
 		std::list<Handler*> subhandlers;
 	public:
-		std::list<T*> object_list;
+		std::list<TValue*> object_list;
 
 		virtual void Remove(Object* object) {
 			for (auto subhandler : this->subhandlers)
 				subhandler->Remove(object);
 
-			this->object_list.remove_if([object](T* tocheck) {return tocheck == object; });
+			this->object_list.remove_if([object](TValue* tocheck) {return tocheck == object; });
 		}
 
 		virtual bool TryAdd(Object* object) {
 			for (auto subhandler : this->subhandlers)
 				subhandler->TryAdd(object);
 
-			T* typed_object = dynamic_cast<T*>(object);
+			TValue* typed_object = dynamic_cast<TValue*>(object);
 
 			if (typed_object == nullptr)
 				return false;
