@@ -11,6 +11,7 @@
 #include <GD_Graphics/RenderPipeline.h>
 #include <GD_Graphics/Mesh.h>
 
+#include <GD_Engine/Input/Implementations/Implementations.h>
 #include <GD_Engine/Input/InputSystem.h>
 #include <GD_Engine/ObjectHandlers/ObjectHandlers.h>
 #include <GD_Engine/Objects/Objects.h>
@@ -54,7 +55,9 @@ int main(void)
 #pragma endregion
 
 #pragma region Input
+    auto player_name = "MAIN";
     auto mInputSystem = new InputSystem();
+    mInputSystem->RegisterAction(player_name, new MouseRightDragImplementation());
 #pragma endregion
 
 #pragma region Object setup
@@ -73,17 +76,18 @@ int main(void)
     root_object->RegisterHandler(mLateUpdate);
 
     //Camera setup
+    auto camera_input = new InputPlayer(player_name);
+    camera_input->SetParent(root_object);
     auto camera_dolly = new OrbitalControl();
-    camera_dolly->SetParent(root_object);
+    camera_dolly->SetParent(camera_input);
 
-    auto mCameraOrtho = new OrthographicCamera(mWindow, CamOrthoPPShader);
-    mCameraOrtho->orthoRange = 30;
-    mCameraOrtho->farClip = 1000.0f;
-    mCameraOrtho->CamF = glm::vec3(0, 0, 1);
-    mCameraOrtho->WorldUp = glm::vec3(0, 1, 0);
-    mCameraOrtho->Translate(glm::vec3(0, 0, -50));
-    mCameraOrtho->SetParent(camera_dolly);
-    active_camera = mCameraOrtho;
+    auto mCameraObject = new PerspectiveCamera(mWindow, CamOrthoPPShader);
+    mCameraObject->angles = 90;
+    mCameraObject->farClip = 1000.0f;
+    mCameraObject->WorldUp = glm::vec3(0, 1, 0);
+    mCameraObject->Translate(glm::vec3(0, 0, -10));
+    mCameraObject->SetParent(camera_dolly);
+    active_camera = mCameraObject;
 
     //Mesh and material caching
     auto sphere_mesh = new Mesh("3D/sphere.obj");
@@ -131,6 +135,16 @@ int main(void)
 
     while (!glfwWindowShouldClose(mWindow->window))
     {
+        mInputSystem->UpdateStates([mInputHandler](std::string name, gde::input::InputAction* action, bool changed) {
+            for (auto input_player : mInputHandler->object_list) {
+                if (input_player->get_player_name() != name)
+                    continue;
+
+                for (auto input_customer : input_player->inputhandler.object_list)
+                    input_customer->TryReceive(action, changed);
+            }
+        });
+
         /* Poll for and process events */
         glfwPollEvents();
 

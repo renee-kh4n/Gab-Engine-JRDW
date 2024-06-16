@@ -136,6 +136,7 @@
   <ItemGroup>
     <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector2.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp" />
@@ -167,13 +168,14 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector_base.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\ActionImplementation.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\MouseRightDrag.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\Implementations.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\InputAction.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\InputSystem.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\InputHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Header.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputCustomer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.h" />

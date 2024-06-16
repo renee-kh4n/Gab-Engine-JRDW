@@ -90,6 +90,9 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h">
@@ -236,7 +239,10 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Header.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\Implementations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

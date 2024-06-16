@@ -21,13 +21,10 @@ namespace gde {
 
         glm::vec3 WorldUp = glm::vec3(0, 1, 0);
 
-        glm::vec3 CamF = glm::vec3(0, 0, -1);
         glm::vec3 CamUp();
         glm::vec3 CamR();
         glm::mat4 GetViewMat();
         virtual glm::mat4 getproj() = 0;
-
-        void RotateCam(float degree, glm::vec3 axis);
     };
 
     struct OrthographicCamera : public Camera {

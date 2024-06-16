@@ -5,7 +5,7 @@
 
 
 namespace gde {
-	class InputHandler : public ObjectHandler<InputCustomer_base> {
+	class InputHandler : public ObjectHandler<InputPlayer> {
 
 	};
 }

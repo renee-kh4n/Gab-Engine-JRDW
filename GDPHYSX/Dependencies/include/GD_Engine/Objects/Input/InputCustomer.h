@@ -7,21 +7,22 @@ namespace gde {
 	using namespace input;
 
 	class InputCustomer_base {
-		virtual bool TryReceive(InputAction value, InputAction::State state) = 0;
+	public:
+		virtual bool TryReceive(InputAction* value, bool changed) = 0;
 	};
 
 	template<typename TInput>
 	class InputCustomer : public InputCustomer_base {
 	protected:
-		virtual void OnInput(TInput* value, InputAction::State state) = 0;
+		virtual void OnInput(TInput* value, bool changed) = 0;
 	public:
-		virtual bool TryReceive(InputAction value, InputAction::State state) override {
-			auto action_cast = dynamic_cast<TInput*>(&value);
+		virtual bool TryReceive(InputAction* value, bool changed) override {
+			auto action_cast = dynamic_cast<TInput*>(value);
 
 			if (action_cast == nullptr)
 				return false;
 
-			this->OnInput(action_cast, state);
+			this->OnInput(action_cast, changed);
 
 			return true;
 		}

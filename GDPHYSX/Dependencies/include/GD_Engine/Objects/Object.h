@@ -28,6 +28,7 @@ namespace gde {
 		glm::mat4 GetWorldSpaceMatrix();
 		Transform* World();
 		Transform* Local();
+		Vector3 Forward();
 		void Translate(Vector3 vector);
 		void Rotate(Vector3 vector);
 		void Scale(Vector3 vector);

@@ -73,6 +73,11 @@ gde::Transform* gde::Object::Local()
 	return &this->local;
 }
 
+gde::Vector3 gde::Object::Forward()
+{
+	return Vector3(this->GetWorldSpaceMatrix()[2]);
+}
+
 void gde::Object::Translate(Vector3 vector)
 {
 	this->transform = glm::translate(this->transform, (glm::vec3)vector);

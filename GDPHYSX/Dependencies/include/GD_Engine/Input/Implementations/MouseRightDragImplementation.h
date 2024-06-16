@@ -5,7 +5,7 @@
 
 namespace gde {
 	namespace input {
-		class MouseRightDragImplementation : ActionImplementation<MouseRightDrag> {
+		class MouseRightDragImplementation : public ActionImplementation<MouseRightDrag> {
 			// Inherited via ActionImplementation
 			virtual void UpdateState() override;
 		};
