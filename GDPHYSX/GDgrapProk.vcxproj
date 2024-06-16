@@ -173,6 +173,7 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\InputHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Header.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputCustomer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.h" />

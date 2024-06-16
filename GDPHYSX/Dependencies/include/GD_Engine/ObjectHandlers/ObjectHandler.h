@@ -23,7 +23,10 @@ namespace gde {
 			for (auto subhandler : this->subhandlers)
 				subhandler->Remove(object);
 
-			this->object_list.remove_if([object](TValue* tocheck) {return tocheck == object; });
+			this->object_list.remove_if([object](TValue* tocheck) {
+				Object* base_object = dynamic_cast<Object*>(tocheck);
+				return base_object == object;
+			});
 		}
 
 		virtual bool TryAdd(Object* object) {
@@ -40,6 +43,8 @@ namespace gde {
 					return false;
 
 			object_list.push_back(typed_object);
+
+			return true;
 		}
 	};
 }

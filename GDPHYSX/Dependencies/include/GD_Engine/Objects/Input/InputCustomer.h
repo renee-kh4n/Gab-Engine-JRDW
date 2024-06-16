@@ -6,7 +6,7 @@
 namespace gde {
 	using namespace input;
 
-	class InputCustomer_base : public Object {
+	class InputCustomer_base {
 		virtual bool TryReceive(InputAction value, InputAction::State state) = 0;
 	};
 

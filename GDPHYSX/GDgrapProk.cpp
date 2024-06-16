@@ -11,6 +11,7 @@
 #include <GD_Graphics/RenderPipeline.h>
 #include <GD_Graphics/Mesh.h>
 
+#include <GD_Engine/Input/InputSystem.h>
 #include <GD_Engine/ObjectHandlers/ObjectHandlers.h>
 #include <GD_Engine/Objects/Objects.h>
 #include <GD_Engine/ObjectFunctions/ObjectFunctions.h>
@@ -50,17 +51,26 @@ int main(void)
     //RenderPipeline setup
     Camera* active_camera = nullptr;
     auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y));
+#pragma endregion
 
-    //Object handlers setup
-    auto mPhysicsHandler = new PhysicsHandler();
-    auto mInputHandler = new InputHandler();
+#pragma region Input
+    auto mInputSystem = new InputSystem();
 #pragma endregion
 
 #pragma region Object setup
+    //Object handlers setup
+    auto mPhysicsHandler = new PhysicsHandler();
+    auto mInputHandler = new InputHandler();
+    auto mEarlyUpdate = new ObjectHandler<EarlyUpdate>();
+    auto mUpdate = new ObjectHandler<Update>();
+    auto mLateUpdate = new ObjectHandler<LateUpdate>();
     //root
     auto root_object = new Root();
     root_object->RegisterHandler(mPhysicsHandler);
     root_object->RegisterHandler(mInputHandler);
+    root_object->RegisterHandler(mEarlyUpdate);
+    root_object->RegisterHandler(mUpdate);
+    root_object->RegisterHandler(mLateUpdate);
 
     //Camera setup
     auto camera_dolly = new OrbitalControl();
@@ -102,7 +112,7 @@ int main(void)
     system->start_force.random_between_two = true;
     system->start_force.valueA = Vector3(-1, 1, -1) * 200;
     system->start_force.valueB = Vector3(1, 5, 1) * 200;
-    system->start_lifetime.valueA = 10;
+    system->start_lifetime.valueA = 2;
     system->SetParent(root_object);
 
     //physics force setup
@@ -125,13 +135,10 @@ int main(void)
         glfwPollEvents();
 
         //Early update
-        root_object->CallRecursively([](Object* object) {
-            EarlyUpdate* updater = dynamic_cast<EarlyUpdate*>(object);
-
-            if (updater != nullptr) {
-                updater->InvokeEarlyUpdate();
-            }
-        });
+        for (auto updatable : mEarlyUpdate->object_list)
+        {
+            updatable->InvokeEarlyUpdate();
+        }
 
         //Update pipeline
         mRenderPipeline->RenderFrame(active_camera->World()->position, active_camera->GetViewMat(), active_camera->getproj(), active_camera->mShader);
@@ -139,25 +146,19 @@ int main(void)
         //Update window
         glfwSwapBuffers(mWindow->window);
 
-        mTime->TickFixed([mPhysicsHandler, root_object](double deltatime) {
+        mTime->TickFixed([mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
             mPhysicsHandler->Update(deltatime);
 
             //Normal Update
-            root_object->CallRecursively([deltatime](Object* object) {
-                Update* updater = dynamic_cast<Update*>(object);
-
-                if (updater != nullptr) {
-                    updater->InvokeUpdate(deltatime);
-                }
-            });
+            for (auto updatable : mUpdate->object_list)
+            {
+                updatable->InvokeUpdate(deltatime);
+            }
             //Late Update
-            root_object->CallRecursively([deltatime](Object* object) {
-                LateUpdate* updater = dynamic_cast<LateUpdate*>(object);
-
-                if (updater != nullptr) {
-                    updater->InvokeLateUpdate(deltatime);
-                }
-            });
+            for (auto updatable : mLateUpdate->object_list)
+            {
+                updatable->InvokeLateUpdate(deltatime);
+            }
         });
 
         std::list<Object*> toDelete;
