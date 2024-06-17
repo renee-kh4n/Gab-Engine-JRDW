@@ -135,9 +135,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector2.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\CameraSwitcher.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp" />
@@ -167,7 +171,11 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vectors.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector_base.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\ActionImplementation.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\WasdDelta.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\KeyPress.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\MouseRightDrag.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\Implementations.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Input\InputAction.h" />
@@ -175,6 +183,8 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\InputHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\CameraSwitcher.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputCustomer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h" />

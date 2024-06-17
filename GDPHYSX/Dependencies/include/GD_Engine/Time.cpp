@@ -5,7 +5,11 @@ gde::Time::Time()
     using clock = std::chrono::high_resolution_clock;
     curr_time = clock::now();
     prev_time = curr_time;
-    curr_ns = std::chrono::nanoseconds(0);
+    curr_ns = 0;
+}
+
+void gde::Time::Reset() {
+    prev_time = curr_time;
 }
 
 void gde::Time::TickFixed(std::function<void(double)> update_callback)
@@ -16,14 +20,17 @@ void gde::Time::TickFixed(std::function<void(double)> update_callback)
     auto dur = std::chrono::duration_cast<std::chrono::nanoseconds>(curr_time - prev_time);
     prev_time = curr_time;
 
-    curr_ns += dur;
+    if (this->paused)
+        return;
 
-    while (curr_ns >= timestep) {
+    curr_ns += (float)dur.count() * scale;
+
+    while (curr_ns >= timestep.count()) {
 
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(timestep);
         auto seconds = (double)ms.count() / 1000;
         update_callback(seconds);
 
-        curr_ns -= timestep;
+        curr_ns -= timestep.count();
     }
 }

@@ -9,20 +9,12 @@ namespace gde {
         this->mShader = mShader;
     }
 
-    glm::vec3 Camera::CamUp()
-    {
-        return glm::cross(CamR(), (glm::vec3)this->Forward());
-    }
-
-    glm::vec3 Camera::CamR()
-    {
-        return glm::normalize(glm::cross((glm::vec3)this->Forward(), WorldUp));
-    }
-
     glm::mat4 Camera::GetViewMat()
     {
-        auto this_pos = (glm::vec3)this->World()->position;
-        return glm::lookAt(this_pos, (glm::vec3)this->Forward() + this_pos, this->WorldUp);
+        auto world = this->World();
+
+        auto this_pos = (glm::vec3)world->position;
+        return glm::lookAt(this_pos, (glm::vec3)world->Forward + this_pos, (glm::vec3)world->Up);
     }
 
     PerspectiveCamera::PerspectiveCamera(Window* mWindow, Shader* mShader) : Camera(mWindow, mShader)
@@ -40,7 +32,7 @@ namespace gde {
 
     glm::mat4 OrthographicCamera::getproj()
     {
-        return glm::ortho(orthoRange, -orthoRange, -orthoRange, orthoRange, this->nearClip, this->farClip);
+        return glm::ortho(-orthoRange, orthoRange, -orthoRange, orthoRange, this->nearClip, this->farClip);
     }
 
 }

@@ -22,8 +22,6 @@ namespace gde{
 		Vector3(const Vector3& from);
 		Vector3(float x, float y, float z);
 
-		virtual float* GetValuePointer(int index);
-
 		Vector3(glm::vec3 glmvec);
 		operator glm::vec3() const;
 
@@ -31,6 +29,7 @@ namespace gde{
 
 		// Inherited via Vector_base
 		Vector3 Cross(const Vector3& right);
+		Vector3 Normalize();
 
 		Vector3 operator-();
 		Vector3 operator*(const float& right);

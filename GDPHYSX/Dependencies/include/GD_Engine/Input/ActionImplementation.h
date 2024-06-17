@@ -1,12 +1,13 @@
 #pragma once
 
 #include "InputAction.h"
+#include <GD_Graphics/Window.h>
 
 namespace gde {
 	namespace input {
 		class ActionImplementation_base {
 		public:
-			virtual bool CheckStateChanged() = 0;
+			virtual bool CheckStateChanged(Window* target) = 0;
 			virtual InputAction* GetState() = 0;
 		};
 
@@ -15,15 +16,15 @@ namespace gde {
 		protected:
 			TAction mState;
 		public:
-			virtual bool CheckStateChanged() override {
+			virtual bool CheckStateChanged(Window* target) override {
 				auto old_state = mState;
-				UpdateState();
+				UpdateState(target);
 				return mState.state != old_state.state;
 			}
 			virtual InputAction* GetState() override {
 				return &mState;
 			}
-			virtual void UpdateState() = 0;
+			virtual void UpdateState(Window* target) = 0;
 		};
 	}
 }

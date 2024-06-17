@@ -13,7 +13,18 @@ void gde::ParticleSystem::Spawn()
 	auto new_start_force = this->start_force.GetValue();
 	newparticle->AddForce(new_start_force);
 
+	if (this->world_space == false)
+		newparticle->SetParent(this);
+	if (this->world_space == true)
+		newparticle->SetParent(this->parent);
+
 	this->particles.insert_or_assign(newparticle, this->start_lifetime.GetValue());
+}
+
+void gde::ParticleSystem::Spawn(int count)
+{
+	for (int i = 0; i < count; i++)
+		this->Spawn();
 }
 
 void gde::ParticleSystem::InvokeUpdate(float deltatime)

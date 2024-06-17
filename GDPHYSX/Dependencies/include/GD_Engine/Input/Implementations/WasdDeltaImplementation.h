@@ -1,13 +1,12 @@
 #pragma once
 
 #include "../ActionImplementation.h"
-#include "../Action/MouseRightDrag.h"
+#include "../Action/WasdDelta.h"
 
 namespace gde {
 	namespace input {
-		class MouseRightDragImplementation : public ActionImplementation<MouseRightDrag> {
+		class WasdDeltaImplementation : public ActionImplementation<WasdDelta> {
 		private:
-			Vector2 old_mouse_pos;
 			// Inherited via ActionImplementation
 			virtual void UpdateState(Window* target) override;
 		};

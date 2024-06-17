@@ -8,6 +8,6 @@ namespace gde {
         int win_x;
         int win_y;
 
-        Window(int win_x = 700, int win_y = 700);
+        Window(const char* name, int win_x = 700, int win_y = 700);
     };
 }

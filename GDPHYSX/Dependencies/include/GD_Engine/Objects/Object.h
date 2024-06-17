@@ -12,13 +12,15 @@ namespace gde {
 	private:
 		bool isDestroyQueued = false;
 
-		Object* parent;
 		std::list<Object*> children;
 
 		Transform world;
 		Transform local;
-		glm::mat4 transform;
+
+		void MatToTrans(Transform* target, glm::mat4 mat);
 	protected:
+		Object* parent;
+		glm::mat4 transform;
 		virtual Object* Copy_self();
 	public:
 		Object();
@@ -28,9 +30,11 @@ namespace gde {
 		glm::mat4 GetWorldSpaceMatrix();
 		Transform* World();
 		Transform* Local();
-		Vector3 Forward();
-		void Translate(Vector3 vector);
-		void Rotate(Vector3 vector);
+		void SetPosition(Vector3 vector);
+		void TranslateWorld(Vector3 vector);
+		void TranslateLocal(Vector3 vector);
+		void Rotate(Vector3 axis, float angle);
+		void Orient(Vector3 forward, Vector3 Up);
 		void Scale(Vector3 vector);
 
 		virtual void OnEnterHierarchy(Object* newChild);

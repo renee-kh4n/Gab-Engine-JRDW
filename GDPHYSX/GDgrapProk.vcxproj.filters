@@ -93,6 +93,18 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\CameraSwitcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h">
@@ -243,6 +255,24 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\Implementations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\CameraSwitcher.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\KeyPress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\WasdDelta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

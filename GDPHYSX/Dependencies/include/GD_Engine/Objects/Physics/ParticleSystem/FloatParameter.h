@@ -9,7 +9,7 @@ namespace gde {
 		protected:
 			float GetRandomValue() override {
 				auto range = this->valueB - this->valueA;
-				return ((float)rand() / RAND_MAX) * range;
+				return this->valueA + (((float)rand() / RAND_MAX) * range);
 			}
 		};
 	}

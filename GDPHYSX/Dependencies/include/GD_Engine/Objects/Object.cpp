@@ -1,6 +1,23 @@
 #include "Object.h"
 #include <glm/gtx/matrix_decompose.hpp>
 
+void gde::Object::MatToTrans(Transform* target, glm::mat4 mat)
+{
+	glm::vec3 scale;
+	glm::quat rotation;
+	glm::vec3 translation;
+	glm::vec3 skew;
+	glm::vec4 perspective;
+	glm::decompose(mat, scale, rotation, translation, skew, perspective);
+
+	target->position = translation;
+	target->rotation = glm::eulerAngles(rotation) * 3.14159f / 180.f;
+	target->scale = scale;
+	target->Forward = Vector3(this->GetWorldSpaceMatrix()[2]);
+	target->Up = Vector3(this->GetWorldSpaceMatrix()[1]);
+	target->Right = Vector3(this->GetWorldSpaceMatrix()[0]);
+}
+
 gde::Object* gde::Object::Copy_self()
 {
 	return new Object(*this);
@@ -41,44 +58,29 @@ glm::mat4 gde::Object::GetWorldSpaceMatrix()
 
 gde::Transform* gde::Object::World()
 {
-	auto trans_mat = this->GetWorldSpaceMatrix();
-
-	glm::vec3 scale;
-	glm::quat rotation;
-	glm::vec3 translation;
-	glm::vec3 skew;
-	glm::vec4 perspective;
-	glm::decompose(trans_mat, scale, rotation, translation, skew, perspective);
-
-	this->world.position = translation;
-	this->world.rotation = glm::eulerAngles(rotation) * 3.14159f / 180.f;
-	this->world.scale = scale;
-
+	this->MatToTrans(&this->world, this->GetWorldSpaceMatrix());
 	return &this->world;
 }
 
 gde::Transform* gde::Object::Local()
 {
-	glm::vec3 scale;
-	glm::quat rotation;
-	glm::vec3 translation;
-	glm::vec3 skew;
-	glm::vec4 perspective;
-	glm::decompose(this->transform, scale, rotation, translation, skew, perspective);
-
-	this->local.position = translation;
-	this->local.rotation = glm::eulerAngles(rotation) * 3.14159f / 180.f;
-	this->local.scale = scale;
-
+	this->MatToTrans(&this->local, this->transform);
 	return &this->local;
 }
 
-gde::Vector3 gde::Object::Forward()
+void gde::Object::SetPosition(Vector3 vector)
 {
-	return Vector3(this->GetWorldSpaceMatrix()[2]);
+	this->transform = glm::translate(this->transform, -(glm::vec3)this->Local()->position);
+	this->transform = glm::translate(this->transform, (glm::vec3)vector);
 }
 
-void gde::Object::Translate(Vector3 vector)
+void gde::Object::TranslateWorld(Vector3 vector)
+{
+	auto localdelta = glm::vec3(glm::vec4((glm::vec3)vector, 1) * this->GetWorldSpaceMatrix());
+	this->transform = glm::translate(this->transform, (glm::vec3)localdelta);
+}
+
+void gde::Object::TranslateLocal(Vector3 vector)
 {
 	this->transform = glm::translate(this->transform, (glm::vec3)vector);
 }
@@ -88,11 +90,16 @@ void gde::Object::Scale(Vector3 vector)
 	this->transform = glm::scale(this->transform, (glm::vec3)vector);
 }
 
-void gde::Object::Rotate(Vector3 vector)
+void gde::Object::Rotate(Vector3 axis, float deg_angle)
 {
-	this->transform = glm::rotate(this->transform, glm::radians(vector.y), glm::vec3(0, 1, 0));
-	this->transform = glm::rotate(this->transform, glm::radians(vector.x), glm::vec3(1, 0, 0));
-	this->transform = glm::rotate(this->transform, glm::radians(vector.z), glm::vec3(0, 0, 1));
+	this->transform = glm::rotate(glm::mat4(1.0f), glm::radians(deg_angle), (glm::vec3)axis) * this->transform;
+}
+
+void gde::Object::Orient(Vector3 forward, Vector3 Up)
+{
+	this->transform[2] = glm::vec4((glm::vec3)forward, 0);
+	this->transform[1] = glm::vec4((glm::vec3)Up, 0);
+	this->transform[0] = glm::vec4((glm::vec3)Up.Cross(forward), 0);
 }
 
 void gde::Object::OnEnterHierarchy(Object* newChild)
@@ -139,7 +146,6 @@ void gde::Object::SetParent(Object* newParent)
 {
 	if (parent != nullptr) {
 		parent->OnExitHierarchy(this);
-
 		parent->children.remove_if([this](Object* child) {return child == this; });
 	}
 

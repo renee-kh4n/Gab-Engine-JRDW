@@ -23,7 +23,7 @@ namespace gde {
 		float time_last_spawned = 0;
 	public:
 		float spawns_per_sec = 1;
-		bool world_space;
+		bool world_space = false;
 
 		VectorParameter start_force;
 		FloatParameter start_speed;
@@ -32,6 +32,7 @@ namespace gde {
 		ParticleSystem(std::function<RigidObject* (void)> particle_function);
 
 		void Spawn();
+		void Spawn(int count);
 
 		// Inherited via Update
 		virtual void InvokeUpdate(float deltatime) override;

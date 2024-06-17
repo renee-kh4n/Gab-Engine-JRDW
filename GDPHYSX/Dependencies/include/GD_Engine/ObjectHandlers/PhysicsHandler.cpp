@@ -20,7 +20,7 @@ void gde::PhysicsHandler::Update(double duration)
 		rigidobject->acceleration = Vector3::zero;
 		rigidobject->acceleration += total_force * (1 / rigidobject->mass);
 
-		rigidobject->Translate((rigidobject->velocity * duration) + ((rigidobject->acceleration * (duration * duration)) * (1.0f / 2.0f)));
+		rigidobject->TranslateWorld((rigidobject->velocity * duration) + ((rigidobject->acceleration * (duration * duration)) * (1.0f / 2.0f)));
 		
 		rigidobject->velocity += rigidobject->acceleration * duration;
 		rigidobject->velocity *= powf(rigidobject->damping, duration);

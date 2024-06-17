@@ -19,10 +19,10 @@ namespace gde {
 
         Camera(Window* mWindow, Shader* mShader);
 
-        glm::vec3 WorldUp = glm::vec3(0, 1, 0);
+        Vector3 WorldUp = Vector3(0, 1, 0);
 
-        glm::vec3 CamUp();
-        glm::vec3 CamR();
+        Vector3 CamUp();
+        Vector3 CamR();
         glm::mat4 GetViewMat();
         virtual glm::mat4 getproj() = 0;
     };

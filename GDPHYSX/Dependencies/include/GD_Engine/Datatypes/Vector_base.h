@@ -36,7 +36,7 @@ namespace gde {
 				}
 			}
 
-			void operator*=(const float& right)
+			void operator*=(const T& right)
 			{
 				for (int i = 0; i < L; i++)
 				{
@@ -44,31 +44,31 @@ namespace gde {
 				}
 			}
 
-			float SqrMagnitude()
+			T SqrMagnitude()
 			{
-				auto result = 0;
+				T result = 0.0f;
 
 				for (auto component : value_pointers)
 				{
-					result += *component * *component;
+					result += (*component) * (*component);
 				}
 
 				return result;
 			}
 
-			float Magnitude()
+			T Magnitude()
 			{
-				return sqrtf(this->SqrMagnitude());
+				return sqrt(this->SqrMagnitude());
 			}
 
 			
-			float Dot(const Vector<L, T>& right)
+			T Dot(const Vector<L, T>& right)
 			{
-				float result = 0;
+				T result = 0;
 
 				for (int i = 0; i < L; i++)
 				{
-					result += *this->value_pointers[i] * *right.value_pointers[i];
+					result += (*this->value_pointers[i]) * (*right.value_pointers[i]);
 				}
 
 				return result;

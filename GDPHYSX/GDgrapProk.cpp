@@ -21,17 +21,20 @@
 
 using namespace gde;
 
-static Window* mWindow;
-
 int main(void)
 {
+    //PHASE 1 CODE
+    int particles_to_spawn = 0;
+    std::cout << "Enter particle count: ";
+    std::cin >> particles_to_spawn;
+
     auto mTime = new Time();
 
     /* Initialize GLFW*/
     if (!glfwInit())
         return -1;
 
-    mWindow = new Window(900, 900);
+    Window* mWindow = new Window("PHASE 1 GDPHYSX", 900, 900);
     
     /* Initialize GLAD*/
     gladLoadGL();
@@ -55,9 +58,12 @@ int main(void)
 #pragma endregion
 
 #pragma region Input
-    auto player_name = "MAIN";
     auto mInputSystem = new InputSystem();
-    mInputSystem->RegisterAction(player_name, new MouseRightDragImplementation());
+    auto player_name = "MAIN";
+    mInputSystem->RegisterActionListener(player_name, new MouseRightDragImplementation());
+    mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_Q>());
+    mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_SPACE>());
+    mInputSystem->RegisterActionListener(player_name, new WasdDeltaImplementation());
 #pragma endregion
 
 #pragma region Object setup
@@ -76,35 +82,60 @@ int main(void)
     root_object->RegisterHandler(mLateUpdate);
 
     //Camera setup
-    auto camera_input = new InputPlayer(player_name);
-    camera_input->SetParent(root_object);
+    auto player_input = new InputPlayer(player_name);
+    player_input->SetParent(root_object);
     auto camera_dolly = new OrbitalControl();
-    camera_dolly->SetParent(camera_input);
+    camera_dolly->SetParent(player_input);
 
-    auto mCameraObject = new PerspectiveCamera(mWindow, CamOrthoPPShader);
-    mCameraObject->angles = 90;
-    mCameraObject->farClip = 1000.0f;
-    mCameraObject->WorldUp = glm::vec3(0, 1, 0);
-    mCameraObject->Translate(glm::vec3(0, 0, -10));
-    mCameraObject->SetParent(camera_dolly);
-    active_camera = mCameraObject;
+    auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
+    mPerspectiveCam->angles = 90;
+    mPerspectiveCam->farClip = 1000.0f;
+    mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
+    mPerspectiveCam->TranslateWorld(Vector3(0, 0, -400));
+    mPerspectiveCam->SetParent(camera_dolly);
+    auto mOrthoCam = new OrthographicCamera(mWindow, CamOrthoPPShader);
+    mOrthoCam->orthoRange = 450;
+    mOrthoCam->farClip = 1000.0f;
+    mOrthoCam->WorldUp = Vector3(0, 1, 0);
+    mOrthoCam->TranslateWorld(Vector3(0, 0, -400));
+    mOrthoCam->SetParent(camera_dolly);
+    active_camera = mPerspectiveCam;
+
+    auto mCamSwitcher = new CameraSwitcher((void*)mPerspectiveCam, (void*)mOrthoCam, (void**)&active_camera);
+    mCamSwitcher->SetParent(player_input);
+
+    auto mPauser = new SpacebarPauser(mTime);
+    mPauser->SetParent(player_input);
 
     //Mesh and material caching
     auto sphere_mesh = new Mesh("3D/sphere.obj");
-    auto sphere_material = new Material(unlitShader);
-    sphere_material->setOverride<glm::vec3>("color", glm::vec3(1, 0, 0));
-    auto sphere_drawcall = new DrawCall(sphere_mesh, sphere_material);
-    mRenderPipeline->RegisterDrawCall(sphere_drawcall);
 
-    auto CreateParticleFunction = [sphere_drawcall, root_object, unlitShader, mRenderPipeline]() {
+    auto create_unlit_rendercall = [sphere_mesh, unlitShader, mRenderPipeline](Vector3 color) {
+        auto unlit_mat = new Material(unlitShader);
+        unlit_mat->setOverride<glm::vec3>("color", color);
+        auto new_drawcall = new DrawCall(sphere_mesh, unlit_mat);
+        mRenderPipeline->RegisterDrawCall(new_drawcall);
+        return new_drawcall;
+    };
+
+    std::vector<DrawCall*> drawcalls = {
+        create_unlit_rendercall(Vector3(1, 0, 0)),
+        create_unlit_rendercall(Vector3(0, 1, 0)),
+        create_unlit_rendercall(Vector3(0, 0, 1)),
+        create_unlit_rendercall(Vector3(1, 1, 0)),
+        create_unlit_rendercall(Vector3(1, 0, 1)),
+        create_unlit_rendercall(Vector3(0, 1, 1)),
+    };
+    //reference sphere renderobject setup
+
+    auto CreateParticleFunction = [drawcalls, root_object, unlitShader, mRenderPipeline]() {
         //sphere rigidobject setup
         auto sphere_rigidobject = new RigidObject();
         sphere_rigidobject->damping = 1.0f;
-        sphere_rigidobject->SetParent(root_object);
 
         //sphere renderobject setup
-        auto sphere_renderobject = new RenderObject(sphere_drawcall);
-        sphere_renderobject->Scale(Vector3(1, 1, 1) * 0.2f);
+        auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
+        sphere_renderobject->Scale(Vector3(1, 1, 1) * 0.6f);
         sphere_renderobject->SetParent(sphere_rigidobject);
 
         return sphere_rigidobject;
@@ -112,11 +143,13 @@ int main(void)
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
-    system->spawns_per_sec = 200;
+    system->spawns_per_sec = 0;
     system->start_force.random_between_two = true;
-    system->start_force.valueA = Vector3(-1, 1, -1) * 200;
-    system->start_force.valueB = Vector3(1, 5, 1) * 200;
-    system->start_lifetime.valueA = 2;
+    system->start_force.valueA = Vector3(-1, 0.5, -1) * 800;
+    system->start_force.valueB = Vector3(1, 4, 1) * 800;
+    system->start_lifetime.random_between_two = true;
+    system->start_lifetime.valueA = 0.4f;
+    system->start_lifetime.valueA = 15;
     system->SetParent(root_object);
 
     //physics force setup
@@ -127,14 +160,15 @@ int main(void)
     gravity_volume->forceMode = ForceVolume::VELOCITY;
     gravity_volume->SetParent(root_object);
 
+    //PHASE 1 CODE
+    system->Spawn(particles_to_spawn);
+
 #pragma endregion
 
-    /// <summary>
     /// MAIN GAME LOOP
-    /// </summary>
-
     while (!glfwWindowShouldClose(mWindow->window))
     {
+        //Update input system
         mInputSystem->UpdateStates([mInputHandler](std::string name, gde::input::InputAction* action, bool changed) {
             for (auto input_player : mInputHandler->object_list) {
                 if (input_player->get_player_name() != name)
@@ -143,7 +177,7 @@ int main(void)
                 for (auto input_customer : input_player->inputhandler.object_list)
                     input_customer->TryReceive(action, changed);
             }
-        });
+        }, mWindow);
 
         /* Poll for and process events */
         glfwPollEvents();
@@ -154,12 +188,12 @@ int main(void)
             updatable->InvokeEarlyUpdate();
         }
 
-        //Update pipeline
+        //Update Render pipeline
         mRenderPipeline->RenderFrame(active_camera->World()->position, active_camera->GetViewMat(), active_camera->getproj(), active_camera->mShader);
-
-        //Update window
+        //Render window
         glfwSwapBuffers(mWindow->window);
 
+        //Update other handlers
         mTime->TickFixed([mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
             mPhysicsHandler->Update(deltatime);
 
@@ -175,6 +209,7 @@ int main(void)
             }
         });
 
+        //Delete all queued for deletions
         std::list<Object*> toDelete;
 
         root_object->CallRecursively([&toDelete](Object* object) {
