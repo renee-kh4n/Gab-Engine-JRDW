@@ -34,7 +34,7 @@ int main(void)
     if (!glfwInit())
         return -1;
 
-    Window* mWindow = new Window("PHASE 1 GDPHYSX", 900, 900);
+    Window* mWindow = new Window("PHASE 1 GDPHYSX", 800, 800);
     
     /* Initialize GLAD*/
     gladLoadGL();
