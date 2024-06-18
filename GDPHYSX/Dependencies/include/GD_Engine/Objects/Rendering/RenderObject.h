@@ -10,9 +10,9 @@ namespace gde {
 	class RenderObject : public Object, public EarlyUpdate {
 	private:
 		//Rendering stuff
-		DrawCall* mDrawCall;
+		rendering::DrawCall* mDrawCall;
 	public:
-		RenderObject(DrawCall* mDrawCall);
+		RenderObject(rendering::DrawCall* mDrawCall);
 		virtual ~RenderObject();
 
 		// Inherited via EarlyUpdate

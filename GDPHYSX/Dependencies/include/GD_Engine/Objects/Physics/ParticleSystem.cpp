@@ -1,13 +1,14 @@
 #include "ParticleSystem.h"
 
 #include <iostream>
+using namespace gde;
 
-gde::ParticleSystem::ParticleSystem(std::function<RigidObject* (void)> particle_function)
+ParticleSystem::ParticleSystem(std::function<RigidObject* (void)> particle_function)
 {
 	this->particle_function = particle_function;
 }
 
-void gde::ParticleSystem::Spawn()
+void ParticleSystem::Spawn()
 {
 	auto newparticle = this->particle_function();
 	auto new_start_force = this->start_force.GetValue();
@@ -21,13 +22,13 @@ void gde::ParticleSystem::Spawn()
 	this->particles.insert_or_assign(newparticle, this->start_lifetime.GetValue());
 }
 
-void gde::ParticleSystem::Spawn(int count)
+void ParticleSystem::Spawn(int count)
 {
 	for (int i = 0; i < count; i++)
 		this->Spawn();
 }
 
-void gde::ParticleSystem::InvokeUpdate(float deltatime)
+void ParticleSystem::InvokeUpdate(float deltatime)
 {
 	this->time_last_spawned += deltatime;
 

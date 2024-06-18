@@ -14,10 +14,13 @@ namespace gde {
 
 		std::list<Object*> children;
 
+		glm::mat4 prev_world_space_matrix;
 		Transform world;
 		Transform local;
 
 		void MatToTrans(Transform* target, glm::mat4 mat);
+
+		void UpdateTransforms();
 	protected:
 		Object* parent;
 		glm::mat4 transform;
@@ -30,7 +33,7 @@ namespace gde {
 		glm::mat4 GetWorldSpaceMatrix();
 		Transform* World();
 		Transform* Local();
-		void SetPosition(Vector3 vector);
+		void SetLocalPosition(Vector3 vector);
 		void TranslateWorld(Vector3 vector);
 		void TranslateLocal(Vector3 vector);
 		void Rotate(Vector3 axis, float angle);

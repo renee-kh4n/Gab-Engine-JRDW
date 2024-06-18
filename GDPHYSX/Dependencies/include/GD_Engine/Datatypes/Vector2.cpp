@@ -7,13 +7,13 @@ namespace gde {
 		this->y = 0;
 	}
 
-	Vector2::Vector2(const gde::Vector2& from) : Vector<2, float>({ &x, &y })
+	Vector2::Vector2(const Vector2& from) : Vector<2, float>({ &x, &y })
 	{
 		this->x = from.x;
 		this->y = from.y;
 	}
 
-	gde::Vector2::Vector2(float x, float y) : Vector<2, float>({ &x, &y})
+	Vector2::Vector2(float x, float y) : Vector<2, float>({ &x, &y})
 	{
 		this->x = x;
 		this->y = y;

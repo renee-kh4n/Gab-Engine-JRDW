@@ -7,6 +7,8 @@
 #include "../../Objects/Object.h"
 
 namespace gde {
+    using namespace rendering;
+
     /// <summary>
     /// Generic camera class with assignable project matrix and utility functions for rendering.
     /// </summary>

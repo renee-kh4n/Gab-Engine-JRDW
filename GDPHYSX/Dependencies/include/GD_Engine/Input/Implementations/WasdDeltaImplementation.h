@@ -8,7 +8,7 @@ namespace gde {
 		class WasdDeltaImplementation : public ActionImplementation<WasdDelta> {
 		private:
 			// Inherited via ActionImplementation
-			virtual void UpdateState(Window* target) override;
+			virtual void UpdateState(rendering::Window* target) override;
 		};
 	}
 }

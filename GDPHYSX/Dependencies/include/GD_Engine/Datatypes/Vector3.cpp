@@ -15,7 +15,7 @@ namespace gde {
 		this->z = from.z;
 	}
 
-	gde::Vector3::Vector3(float _x, float _y, float _z) : Vector<3, float>({ &x, &y, &z })
+	Vector3::Vector3(float _x, float _y, float _z) : Vector<3, float>({ &x, &y, &z })
 	{
 		this->x = _x;
 		this->y = _y;

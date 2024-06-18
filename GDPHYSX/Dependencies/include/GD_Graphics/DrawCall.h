@@ -6,13 +6,15 @@
 
 
 namespace gde {
-    class DrawCall {
-    public:
-        std::unordered_map<void*, glm::mat4> calls;
+    namespace rendering {
+        class DrawCall {
+        public:
+            std::unordered_map<void*, glm::mat4> calls;
 
-        Mesh* m_mesh;
-        Material* m_material;
+            Mesh* m_mesh;
+            Material* m_material;
 
-        DrawCall(Mesh* mesh, Material* material);
-    };
+            DrawCall(Mesh* mesh, Material* material);
+        };
+    }
 }

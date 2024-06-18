@@ -3,23 +3,37 @@
 #include "util.h"
 
 namespace gde {
-	struct PointLight {
-		glm::vec3 color;
-		float intensity;
-		glm::vec3 pos;
-	};
+	namespace rendering {
+		struct Light {
+			virtual enum Type {
+				POINT,
+				CONE,
+				DIRECTION
+			} GetType() = 0;
 
-	struct ConeLight {
-		glm::vec3 color;
-		float intensity;
-		glm::vec3 pos;
-		glm::vec3 dir;
-		glm::vec2 angle;
-	};
+			glm::vec3 color;
+			float intensity;
+			glm::vec3 pos;
+		};
 
-	struct DirLight {
-		glm::vec3 color;
-		float intensity;
-		glm::vec3 dir;
-	};
+		struct PointLight : public Light {
+			// Inherited via Light
+			virtual Type GetType() override;
+		};
+
+		struct ConeLight : public Light {
+			// Inherited via Light
+			virtual Type GetType() override;
+
+			glm::vec3 dir;
+			glm::vec2 angle;
+		};
+
+		struct DirLight : public Light {
+			// Inherited via Light
+			virtual Type GetType() override;
+
+			glm::vec3 dir;
+		};
+	}
 }

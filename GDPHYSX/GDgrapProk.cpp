@@ -23,11 +23,6 @@ using namespace gde;
 
 int main(void)
 {
-    //PHASE 1 CODE
-    int particles_to_spawn = 0;
-    std::cout << "Enter particle count: ";
-    std::cin >> particles_to_spawn;
-
     auto mTime = new Time();
 
     /* Initialize GLFW*/
@@ -55,6 +50,7 @@ int main(void)
     //RenderPipeline setup
     Camera* active_camera = nullptr;
     auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y));
+    mRenderPipeline->SetPostProcessing(Cam1stPPShader);
 #pragma endregion
 
 #pragma region Input
@@ -70,6 +66,7 @@ int main(void)
     //Object handlers setup
     auto mPhysicsHandler = new PhysicsHandler();
     auto mInputHandler = new InputHandler();
+    auto mLightHandler = new ObjectHandler<gde::Light>();
     auto mEarlyUpdate = new ObjectHandler<EarlyUpdate>();
     auto mUpdate = new ObjectHandler<Update>();
     auto mLateUpdate = new ObjectHandler<LateUpdate>();
@@ -77,6 +74,7 @@ int main(void)
     auto root_object = new Root();
     root_object->RegisterHandler(mPhysicsHandler);
     root_object->RegisterHandler(mInputHandler);
+    root_object->RegisterHandler(mLightHandler);
     root_object->RegisterHandler(mEarlyUpdate);
     root_object->RegisterHandler(mUpdate);
     root_object->RegisterHandler(mLateUpdate);
@@ -97,7 +95,7 @@ int main(void)
     mOrthoCam->orthoRange = 450;
     mOrthoCam->farClip = 1000.0f;
     mOrthoCam->WorldUp = Vector3(0, 1, 0);
-    mOrthoCam->TranslateWorld(Vector3(0, 0, -400));
+    mOrthoCam->TranslateWorld(Vector3(0, 0, -200));
     mOrthoCam->SetParent(camera_dolly);
     active_camera = mPerspectiveCam;
 
@@ -110,9 +108,11 @@ int main(void)
     //Mesh and material caching
     auto sphere_mesh = new Mesh("3D/sphere.obj");
 
-    auto create_unlit_rendercall = [sphere_mesh, unlitShader, mRenderPipeline](Vector3 color) {
+    auto create_unlit_rendercall = [sphere_mesh, unlitShader, litShader, mRenderPipeline](Vector3 color) {
         auto unlit_mat = new Material(unlitShader);
         unlit_mat->setOverride<glm::vec3>("color", color);
+        unlit_mat->setOverride<glm::vec3>("dirlight.dir", glm::vec3(0, -1, 0));
+        unlit_mat->setOverride<glm::vec3>("dirlight.color", glm::vec3(1, 1, 1) * 3.0f);
         auto new_drawcall = new DrawCall(sphere_mesh, unlit_mat);
         mRenderPipeline->RegisterDrawCall(new_drawcall);
         return new_drawcall;
@@ -128,10 +128,11 @@ int main(void)
     };
     //reference sphere renderobject setup
 
-    auto CreateParticleFunction = [drawcalls, root_object, unlitShader, mRenderPipeline]() {
+    auto CreateParticleFunction = [create_unlit_rendercall, drawcalls, root_object, unlitShader, mRenderPipeline]() {
+
         //sphere rigidobject setup
         auto sphere_rigidobject = new RigidObject();
-        sphere_rigidobject->damping = 1.0f;
+        sphere_rigidobject->damping = 0.9f;
 
         //sphere renderobject setup
         auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
@@ -143,7 +144,7 @@ int main(void)
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
-    system->spawns_per_sec = 0;
+    system->spawns_per_sec = 100;
     system->start_force.random_between_two = true;
     system->start_force.valueA = Vector3(-1, 0.5, -1) * 800;
     system->start_force.valueB = Vector3(1, 4, 1) * 800;
@@ -160,8 +161,11 @@ int main(void)
     gravity_volume->forceMode = ForceVolume::VELOCITY;
     gravity_volume->SetParent(root_object);
 
-    //PHASE 1 CODE
-    system->Spawn(particles_to_spawn);
+    //light
+    auto directional_light = new DirectionalLight();
+    directional_light->Color = Vector3(1, 1, 1);
+    directional_light->intensity = 3;
+    directional_light->SetParent(root_object);
 
 #pragma endregion
 
@@ -169,7 +173,7 @@ int main(void)
     while (!glfwWindowShouldClose(mWindow->window))
     {
         //Update input system
-        mInputSystem->UpdateStates([mInputHandler](std::string name, gde::input::InputAction* action, bool changed) {
+        mInputSystem->UpdateStates([mInputHandler](std::string name, input::InputAction* action, bool changed) {
             for (auto input_player : mInputHandler->object_list) {
                 if (input_player->get_player_name() != name)
                     continue;
@@ -189,7 +193,14 @@ int main(void)
         }
 
         //Update Render pipeline
-        mRenderPipeline->RenderFrame(active_camera->World()->position, active_camera->GetViewMat(), active_camera->getproj(), active_camera->mShader);
+        for (auto light : mLightHandler->object_list)
+        {
+            if (mRenderPipeline->TryPushLight(light->GetData(), false) == false) {
+                break;
+            }
+        }
+        mRenderPipeline->SetView(active_camera->World()->position, active_camera->GetViewMat(), active_camera->getproj());
+        mRenderPipeline->RenderFrame();
         //Render window
         glfwSwapBuffers(mWindow->window);
 

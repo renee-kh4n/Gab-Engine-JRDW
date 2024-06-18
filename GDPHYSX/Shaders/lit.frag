@@ -11,26 +11,43 @@ in vec3 fragPos;
 uniform sampler2D texdiffuse;
 uniform bool hasNormalTex;
 uniform sampler2D texnormal;
+//COLORS
+uniform vec3 color;
 
 //SKYBOX AMBIENT LIGHT
 uniform samplerCube skybox;
 
 //DIRECTIONAL LIGHT
-uniform vec3 dLightDir;
-uniform vec3 dLightColor;
+struct DirLight
+{
+	vec3 dir;
+	vec3 color;
+}dirlight;
 
 //POINT LIGHT
-uniform vec3 pLightPos;
-//COLOR defines point light BRIGHTNESS
-uniform vec3 pLightColor;
+struct PointLight
+{
+	vec3 pos;
+	vec3 color;
+};
 
 //CONE LIGHT
-uniform vec3 cLightPos;
-uniform vec3 cLightFaceDir;
-uniform vec2 cLightAngle;
-//COLOR defines point light BRIGHTNESS
-uniform vec3 cLightColor;
+struct ConeLight
+{
+	vec3 pos;
+	vec3 dir;
+	float outer_angle;
+	float inner_angle;
+	vec3 color;
+};
 
+const int pointlight_count = 10;
+const int conelight_count = 10;
+
+layout (std140) uniform LightBlock{
+	PointLight pointlights[pointlight_count];
+	ConeLight conelights[conelight_count];
+};
 
 //AMBIENT LIGHT
 uniform float ambientLightIntensity;
@@ -56,40 +73,47 @@ void main(){
 	vec3 tangent = normalize(tanCoord);
 	vec3 viewDir = normalize(pass_camPos - fragPos);
 
+	vec3 light_total = vec3(0,0,0);
+
 	//Directional light set-up
-	vec3 dirLightDir = normalize(dLightDir);
-	vec3 dDiffuse = max(dot(normal, -dirLightDir), 0.0f) * dLightColor;
+	vec3 dirLightDir = normalize(dirlight.dir);
+	vec3 dDiffuse = max(dot(normal, -dirLightDir), 0.0f) * dirlight.color;
 	//Spec lighting calculation
 	vec3 dReflectDir = reflect(-dirLightDir, normal);
 	float dSpec = pow(max(dot(dReflectDir, viewDir), 0.01), specPhong);
 	vec3 dSpecColor = dSpec * specStrength * dDiffuse;
-	vec3 dLightTotal = dDiffuse + dSpecColor;
+	light_total += dDiffuse + dSpecColor;
 
 	//Point light set-up + intensity calculation from distance
-	vec3 pLightOffset = pLightPos - fragPos;
-	vec3 pLightDir = normalize(pLightOffset);
-	float pLightIntensity = 1 / (1 + length(pLightOffset) + (pow(pLightOffset.x, 2) + pow(pLightOffset.y, 2)));
-	vec3 pLightFinalColor = pLightColor * pLightIntensity;
-	vec3 pDiffuse = max(dot(normal, pLightDir) * pLightFinalColor, 0.0f);
-	vec3 pLightTotal = pDiffuse;
+	for(int i = 0; i < pointlight_count; i++){
+		PointLight curlight = pointlights[i];
 
-	//Cone Light
-	vec3 cLightOffset = cLightPos - fragPos;
-	vec3 cLightDir = normalize(cLightOffset);
-	float cLightIntensity = 1 / (1 + length(cLightOffset) + (pow(cLightOffset.x, 2) + pow(cLightOffset.y, 2)));
-	vec3 cLightFinalColor = cLightColor * cLightIntensity;
-	float cTheta     = acos(dot(cLightDir, normalize(-cLightFaceDir)));
-	float cEpsilon   = cLightAngle.x - cLightAngle.y;
-	float cIntensity = smoothstep(0.0, 1.0, (cTheta - cLightAngle.y) / cEpsilon);
-	vec3 cDiffuse = max(dot(normal, cLightDir) * cLightFinalColor * cIntensity, 0.0f);
-	//Spec lighting calculation
-	vec3 cReflectDir = reflect(-cLightDir, normal);
-	float cSpec = pow(max(dot(cReflectDir, viewDir), 0.01), specPhong);
-	vec3 cSpecColor = cSpec * specStrength * cDiffuse;
-	vec3 cLightTotal = cDiffuse + cSpecColor;
+		vec3 offset = curlight.pos - fragPos;
+		vec3 dir = normalize(offset);
+		float intensity = 1 / (1 + length(offset) + (pow(offset.x, 2) + pow(offset.y, 2)));
+		vec3 finalcolor = curlight.color * intensity;
+		vec3 diffuse = max(dot(normal, dir) * finalcolor, 0.0f);
+		light_total += diffuse;
+	}
 
-	//Diffuse calculation
-	vec3 totalDiffuse = dLightTotal + pLightTotal + cLightTotal;
+	for(int i = 0; i < conelight_count; i++){
+		ConeLight curlight = conelights[i];
+
+		vec3 cLightOffset = curlight.pos - fragPos;
+		vec3 cLightDir = normalize(cLightOffset);
+		float cLightIntensity = 1 / (1 + length(cLightOffset) + (pow(cLightOffset.x, 2) + pow(cLightOffset.y, 2)));
+		vec3 cLightFinalColor = curlight.color * cLightIntensity;
+		float cTheta     = acos(dot(cLightDir, normalize(-curlight.dir)));
+		float cEpsilon   = curlight.inner_angle - curlight.outer_angle;
+		float cIntensity = smoothstep(0.0, 1.0, (cTheta - curlight.outer_angle) / cEpsilon);
+		vec3 cDiffuse = max(dot(normal, cLightDir) * cLightFinalColor * cIntensity, 0.0f);
+
+		//Spec lighting calculation
+		vec3 cReflectDir = reflect(-cLightDir, normal);
+		float cSpec = pow(max(dot(cReflectDir, viewDir), 0.01), specPhong);
+		vec3 cSpecColor = cSpec * specStrength * cDiffuse;
+		light_total += cDiffuse + cSpecColor;
+	}
 
 	//Ambient calculation
 	float Pi = 6.28318530718;
@@ -119,6 +143,7 @@ void main(){
 	
 
 	//Combine all light sources
-	FragColor = vec4(totalDiffuse + ambient, 1.0f) * max(texture(texdiffuse, texCoord), 0.2);
+	//FragColor = vec4(light_total + ambient, 1.0f) * max(texture(texdiffuse, texCoord), 0.2) * vec4(color, 1.0);
+	FragColor = vec4(color, 1.0);
 	//FragColor = vec4(normal, 1.0f);
 }

@@ -16,7 +16,7 @@ namespace gde {
 		};
 
 		Vector2();
-		Vector2(const gde::Vector2& from);
+		Vector2(const Vector2& from);
 		Vector2(float x, float y);
 
 		virtual float* GetValuePointer(int index);
