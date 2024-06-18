@@ -35,7 +35,6 @@ namespace gde {
 		struct Material {
 			std::unordered_map<const char*, MaterialOverride> overrides;
 			std::vector<MaterialTexture> textureOverrides;
-			bool just_changed = false;
 			Shader* m_shader;
 
 			Material(Shader*);
@@ -50,7 +49,6 @@ namespace gde {
 				materialOverride.value_bool = value;
 
 				overrides.insert_or_assign(id, materialOverride);
-				just_changed = true;
 			}
 			template<>
 			void setOverride<float>(const char* id, float value) {
@@ -59,7 +57,6 @@ namespace gde {
 				materialOverride.value_float = value;
 
 				overrides.insert_or_assign(id, materialOverride);
-				just_changed = true;
 			}
 			template<>
 			void setOverride<glm::vec2>(const char* id, glm::vec2 value) {
@@ -68,7 +65,6 @@ namespace gde {
 				materialOverride.value_vec2 = value;
 
 				overrides.insert_or_assign(id, materialOverride);
-				just_changed = true;
 			}
 			template<>
 			void setOverride<glm::vec3>(const char* id, glm::vec3 value) {
@@ -77,7 +73,6 @@ namespace gde {
 				materialOverride.value_vec3 = value;
 
 				overrides.insert_or_assign(id, materialOverride);
-				just_changed = true;
 			}
 			template<>
 			void setOverride<glm::mat4>(const char* id, glm::mat4 value) {
@@ -86,7 +81,6 @@ namespace gde {
 				materialOverride.value_mat4 = value;
 
 				overrides.insert_or_assign(id, materialOverride);
-				just_changed = true;
 			}
 		};
 	}

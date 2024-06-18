@@ -1,13 +1,14 @@
 #include "DirectionalLight.h"
 
 using namespace gde;
+using namespace rendering;
 
 rendering::Light* gde::DirectionalLight::GetData()
 {
     if (this->mLight == nullptr)
-        this->mLight = new rendering::DirLight();
+        this->mLight = new DirLight();
 
-    auto dir_light = (rendering::DirLight*)this->mLight;
+    auto dir_light = (DirLight*)this->mLight;
 
     dir_light->color = this->Color;
     dir_light->intensity = this->intensity;

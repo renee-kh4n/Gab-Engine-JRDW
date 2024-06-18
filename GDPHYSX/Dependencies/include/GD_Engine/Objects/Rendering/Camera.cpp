@@ -1,6 +1,8 @@
 #include "Camera.h"
 
 namespace gde {
+    using namespace rendering;
+
     Camera::Camera(Window* mWindow, Shader* mShader)
     {
         this->nearClip = 0.1f;

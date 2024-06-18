@@ -1,8 +1,6 @@
 #include "Time.h"
 
-using namespace gde;
-
-Time::Time()
+gde::Time::Time()
 {
     using clock = std::chrono::high_resolution_clock;
     curr_time = clock::now();
@@ -10,11 +8,11 @@ Time::Time()
     curr_ns = 0;
 }
 
-void Time::Reset() {
+void gde::Time::Reset() {
     prev_time = curr_time;
 }
 
-void Time::TickFixed(std::function<void(double)> update_callback)
+void gde::Time::TickFixed(std::function<void(double)> update_callback)
 {
     using clock = std::chrono::high_resolution_clock;
 

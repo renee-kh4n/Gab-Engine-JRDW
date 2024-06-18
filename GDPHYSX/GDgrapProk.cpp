@@ -23,6 +23,7 @@ using namespace gde;
 
 int main(void)
 {
+
     auto mTime = new Time();
 
     /* Initialize GLFW*/
@@ -50,7 +51,6 @@ int main(void)
     //RenderPipeline setup
     Camera* active_camera = nullptr;
     auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y));
-    mRenderPipeline->SetPostProcessing(Cam1stPPShader);
 #pragma endregion
 
 #pragma region Input
@@ -95,7 +95,7 @@ int main(void)
     mOrthoCam->orthoRange = 450;
     mOrthoCam->farClip = 1000.0f;
     mOrthoCam->WorldUp = Vector3(0, 1, 0);
-    mOrthoCam->TranslateWorld(Vector3(0, 0, -200));
+    mOrthoCam->TranslateWorld(Vector3(0, 0, -400));
     mOrthoCam->SetParent(camera_dolly);
     active_camera = mPerspectiveCam;
 
@@ -108,11 +108,15 @@ int main(void)
     //Mesh and material caching
     auto sphere_mesh = new Mesh("3D/sphere.obj");
 
-    auto create_unlit_rendercall = [sphere_mesh, unlitShader, litShader, mRenderPipeline](Vector3 color) {
-        auto unlit_mat = new Material(unlitShader);
-        unlit_mat->setOverride<glm::vec3>("color", color);
-        unlit_mat->setOverride<glm::vec3>("dirlight.dir", glm::vec3(0, -1, 0));
-        unlit_mat->setOverride<glm::vec3>("dirlight.color", glm::vec3(1, 1, 1) * 3.0f);
+    auto create_unlit_rendercall = [sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
+        auto unlit_mat = new Material(litShader);
+        unlit_mat->setOverride<glm::vec3>("color", color * 0.9f);
+        unlit_mat->setOverride<float>("specStrength", 0.9f);
+        unlit_mat->setOverride<float>("specPhong", 16);
+        unlit_mat->setOverride<glm::vec3>("dirlight.color", glm::vec3(1,1,1) * 1.0f);
+        unlit_mat->setOverride<glm::vec3>("dirlight.dir", glm::vec3(1, -1, 0));
+        unlit_mat->setOverride<bool>("hasDiffuseTex", false);
+        unlit_mat->setOverride<bool>("hasNormalTex", false);
         auto new_drawcall = new DrawCall(sphere_mesh, unlit_mat);
         mRenderPipeline->RegisterDrawCall(new_drawcall);
         return new_drawcall;
@@ -128,15 +132,14 @@ int main(void)
     };
     //reference sphere renderobject setup
 
-    auto CreateParticleFunction = [create_unlit_rendercall, drawcalls, root_object, unlitShader, mRenderPipeline]() {
-
+    auto CreateParticleFunction = [drawcalls, root_object, unlitShader, mRenderPipeline]() {
         //sphere rigidobject setup
         auto sphere_rigidobject = new RigidObject();
-        sphere_rigidobject->damping = 0.9f;
+        sphere_rigidobject->damping = 1.0f;
 
         //sphere renderobject setup
         auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-        sphere_renderobject->Scale(Vector3(1, 1, 1) * 0.6f);
+        sphere_renderobject->Scale(Vector3(1, 1, 1) * 4.0f);
         sphere_renderobject->SetParent(sphere_rigidobject);
 
         return sphere_rigidobject;
@@ -173,7 +176,7 @@ int main(void)
     while (!glfwWindowShouldClose(mWindow->window))
     {
         //Update input system
-        mInputSystem->UpdateStates([mInputHandler](std::string name, input::InputAction* action, bool changed) {
+        mInputSystem->UpdateStates([mInputHandler](std::string name, gde::input::InputAction* action, bool changed) {
             for (auto input_player : mInputHandler->object_list) {
                 if (input_player->get_player_name() != name)
                     continue;
@@ -200,6 +203,7 @@ int main(void)
             }
         }
         mRenderPipeline->SetView(active_camera->World()->position, active_camera->GetViewMat(), active_camera->getproj());
+        mRenderPipeline->SetPostProcessing(active_camera->mShader);
         mRenderPipeline->RenderFrame();
         //Render window
         glfwSwapBuffers(mWindow->window);

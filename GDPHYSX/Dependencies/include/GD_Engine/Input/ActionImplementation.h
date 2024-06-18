@@ -4,10 +4,13 @@
 #include <GD_Graphics/Window.h>
 
 namespace gde {
+
 	namespace input {
+	using namespace rendering;
+
 		class ActionImplementation_base {
 		public:
-			virtual bool CheckStateChanged(rendering::Window* target) = 0;
+			virtual bool CheckStateChanged(Window* target) = 0;
 			virtual InputAction* GetState() = 0;
 		};
 
@@ -16,7 +19,7 @@ namespace gde {
 		protected:
 			TAction mState;
 		public:
-			virtual bool CheckStateChanged(rendering::Window* target) override {
+			virtual bool CheckStateChanged(Window* target) override {
 				auto old_state = mState;
 				UpdateState(target);
 				return mState.state != old_state.state;
@@ -24,7 +27,7 @@ namespace gde {
 			virtual InputAction* GetState() override {
 				return &mState;
 			}
-			virtual void UpdateState(rendering::Window* target) = 0;
+			virtual void UpdateState(Window* target) = 0;
 		};
 	}
 }

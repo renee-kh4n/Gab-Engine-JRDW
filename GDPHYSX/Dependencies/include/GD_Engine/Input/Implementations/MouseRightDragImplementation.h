@@ -9,7 +9,7 @@ namespace gde {
 		private:
 			Vector2 old_mouse_pos;
 			// Inherited via ActionImplementation
-			virtual void UpdateState(rendering::Window* target) override;
+			virtual void UpdateState(Window* target) override;
 		};
 	}
 }

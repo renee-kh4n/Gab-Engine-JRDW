@@ -2,14 +2,12 @@
 
 #include <iostream>
 
-using namespace gde;
-
-PhysicsHandler::PhysicsHandler()
+gde::PhysicsHandler::PhysicsHandler()
 {
 	this->subhandlers.push_back(&this->forcevolume_handler);
 }
 
-void PhysicsHandler::Update(double duration)
+void gde::PhysicsHandler::Update(double duration)
 {
 	for (auto rigidobject : this->object_list) {
 

@@ -8,8 +8,9 @@ in vec3 tanCoord;
 in vec3 fragPos;
 
 //TEXTURES
+uniform bool hasDiffuseTex = false;
 uniform sampler2D texdiffuse;
-uniform bool hasNormalTex;
+uniform bool hasNormalTex = false;
 uniform sampler2D texnormal;
 //COLORS
 uniform vec3 color;
@@ -18,7 +19,7 @@ uniform vec3 color;
 uniform samplerCube skybox;
 
 //DIRECTIONAL LIGHT
-struct DirLight
+uniform struct DirLight
 {
 	vec3 dir;
 	vec3 color;
@@ -77,12 +78,11 @@ void main(){
 
 	//Directional light set-up
 	vec3 dirLightDir = normalize(dirlight.dir);
-	vec3 dDiffuse = max(dot(normal, -dirLightDir), 0.0f) * dirlight.color;
+	float dDiffuse = max(dot(normal, -dirLightDir), 0.0f);
 	//Spec lighting calculation
-	vec3 dReflectDir = reflect(-dirLightDir, normal);
-	float dSpec = pow(max(dot(dReflectDir, viewDir), 0.01), specPhong);
-	vec3 dSpecColor = dSpec * specStrength * dDiffuse;
-	light_total += dDiffuse + dSpecColor;
+	vec3 dReflectDir = reflect(dirLightDir, normal);
+	float dSpec = pow(max(dot(viewDir, dReflectDir), 0.0), specPhong) * specStrength;
+	light_total += (dDiffuse + dSpec) * dirlight.color;
 
 	//Point light set-up + intensity calculation from distance
 	for(int i = 0; i < pointlight_count; i++){
@@ -141,9 +141,12 @@ void main(){
     ambientOutput /= ambientReflectionLayersApplied + 1;
 	vec3 ambient = ambientOutput.xyz * ambientLightIntensity;
 	
-
 	//Combine all light sources
-	//FragColor = vec4(light_total + ambient, 1.0f) * max(texture(texdiffuse, texCoord), 0.2) * vec4(color, 1.0);
-	FragColor = vec4(color, 1.0);
-	//FragColor = vec4(normal, 1.0f);
+	vec3 final_color = (light_total + ambient) * color;
+
+	if(hasDiffuseTex){
+		final_color = final_color * vec3(max(texture(texdiffuse, texCoord), 0.001));
+	}
+
+	FragColor = vec4(final_color, 1.0f);
 }

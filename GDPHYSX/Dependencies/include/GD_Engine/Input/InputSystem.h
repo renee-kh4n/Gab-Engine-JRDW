@@ -9,10 +9,7 @@
 #include "ActionImplementation.h"
 
 namespace gde {
-	using namespace rendering;
-
 	namespace input {
-
 		class InputSystem {
 		private:
 			std::unordered_map<std::string, std::list<ActionImplementation_base*>> player_actions;
@@ -23,7 +20,7 @@ namespace gde {
 
 				player_actions[name].push_back(action);
 			}
-
+			
 			void UpdateStates(std::function<void(std::string, InputAction*, bool)> callback, Window* target) {
 				for (auto player_action : player_actions)
 					for (auto action_implementation : player_action.second) {

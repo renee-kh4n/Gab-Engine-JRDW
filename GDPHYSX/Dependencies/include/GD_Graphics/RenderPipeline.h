@@ -11,38 +11,40 @@
 #include "Framebuffer.h"
 
 namespace gde {
-	namespace rendering {
-		class RenderPipeline {
-		private:
-			Shader* depthShader;
-			Framebuffer* mFrameBuffer;
-			Framebuffer* mDepthFrameBuffer;
+	using namespace rendering;
 
-			double lastFrameT = 0.0f;
-			double currentFrameT = 0.0f;
-			double deltaTime = 0.0f;
+	class RenderPipeline {
+	private:
+		Shader* depthShader;
+		Framebuffer* mFrameBuffer;
+		Framebuffer* mDepthFrameBuffer;
 
-			glm::vec3 from;
-			glm::mat4 viewMat;
-			glm::mat4 projMat;
-			Shader* postprocess;
+		double lastFrameT = 0.0f;
+		double currentFrameT = 0.0f;
+		double deltaTime = 0.0f;
 
-			std::vector<DrawCall*> drawcalls;
-			std::list<Light*> lights_this_frame;
-			int maxlights = 10;
+		glm::vec3 from;
+		glm::mat4 viewMat;
+		glm::mat4 projMat;
+		Shader* postprocess;
 
-			Skybox* mSkybox;
-		public:
-			RenderPipeline(glm::vec2);
-			void RegisterDrawCall(DrawCall*);
-			
-			void SetMaximumLights(int maxlights);
-			void SetView(glm::vec3 from, glm::mat4 viewMat, glm::mat4 projMat);
-			void SetPostProcessing(Shader* postprocess);
-			bool TryPushLight(Light* data, bool priority = false);
+		std::vector<DrawCall*> drawcalls;
 
-			void RenderFrame();
-			void CleanUp();
-		};
-	}
+		std::list<rendering::Light*> lights_this_frame;
+		int maxlights = 10;
+
+		Skybox* mSkybox;
+	public:
+		RenderPipeline(glm::vec2);
+		void RegisterDrawCall(DrawCall*);
+
+		void SetMaximumLights(int maxlights);
+		void SetView(glm::vec3 from, glm::mat4 viewMat, glm::mat4 projMat);
+		void SetPostProcessing(Shader* postprocess);
+		bool TryPushLight(rendering::Light* data, bool priority = false);
+
+		void RenderFrame();
+
+		void CleanUp();
+	};
 }

@@ -9,7 +9,7 @@ namespace gde {
 		class KeyPressImplementation : public ActionImplementation<KeyPress<K>> {
 		public:
 			// Inherited via ActionImplementation
-            void UpdateState(rendering::Window* target)
+            void UpdateState(Window* target)
             {
                 auto key_state = glfwGetKey(target->window, this->mState.key);
 
