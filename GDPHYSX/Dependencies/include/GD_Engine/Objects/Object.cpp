@@ -157,7 +157,7 @@ void gde::Object::SetParent(Object* newParent)
 	this->parent = newParent;
 }
 
-gde::Object* gde::Object::GetChildAt(int i)
+gde::Object* gde::Object::GetChildAt(size_t i)
 {
 	auto start = this->children.begin();
 
@@ -167,7 +167,7 @@ gde::Object* gde::Object::GetChildAt(int i)
 	return *start;
 }
 
-int gde::Object::GetChildCount()
+size_t gde::Object::GetChildCount()
 {
 	return this->children.size();
 }

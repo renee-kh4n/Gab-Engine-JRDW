@@ -11,6 +11,7 @@ namespace gde {
 	private:
 		//Rendering stuff
 		DrawCall* mDrawCall;
+		glm::mat4* to_update;
 	public:
 		RenderObject(DrawCall* mDrawCall);
 		virtual ~RenderObject();

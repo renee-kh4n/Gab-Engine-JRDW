@@ -40,15 +40,15 @@ namespace gde {
 		virtual void OnEnterHierarchy(Object* newChild);
 		virtual void OnExitHierarchy(Object* newChild);
 		void SetParent(Object* newParent);
-		Object* GetChildAt(int i);
-		int GetChildCount();
+		Object* GetChildAt(size_t i);
+		size_t GetChildCount();
 
 		void Destroy();
 		bool get_isDestroyed();
 
 		void CallRecursively(std::function<void(Object*)> action) {
-			int childcount = GetChildCount();
-			for (int i = 0; i < childcount; i++)
+			size_t childcount = GetChildCount();
+			for (size_t i = 0; i < childcount; i++)
 			{
 				this->GetChildAt(i)->CallRecursively(action);
 			}

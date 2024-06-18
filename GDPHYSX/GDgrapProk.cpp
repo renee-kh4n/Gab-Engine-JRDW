@@ -113,10 +113,6 @@ int main(void)
         unlit_mat->setOverride<glm::vec3>("color", color * 0.9f);
         unlit_mat->setOverride<float>("specStrength", 0.9f);
         unlit_mat->setOverride<float>("specPhong", 16);
-        unlit_mat->setOverride<glm::vec3>("dirlight.color", glm::vec3(1,1,1) * 1.0f);
-        unlit_mat->setOverride<glm::vec3>("dirlight.dir", glm::vec3(1, -1, 0));
-        unlit_mat->setOverride<bool>("hasDiffuseTex", false);
-        unlit_mat->setOverride<bool>("hasNormalTex", false);
         auto new_drawcall = new DrawCall(sphere_mesh, unlit_mat);
         mRenderPipeline->RegisterDrawCall(new_drawcall);
         return new_drawcall;
@@ -147,7 +143,7 @@ int main(void)
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
-    system->spawns_per_sec = 100;
+    system->spawns_per_sec = 50;
     system->start_force.random_between_two = true;
     system->start_force.valueA = Vector3(-1, 0.5, -1) * 800;
     system->start_force.valueB = Vector3(1, 4, 1) * 800;
@@ -167,7 +163,8 @@ int main(void)
     //light
     auto directional_light = new DirectionalLight();
     directional_light->Color = Vector3(1, 1, 1);
-    directional_light->intensity = 3;
+    directional_light->Orient(Vector3(0, -1, 0), Vector3(1, 0, 0));
+    directional_light->intensity = 1;
     directional_light->SetParent(root_object);
 
 #pragma endregion
@@ -212,15 +209,17 @@ int main(void)
         mTime->TickFixed([mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
             mPhysicsHandler->Update(deltatime);
 
+            float delta_f = (float)deltatime;
+
             //Normal Update
             for (auto updatable : mUpdate->object_list)
             {
-                updatable->InvokeUpdate(deltatime);
+                updatable->InvokeUpdate(delta_f);
             }
             //Late Update
             for (auto updatable : mLateUpdate->object_list)
             {
-                updatable->InvokeLateUpdate(deltatime);
+                updatable->InvokeLateUpdate(delta_f);
             }
         });
 

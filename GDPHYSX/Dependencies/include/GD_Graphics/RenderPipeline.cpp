@@ -6,6 +6,11 @@ using namespace gde;
 
 gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions)
 {
+    this->from = glm::vec3(1.0f);
+    this->projMat = glm::mat4(1.0f);
+    this->viewMat = glm::mat4(1.0f);
+    this->postprocess = nullptr;
+
     //Skybox setup
     this->mSkybox = NULL;
 
@@ -49,9 +54,10 @@ void gde::RenderPipeline::RenderFrame()
     lastFrameT = currentFrameT;
 
 #pragma region Rendering
+    auto& lights_mframe = this->lights_this_frame;
     /* =============== Render here =============== */
     //Function to draw all objects to a specified buffer
-    auto DrawToBuffer = [=](Framebuffer* buffer, bool depthWritersOnly = false, Shader* overrideShader = NULL) {
+    auto DrawToBuffer = [=, &lights_mframe](Framebuffer* buffer, bool depthWritersOnly = false, Shader* overrideShader = NULL) {
         //Initialize the buffer
         glBindFramebuffer(GL_FRAMEBUFFER, buffer->framebuffer);
         glEnable(GL_DEPTH_TEST); //Enable depthtest again
@@ -117,6 +123,14 @@ void gde::RenderPipeline::RenderFrame()
             //Pass the necessary CPU-computed data to the object shader
             
             for (auto& call : obj->calls) {
+                for (auto lightdata : lights_mframe)
+                {
+                    if (lightdata->GetType() == Light::DIRECTION) {
+                        auto dirlight = (DirLight*)lightdata;
+                        setVec3("dirlight.color", dirlight->color * dirlight->intensity);
+                        setVec3("dirlight.dir", dirlight->dir);
+                    }
+                }
                 //Transform data
                 glm::mat4 tmat = call.second;
                 glm::mat4 tmat_VM = tmat;
@@ -150,7 +164,7 @@ void gde::RenderPipeline::RenderFrame()
 
                 //Draw the current object
                 glBindVertexArray(obj->m_mesh->VAO);
-                glDrawArrays(GL_TRIANGLES, 0, obj->m_mesh->fullVertexData.size() / 8);
+                glDrawArrays(GL_TRIANGLES, 0, (GLsizei)obj->m_mesh->fullVertexData.size() / 8);
             }
         }
 
