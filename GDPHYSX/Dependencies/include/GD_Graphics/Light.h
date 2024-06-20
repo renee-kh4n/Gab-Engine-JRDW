@@ -14,6 +14,9 @@ namespace gde {
 			glm::vec3 color;
 			float intensity;
 			glm::vec3 pos;
+
+			bool changed = true;
+			size_t previous_render_index = 0;
 		};
 
 		struct PointLight : public Light {

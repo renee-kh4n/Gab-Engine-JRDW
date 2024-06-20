@@ -66,7 +66,7 @@ int main(void)
     //Object handlers setup
     auto mPhysicsHandler = new PhysicsHandler();
     auto mInputHandler = new InputHandler();
-    auto mLightHandler = new ObjectHandler<gde::Light>();
+    auto mLightHandler = new ObjectHandler<gde::LightObject>();
     auto mEarlyUpdate = new ObjectHandler<EarlyUpdate>();
     auto mUpdate = new ObjectHandler<Update>();
     auto mLateUpdate = new ObjectHandler<LateUpdate>();
@@ -162,9 +162,9 @@ int main(void)
 
     //light
     auto directional_light = new DirectionalLight();
-    directional_light->Color = Vector3(1, 1, 1);
+    directional_light->Set_Color(Vector3(1, 1, 1));
+    directional_light->Set_Intensity(1);
     directional_light->Orient(Vector3(0, -1, 0), Vector3(1, 0, 0));
-    directional_light->intensity = 1;
     directional_light->SetParent(root_object);
 
 #pragma endregion

@@ -149,6 +149,7 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Root.cpp" />
@@ -192,7 +193,7 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Light.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\PointLight.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Root.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Object.h" />

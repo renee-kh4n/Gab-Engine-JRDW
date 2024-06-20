@@ -8,7 +8,7 @@ void gde::input::MouseRightDragImplementation::UpdateState(Window* target)
     if (key_state == GLFW_PRESS) {
         double x, y;
         glfwGetCursorPos(target->window, &x, &y);
-        auto new_pos = Vector2(x, y);
+        auto new_pos = Vector2((float)x, (float)y);
 
         if (this->mState.state == InputAction::State::END) {
             this->mState.state = InputAction::State::START;

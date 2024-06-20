@@ -123,13 +123,20 @@ void gde::RenderPipeline::RenderFrame()
             //Pass the necessary CPU-computed data to the object shader
             
             for (auto& call : obj->calls) {
+
+                size_t index = 0;
                 for (auto lightdata : lights_mframe)
                 {
+                    if (lightdata->changed == false && lightdata->previous_render_index == index)
+                        continue;
+
                     if (lightdata->GetType() == Light::DIRECTION) {
                         auto dirlight = (DirLight*)lightdata;
                         setVec3("dirlight.color", dirlight->color * dirlight->intensity);
                         setVec3("dirlight.dir", dirlight->dir);
                     }
+
+                    index++;
                 }
                 //Transform data
                 glm::mat4 tmat = call.second;
@@ -198,6 +205,8 @@ void gde::RenderPipeline::RenderFrame()
 
     //Output the buffer
     glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    this->lights_this_frame.clear();
 #pragma endregion
 }
 

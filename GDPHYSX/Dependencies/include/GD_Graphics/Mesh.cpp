@@ -14,7 +14,7 @@ Mesh::Mesh(std::string path) {
     {
         //Variables for tangent calculation
         //Store vacant data indices for tangent calculation
-        std::vector<int> tanIndices = {};
+        std::vector<size_t> tanIndices = {};
         glm::vec3 vertices[3] = { glm::vec3(), glm::vec3(), glm::vec3() };
         glm::vec3 normal0;
 
