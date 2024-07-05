@@ -70,7 +70,7 @@ void gde::RenderPipeline::RenderFrame()
         }
 
         //Loop through all objects
-        for (auto obj : drawcalls)
+        for (auto& obj : drawcalls)
         {
             //Enable chosen shader program
             if (overrideShader == NULL)

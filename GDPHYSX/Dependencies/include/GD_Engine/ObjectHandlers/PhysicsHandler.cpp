@@ -29,4 +29,18 @@ void gde::PhysicsHandler::Update(double duration)
 
 		rigidobject->frame_force = Vector3::zero;
 	}
+
+	this->mContactResolver.ResolveContacts(contacts, duration);
+}
+
+void gde::PhysicsHandler::AddContact(RigidObject* r1, RigidObject* r2, float restitution, Vector3 contactNormal)
+{
+	CollisionContact* toAdd = new CollisionContact();
+
+	toAdd->objects[0] = r1;
+	toAdd->objects[1] = r2;
+	toAdd->restitution = restitution;
+	toAdd->contactNormal = contactNormal;
+
+	contacts.push_back(toAdd);
 }

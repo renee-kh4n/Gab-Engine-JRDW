@@ -114,6 +114,12 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\Contact.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h">
@@ -291,6 +297,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\CollisionContact.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

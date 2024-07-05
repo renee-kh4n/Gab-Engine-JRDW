@@ -114,11 +114,6 @@ void gde::Object::OnEnterHierarchy(Object* newChild)
 		}
 	};
 
-	for (auto subchild : newChild->children)
-	{
-		propagate_upwards(subchild);
-	}
-
 	propagate_upwards(newChild);
 }
 
@@ -150,7 +145,7 @@ void gde::Object::SetParent(Object* newParent)
 	}
 
 	if (newParent != nullptr) {
-		newParent->OnEnterHierarchy(this);
+		this->CallRecursively([newParent](Object* child) {newParent->OnEnterHierarchy(child); });
 		newParent->children.push_back(this);
 	}
 
@@ -184,4 +179,15 @@ void gde::Object::Destroy()
 bool gde::Object::get_isDestroyed()
 {
 	return this->isDestroyQueued;
+}
+
+void gde::Object::CallRecursively(std::function<void(Object*)> action)
+{
+	size_t childcount = GetChildCount();
+	for (size_t i = 0; i < childcount; i++)
+	{
+		this->GetChildAt(i)->CallRecursively(action);
+	}
+
+	action(this);
 }

@@ -23,7 +23,6 @@ using namespace gde;
 
 int main(void)
 {
-
     auto mTime = new Time();
 
     /* Initialize GLFW*/
@@ -86,7 +85,7 @@ int main(void)
     camera_dolly->SetParent(player_input);
 
     auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
-    mPerspectiveCam->angles = 90;
+    mPerspectiveCam->angles = 60;
     mPerspectiveCam->farClip = 1000.0f;
     mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
     mPerspectiveCam->TranslateWorld(Vector3(0, 0, -400));
@@ -135,7 +134,7 @@ int main(void)
 
         //sphere renderobject setup
         auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-        sphere_renderobject->Scale(Vector3(1, 1, 1) * 4.0f);
+        sphere_renderobject->Scale(Vector3(1, 1, 1) * 50.0f);
         sphere_renderobject->SetParent(sphere_rigidobject);
 
         return sphere_rigidobject;
@@ -143,14 +142,27 @@ int main(void)
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
-    system->spawns_per_sec = 50;
+    system->world_space = false;
+    system->spawns_per_sec = 0;
     system->start_force.random_between_two = true;
     system->start_force.valueA = Vector3(-1, 0.5, -1) * 800;
     system->start_force.valueB = Vector3(1, 4, 1) * 800;
     system->start_lifetime.random_between_two = true;
     system->start_lifetime.valueA = 0.4f;
     system->start_lifetime.valueA = 15;
-    system->SetParent(root_object);
+    //system->SetParent(root_object);
+
+    //Collision testing
+    auto ball_a = CreateParticleFunction();
+    ball_a->SetParent(root_object);
+    ball_a->velocity = Vector3(30, 0, 0);
+
+    auto ball_b = CreateParticleFunction();
+    ball_b->TranslateLocal(Vector3(100, 0, 0));
+    ball_b->SetParent(root_object);
+    ball_b->velocity = Vector3(-30, 0, 0);
+
+    mPhysicsHandler->AddContact(ball_a, ball_b, 1, (ball_a->World()->position - ball_b->World()->position).Normalize());
 
     //physics force setup
     auto gravity_volume = new ForceVolume();
@@ -158,7 +170,7 @@ int main(void)
     gravity_volume->mode = ForceVolume::DIRECTIONAL;
     gravity_volume->vector = Vector3(0, -10, 0);
     gravity_volume->forceMode = ForceVolume::VELOCITY;
-    gravity_volume->SetParent(root_object);
+    //gravity_volume->SetParent(root_object);
 
     //light
     auto directional_light = new DirectionalLight();

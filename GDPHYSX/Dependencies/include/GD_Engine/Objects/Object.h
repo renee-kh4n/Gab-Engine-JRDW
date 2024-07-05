@@ -46,14 +46,6 @@ namespace gde {
 		void Destroy();
 		bool get_isDestroyed();
 
-		void CallRecursively(std::function<void(Object*)> action) {
-			size_t childcount = GetChildCount();
-			for (size_t i = 0; i < childcount; i++)
-			{
-				this->GetChildAt(i)->CallRecursively(action);
-			}
-
-			action(this);
-		}
+		void CallRecursively(std::function<void(Object*)> action);
 	};
 }
