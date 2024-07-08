@@ -8,11 +8,13 @@ namespace gde {
 	public:
 		RigidObject* objects[2];
 		float restitution;
+		float depth;
 		Vector3 contactNormal;
 		void Resolve(float time);
 
 	protected:
 		float GetSeperatingSpeed();
 		void ResolveVelocity(float time);
+		void ResolveInterpenetration(float time);
 	};
 }

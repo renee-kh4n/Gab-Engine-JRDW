@@ -146,10 +146,13 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\Contact.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.cpp" />
@@ -196,6 +199,9 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\CollisionContact.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\PointLight.h" />

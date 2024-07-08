@@ -2,8 +2,14 @@
 
 void gde::ContactResolver::ResolveContacts(std::vector<CollisionContact*> contacts, float time)
 {
-	for (auto& contact : contacts)
+	int iterations = 0;
+	while (iterations < this->max_iterations)
 	{
-		contact->Resolve(time);
+		for (auto& contact : contacts)
+		{
+			contact->Resolve(time);
+		}
+
+		iterations++;
 	}
 }

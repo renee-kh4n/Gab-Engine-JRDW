@@ -3,6 +3,7 @@
 void gde::CollisionContact::Resolve(float time)
 {
 	this->ResolveVelocity(time);
+	this->ResolveInterpenetration(time);
 }
 
 float gde::CollisionContact::GetSeperatingSpeed()
@@ -36,4 +37,27 @@ void gde::CollisionContact::ResolveVelocity(float time)
 		Vector3 V_b = impulse * (-1.0f / this->objects[1]->mass);
 		this->objects[1]->velocity = this->objects[1]->velocity + V_b;
 	}
+}
+
+void gde::CollisionContact::ResolveInterpenetration(float time)
+{
+	if (depth > 0) return;
+
+	float totalMass = 1.0f / this->objects[0]->mass;
+	if (this->objects[1]) totalMass += 1.0f / this->objects[1]->mass;
+
+	if (totalMass <= 0) return;
+
+	float moveForce	= depth / totalMass;
+	Vector3 impulse = contactNormal * moveForce;
+
+	Vector3 V_a = impulse * (1.0f / this->objects[0]->mass);
+	this->objects[0]->TranslateWorld(V_a);
+
+	if (this->objects[1]) {
+		Vector3 V_b = impulse * (-1.0f / this->objects[1]->mass);
+		this->objects[0]->TranslateWorld(V_b);
+	}
+
+	depth = 0;
 }

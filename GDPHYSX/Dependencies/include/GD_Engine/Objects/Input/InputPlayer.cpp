@@ -12,10 +12,14 @@ std::string gde::InputPlayer::get_player_name()
 
 void gde::InputPlayer::OnEnterHierarchy(Object* other)
 {
+	Object::OnEnterHierarchy(other);
+
 	inputhandler.TryAdd(other);
 }
 
 void gde::InputPlayer::OnExitHierarchy(Object* other)
 {
+	Object::OnExitHierarchy(other);
+
 	inputhandler.Remove(other);
 }

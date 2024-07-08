@@ -137,6 +137,11 @@ void gde::Object::OnExitHierarchy(Object* newChild)
 	propagate_upwards(newChild);
 }
 
+gde::Object* gde::Object::GetParent()
+{
+	return this->parent;
+}
+
 void gde::Object::SetParent(Object* newParent)
 {
 	if (parent != nullptr) {

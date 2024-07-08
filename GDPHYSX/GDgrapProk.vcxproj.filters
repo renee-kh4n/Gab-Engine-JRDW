@@ -120,6 +120,15 @@
     <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h">
@@ -303,6 +312,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

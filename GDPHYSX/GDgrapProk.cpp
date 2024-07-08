@@ -134,7 +134,7 @@ int main(void)
 
         //sphere renderobject setup
         auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-        sphere_renderobject->Scale(Vector3(1, 1, 1) * 50.0f);
+        sphere_renderobject->Scale(Vector3(1, 1, 1) * 5.0f);
         sphere_renderobject->SetParent(sphere_rigidobject);
 
         return sphere_rigidobject;
@@ -155,14 +155,25 @@ int main(void)
     //Collision testing
     auto ball_a = CreateParticleFunction();
     ball_a->SetParent(root_object);
-    ball_a->velocity = Vector3(30, 0, 0);
+    ball_a->velocity = Vector3(30, 70, 0);
 
     auto ball_b = CreateParticleFunction();
-    ball_b->TranslateLocal(Vector3(100, 0, 0));
+    ball_b->TranslateLocal(Vector3(5, 0, 0));
     ball_b->SetParent(root_object);
-    ball_b->velocity = Vector3(-30, 0, 0);
+    ball_b->velocity = Vector3(-30, 0, 100);
 
-    mPhysicsHandler->AddContact(ball_a, ball_b, 1, (ball_a->World()->position - ball_b->World()->position).Normalize());
+    auto spring = new AnchorSpring(1, 1);
+    spring->to_rbody = ball_a;
+    spring->TranslateWorld(Vector3(0, 1, 0));
+    //spring->SetParent(ball_b);
+
+    auto rod = new Rod();
+    rod->objects[0] = ball_a;
+    rod->objects[1] = ball_b;
+    rod->length = 30;
+    mPhysicsHandler->AddLink(rod);
+
+    //mPhysicsHandler->AddContact(ball_a, ball_b, 1);
 
     //physics force setup
     auto gravity_volume = new ForceVolume();
@@ -170,7 +181,7 @@ int main(void)
     gravity_volume->mode = ForceVolume::DIRECTIONAL;
     gravity_volume->vector = Vector3(0, -10, 0);
     gravity_volume->forceMode = ForceVolume::VELOCITY;
-    //gravity_volume->SetParent(root_object);
+    gravity_volume->SetParent(root_object);
 
     //light
     auto directional_light = new DirectionalLight();

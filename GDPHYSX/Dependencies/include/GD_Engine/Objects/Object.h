@@ -39,7 +39,8 @@ namespace gde {
 
 		virtual void OnEnterHierarchy(Object* newChild);
 		virtual void OnExitHierarchy(Object* newChild);
-		void SetParent(Object* newParent);
+		Object* GetParent();
+		virtual void SetParent(Object* newParent);
 		Object* GetChildAt(size_t i);
 		size_t GetChildCount();
 

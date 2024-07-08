@@ -13,10 +13,16 @@ namespace gde {
 		std::vector<CollisionContact*> contacts;
 
 		ContactResolver mContactResolver = ContactResolver(20);
+		std::list<RigidObjectLink*> links;
 	public:
+
 		PhysicsHandler();
 
 		void Update(double duration);
-		void AddContact(RigidObject* r1, RigidObject* r2, float restitution, Vector3 contactNormal);
+		void AddContact(RigidObject* r1, RigidObject* r2, float restitution);
+		void AddLink(RigidObjectLink* link);
+
+	protected:
+		void GenerateContacts();
 	};
 }
