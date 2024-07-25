@@ -29,7 +29,7 @@ int main(void)
     if (!glfwInit())
         return -1;
 
-    Window* mWindow = new Window("PHASE 1 GDPHYSX", 800, 800);
+    Window* mWindow = new Window("Rayo, Gabriel Paulo A", 800, 800);
     
     /* Initialize GLAD*/
     gladLoadGL();
@@ -108,7 +108,7 @@ int main(void)
     auto sphere_mesh = new Mesh("3D/sphere.obj");
 
     auto create_unlit_rendercall = [sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
-        auto unlit_mat = new Material(litShader);
+        auto unlit_mat = new Material(unlitShader);
         unlit_mat->setOverride<glm::vec3>("color", color * 0.9f);
         unlit_mat->setOverride<float>("specStrength", 0.9f);
         unlit_mat->setOverride<float>("specPhong", 16);
@@ -137,8 +137,14 @@ int main(void)
         sphere_renderobject->Scale(Vector3(1, 1, 1) * 5.0f);
         sphere_renderobject->SetParent(sphere_rigidobject);
 
+        //Sphere collider
+        auto collider = new Collider(10.0f);
+        collider->SetParent(sphere_rigidobject);
+
         return sphere_rigidobject;
     };
+
+
 
     //particle system setup
     auto system = new ParticleSystem(CreateParticleFunction);
@@ -153,33 +159,40 @@ int main(void)
     //system->SetParent(root_object);
 
     //Collision testing
-    auto ball_a = CreateParticleFunction();
-    ball_a->SetParent(root_object);
-    ball_a->velocity = Vector3(30, 70, 0);
+    auto lineDrawCall = create_unlit_rendercall(Vector3(1, 1, 1));
+    lineDrawCall->m_mesh = new Mesh("3D/plane.obj");
+    
+    auto createswing = [camera_dolly, lineDrawCall, CreateParticleFunction, root_object](Vector3 position, float length, Vector3 offset = Vector3::zero) {
+        auto ball = CreateParticleFunction();
+        ball->SetParent(root_object);
+        ball->TranslateLocal(position + offset);
+        ball->velocity = Vector3(0, 0, 0);
+        ball->SetScale(Vector3(1, 1, 1) * 5);
 
-    auto ball_b = CreateParticleFunction();
-    ball_b->TranslateLocal(Vector3(5, 0, 0));
-    ball_b->SetParent(root_object);
-    ball_b->velocity = Vector3(-30, 0, 100);
+        auto chain = new ChainJoint(length);
+        chain->TranslateLocal(position);
+        chain->to_rbody = ball;
+        chain->SetParent(root_object);
 
-    auto spring = new AnchorSpring(1, 1);
-    spring->to_rbody = ball_a;
-    spring->TranslateWorld(Vector3(0, 1, 0));
-    //spring->SetParent(ball_b);
+        auto line = new LineRenderer(lineDrawCall, camera_dolly, ball, chain);
+        line->SetParent(root_object);
+    };
 
-    auto rod = new Rod();
-    rod->objects[0] = ball_a;
-    rod->objects[1] = ball_b;
-    rod->length = 30;
-    mPhysicsHandler->AddLink(rod);
+    auto startpos = Vector3(150, 200, 0);
+    auto interval = Vector3(-70, 0, 0);
+    auto length = 300;
+    createswing(Vector3(150, 200, 0), length, Vector3(70, 0, 0));
 
-    //mPhysicsHandler->AddContact(ball_a, ball_b, 1);
+    for (size_t i = 0; i < 5; i++)
+    {
+        createswing(startpos + (interval * i), length);
+    }
 
     //physics force setup
     auto gravity_volume = new ForceVolume();
     gravity_volume->shape = ForceVolume::GLOBAL;
     gravity_volume->mode = ForceVolume::DIRECTIONAL;
-    gravity_volume->vector = Vector3(0, -10, 0);
+    gravity_volume->vector = Vector3(0, -30, 0);
     gravity_volume->forceMode = ForceVolume::VELOCITY;
     gravity_volume->SetParent(root_object);
 

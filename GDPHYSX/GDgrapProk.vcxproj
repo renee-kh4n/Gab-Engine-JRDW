@@ -134,6 +134,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Dependencies\include\GD_Engine\Component\Transform.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector2.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.cpp" />
@@ -144,17 +145,22 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collider\Collider.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\Contact.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.cpp" />
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.cpp" />
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.cpp" />
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Particle\ParticleObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\AnchorSpring.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\LightObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Renderer\LineRenderer.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Root.cpp" />
@@ -198,13 +204,18 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputCustomer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collider\Collider.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\CollisionContact.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\PointLight.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Particle\ParticleObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\AnchorSpring.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\LightObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\PointLight.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Renderer\LineRenderer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Root.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Object.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Objects.h" />
@@ -228,6 +239,7 @@
     <ClInclude Include="Dependencies\include\GD_Graphics\DrawCall.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Framebuffer.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Light.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Lines.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Material.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Mesh.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\RenderPipeline.h" />
@@ -577,6 +589,15 @@
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="3D\plane.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
     </CopyFileToFolders>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

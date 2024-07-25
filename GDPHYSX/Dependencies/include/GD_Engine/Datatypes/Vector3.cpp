@@ -21,6 +21,15 @@ namespace gde {
 		this->y = _y;
 		this->z = _z;
 	}
+	Vector3::Vector3(glm::vec3 glmvec) : Vector<3, float>({ &x, &y, &z })
+	{
+		this->x = glmvec.x;
+		this->y = glmvec.y;
+		this->z = glmvec.z;
+	}
+	Vector3::operator glm::vec3() const {
+		return glm::vec3(this->x, this->y, this->z);
+	}
 
 	Vector3 Vector3::Cross(const Vector3& right)
 	{
@@ -33,22 +42,23 @@ namespace gde {
 		return result;
 	}
 
-	Vector3 Vector3::Normalize()
+	Vector3 Vector3::Reciprocal()
 	{
-		return (*this) * (1.0f / this->Magnitude());
+		return Vector3(1.0f / this->x, 1.0f / this->y, 1.0f / this->z);
 	}
 
-	Vector3::Vector3(glm::vec3 glmvec) : Vector<3, float>({&x, &y, &z})
+	Vector3 Vector3::Normalize()
 	{
-		this->x = glmvec.x;
-		this->y = glmvec.y;
-		this->z = glmvec.z;
-	}
-	Vector3::operator glm::vec3() const {
-		return glm::vec3(this->x, this->y, this->z);
+		auto mag = this->Magnitude();
+
+		if (abs(mag) < 0.00001f)
+			return Vector3::zero;
+
+		return (*this) * (1.0f / mag);
 	}
 
 	const Vector3 Vector3::zero = Vector3(0, 0, 0);
+	const Vector3 Vector3::up = Vector3(0, 1, 0);
 
 	Vector3 Vector3::operator-()
 	{

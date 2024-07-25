@@ -18,9 +18,10 @@ namespace gde {
 		Transform local;
 
 		void MatToTrans(Transform* target, glm::mat4 mat);
+		glm::mat4 TransToMat(Transform* trans);
 	protected:
 		Object* parent;
-		glm::mat4 transform;
+		glm::mat4 local_transform;
 		virtual Object* Copy_self();
 	public:
 		Object();
@@ -36,6 +37,7 @@ namespace gde {
 		void Rotate(Vector3 axis, float angle);
 		void Orient(Vector3 forward, Vector3 Up);
 		void Scale(Vector3 vector);
+		void SetScale(Vector3 vector);
 
 		virtual void OnEnterHierarchy(Object* newChild);
 		virtual void OnExitHierarchy(Object* newChild);

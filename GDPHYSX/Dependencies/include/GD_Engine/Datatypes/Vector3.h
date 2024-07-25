@@ -26,9 +26,11 @@ namespace gde{
 		operator glm::vec3() const;
 
 		static const Vector3 zero;
+		static const Vector3 up;
 
 		// Inherited via Vector_base
 		Vector3 Cross(const Vector3& right);
+		Vector3 Reciprocal();
 		Vector3 Normalize();
 
 		Vector3 operator-();

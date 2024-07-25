@@ -105,13 +105,13 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.cpp">
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Graphics\Light.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.cpp">
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\LightObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\Contact.cpp">
@@ -120,13 +120,31 @@
     <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.cpp">
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\AnchorSpring.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Particle\ParticleObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collider\Collider.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Renderer\LineRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Component\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,13 +317,13 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\DirectionalLight.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\LightObject.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\LightObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\PointLight.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\PointLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\CollisionContact.h">
@@ -314,13 +332,31 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Spring\AnchorSpring.h">
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\AnchorSpring.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Particle\ParticleObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collider\Collider.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Renderer\LineRenderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Graphics\Lines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -423,6 +459,7 @@
     <CopyFileToFolders Include="Shaders\depth.frag" />
     <CopyFileToFolders Include="3D\sphere.obj" />
     <CopyFileToFolders Include="Shaders\unlit.frag" />
+    <CopyFileToFolders Include="3D\plane.obj" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="Tex\partenza.jpg">

@@ -73,6 +73,7 @@ namespace gde {
 
 				return result;
 			}
+
 			std::string ToString()
 			{
 				std::string tostring = "";

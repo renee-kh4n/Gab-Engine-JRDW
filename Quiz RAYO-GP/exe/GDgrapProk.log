@@ -1,0 +1,8 @@
+﻿  GDgrapProk.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\GDgrapProk.cpp(167,39): warning C4305: 'argument': truncation from 'double' to 'float'
+  Generating code
+  2 of 4396 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    8 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\x64\Release\GDPHYSX.exe
