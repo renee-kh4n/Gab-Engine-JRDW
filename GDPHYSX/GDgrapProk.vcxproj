@@ -140,9 +140,10 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.cpp" />
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\CameraSwitcher.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\VariableSwitcher.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarHitter.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collider\Collider.cpp" />
@@ -198,7 +199,8 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\CameraSwitcher.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\VariableSwitcher.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarHitter.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputCustomer.h" />

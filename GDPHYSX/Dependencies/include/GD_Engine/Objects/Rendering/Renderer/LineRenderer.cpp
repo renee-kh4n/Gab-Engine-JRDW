@@ -24,15 +24,19 @@ void gde::LineRenderer::InvokeEarlyUpdate()
 	auto v1 = this->GetPos(0);
 	auto v2 = this->GetPos(1);
 	auto delta = v2 - v1;
-	auto delta_dir = delta.Normalize();
-	auto delta_mag = delta.x / delta_dir.x;
-	auto new_pos = (v1 + v2) * 0.5f;
 
-	this->SetPosition(new_pos);
-	this->SetScale(Vector3(1, 1, delta.Magnitude() / 2));
-	//this->SetScale(Vector3(delta_mag, delta_mag, delta_mag));
-	auto to_eye = (this->camera->World()->position - new_pos).Normalize();
-	this->Orient(delta_dir, to_eye);
+	if (delta.SqrMagnitude() > 0.0f) {
+		auto delta_mag = delta.Magnitude();
+		auto delta_dir = delta * (1.0f / delta_mag);
+
+		auto new_pos = (v1 + v2) * 0.5f;
+
+		this->SetPosition(new_pos);
+
+		auto to_eye = (this->camera->World()->position - new_pos).Normalize();
+		this->SetScale(Vector3(0.7f, 1, delta_mag / 2));
+		this->Orient(delta_dir, to_eye);
+	}
 	
 	RenderObject::InvokeEarlyUpdate();
 }

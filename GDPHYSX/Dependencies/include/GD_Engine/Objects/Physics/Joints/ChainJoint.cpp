@@ -5,7 +5,6 @@ void gde::ChainJoint::InvokeUpdate(float deltatime)
 	auto delta = this->World()->position - this->to_rbody->World()->position;
 	auto vel = this->to_rbody->velocity;
 
-
 	if (delta.SqrMagnitude() < this->restLen * this->restLen)
 		return;
 
@@ -15,4 +14,7 @@ void gde::ChainJoint::InvokeUpdate(float deltatime)
 	auto velChange = delta_dir * -dot;
 
 	this->to_rbody->velocity += velChange;
+
+	if (delta.SqrMagnitude() > this->restLen * this->restLen)
+		this->to_rbody->SetPosition(this->World()->position + (-delta.Normalize() * restLen));
 }

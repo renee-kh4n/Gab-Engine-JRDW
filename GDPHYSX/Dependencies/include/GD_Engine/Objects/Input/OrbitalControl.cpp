@@ -12,13 +12,5 @@ void gde::OrbitalControl::OnInput(WasdDelta* value, bool changed)
 	if (this->orbital_rotation.y > 70)
 		this->orbital_rotation.y = 70;
 
-	this->local_transform = glm::mat4(1.0f);
-
-	this->Rotate(this->World()->Right, this->orbital_rotation.y);
-	this->Rotate(Vector3(0, 1, 0), -this->orbital_rotation.x);
-
-	auto forward = this->World()->Forward;
-	auto correct_right = Vector3(0, 1, 0).Cross(forward).Normalize();
-	auto correct_up = forward.Cross(correct_right).Normalize();
-	//this->Orient(forward, correct_up);
+	this->SetRotation(Vector3(orbital_rotation.x, orbital_rotation.y, 0));
 }

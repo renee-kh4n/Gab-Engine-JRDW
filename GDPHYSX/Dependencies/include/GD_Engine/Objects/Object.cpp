@@ -5,6 +5,20 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
+void gde::Object::UpdateTransform()
+{
+	auto newworld_matrix = this->parent_matrix * this->local_matrix;
+
+	for (auto child : this->children)
+	{
+		child->parent_matrix = newworld_matrix;
+		child->UpdateTransform();
+	}
+
+	MatToTrans(&this->world, newworld_matrix);
+	MatToTrans(&this->local, this->local_matrix);
+}
+
 void gde::Object::MatToTrans(Transform* target, glm::mat4 mat)
 {
 	glm::vec3 scale;
@@ -17,17 +31,9 @@ void gde::Object::MatToTrans(Transform* target, glm::mat4 mat)
 	target->position = translation;
 	target->rotation = glm::eulerAngles(rotation) * (180.0f / (float)M_PI);
 	target->scale = scale;
-	target->Forward = Vector3(this->GetWorldSpaceMatrix()[2]);
-	target->Up = Vector3(this->GetWorldSpaceMatrix()[1]);
-	target->Right = Vector3(this->GetWorldSpaceMatrix()[0]);
-}
-
-glm::mat4 gde::Object::TransToMat(Transform* trans)
-{
-	auto newmat = glm::mat4(1.0f);
-	newmat = glm::scale(newmat, (glm::vec3)trans->scale);
-	//newmat *= ;
-	newmat = glm::translate(newmat, (glm::vec3)trans->position);
+	target->Forward = Vector3(mat[2]);
+	target->Up = Vector3(mat[1]);
+	target->Right = Vector3(mat[0]);
 }
 
 gde::Object* gde::Object::Copy_self()
@@ -37,7 +43,8 @@ gde::Object* gde::Object::Copy_self()
 
 gde::Object::Object()
 {
-	this->local_transform = glm::mat4(1.0f);
+	this->parent_matrix = glm::mat4(1.0f);
+	this->local_matrix = glm::mat4(1.0f);
 	this->parent = nullptr;
 }
 
@@ -58,25 +65,13 @@ gde::Object* gde::Object::Copy()
 	return copy;
 }
 
-glm::mat4 gde::Object::GetWorldSpaceMatrix()
-{
-	glm::mat4 parentmat = glm::mat4(1.0f);
-
-	if (this->parent != nullptr)
-		parentmat = this->parent->GetWorldSpaceMatrix();
-
-	return parentmat * this->local_transform;
-}
-
 gde::Transform* gde::Object::World()
 {
-	this->MatToTrans(&this->world, this->GetWorldSpaceMatrix());
 	return &this->world;
 }
 
 gde::Transform* gde::Object::Local()
 {
-	this->MatToTrans(&this->local, this->local_transform);
 	return &this->local;
 }
 
@@ -90,26 +85,27 @@ void gde::Object::SetPosition(Vector3 vector)
 
 void gde::Object::TranslateWorld(Vector3 vector)
 {
-	/*OLD
-	auto localdelta = glm::vec3(glm::vec4((glm::vec3)vector, 1) * this->GetWorldSpaceMatrix());
-	this->local_transform = glm::translate(this->local_transform, (glm::vec3)localdelta);
-	*/
-
-	auto curloc = glm::vec3(this->local_transform[3]);
+	auto curloc = glm::vec3(this->local_matrix[3]);
 	curloc += (glm::vec3)vector;
-	auto newrow4 = glm::vec4(curloc, this->local_transform[3][3]);
+	auto newrow4 = glm::vec4(curloc, this->local_matrix[3][3]);
 
-	this->local_transform[3] = newrow4;
+	this->local_matrix[3] = newrow4;
+
+	UpdateTransform();
 }
 
 void gde::Object::TranslateLocal(Vector3 vector)
 {
-	this->local_transform = glm::translate(this->local_transform, (glm::vec3)vector);
+	this->local_matrix = glm::translate(this->local_matrix, (glm::vec3)vector);
+
+	UpdateTransform();
 }
 
 void gde::Object::Scale(Vector3 vector)
 {
-	this->local_transform = glm::scale(this->local_transform, (glm::vec3)vector);
+	this->local_matrix = glm::scale(this->local_matrix, (glm::vec3)vector);
+
+	UpdateTransform();
 }
 
 void gde::Object::SetScale(Vector3 vector)
@@ -119,19 +115,35 @@ void gde::Object::SetScale(Vector3 vector)
 	glm::vec3 translation;
 	glm::vec3 skew;
 	glm::vec4 perspective;
-	glm::decompose(this->local_transform, scale, rotation, translation, skew, perspective);
+	glm::decompose(this->local_matrix, scale, rotation, translation, skew, perspective);
 
 	auto newmat = glm::mat4(1.0f);
 	newmat = glm::translate(newmat, translation);
 	newmat *= glm::toMat4(rotation);
 	newmat = glm::scale(newmat, (glm::vec3)vector);
 
-	this->local_transform = newmat;
+	this->local_matrix = newmat;
+
+	UpdateTransform();
 }
 
 void gde::Object::Rotate(Vector3 axis, float deg_angle)
 {
-	this->local_transform = glm::rotate(glm::mat4(1.0f), glm::radians(deg_angle), (glm::vec3)axis) * this->local_transform;
+	this->local_matrix = glm::rotate(glm::mat4(1.0f), glm::radians(deg_angle), (glm::vec3)axis) * this->local_matrix;
+	UpdateTransform();
+}
+
+void gde::Object::SetRotation(Vector3 euler)
+{
+	auto newmat = glm::mat4(1.0f);
+	newmat = glm::translate(newmat, (glm::vec3)Local()->position);
+	newmat = glm::rotate(glm::mat4(1.0f), glm::radians(euler.y), glm::vec3(1, 0, 0)) * newmat;
+	newmat = glm::rotate(glm::mat4(1.0f), glm::radians(-euler.x), glm::vec3(0, 1, 0)) * newmat;
+	newmat = glm::scale(newmat,(glm::vec3)Local()->scale);
+
+	this->local_matrix = newmat;
+
+	UpdateTransform();
 }
 
 void gde::Object::Orient(Vector3 forward, Vector3 Up)
@@ -147,14 +159,16 @@ void gde::Object::Orient(Vector3 forward, Vector3 Up)
 	glm::vec3 translation;
 	glm::vec3 skew;
 	glm::vec4 perspective;
-	glm::decompose(this->local_transform, scale, rotation, translation, skew, perspective);
+	glm::decompose(this->local_matrix, scale, rotation, translation, skew, perspective);
 
 	auto newmat = glm::mat4(1.0f);
 	newmat = glm::translate(newmat, translation);
 	newmat *= lookatmat;
 	newmat = glm::scale(newmat, scale);
 
-	this->local_transform = newmat;
+	this->local_matrix = newmat;
+
+	UpdateTransform();
 }
 
 void gde::Object::OnEnterHierarchy(Object* newChild)
@@ -170,6 +184,8 @@ void gde::Object::OnEnterHierarchy(Object* newChild)
 	};
 
 	propagate_upwards(newChild);
+	
+	UpdateTransform();
 }
 
 void gde::Object::OnExitHierarchy(Object* newChild)

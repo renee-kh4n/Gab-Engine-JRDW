@@ -17,24 +17,26 @@ namespace gde {
 		Transform world;
 		Transform local;
 
+		void UpdateTransform();
+
 		void MatToTrans(Transform* target, glm::mat4 mat);
-		glm::mat4 TransToMat(Transform* trans);
 	protected:
 		Object* parent;
-		glm::mat4 local_transform;
+		glm::mat4 parent_matrix;
+		glm::mat4 local_matrix;
 		virtual Object* Copy_self();
 	public:
 		Object();
 		virtual ~Object();
 		virtual Object* Copy();
 
-		glm::mat4 GetWorldSpaceMatrix();
 		Transform* World();
 		Transform* Local();
 		void SetPosition(Vector3 vector);
 		void TranslateWorld(Vector3 vector);
 		void TranslateLocal(Vector3 vector);
 		void Rotate(Vector3 axis, float angle);
+		void SetRotation(Vector3 euler);
 		void Orient(Vector3 forward, Vector3 Up);
 		void Scale(Vector3 vector);
 		void SetScale(Vector3 vector);

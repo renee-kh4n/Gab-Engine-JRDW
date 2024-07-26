@@ -4,7 +4,7 @@
 gde::RenderObject::RenderObject(DrawCall* mDrawCall)
 {
 	this->mDrawCall = mDrawCall;
-	this->mDrawCall->calls.insert_or_assign(this, this->GetWorldSpaceMatrix());
+	this->mDrawCall->calls.insert_or_assign(this, this->parent_matrix * this->local_matrix);
 	to_update = &this->mDrawCall->calls[this];
 }
 
@@ -15,5 +15,5 @@ gde::RenderObject::~RenderObject()
 
 void gde::RenderObject::InvokeEarlyUpdate()
 {
-	*to_update = this->GetWorldSpaceMatrix();
+	*to_update = this->parent_matrix * this->local_matrix;
 }

@@ -49,12 +49,12 @@ namespace gde {
 
 	Vector3 Vector3::Normalize()
 	{
-		auto mag = this->Magnitude();
+		auto sqrmag = this->SqrMagnitude();
 
-		if (abs(mag) < 0.00001f)
+		if (sqrmag < 0.001f)
 			return Vector3::zero;
 
-		return (*this) * (1.0f / mag);
+		return (*this) * (1.0f / this->Magnitude());
 	}
 
 	const Vector3 Vector3::zero = Vector3(0, 0, 0);

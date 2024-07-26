@@ -19,6 +19,10 @@
 #include <GD_Engine/Datatypes/Vectors.h>
 #include <GD_Engine/Time.h>
 
+#include <GD_Engine/Objects/Input/VariableSwitcher.h>
+#include <GD_Engine/Objects/Input/OrbitalControl.h>
+#include <GD_Engine/Objects/Input/SpacebarHitter.h>
+
 using namespace gde;
 
 int main(void)
@@ -29,7 +33,7 @@ int main(void)
     if (!glfwInit())
         return -1;
 
-    Window* mWindow = new Window("Rayo, Gabriel Paulo A", 800, 800);
+    Window* mWindow = new Window("Rayo / Voxlab", 800, 800);
     
     /* Initialize GLAD*/
     gladLoadGL();
@@ -56,6 +60,8 @@ int main(void)
     auto mInputSystem = new InputSystem();
     auto player_name = "MAIN";
     mInputSystem->RegisterActionListener(player_name, new MouseRightDragImplementation());
+    mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_1>());
+    mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_2>());
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_Q>());
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_SPACE>());
     mInputSystem->RegisterActionListener(player_name, new WasdDeltaImplementation());
@@ -83,47 +89,56 @@ int main(void)
     player_input->SetParent(root_object);
     auto camera_dolly = new OrbitalControl();
     camera_dolly->SetParent(player_input);
+    auto camera_parent = new Object();
+    camera_parent->SetParent(camera_dolly);
 
     auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
     mPerspectiveCam->angles = 60;
-    mPerspectiveCam->farClip = 1000.0f;
+    mPerspectiveCam->farClip = 1500.0f;
     mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
-    mPerspectiveCam->TranslateWorld(Vector3(0, 0, -400));
-    mPerspectiveCam->SetParent(camera_dolly);
+    mPerspectiveCam->SetParent(camera_parent);
     auto mOrthoCam = new OrthographicCamera(mWindow, CamOrthoPPShader);
     mOrthoCam->orthoRange = 450;
-    mOrthoCam->farClip = 1000.0f;
+    mOrthoCam->farClip = 1500.0f;
     mOrthoCam->WorldUp = Vector3(0, 1, 0);
-    mOrthoCam->TranslateWorld(Vector3(0, 0, -400));
-    mOrthoCam->SetParent(camera_dolly);
+    mOrthoCam->SetParent(camera_parent);
     active_camera = mPerspectiveCam;
 
-    auto mCamSwitcher = new CameraSwitcher((void*)mPerspectiveCam, (void*)mOrthoCam, (void**)&active_camera);
-    mCamSwitcher->SetParent(player_input);
+    camera_parent->TranslateWorld(Vector3(0, 0, -800));
 
-    auto mPauser = new SpacebarPauser(mTime);
-    mPauser->SetParent(player_input);
+    auto mCamSwitcher0 = new VariableSwitcher<GLFW_KEY_1>((void*)mPerspectiveCam, (void**)&active_camera);
+    mCamSwitcher0->SetParent(player_input);
+    auto mCamSwitcher1 = new VariableSwitcher<GLFW_KEY_2>((void*)mOrthoCam, (void**)&active_camera);
+    mCamSwitcher1->SetParent(player_input);
 
     //Mesh and material caching
+
+    //unlit line rendercall
+    auto mat = new Material(unlitShader);
+    mat->setOverride<glm::vec3>("color", Vector3(1, 1, 1));
+    auto lineDrawCall = new DrawCall(new Mesh("3D/plane.obj"), mat);
+    mRenderPipeline->RegisterDrawCall(lineDrawCall);
+
+    //particle rendercall
     auto sphere_mesh = new Mesh("3D/sphere.obj");
 
-    auto create_unlit_rendercall = [sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
-        auto unlit_mat = new Material(unlitShader);
-        unlit_mat->setOverride<glm::vec3>("color", color * 0.9f);
-        unlit_mat->setOverride<float>("specStrength", 0.9f);
-        unlit_mat->setOverride<float>("specPhong", 16);
-        auto new_drawcall = new DrawCall(sphere_mesh, unlit_mat);
+    auto create_rendercall = [sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
+        auto mat = new Material(litShader);
+        mat->setOverride<glm::vec3>("color", color * 0.9f);
+        mat->setOverride<float>("specStrength", 0.9f);
+        mat->setOverride<float>("specPhong", 16);
+        auto new_drawcall = new DrawCall(sphere_mesh, mat);
         mRenderPipeline->RegisterDrawCall(new_drawcall);
         return new_drawcall;
     };
 
     std::vector<DrawCall*> drawcalls = {
-        create_unlit_rendercall(Vector3(1, 0, 0)),
-        create_unlit_rendercall(Vector3(0, 1, 0)),
-        create_unlit_rendercall(Vector3(0, 0, 1)),
-        create_unlit_rendercall(Vector3(1, 1, 0)),
-        create_unlit_rendercall(Vector3(1, 0, 1)),
-        create_unlit_rendercall(Vector3(0, 1, 1)),
+        create_rendercall(Vector3(1, 0, 0)),
+        create_rendercall(Vector3(0, 1, 0)),
+        create_rendercall(Vector3(0, 0, 1)),
+        create_rendercall(Vector3(1, 1, 0)),
+        create_rendercall(Vector3(1, 0, 1)),
+        create_rendercall(Vector3(0, 1, 1)),
     };
     //reference sphere renderobject setup
 
@@ -131,68 +146,87 @@ int main(void)
         //sphere rigidobject setup
         auto sphere_rigidobject = new RigidObject();
         sphere_rigidobject->damping = 1.0f;
+        sphere_rigidobject->mass = 50;
 
         //sphere renderobject setup
         auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-        sphere_renderobject->Scale(Vector3(1, 1, 1) * 5.0f);
+        sphere_renderobject->TranslateLocal(Vector3(0, 0, 0));
         sphere_renderobject->SetParent(sphere_rigidobject);
-
-        //Sphere collider
-        auto collider = new Collider(10.0f);
-        collider->SetParent(sphere_rigidobject);
 
         return sphere_rigidobject;
     };
 
-
-
-    //particle system setup
-    auto system = new ParticleSystem(CreateParticleFunction);
-    system->world_space = false;
-    system->spawns_per_sec = 0;
-    system->start_force.random_between_two = true;
-    system->start_force.valueA = Vector3(-1, 0.5, -1) * 800;
-    system->start_force.valueB = Vector3(1, 4, 1) * 800;
-    system->start_lifetime.random_between_two = true;
-    system->start_lifetime.valueA = 0.4f;
-    system->start_lifetime.valueA = 15;
-    //system->SetParent(root_object);
-
-    //Collision testing
-    auto lineDrawCall = create_unlit_rendercall(Vector3(1, 1, 1));
-    lineDrawCall->m_mesh = new Mesh("3D/plane.obj");
-    
-    auto createswing = [camera_dolly, lineDrawCall, CreateParticleFunction, root_object](Vector3 position, float length, Vector3 offset = Vector3::zero) {
+    //Collision testing   
+    auto createswing = [camera_parent, lineDrawCall, CreateParticleFunction, root_object](Vector3 position, float length, float radius, Vector3 offset = Vector3::zero) {
         auto ball = CreateParticleFunction();
         ball->SetParent(root_object);
         ball->TranslateLocal(position + offset);
         ball->velocity = Vector3(0, 0, 0);
-        ball->SetScale(Vector3(1, 1, 1) * 5);
+        ball->SetScale(Vector3(1, 1, 1) * (radius));
+
+        //Sphere collider
+        auto collider = new Collider(radius);
+        collider->SetParent(ball);
 
         auto chain = new ChainJoint(length);
         chain->TranslateLocal(position);
         chain->to_rbody = ball;
         chain->SetParent(root_object);
 
-        auto line = new LineRenderer(lineDrawCall, camera_dolly, ball, chain);
+        auto line = new LineRenderer(lineDrawCall, camera_parent, ball, chain);
         line->SetParent(root_object);
+
+        return ball;
     };
 
-    auto startpos = Vector3(150, 200, 0);
-    auto interval = Vector3(-70, 0, 0);
-    auto length = 300;
-    createswing(Vector3(150, 200, 0), length, Vector3(70, 0, 0));
+    auto length = 300.0f;
+    auto gap = 50;
+    auto radius = 20;
+    auto grav_str = -50;
+    auto initial_force = Vector3(-40000, 0, 0);
 
-    for (size_t i = 0; i < 5; i++)
+    
+    std::cout << "Cable Length: ";
+    std::cin >> length;
+    std::cout << "Particle Gap: ";
+    std::cin >> gap;
+    std::cout << "Particle Radius: ";
+    std::cin >> radius;
+    std::cout << "Gravity Strength: ";
+    std::cin >> grav_str;
+    std::cout << "Apply Force: " << std::endl;
+    std::cout << "x: ";
+    std::cin >> initial_force.x;
+    std::cout << "y: ";
+    std::cin >> initial_force.y;
+    std::cout << "z: ";
+    std::cin >> initial_force.z;
+    
+
+    auto interval = Vector3(-gap, 0, 0);
+    auto count = 5;
+    RigidObject* firstball = nullptr;
+
+    for (size_t i = 0; i < count; i++)
     {
-        createswing(startpos + (interval * i), length);
+        auto startpos = interval * (((float)(count - 1) / -2.0f));
+        startpos.y = length / 2.0f;
+        startpos += interval * i;
+
+        auto ball = createswing(startpos, length, radius);
+
+        if (firstball == nullptr)
+            firstball = ball;
     }
+
+    auto mSpacebarHitter = new SpacebarHitter(firstball, initial_force);
+    mSpacebarHitter->SetParent(player_input);
 
     //physics force setup
     auto gravity_volume = new ForceVolume();
     gravity_volume->shape = ForceVolume::GLOBAL;
     gravity_volume->mode = ForceVolume::DIRECTIONAL;
-    gravity_volume->vector = Vector3(0, -30, 0);
+    gravity_volume->vector = Vector3(0, grav_str, 0);
     gravity_volume->forceMode = ForceVolume::VELOCITY;
     gravity_volume->SetParent(root_object);
 
@@ -200,7 +234,7 @@ int main(void)
     auto directional_light = new DirectionalLight();
     directional_light->Set_Color(Vector3(1, 1, 1));
     directional_light->Set_Intensity(1);
-    directional_light->Orient(Vector3(0, -1, 0), Vector3(1, 0, 0));
+    directional_light->Orient(Vector3(0, 1, 0), Vector3(1, 0, 0));
     directional_light->SetParent(root_object);
 
 #pragma endregion
