@@ -89,7 +89,7 @@ void gde::PhysicsHandler::GetOverlap()
 			if (delta2 > rad2)
 				continue;
 
-			AddContact(*a, *b, 1.0f, sqrt(rad2 - delta2));
+			AddContact(*a, *b, 0.9f, sqrt(rad2 - delta2));
 		}
 	}
 }
