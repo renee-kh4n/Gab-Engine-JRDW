@@ -1,7 +1,58 @@
-﻿  PhysicsHandler.cpp
+﻿  Transform.cpp
+  Vector2.cpp
+  KeyPressImplementation.cpp
+  MouseRightDragImplementation.cpp
+  WasdDeltaImplementation.cpp
+  ContactResolver.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.cpp(6,20): warning C4018: '<': signed/unsigned mismatch
+  VariableSwitcher.cpp
+  InputPlayer.cpp
+  OrbitalControl.cpp
+  SpacebarHitter.cpp
+  SpacebarPauser.cpp
+  Object.cpp
+  Collider.cpp
+  Contact.cpp
+  ForceVolume.cpp
+  Bungee.cpp
+  ChainJoint.cpp
+  RigidObjectLink.cpp
+  Rod.cpp
+  ParticleSystem.cpp
+  Compiling...
+  FloatParameter.cpp
+  VectorParameter.cpp
+  PhysicsHandler.cpp
 C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.cpp(36,52): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  ParticleObject.cpp
+  AnchorSpring.cpp
+  DirectionalLight.cpp
+  LightObject.cpp
+  LineRenderer.cpp
+  RenderObject.cpp
+  RigidObject.cpp
+  Root.cpp
+  Time.cpp
+  Vector3.cpp
+  DrawCall.cpp
+  Light.cpp
+  Material.cpp
+  Mesh.cpp
+  RenderPipeline.cpp
+  GDgrapProk.cpp
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\GDgrapProk.cpp(206,29): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\GDgrapProk.cpp(214,32): warning C4244: 'argument': conversion from 'size_t' to 'const float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\GDgrapProk.cpp(216,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\GDgrapProk.cpp(229,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Camera.cpp
+  Compiling...
+  Shader.cpp
+  Skybox.cpp
+  Texture.cpp
+  Window.cpp
+  glad.c
   Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  Previous IPDB not found, fall back to full compilation.
   All 4185 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   Finished generating code
   GDgrapProk.vcxproj -> C:\Users\gabri\OneDrive\Documents\UP_docs\School\CPP projects school\GDGRAP\GDPHYSX\x64\Release\GDPHYSX.exe

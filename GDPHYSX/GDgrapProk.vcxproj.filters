@@ -373,7 +373,6 @@
     <CopyFileToFolders Include="3D\myCube.obj" />
     <CopyFileToFolders Include="Shaders\skybox.frag" />
     <CopyFileToFolders Include="Shaders\skybox.vert" />
-    <CopyFileToFolders Include="3D\quiz.obj" />
     <CopyFileToFolders Include="3D\bunny.obj" />
     <CopyFileToFolders Include="Tex\Skybox\rainbow_bk.png">
       <Filter>Resource Files</Filter>
@@ -393,13 +392,6 @@
     <CopyFileToFolders Include="Tex\Skybox\rainbow_up.png">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
-    <CopyFileToFolders Include="3D\sub1.obj" />
-    <CopyFileToFolders Include="3D\sub2.obj" />
-    <CopyFileToFolders Include="3D\sub3.obj" />
-    <CopyFileToFolders Include="3D\sub4.obj" />
-    <CopyFileToFolders Include="3D\sub5.obj" />
-    <CopyFileToFolders Include="3D\sub6.obj" />
-    <CopyFileToFolders Include="3D\sub7.obj" />
     <CopyFileToFolders Include="Shaders\camshader.vert" />
     <CopyFileToFolders Include="Shaders\camshader.frag" />
     <CopyFileToFolders Include="Tex\Skybox\uw_up.jpg">
@@ -418,48 +410,6 @@
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Tex\Skybox\uw_rt.jpg">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub1\diff.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub1\norm.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub2\diff.jpg">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub2\norm.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub3\diff.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub3\norm.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub4\diff.jpg">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub4\norm.jpg">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub5\diff.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub6\diff.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub6\norm.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub7\diff.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub7\gloss.png">
-      <Filter>Resource Files</Filter>
-    </CopyFileToFolders>
-    <CopyFileToFolders Include="Tex\sub7\norm.png">
       <Filter>Resource Files</Filter>
     </CopyFileToFolders>
     <CopyFileToFolders Include="Shaders\depth.frag" />
