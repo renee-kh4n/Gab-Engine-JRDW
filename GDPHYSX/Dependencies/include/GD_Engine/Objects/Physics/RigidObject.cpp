@@ -17,6 +17,24 @@ void gde::RigidObject::AddForce(Vector3 force)
 	this->frame_force += force;
 }
 
+float gde::RigidObject::MomentOfInertia()
+{
+	float final = 0.0f;
+
+	for (auto col : colliders)
+	{
+		final += ((float)2 / 5) * mass * (col->GetWorldRadius() * col->GetWorldRadius());
+	}
+
+	return final;
+}
+
+void gde::RigidObject::AddForceAtPoint(Vector3 force, Vector3 relativeWorldPoint)
+{
+	this->AddForce(force);
+	this->accumulatedTorque = relativeWorldPoint.Cross(force);
+}
+
 void gde::RigidObject::OnEnterHierarchy(Object* newChild)
 {
 	Object::OnEnterHierarchy(newChild);

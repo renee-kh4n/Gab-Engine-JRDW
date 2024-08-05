@@ -1,5 +1,7 @@
 #include "PhysicsHandler.h"
 
+#include <glm/gtx/quaternion.hpp>
+
 #include <iostream>
 
 gde::PhysicsHandler::PhysicsHandler()
@@ -9,25 +11,41 @@ gde::PhysicsHandler::PhysicsHandler()
 
 void gde::PhysicsHandler::Update(double duration)
 {
-	for (auto rigidobject : this->object_list) {
+	for (auto ro : this->object_list) {
 
+		//Translational
 		for (auto volume : this->forcevolume_handler.object_list) {
-			volume->TryApply(rigidobject);
+			volume->TryApply(ro);
 		}
 
-		auto total_force = rigidobject->frame_force;
+		auto total_force = ro->frame_force;
 
-		rigidobject->acceleration = Vector3::zero;
-		rigidobject->acceleration += total_force * (1 / rigidobject->mass);
+		ro->acceleration = Vector3::zero;
+		ro->acceleration += total_force * (1 / ro->mass);
 
 		float dur_f = (float)duration;
 
-		rigidobject->TranslateWorld((rigidobject->velocity * dur_f) + ((rigidobject->acceleration * (dur_f * dur_f)) * (1.0f / 2.0f)));
+		ro->TranslateWorld((ro->velocity * dur_f) + ((ro->acceleration * (dur_f * dur_f)) * (1.0f / 2.0f)));
 
-		rigidobject->velocity += rigidobject->acceleration * dur_f;
-		rigidobject->velocity *= powf(rigidobject->damping, dur_f);
+		ro->velocity += ro->acceleration * dur_f;
+		ro->velocity *= powf(ro->damping, dur_f);
 
-		rigidobject->frame_force = Vector3::zero;
+		ro->frame_force = Vector3::zero;
+
+		//Angular
+		float mI = ro->MomentOfInertia();
+		ro->angularVelocity += ro->accumulatedTorque * duration * ((float)1 / mI);
+		ro->angularVelocity *= powf(ro->amgularDamp, duration);
+
+		auto aV = ro->angularVelocity * duration;
+		float aVmag = aV.Magnitude();
+		Vector3 aVdir = aV * (1.0f / aVmag);
+
+		if (aVmag > 0.0001f) {
+			ro->Rotate(aVdir, aVmag);
+		}
+
+		ro->accumulatedTorque = Vector3::zero;
 	}
 
 	this->GenerateContacts();

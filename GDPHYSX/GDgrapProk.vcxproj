@@ -151,6 +151,7 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\ActionDoer.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\VariableSwitcher.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarHitter.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.h" />
@@ -210,6 +212,7 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\CollisionContact.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Particle\ParticleObject.h" />
@@ -286,18 +289,18 @@
     </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Tex\ayaya.png">
+    <CopyFileToFolders Include="Tex\ayaya.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Tex\</DestinationFolders>
-      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Tex\</DestinationFolders>
-    </Image>
-    <Image Include="Tex\cubeacca.jpg">
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\cubeacca.jpg">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Tex\</DestinationFolders>
-      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Tex\</DestinationFolders>
-    </Image>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex</DestinationFolders>
+    </CopyFileToFolders>
     <CopyFileToFolders Include="Tex\Skybox\uw_bk.jpg">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
@@ -338,10 +341,12 @@
     <Image Include="Tex\sub7\diff.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Tex\partenza.jpg">
+    <CopyFileToFolders Include="Tex\partenza.jpg">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
-    </Image>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex</DestinationFolders>
+    </CopyFileToFolders>
     <CopyFileToFolders Include="Tex\Skybox\rainbow_bk.png">
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
       <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>

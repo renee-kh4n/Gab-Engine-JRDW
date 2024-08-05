@@ -150,6 +150,9 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarHitter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h">
@@ -365,6 +368,12 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarHitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\ActionDoer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Shaders\lit.frag" />
@@ -416,17 +425,17 @@
     <CopyFileToFolders Include="3D\sphere.obj" />
     <CopyFileToFolders Include="Shaders\unlit.frag" />
     <CopyFileToFolders Include="3D\plane.obj" />
+    <CopyFileToFolders Include="Tex\ayaya.png">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\cubeacca.jpg">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\partenza.jpg">
+      <Filter>Resource Files</Filter>
+    </CopyFileToFolders>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Tex\partenza.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Tex\cubeacca.jpg">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="Tex\ayaya.png">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="Tex\sub1\gloss.png">
       <Filter>Resource Files</Filter>
     </Image>
