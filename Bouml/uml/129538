@@ -1,0 +1,448 @@
+format 224
+"ObjectHandlers" // GDPHYSX::Dependencies::include::GD_Engine::ObjectHandlers
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Engine/ObjectHandlers/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Engine/ObjectHandlers/"
+  cpp_namespace "gde"
+  classview 129154 "ObjectHandlers"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 131074 "InputHandler"
+      visibility package 
+      nactuals 1
+      actual class class_ref 131202 // ObjectHandler
+        rank 0 value class_ref 131330 // InputPlayer
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 130946 // <realization>
+	relation 130946 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 130946 // <realization>
+	  b parent class_ref 131202 // ObjectHandler
+      end
+    end
+
+    class 131202 "ObjectHandler"
+      visibility package 
+      nformals 1
+      formal name "TValue" type "class" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 131074 // <generalisation>
+	relation 131074 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 131074 // <generalisation>
+	  b parent class_ref 131458 // Handler
+      end
+
+      classrelation 131202 // subhandlers (<unidirectional association>)
+	relation 131202 --->
+	  stereotype "std::list"
+	  a role_name "subhandlers" protected
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}*> ${name}${value};
+"
+	    classrelation_ref 131202 // subhandlers (<unidirectional association>)
+	  b parent class_ref 131458 // Handler
+      end
+
+      attribute 131330 "object_list"
+	public explicit_type "TValue*"
+	stereotype "std::list"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 131970 "Remove"
+	cpp_virtual cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param inout name "object" type class_ref 131586 // Object
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+			for (auto subhandler : this->subhandlers)
+				subhandler->Remove(object);
+
+			this->object_list.remove_if([object](TValue* tocheck) {
+				Object* base_object = dynamic_cast<Object*>(tocheck);
+				return base_object == object;
+			});
+		};
+"
+	
+	
+	
+	
+      end
+
+      operation 132098 "TryAdd"
+	cpp_virtual cpp_inline public explicit_return_type "bool"
+	nparams 1
+	  param inout name "object" type class_ref 131586 // Object
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+			for (auto subhandler : this->subhandlers)
+				subhandler->TryAdd(object);
+
+			TValue* typed_object = dynamic_cast<TValue*>(object);
+
+			if (typed_object == nullptr)
+				return false;
+
+			for (auto existing : this->object_list)
+				if (existing == typed_object)
+					return false;
+
+			object_list.push_back(typed_object);
+
+			return true;
+		};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 131458 "Handler"
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      operation 131714 "Remove"
+	abstract cpp_virtual public explicit_return_type "void"
+	nparams 1
+	  param inout name "object" type class_ref 131586 // Object
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 131842 "TryAdd"
+	abstract cpp_virtual public explicit_return_type "bool"
+	nparams 1
+	  param inout name "object" type class_ref 131586 // Object
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 131714 "PhysicsHandler"
+      visibility package 
+      nactuals 1
+      actual class class_ref 131202 // ObjectHandler
+        rank 0 value class_ref 131842 // RigidObject
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 131330 // <realization>
+	relation 131330 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 131330 // <realization>
+	  b parent class_ref 131202 // ObjectHandler
+      end
+
+      classrelation 131458 // forcevolume_handler (<directional composition>)
+	relation 131458 *-->
+	  stereotype "ObjectHandler"
+	  a role_name "forcevolume_handler" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 131458 // forcevolume_handler (<directional composition>)
+	  b parent class_ref 131970 // ForceVolume
+      end
+
+      classrelation 131586 // contacts (<unidirectional association>)
+	relation 131586 --->
+	  stereotype "std::vector"
+	  a role_name "contacts" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}*> ${name}${value};
+"
+	    classrelation_ref 131586 // contacts (<unidirectional association>)
+	  b parent class_ref 132098 // CollisionContact
+      end
+
+      classrelation 131714 // mContactResolver (<directional composition>)
+	relation 131714 *-->
+	  a role_name "mContactResolver" init_value "=  ContactResolver(20)" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${h_value};
+"
+	    classrelation_ref 131714 // mContactResolver (<directional composition>)
+	  b parent class_ref 132226 // ContactResolver
+      end
+
+      classrelation 131842 // links (<unidirectional association>)
+	relation 131842 --->
+	  stereotype "std::list"
+	  a role_name "links" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}*> ${name}${value};
+"
+	    classrelation_ref 131842 // links (<unidirectional association>)
+	  b parent class_ref 132354 // RigidObjectLink
+      end
+
+      operation 132226 "PhysicsHandler"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 132354 "Update"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	  param in name "duration" explicit_type "double"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 132482 "AddContact"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 4
+	  param inout name "r1" type class_ref 131842 // RigidObject
+	  param inout name "r2" type class_ref 131842 // RigidObject
+	  param in name "restitution" explicit_type "float"
+	  param in name "depth" explicit_type "float"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} ${p2}${v2}, ${t3} ${p3}${v3}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 132610 "AddLink"
+	preserve_cpp_body_indent public explicit_return_type "void"
+	nparams 1
+	  param inout name "link" type class_ref 132354 // RigidObjectLink
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} * ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 132738 "GenerateContacts"
+	preserve_cpp_body_indent protected explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 132866 "GetOverlap"
+	preserve_cpp_body_indent protected explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  deploymentview 129154 "ObjectHandlers"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 130562 "InputHandler"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 131074 // InputHandler
+      end
+    end
+
+    artifact 130690 "ObjectHandler"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 131458 // Handler
+	class_ref 131202 // ObjectHandler
+      end
+    end
+
+    artifact 130818 "PhysicsHandler"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 131714 // PhysicsHandler
+      end
+    end
+  end
+
+  package_ref 130178 // Members
+end

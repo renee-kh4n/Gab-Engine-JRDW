@@ -1,0 +1,36 @@
+format 224
+"glm" // GDPHYSX::Dependencies::include::glm
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/glm/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/glm/"
+  package_ref 132482 // simd
+end

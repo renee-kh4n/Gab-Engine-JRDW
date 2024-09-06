@@ -1,0 +1,2138 @@
+format 224
+"GD_Graphics" // GDPHYSX::Dependencies::include::GD_Graphics::GD_Graphics
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Graphics/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Graphics/"
+  classview 131586 "GD_Graphics"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 139138 "anonymous1"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum  {
+${items}};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 143362 "STBI_default"
+	public type class_ref 139138 // anonymous1
+	init_value " 0"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 143490 "STBI_grey"
+	public type class_ref 139138 // anonymous1
+	init_value " 1"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 143618 "STBI_grey_alpha"
+	public type class_ref 139138 // anonymous1
+	init_value " 2"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 143746 "STBI_rgb"
+	public type class_ref 139138 // anonymous1
+	init_value " 3"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 143874 "STBI_rgb_alpha"
+	public type class_ref 139138 // anonymous1
+	init_value " 4
+"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 139266 "stbi_uc"
+      visibility package stereotype "typedef" explicit_base_type "unsigned char"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 139394 "stbi_us"
+      visibility package stereotype "typedef" explicit_base_type "unsigned short"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 139522 "stbi_io_callbacks"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "////////////////////////////////////////////////////////////////////////////
+
+ PRIMARY API - works on images of any type
+
+
+ load image by filename, open file, or memory buffer
+"
+      attribute 144002 "read"
+	public explicit_type "int (*) (void *user,char *data,int size)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+   int      (*${name})  (void *user,char *data,int size)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " fill 'data' with 'size' bytes.  return number of bytes actually read"
+      end
+
+      attribute 144130 "skip"
+	public explicit_type "void (*) (void *user,int n)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}   void     (*${name})  (void *user,int n)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " skip the next 'n' bytes, or 'unget' the last -n bytes if negative"
+      end
+
+      attribute 144258 "eof"
+	public explicit_type "int (*) (void *user)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}   int      (*${name})   (void *user)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " returns nonzero if we are at end of file/data"
+      end
+    end
+
+    class 139650 "stbi__int16"
+      visibility package stereotype "typedef" explicit_base_type "int16_t"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 139778 "stbi__uint32"
+      visibility package stereotype "typedef" explicit_base_type "uint32_t"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 139906 "stbi__int32"
+      visibility package stereotype "typedef" explicit_base_type "int32_t"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 140034 "stbi__uint16"
+      visibility package stereotype "typedef" explicit_base_type "uint16_t"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 140162 "validate_uint32"
+      visibility package stereotype "typedef" explicit_base_type "unsigned char"
+      cpp_decl "${comment}typedef ${type} ${name}[sizeof(stbi__uint32)==4 ? 1 : -1];
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " should produce compiler error if size is wrong"
+    end
+
+    class 140290 "stbi__context"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/////////////////////////////////////////////
+
+  stbi__context struct and start_xxx functions
+ stbi__context structure is our basic context used by all images, so it
+ contains all the IO context, plus some basic image information"
+      classrelation 144386 // img_x (<directional composition>)
+	relation 144386 *-->
+	  a role_name "img_x" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 144386 // img_x (<directional composition>)
+	  b parent class_ref 139778 // stbi__uint32
+      end
+
+      classrelation 144514 // img_y (<directional composition>)
+	relation 144514 *-->
+	  a role_name "img_y" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 144514 // img_y (<directional composition>)
+	  b parent class_ref 139778 // stbi__uint32
+      end
+
+      attribute 144386 "img_n"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 144514 "img_out_n"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 144642 // io (<directional composition>)
+	relation 144642 *-->
+	  a role_name "io" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 144642 // io (<directional composition>)
+	  b parent class_ref 139522 // stbi_io_callbacks
+      end
+
+      attribute 144642 "io_user_data"
+	public explicit_type "void"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 144770 "read_from_callbacks"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 144898 "buflen"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 144770 // buffer_start (<directional composition>)
+	relation 144770 *-->
+	  a role_name "buffer_start" multiplicity "[128]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 144770 // buffer_start (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 145026 "callback_already_read"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 144898 // img_buffer (<unidirectional association>)
+	relation 144898 --->
+	  a role_name "img_buffer" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 144898 // img_buffer (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 145026 // img_buffer_end (<unidirectional association>)
+	relation 145026 --->
+	  a role_name "img_buffer_end" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 145026 // img_buffer_end (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 145154 // img_buffer_original (<unidirectional association>)
+	relation 145154 --->
+	  a role_name "img_buffer_original" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 145154 // img_buffer_original (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 145282 // img_buffer_original_end (<unidirectional association>)
+	relation 145282 --->
+	  a role_name "img_buffer_original_end" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 145282 // img_buffer_original_end (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+    end
+
+    class 140418 "anonymous2"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum  {
+${items}};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 145154 "STBI_ORDER_RGB"
+	public type class_ref 140418 // anonymous2
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145282 "STBI_ORDER_BGR"
+	public type class_ref 140418 // anonymous2
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 140546 "stbi__result_info"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 145410 "bits_per_channel"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145538 "num_channels"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145666 "channel_order"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 140674 "anonymous3"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum  {
+${items}};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "////////////////////////////////////////////////////////////////////////////
+
+ Common code used by all image loaders
+"
+      attribute 145794 "STBI__SCAN_load"
+	public type class_ref 140674 // anonymous3
+	init_value "0"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 145922 "STBI__SCAN_type"
+	public type class_ref 140674 // anonymous3
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146050 "STBI__SCAN_header"
+	public type class_ref 140674 // anonymous3
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 140802 "stbi__huffman"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 145410 // fast (<directional composition>)
+	relation 145410 *-->
+	  a role_name "fast" multiplicity "[1 << FAST_BITS]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 145410 // fast (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 145538 // code (<directional composition>)
+	relation 145538 *-->
+	  a role_name "code" multiplicity "[256]" public
+	    comment " weirdly, repacking this into AoS is a 10% speed loss, instead of a win
+"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 145538 // code (<directional composition>)
+	  b parent class_ref 140034 // stbi__uint16
+      end
+
+      classrelation 145666 // values (<directional composition>)
+	relation 145666 *-->
+	  a role_name "values" multiplicity "[256]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 145666 // values (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 145794 // size (<directional composition>)
+	relation 145794 *-->
+	  a role_name "size" multiplicity "[257]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 145794 // size (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 146178 "maxcode"
+	public explicit_type "uint"
+	multiplicity "[18]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146306 "delta"
+	public explicit_type "int"
+	multiplicity "[17]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " old 'firstsymbol' - old 'firstcode'"
+      end
+    end
+
+    class 140930 "stbi__jpeg"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 145922 // s (<unidirectional association>)
+	relation 145922 --->
+	  a role_name "s" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 145922 // s (<unidirectional association>)
+	  b parent class_ref 140290 // stbi__context
+      end
+
+      classrelation 146050 // huff_dc (<directional composition>)
+	relation 146050 *-->
+	  a role_name "huff_dc" multiplicity "[4]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 146050 // huff_dc (<directional composition>)
+	  b parent class_ref 140802 // stbi__huffman
+      end
+
+      classrelation 146178 // huff_ac (<directional composition>)
+	relation 146178 *-->
+	  a role_name "huff_ac" multiplicity "[4]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 146178 // huff_ac (<directional composition>)
+	  b parent class_ref 140802 // stbi__huffman
+      end
+
+      classrelation 146306 // dequant (<directional composition>)
+	relation 146306 *-->
+	  a role_name "dequant" multiplicity "[4][64]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 146306 // dequant (<directional composition>)
+	  b parent class_ref 140034 // stbi__uint16
+      end
+
+      classrelation 146434 // fast_ac (<directional composition>)
+	relation 146434 *-->
+	  a role_name "fast_ac" multiplicity "[4][1 << FAST_BITS]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 146434 // fast_ac (<directional composition>)
+	  b parent class_ref 139650 // stbi__int16
+      end
+
+      attribute 146434 "img_h_max"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " sizes for components, interleaved MCUs
+"
+      end
+
+      attribute 146562 "img_v_max"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146690 "img_mcu_x"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146818 "img_mcu_y"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 146946 "img_mcu_w"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147074 "img_mcu_h"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147202 "img_comp"
+	public explicit_type "<complex type>"
+	multiplicity "[4]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}struct 
+   {
+      int id;
+      int h,v;
+      int tq;
+      int hd,ha;
+      int dc_pred;
+
+      int x,y,w2,h2;
+      stbi_uc *data;
+      void *raw_data, *raw_coeff;
+      stbi_uc *linebuf;
+      short   *coeff;   // progressive only
+      int      coeff_w, coeff_h; // number of 8x8 coefficient blocks
+   } ${name}${multiplicity}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " definition of jpeg image component
+"
+      end
+
+      classrelation 146562 // code_buffer (<directional composition>)
+	relation 146562 *-->
+	  a role_name "code_buffer" public
+	    comment " jpeg entropy-coded buffer"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 146562 // code_buffer (<directional composition>)
+	  b parent class_ref 139778 // stbi__uint32
+      end
+
+      attribute 147330 "code_bits"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " number of valid bits"
+      end
+
+      attribute 147458 "marker"
+	public explicit_type "byte"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " marker seen while filling entropy buffer"
+      end
+
+      attribute 147586 "nomore"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " flag if we saw a marker so must stop"
+      end
+
+      attribute 147714 "progressive"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147842 "spec_start"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 147970 "spec_end"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148098 "succ_high"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148226 "succ_low"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148354 "eob_run"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148482 "jfif"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148610 "app14_color_transform"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " Adobe APP14 tag"
+      end
+
+      attribute 148738 "rgb"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148866 "scan_n"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 148994 "order"
+	public explicit_type "int"
+	multiplicity "[4]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 149122 "restart_interval"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 149250 "todo"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 149378 "idct_block_kernel"
+	public explicit_type "// kernels void (*)(stbi_uc *out, int out_stride, short data[64])"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+
+// kernels
+   void (*${name})(stbi_uc *out, int out_stride, short data[64])${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " kernels
+"
+      end
+
+      attribute 149506 "YCbCr_to_RGB_kernel"
+	public explicit_type "void (*)(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+   void (*${name})(stbi_uc *out, const stbi_uc *y, const stbi_uc *pcb, const stbi_uc *pcr, int count, int step)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 149634 "resample_row_hv_2_kernel"
+	public explicit_type "stbi_uc *(*)(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+   stbi_uc *(*${name})(stbi_uc *out, stbi_uc *in_near, stbi_uc *in_far, int w, int hs)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 141058 "resample_row_func"
+      visibility package stereotype "typedef" base_type class_ref 139266 // stbi_uc
+      cpp_decl "${comment}typedef ${type}*(* ${name})(stbi_uc *out, stbi_uc *in0, stbi_uc *in1,
+                                    int w, int hs);
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " static jfif-centered resampling (across block boundaries)"
+      classrelation 146690 // <dependency>
+	relation 146690 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 146690 // <dependency>
+	  b parent class_ref 139266 // stbi_uc
+      end
+    end
+
+    class 141186 "stbi__resample"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 146818 // resample (<directional composition>)
+	relation 146818 *-->
+	  a role_name "resample" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 146818 // resample (<directional composition>)
+	  b parent class_ref 141058 // resample_row_func
+      end
+
+      classrelation 146946 // line0 (<unidirectional association>)
+	relation 146946 --->
+	  a role_name "line0" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 146946 // line0 (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 147074 // line1 (<unidirectional association>)
+	relation 147074 --->
+	  a role_name "line1" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 147074 // line1 (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 149762 "hs"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 149890 "vs"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " expansion factor in each axis"
+      end
+
+      attribute 150018 "w_lores"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " horizontal pixels pre-expansion"
+      end
+
+      attribute 150146 "ystep"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " how far through vertical expansion we are"
+      end
+
+      attribute 150274 "ypos"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " which pre-expansion row we're on"
+      end
+    end
+
+    class 141314 "stbi__zhuffman"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " zlib-style huffman encoding
+ (jpegs packs from left, zlib from right, so can't share code)"
+      classrelation 147202 // fast (<directional composition>)
+	relation 147202 *-->
+	  a role_name "fast" multiplicity "[1 << STBI__ZFAST_BITS]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 147202 // fast (<directional composition>)
+	  b parent class_ref 140034 // stbi__uint16
+      end
+
+      classrelation 147330 // firstcode (<directional composition>)
+	relation 147330 *-->
+	  a role_name "firstcode" multiplicity "[16]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 147330 // firstcode (<directional composition>)
+	  b parent class_ref 140034 // stbi__uint16
+      end
+
+      attribute 150402 "maxcode"
+	public explicit_type "int"
+	multiplicity "[17]"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 147458 // firstsymbol (<directional composition>)
+	relation 147458 *-->
+	  a role_name "firstsymbol" multiplicity "[16]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 147458 // firstsymbol (<directional composition>)
+	  b parent class_ref 140034 // stbi__uint16
+      end
+
+      classrelation 147586 // size (<directional composition>)
+	relation 147586 *-->
+	  a role_name "size" multiplicity "[STBI__ZNSYMS]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 147586 // size (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 147714 // value (<directional composition>)
+	relation 147714 *-->
+	  a role_name "value" multiplicity "[STBI__ZNSYMS]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 147714 // value (<directional composition>)
+	  b parent class_ref 140034 // stbi__uint16
+      end
+    end
+
+    class 141442 "stbi__zbuf"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " zlib-from-memory implementation for PNG reading
+    because PNG allows splitting the zlib stream arbitrarily,
+    and it's annoying structurally to have PNG call ZLIB call PNG,
+    we require PNG read all the IDATs and combine them into a single
+    memory buffer"
+      classrelation 147842 // zbuffer (<unidirectional association>)
+	relation 147842 --->
+	  a role_name "zbuffer" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 147842 // zbuffer (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 147970 // zbuffer_end (<unidirectional association>)
+	relation 147970 --->
+	  a role_name "zbuffer_end" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 147970 // zbuffer_end (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 150530 "num_bits"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 148098 // code_buffer (<directional composition>)
+	relation 148098 *-->
+	  a role_name "code_buffer" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 148098 // code_buffer (<directional composition>)
+	  b parent class_ref 139778 // stbi__uint32
+      end
+
+      attribute 150658 "zout"
+	public explicit_type "char"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 150786 "zout_start"
+	public explicit_type "char"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 150914 "zout_end"
+	public explicit_type "char"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 151042 "z_expandable"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 148226 // z_length (<directional composition>)
+	relation 148226 *-->
+	  a role_name "z_length" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 148226 // z_length (<directional composition>)
+	  b parent class_ref 141314 // stbi__zhuffman
+      end
+
+      classrelation 148354 // z_distance (<directional composition>)
+	relation 148354 *-->
+	  a role_name "z_distance" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 148354 // z_distance (<directional composition>)
+	  b parent class_ref 141314 // stbi__zhuffman
+      end
+    end
+
+    class 141570 "stbi__pngchunk"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 148482 // length (<directional composition>)
+	relation 148482 *-->
+	  a role_name "length" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 148482 // length (<directional composition>)
+	  b parent class_ref 139778 // stbi__uint32
+      end
+
+      classrelation 148610 // type (<directional composition>)
+	relation 148610 *-->
+	  a role_name "type" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 148610 // type (<directional composition>)
+	  b parent class_ref 139778 // stbi__uint32
+      end
+    end
+
+    class 141698 "stbi__png"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 148738 // s (<unidirectional association>)
+	relation 148738 --->
+	  a role_name "s" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 148738 // s (<unidirectional association>)
+	  b parent class_ref 140290 // stbi__context
+      end
+
+      classrelation 148866 // idata (<unidirectional association>)
+	relation 148866 --->
+	  a role_name "idata" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 148866 // idata (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 148994 // expanded (<unidirectional association>)
+	relation 148994 --->
+	  a role_name "expanded" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 148994 // expanded (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 149122 // out (<unidirectional association>)
+	relation 149122 --->
+	  a role_name "out" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 149122 // out (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 151170 "depth"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 141826 "anonymous4"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum  {
+${items}};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 151298 "STBI__F_none"
+	public type class_ref 141826 // anonymous4
+	init_value "0"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 151426 "STBI__F_sub"
+	public type class_ref 141826 // anonymous4
+	init_value "1"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 151554 "STBI__F_up"
+	public type class_ref 141826 // anonymous4
+	init_value "2"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 151682 "STBI__F_avg"
+	public type class_ref 141826 // anonymous4
+	init_value "3"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 151810 "STBI__F_paeth"
+	public type class_ref 141826 // anonymous4
+	init_value "4"
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 151938 "STBI__F_avg_first"
+	public type class_ref 141826 // anonymous4
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152066 "STBI__F_paeth_first"
+	public type class_ref 141826 // anonymous4
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 141954 "stbi__bmp_data"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 152194 "bpp"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152322 "offset"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152450 "hsz"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152578 "mr"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152706 "mg"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152834 "mb"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 152962 "ma"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 153090 "all_a"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 153218 "extra_read"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 142082 "stbi__pic_packet"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 149250 // size (<directional composition>)
+	relation 149250 *-->
+	  a role_name "size" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 149250 // size (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 149378 // type (<directional composition>)
+	relation 149378 *-->
+	  a role_name "type" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 149378 // type (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 149506 // channel (<directional composition>)
+	relation 149506 *-->
+	  a role_name "channel" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 149506 // channel (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+    end
+
+    class 142210 "stbi__gif_lzw"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 149634 // prefix (<directional composition>)
+	relation 149634 *-->
+	  a role_name "prefix" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 149634 // prefix (<directional composition>)
+	  b parent class_ref 139650 // stbi__int16
+      end
+
+      classrelation 149762 // first (<directional composition>)
+	relation 149762 *-->
+	  a role_name "first" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 149762 // first (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 149890 // suffix (<directional composition>)
+	relation 149890 *-->
+	  a role_name "suffix" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 149890 // suffix (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+    end
+
+    class 142338 "stbi__gif"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 153346 "w"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 153474 "h"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 150018 // out (<unidirectional association>)
+	relation 150018 --->
+	  a role_name "out" public
+	    comment " output buffer (always 4 components)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 150018 // out (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 150146 // background (<unidirectional association>)
+	relation 150146 --->
+	  a role_name "background" public
+	    comment " The current \"background\" as far as a gif is concerned"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 150146 // background (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 150274 // history (<unidirectional association>)
+	relation 150274 --->
+	  a role_name "history" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 150274 // history (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 153602 "flags"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 153730 "bgindex"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 153858 "ratio"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 153986 "transparent"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154114 "eflags"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 150402 // pal (<directional composition>)
+	relation 150402 *-->
+	  a role_name "pal" multiplicity "[256][4]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 150402 // pal (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 150530 // lpal (<directional composition>)
+	relation 150530 *-->
+	  a role_name "lpal" multiplicity "[256][4]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 150530 // lpal (<directional composition>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      classrelation 150658 // codes (<directional composition>)
+	relation 150658 *-->
+	  a role_name "codes" multiplicity "[8192]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 150658 // codes (<directional composition>)
+	  b parent class_ref 142210 // stbi__gif_lzw
+      end
+
+      classrelation 150786 // color_table (<unidirectional association>)
+	relation 150786 --->
+	  a role_name "color_table" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 150786 // color_table (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 154242 "parse"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154370 "step"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154498 "lflags"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154626 "start_x"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154754 "start_y"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 154882 "max_x"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 155010 "max_y"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 155138 "cur_x"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 155266 "cur_y"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 155394 "line_size"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 155522 "delay"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+  end
+
+  deploymentview 131330 "GD_Graphics"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 135682 "stb_image"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 139138 // anonymous1
+	class_ref 139266 // stbi_uc
+	class_ref 139394 // stbi_us
+	class_ref 139522 // stbi_io_callbacks
+	class_ref 139650 // stbi__int16
+	class_ref 139778 // stbi__uint32
+	class_ref 139906 // stbi__int32
+	class_ref 140034 // stbi__uint16
+	class_ref 140162 // validate_uint32
+	class_ref 140290 // stbi__context
+	class_ref 140418 // anonymous2
+	class_ref 140546 // stbi__result_info
+	class_ref 140674 // anonymous3
+	class_ref 140802 // stbi__huffman
+	class_ref 140930 // stbi__jpeg
+	class_ref 141058 // resample_row_func
+	class_ref 141186 // stbi__resample
+	class_ref 141314 // stbi__zhuffman
+	class_ref 141442 // stbi__zbuf
+	class_ref 141570 // stbi__pngchunk
+	class_ref 141698 // stbi__png
+	class_ref 141826 // anonymous4
+	class_ref 141954 // stbi__bmp_data
+	class_ref 142082 // stbi__pic_packet
+	class_ref 142210 // stbi__gif_lzw
+	class_ref 142338 // stbi__gif
+      end
+    end
+  end
+end

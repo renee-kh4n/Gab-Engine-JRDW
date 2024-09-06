@@ -1,0 +1,2705 @@
+format 224
+"tinyobj" // GDPHYSX::Dependencies::include::GD_Graphics::tinyobj
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Graphics/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Graphics/"
+  cpp_namespace "tinyobj"
+  classview 131458 "GD_Graphics"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 138114 "attrib_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " Vertex attributes"
+      classrelation 157314 // vertices (<directional composition>)
+	relation 157314 *-->
+	  stereotype "std::vector"
+	  a role_name "vertices" public
+	    comment " 'v'(xyz)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 157314 // vertices (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 157442 // vertex_weights (<directional composition>)
+	relation 157442 *-->
+	  stereotype "std::vector"
+	  a role_name "vertex_weights" public
+	    comment " For backward compatibility, we store vertex weight in separate array.
+ 'v'(w)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 157442 // vertex_weights (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 157570 // normals (<directional composition>)
+	relation 157570 *-->
+	  stereotype "std::vector"
+	  a role_name "normals" public
+	    comment " 'vn'"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 157570 // normals (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 157698 // texcoords (<directional composition>)
+	relation 157698 *-->
+	  stereotype "std::vector"
+	  a role_name "texcoords" public
+	    comment " 'vt'(uv)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 157698 // texcoords (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 157826 // texcoord_ws (<directional composition>)
+	relation 157826 *-->
+	  stereotype "std::vector"
+	  a role_name "texcoord_ws" public
+	    comment " For backward compatibility, we store texture coordinate 'w' in separate
+ array.
+ 'vt'(w)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 157826 // texcoord_ws (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 157954 // colors (<directional composition>)
+	relation 157954 *-->
+	  stereotype "std::vector"
+	  a role_name "colors" public
+	    comment " extension: vertex colors"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 157954 // colors (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 158082 // skin_weights (<directional composition>)
+	relation 158082 *-->
+	  stereotype "std::vector"
+	  a role_name "skin_weights" public
+	    comment "
+ TinyObj extension.
+
+ NOTE(syoyo): array index is based on the appearance order.
+ To get a corresponding skin weight for a specific vertex id `vid`,
+ Need to reconstruct a look up table: `skin_weight_t::vertex_id` == `vid`
+ (e.g. using std::map, std::unordered_map)
+"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 158082 // skin_weights (<directional composition>)
+	  b parent class_ref 143234 // skin_weight_t
+      end
+
+      operation 149250 "attrib_t"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} {};
+"
+	
+	
+	
+	
+      end
+
+      operation 149378 "GetVertices"
+	const constvalue cpp_inline public explicit_return_type "std::vector<real_t>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${)}${const}${volatile}${throw}${abstract} { return vertices; };
+"
+	
+	
+	
+	
+	comment "
+ For pybind11
+"
+      end
+
+      operation 149506 "GetVertexWeights"
+	const constvalue cpp_inline public explicit_return_type "std::vector<real_t>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${)}${const}${volatile}${throw}${abstract} { return vertex_weights; };
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 138242 "shape_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 161666 "name"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 156930 // mesh (<directional composition>)
+	relation 156930 *-->
+	  a role_name "mesh" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 156930 // mesh (<directional composition>)
+	  b parent class_ref 143490 // mesh_t
+      end
+
+      classrelation 157058 // lines (<directional composition>)
+	relation 157058 *-->
+	  a role_name "lines" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 157058 // lines (<directional composition>)
+	  b parent class_ref 143618 // lines_t
+      end
+
+      classrelation 157186 // points (<directional composition>)
+	relation 157186 *-->
+	  a role_name "points" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 157186 // points (<directional composition>)
+	  b parent class_ref 143746 // points_t
+      end
+    end
+
+    class 138370 "material_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " value. Usually `sRGB` or `linear` (default empty)."
+      attribute 157826 "name"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 152322 // ambient (<directional composition>)
+	relation 152322 *-->
+	  a role_name "ambient" multiplicity "[3]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 152322 // ambient (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 152450 // diffuse (<directional composition>)
+	relation 152450 *-->
+	  a role_name "diffuse" multiplicity "[3]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 152450 // diffuse (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 152578 // specular (<directional composition>)
+	relation 152578 *-->
+	  a role_name "specular" multiplicity "[3]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 152578 // specular (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 152706 // transmittance (<directional composition>)
+	relation 152706 *-->
+	  a role_name "transmittance" multiplicity "[3]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 152706 // transmittance (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 152834 // emission (<directional composition>)
+	relation 152834 *-->
+	  a role_name "emission" multiplicity "[3]" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 152834 // emission (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 152962 // shininess (<directional composition>)
+	relation 152962 *-->
+	  a role_name "shininess" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 152962 // shininess (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 153090 // ior (<directional composition>)
+	relation 153090 *-->
+	  a role_name "ior" public
+	    comment " index of refraction"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153090 // ior (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 153218 // dissolve (<directional composition>)
+	relation 153218 *-->
+	  a role_name "dissolve" public
+	    comment " 1 == opaque; 0 == fully transparent"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153218 // dissolve (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      attribute 157954 "illum"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " illumination model (see http://www.fileformat.info/format/material/)
+"
+      end
+
+      attribute 158082 "dummy"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " Suppress padding warning."
+      end
+
+      attribute 158210 "ambient_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Ka"
+      end
+
+      attribute 158338 "diffuse_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Kd"
+      end
+
+      attribute 158466 "specular_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Ks"
+      end
+
+      attribute 158594 "specular_highlight_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Ns"
+      end
+
+      attribute 158722 "bump_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_bump, map_Bump, bump"
+      end
+
+      attribute 158850 "displacement_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " disp"
+      end
+
+      attribute 158978 "alpha_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_d"
+      end
+
+      attribute 159106 "reflection_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " refl"
+      end
+
+      classrelation 153346 // ambient_texopt (<directional composition>)
+	relation 153346 *-->
+	  a role_name "ambient_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153346 // ambient_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 153474 // diffuse_texopt (<directional composition>)
+	relation 153474 *-->
+	  a role_name "diffuse_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153474 // diffuse_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 153602 // specular_texopt (<directional composition>)
+	relation 153602 *-->
+	  a role_name "specular_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153602 // specular_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 153730 // specular_highlight_texopt (<directional composition>)
+	relation 153730 *-->
+	  a role_name "specular_highlight_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153730 // specular_highlight_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 153858 // bump_texopt (<directional composition>)
+	relation 153858 *-->
+	  a role_name "bump_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153858 // bump_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 153986 // displacement_texopt (<directional composition>)
+	relation 153986 *-->
+	  a role_name "displacement_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 153986 // displacement_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 154114 // alpha_texopt (<directional composition>)
+	relation 154114 *-->
+	  a role_name "alpha_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 154114 // alpha_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 154242 // reflection_texopt (<directional composition>)
+	relation 154242 *-->
+	  a role_name "reflection_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 154242 // reflection_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 154370 // roughness (<directional composition>)
+	relation 154370 *-->
+	  a role_name "roughness" public
+	    comment " PBR extension
+ http://exocortex.com/blog/extending_wavefront_mtl_to_support_pbr
+ [0, 1] default 0"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 154370 // roughness (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 154498 // metallic (<directional composition>)
+	relation 154498 *-->
+	  a role_name "metallic" public
+	    comment " [0, 1] default 0"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 154498 // metallic (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 154626 // sheen (<directional composition>)
+	relation 154626 *-->
+	  a role_name "sheen" public
+	    comment " [0, 1] default 0"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 154626 // sheen (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 154754 // clearcoat_thickness (<directional composition>)
+	relation 154754 *-->
+	  a role_name "clearcoat_thickness" public
+	    comment " [0, 1] default 0"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 154754 // clearcoat_thickness (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 154882 // clearcoat_roughness (<directional composition>)
+	relation 154882 *-->
+	  a role_name "clearcoat_roughness" public
+	    comment " [0, 1] default 0"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 154882 // clearcoat_roughness (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 155010 // anisotropy (<directional composition>)
+	relation 155010 *-->
+	  a role_name "anisotropy" public
+	    comment " aniso. [0, 1] default 0"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155010 // anisotropy (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 155138 // anisotropy_rotation (<directional composition>)
+	relation 155138 *-->
+	  a role_name "anisotropy_rotation" public
+	    comment " anisor. [0, 1] default 0"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155138 // anisotropy_rotation (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 155266 // pad0 (<directional composition>)
+	relation 155266 *-->
+	  a role_name "pad0" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155266 // pad0 (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      attribute 159234 "roughness_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Pr"
+      end
+
+      attribute 159362 "metallic_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Pm"
+      end
+
+      attribute 159490 "sheen_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Ps"
+      end
+
+      attribute 159618 "emissive_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " map_Ke"
+      end
+
+      attribute 159746 "normal_texname"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " norm. For normal mapping."
+      end
+
+      classrelation 155394 // roughness_texopt (<directional composition>)
+	relation 155394 *-->
+	  a role_name "roughness_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155394 // roughness_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 155522 // metallic_texopt (<directional composition>)
+	relation 155522 *-->
+	  a role_name "metallic_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155522 // metallic_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 155650 // sheen_texopt (<directional composition>)
+	relation 155650 *-->
+	  a role_name "sheen_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155650 // sheen_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 155778 // emissive_texopt (<directional composition>)
+	relation 155778 *-->
+	  a role_name "emissive_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155778 // emissive_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      classrelation 155906 // normal_texopt (<directional composition>)
+	relation 155906 *-->
+	  a role_name "normal_texopt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 155906 // normal_texopt (<directional composition>)
+	  b parent class_ref 142850 // texture_option_t
+      end
+
+      attribute 159874 "pad2"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 160002 "unknown_parameter"
+	public explicit_type "std::string, std::string"
+	stereotype "std::map"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 147970 "GetDiffuse"
+	cpp_inline public explicit_return_type "std::array<double, 3>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+            std::array<double, 3> values;
+            values[0] = double(diffuse[0]);
+            values[1] = double(diffuse[1]);
+            values[2] = double(diffuse[2]);
+
+            return values;
+        };
+"
+	
+	
+	
+	
+	comment " For pybind11"
+      end
+
+      operation 148098 "GetSpecular"
+	cpp_inline public explicit_return_type "std::array<double, 3>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+            std::array<double, 3> values;
+            values[0] = double(specular[0]);
+            values[1] = double(specular[1]);
+            values[2] = double(specular[2]);
+
+            return values;
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 148226 "GetTransmittance"
+	cpp_inline public explicit_return_type "std::array<double, 3>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+            std::array<double, 3> values;
+            values[0] = double(transmittance[0]);
+            values[1] = double(transmittance[1]);
+            values[2] = double(transmittance[2]);
+
+            return values;
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 148354 "GetEmission"
+	cpp_inline public explicit_return_type "std::array<double, 3>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+            std::array<double, 3> values;
+            values[0] = double(emission[0]);
+            values[1] = double(emission[1]);
+            values[2] = double(emission[2]);
+
+            return values;
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 148482 "GetAmbient"
+	cpp_inline public explicit_return_type "std::array<double, 3>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+            std::array<double, 3> values;
+            values[0] = double(ambient[0]);
+            values[1] = double(ambient[1]);
+            values[2] = double(ambient[2]);
+
+            return values;
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 148610 "SetDiffuse"
+	cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param inout name "a" explicit_type "std::array<double, 3>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+            diffuse[0] = real_t(a[0]);
+            diffuse[1] = real_t(a[1]);
+            diffuse[2] = real_t(a[2]);
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 148738 "SetAmbient"
+	cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param inout name "a" explicit_type "std::array<double, 3>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+            ambient[0] = real_t(a[0]);
+            ambient[1] = real_t(a[1]);
+            ambient[2] = real_t(a[2]);
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 148866 "SetSpecular"
+	cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param inout name "a" explicit_type "std::array<double, 3>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+            specular[0] = real_t(a[0]);
+            specular[1] = real_t(a[1]);
+            specular[2] = real_t(a[2]);
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 148994 "SetTransmittance"
+	cpp_inline public explicit_return_type "void"
+	nparams 1
+	  param inout name "a" explicit_type "std::array<double, 3>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+            transmittance[0] = real_t(a[0]);
+            transmittance[1] = real_t(a[1]);
+            transmittance[2] = real_t(a[2]);
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 149122 "GetCustomParameter"
+	cpp_inline public explicit_return_type "std::string"
+	nparams 1
+	  param in name "key" explicit_type "std::string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}${)}${const}${volatile}${throw}${abstract} {
+            std::map<std::string, std::string>::const_iterator it =
+                unknown_parameter.find(key);
+
+            if (it != unknown_parameter.end()) {
+                return it->second;
+            }
+            return std::string();
+        };
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 142594 "real_t"
+      visibility package stereotype "typedef" explicit_base_type "float"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "#pragma message \"using float\""
+    end
+
+    class 142722 "texture_type_t"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 156034 "TEXTURE_TYPE_NONE"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156162 "TEXTURE_TYPE_SPHERE"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156290 "TEXTURE_TYPE_CUBE_TOP"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156418 "TEXTURE_TYPE_CUBE_BOTTOM"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156546 "TEXTURE_TYPE_CUBE_FRONT"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156674 "TEXTURE_TYPE_CUBE_BACK"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156802 "TEXTURE_TYPE_CUBE_LEFT"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 156930 "TEXTURE_TYPE_CUBE_RIGHT"
+	public type class_ref 142722 // texture_type_t
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 142850 "texture_option_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " default"
+      classrelation 151298 // type (<directional composition>)
+	relation 151298 *-->
+	  a role_name "type" public
+	    comment " -type (default TEXTURE_TYPE_NONE)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 151298 // type (<directional composition>)
+	  b parent class_ref 142722 // texture_type_t
+      end
+
+      classrelation 151426 // sharpness (<directional composition>)
+	relation 151426 *-->
+	  a role_name "sharpness" public
+	    comment " -boost (default 1.0?)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 151426 // sharpness (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 151554 // brightness (<directional composition>)
+	relation 151554 *-->
+	  a role_name "brightness" public
+	    comment " base_value in -mm option (default 0)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 151554 // brightness (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 151682 // contrast (<directional composition>)
+	relation 151682 *-->
+	  a role_name "contrast" public
+	    comment " gain_value in -mm option (default 1)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 151682 // contrast (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 151810 // origin_offset (<directional composition>)
+	relation 151810 *-->
+	  a role_name "origin_offset" multiplicity "[3]" public
+	    comment " -o u [v [w]] (default 0 0 0)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 151810 // origin_offset (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 151938 // scale (<directional composition>)
+	relation 151938 *-->
+	  a role_name "scale" multiplicity "[3]" public
+	    comment " -s u [v [w]] (default 1 1 1)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 151938 // scale (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 152066 // turbulence (<directional composition>)
+	relation 152066 *-->
+	  a role_name "turbulence" multiplicity "[3]" public
+	    comment " -t u [v [w]] (default 0 0 0)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${value};
+"
+	    classrelation_ref 152066 // turbulence (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      attribute 157058 "texture_resolution"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " -texres resolution (No default value in the spec."
+      end
+
+      attribute 157186 "clamp"
+	public explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " We'll use -1)
+ -clamp (default false)"
+      end
+
+      attribute 157314 "imfchan"
+	public explicit_type "char"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " -imfchan (the default for bump is 'l' and for decal is 'm')"
+      end
+
+      attribute 157442 "blendu"
+	public explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " -blendu (default on)"
+      end
+
+      attribute 157570 "blendv"
+	public explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " -blendv (default on)"
+      end
+
+      classrelation 152194 // bump_multiplier (<directional composition>)
+	relation 152194 *-->
+	  a role_name "bump_multiplier" public
+	    comment " -bm (for bump maps only, default 1.0)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 152194 // bump_multiplier (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      attribute 157698 "colorspace"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " extension
+ Explicitly specify color space of stored texel"
+      end
+    end
+
+    class 142978 "tag_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 160130 "name"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 160258 "intValues"
+	public explicit_type "int"
+	stereotype "std::vector"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 156034 // floatValues (<directional composition>)
+	relation 156034 *-->
+	  stereotype "std::vector"
+	  a role_name "floatValues" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 156034 // floatValues (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      attribute 160386 "stringValues"
+	public explicit_type "std::string"
+	stereotype "std::vector"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 143106 "joint_and_weight_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 160514 "joint_id"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 156162 // weight (<directional composition>)
+	relation 156162 *-->
+	  a role_name "weight" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 156162 // weight (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+    end
+
+    class 143234 "skin_weight_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 160642 "vertex_id"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " Corresponding vertex index in `attrib_t::vertices`."
+      end
+
+      classrelation 156290 // weightValues (<directional composition>)
+	relation 156290 *-->
+	  stereotype "std::vector"
+	  a role_name "weightValues" public
+	    comment " Compared to `index_t`, this index must be positive and
+ start with 0(does not allow relative indexing)
+"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 156290 // weightValues (<directional composition>)
+	  b parent class_ref 143106 // joint_and_weight_t
+      end
+    end
+
+    class 143362 "index_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " Index struct to support different indices for vtx/normal/texcoord.
+ -1 means not used."
+      attribute 160770 "vertex_index"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 160898 "normal_index"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 161026 "texcoord_index"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 143490 "mesh_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 156418 // indices (<directional composition>)
+	relation 156418 *-->
+	  stereotype "std::vector"
+	  a role_name "indices" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 156418 // indices (<directional composition>)
+	  b parent class_ref 143362 // index_t
+      end
+
+      attribute 161154 "num_face_vertices"
+	public explicit_type "unsigned char"
+	stereotype "std::vector"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " The number of vertices per"
+      end
+
+      attribute 161282 "material_ids"
+	public explicit_type "int"
+	stereotype "std::vector"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " face. 3 = triangle, 4 = quad,
+ ... Up to 255 vertices per face.
+ per-face material ID"
+      end
+
+      attribute 161410 "smoothing_group_ids"
+	public explicit_type "unsigned int"
+	stereotype "std::vector"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " per-face smoothing group"
+      end
+
+      classrelation 156546 // tags (<directional composition>)
+	relation 156546 *-->
+	  stereotype "std::vector"
+	  a role_name "tags" public
+	    comment " ID(0 = off. positive value
+ = group id)
+ SubD tag"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 156546 // tags (<directional composition>)
+	  b parent class_ref 142978 // tag_t
+      end
+    end
+
+    class 143618 "lines_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " struct path_t {
+  std::vector<int> indices;  // pairs of indices for lines
+};"
+      classrelation 156674 // indices (<directional composition>)
+	relation 156674 *-->
+	  stereotype "std::vector"
+	  a role_name "indices" public
+	    comment " Linear flattened indices.
+ indices for vertices(poly lines)"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 156674 // indices (<directional composition>)
+	  b parent class_ref 143362 // index_t
+      end
+
+      attribute 161538 "num_line_vertices"
+	public explicit_type "int"
+	stereotype "std::vector"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " The number of vertices per line."
+      end
+    end
+
+    class 143746 "points_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 156802 // indices (<directional composition>)
+	relation 156802 *-->
+	  stereotype "std::vector"
+	  a role_name "indices" public
+	    comment " indices for points"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 156802 // indices (<directional composition>)
+	  b parent class_ref 143362 // index_t
+      end
+    end
+
+    class 143874 "callback_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 161794 "vertex_cb"
+	public explicit_type "// W is optional and set to 1 if there is no `w` item in `v` line void (*)(void* user_data, real_t x, real_t y, real_t z, real_t w)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+        // W is optional and set to 1 if there is no `w` item in `v` line
+        void (*${name})(void* user_data, real_t x, real_t y, real_t z, real_t w)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " W is optional and set to 1 if there is no `w` item in `v` line
+"
+      end
+
+      attribute 161922 "normal_cb"
+	public explicit_type "void (*)(void* user_data, real_t x, real_t y, real_t z)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+        void (*${name})(void* user_data, real_t x, real_t y, real_t z)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 162050 "texcoord_cb"
+	public explicit_type "// y and z are optional and set to 0 if there is no `y` and/or `z` item(s) in // `vt` line. void (*)(void* user_data, real_t x, real_t y, real_t z)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+
+        // y and z are optional and set to 0 if there is no `y` and/or `z` item(s) in
+        // `vt` line.
+        void (*${name})(void* user_data, real_t x, real_t y, real_t z)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " y and z are optional and set to 0 if there is no `y` and/or `z` item(s) in
+ `vt` line.
+"
+      end
+
+      attribute 162178 "index_cb"
+	public explicit_type "// called per 'f' line. num_indices is the number of face indices(e.g. 3 for // triangle, 4 for quad) // 0 will be passed for undefined index in index_t members. void (*)(void* user_data, index_t* indices, int num_indices)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+
+        // called per 'f' line. num_indices is the number of face indices(e.g. 3 for
+        // triangle, 4 for quad)
+        // 0 will be passed for undefined index in index_t members.
+        void (*${name})(void* user_data, index_t* indices, int num_indices)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " called per 'f' line. num_indices is the number of face indices(e.g. 3 for
+ triangle, 4 for quad)
+ 0 will be passed for undefined index in index_t members.
+"
+      end
+
+      attribute 162306 "usemtl_cb"
+	public explicit_type "// `name` material name, `material_id` = the array index of material_t[]. -1 // if // a material not found in .mtl void (*)(void* user_data, const char* name, int material_id)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+        // `name` material name, `material_id` = the array index of material_t[]. -1
+        // if
+        // a material not found in .mtl
+        void (*${name})(void* user_data, const char* name, int material_id)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " `name` material name, `material_id` = the array index of material_t[]. -1
+ if
+ a material not found in .mtl
+"
+      end
+
+      attribute 162434 "mtllib_cb"
+	public explicit_type "// `materials` = parsed material data. void (*)(void* user_data, const material_t* materials, int num_materials)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+        // `materials` = parsed material data.
+        void (*${name})(void* user_data, const material_t* materials,
+            int num_materials)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " `materials` = parsed material data.
+"
+      end
+
+      attribute 162562 "group_cb"
+	public explicit_type "// There may be multiple group names void (*)(void* user_data, const char** names, int num_names)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+        // There may be multiple group names
+        void (*${name})(void* user_data, const char** names, int num_names)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " There may be multiple group names
+"
+      end
+
+      attribute 162690 "object_cb"
+	public explicit_type "void (*)(void* user_data, const char* name)"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}
+        void (*${name})(void* user_data, const char* name)${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 149634 "callback_t"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} : vertex_cb(NULL),
+            normal_cb(NULL),
+            texcoord_cb(NULL),
+            index_cb(NULL),
+            usemtl_cb(NULL),
+            mtllib_cb(NULL),
+            group_cb(NULL),
+            object_cb(NULL) {};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 144002 "MaterialReader"
+      abstract visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      operation 149762 "MaterialReader"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} {};
+"
+	
+	
+	
+	
+      end
+
+      operation 149890 "~MaterialReader"
+	preserve_cpp_body_indent cpp_virtual cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${name}${(}${)}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 150018 "operator ()"
+	abstract cpp_virtual public explicit_return_type "bool"
+	nparams 5
+	  param in name "matId" explicit_type "std::string"
+	  param inout name "materials" explicit_type "std::vector<material_t>"
+	  param inout name "matMap" explicit_type "std::map<std::string, int>"
+	  param inout name "warn" explicit_type "std::string"
+	  param inout name "err" explicit_type "std::string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, ${t1} * ${p1}${v1}, ${t2} * ${p2}${v2}, ${t3} * ${p3}${v3}, ${t4} * ${p4}${v4}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 144130 "MaterialFileReader"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/
+/ Read .mtl from a file.
+/"
+      classrelation 158210 // <generalisation>
+	relation 158210 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 158210 // <generalisation>
+	  b parent class_ref 144002 // MaterialReader
+      end
+
+      operation 150146 "MaterialFileReader"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	  param in name "mtl_basedir" explicit_type "std::string"
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}const ${t0} & ${p0}${v0}${)}${volatile}${throw}${abstract} : m_mtlBaseDir(mtl_basedir) {};
+"
+	
+	
+	
+	
+	comment " Path could contain separator(';' in Windows, ':' in Posix)"
+      end
+
+      operation 150274 "~MaterialFileReader"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${typeprefix}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${typeprefix}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 150402 "operator ()"
+	cpp_virtual public explicit_return_type "bool"
+	nparams 5
+	  param in name "matId" explicit_type "std::string"
+	  param inout name "materials" explicit_type "std::vector<material_t>"
+	  param inout name "matMap" explicit_type "std::map<std::string, int>"
+	  param inout name "warn" explicit_type "std::string"
+	  param inout name "err" explicit_type "std::string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      attribute 162818 "m_mtlBaseDir"
+	private explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 144258 "MaterialStreamReader"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/
+/ Read .mtl from a stream.
+/"
+      classrelation 158338 // <generalisation>
+	relation 158338 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 158338 // <generalisation>
+	  b parent class_ref 144002 // MaterialReader
+      end
+
+      operation 150530 "MaterialStreamReader"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	  param inout name "inStream" explicit_type "std::istream"
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${t0} & ${p0}${v0}${)}${volatile}${throw}${abstract} : m_inStream(inStream) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 150658 "~MaterialStreamReader"
+	cpp_virtual public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${virtual}${typeprefix}${name}${(}${)}${volatile}${throw};
+"
+	cpp_def "${comment}${inline}${typeprefix}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 150786 "operator ()"
+	cpp_virtual public explicit_return_type "bool"
+	nparams 5
+	  param in name "matId" explicit_type "std::string"
+	  param inout name "materials" explicit_type "std::vector<material_t>"
+	  param inout name "matMap" explicit_type "std::map<std::string, int>"
+	  param inout name "warn" explicit_type "std::string"
+	  param inout name "err" explicit_type "std::string"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      attribute 162946 "m_inStream"
+	private explicit_type "std::istream"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} & ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 144386 "ObjReaderConfig"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " v2 API"
+      attribute 163074 "triangulate"
+	public explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " triangulate polygon?"
+      end
+
+      attribute 163202 "triangulation_method"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " Currently not used.
+ \"simple\" or empty: Create triangle fan
+ \"earcut\": Use the algorithm based on Ear clipping
+"
+      end
+
+      attribute 163330 "vertex_color"
+	public explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "/ Parse vertex color.
+/ If vertex color is not present, its filled with default value.
+/ false = no vertex color
+/ This will increase memory of parsed .obj
+"
+      end
+
+      attribute 163458 "mtl_search_path"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "/
+/ Search path to .mtl file.
+/ Default = \"\" = search from the same directory of .obj file.
+/ Valid only when loading .obj from a file.
+/
+"
+      end
+
+      operation 150914 "ObjReaderConfig"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} : triangulate(true), triangulation_method(\"simple\"), vertex_color(true) {};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 144514 "ObjReader"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "/
+/ Wavefront .obj reader class(v2 API)
+/"
+      operation 151042 "ObjReader"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} : valid_(false) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 151170 "ParseFromFile"
+	preserve_cpp_body_indent cpp_inline public explicit_return_type "bool"
+	nparams 2
+	  param in name "filename" explicit_type "std::string"
+	  param in name "config" type class_ref 144386 // ObjReaderConfig
+	    defaultvalue "ObjReaderConfig()"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment "/
+/ Load .obj and .mtl from a file.
+/
+/ @param[in] filename wavefront .obj filename
+/ @param[in] config Reader configuration
+/"
+      end
+
+      operation 151298 "ParseFromString"
+	preserve_cpp_body_indent cpp_inline public explicit_return_type "bool"
+	nparams 3
+	  param in name "obj_text" explicit_type "std::string"
+	  param in name "mtl_text" explicit_type "std::string"
+	  param in name "config" type class_ref 144386 // ObjReaderConfig
+	    defaultvalue "ObjReaderConfig()"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} & ${p0}${v0}, const ${t1} & ${p1}${v1}, const ${t2} & ${p2}${v2}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment "/
+/ Parse .obj from a text string.
+/ Need to supply .mtl text string by `mtl_text`.
+/ This function ignores `mtllib` line in .obj text.
+/
+/ @param[in] obj_text wavefront .obj filename
+/ @param[in] mtl_text wavefront .mtl filename
+/ @param[in] config Reader configuration
+/"
+      end
+
+      operation 151426 "Valid"
+	const cpp_inline public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} { return valid_; };
+"
+	
+	
+	
+	
+	comment "/
+/ .obj was loaded or parsed correctly.
+/"
+      end
+
+      operation 151554 "GetAttrib"
+	const constvalue cpp_inline public return_type class_ref 138114 // attrib_t
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${)}${const}${volatile}${throw}${abstract} { return attrib_; };
+"
+	
+	
+	
+	
+      end
+
+      operation 151682 "GetShapes"
+	const constvalue cpp_inline public explicit_return_type "std::vector<shape_t>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${)}${const}${volatile}${throw}${abstract} { return shapes_; };
+"
+	
+	
+	
+	
+      end
+
+      operation 151810 "GetMaterials"
+	const constvalue cpp_inline public explicit_return_type "std::vector<material_t>"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${)}${const}${volatile}${throw}${abstract} { return materials_; };
+"
+	
+	
+	
+	
+      end
+
+      operation 151938 "Warning"
+	const constvalue cpp_inline public explicit_return_type "std::string"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${)}${const}${volatile}${throw}${abstract} { return warning_; };
+"
+	
+	
+	
+	
+	comment "/
+/ Warning message(may be filled after `Load` or `Parse`)
+/"
+      end
+
+      operation 152066 "Error"
+	const constvalue cpp_inline public explicit_return_type "std::string"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} & ${name}${(}${)}${const}${volatile}${throw}${abstract} { return error_; };
+"
+	
+	
+	
+	
+	comment "/
+/ Error message(filled when `Load` or `Parse` failed)
+/"
+      end
+
+      attribute 163586 "valid_"
+	private explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 158466 // attrib_ (<directional composition>)
+	relation 158466 *-->
+	  a role_name "attrib_" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 158466 // attrib_ (<directional composition>)
+	  b parent class_ref 138114 // attrib_t
+      end
+
+      classrelation 158594 // shapes_ (<directional composition>)
+	relation 158594 *-->
+	  stereotype "std::vector"
+	  a role_name "shapes_" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 158594 // shapes_ (<directional composition>)
+	  b parent class_ref 138242 // shape_t
+      end
+
+      classrelation 158722 // materials_ (<directional composition>)
+	relation 158722 *-->
+	  stereotype "std::vector"
+	  a role_name "materials_" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 158722 // materials_ (<directional composition>)
+	  b parent class_ref 138370 // material_t
+      end
+
+      attribute 163714 "warning_"
+	private explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 163842 "error_"
+	private explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 144642 "vertex_index_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 163970 "v_idx"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 164098 "vt_idx"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 164226 "vn_idx"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 152194 "vertex_index_t"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} : v_idx(-1), vt_idx(-1), vn_idx(-1) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 152322 "vertex_index_t"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	  param in name "idx" explicit_type "int"
+	cpp_decl "    ${comment}${inline}explicit ${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw}${abstract} : v_idx(idx), vt_idx(idx), vn_idx(idx) {};
+"
+	
+	
+	
+	
+      end
+
+      operation 152450 "vertex_index_t"
+	cpp_inline public explicit_return_type ""
+	nparams 3
+	  param in name "vidx" explicit_type "int"
+	  param in name "vtidx" explicit_type "int"
+	  param in name "vnidx" explicit_type "int"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw}${abstract} : v_idx(vidx), vt_idx(vtidx), vn_idx(vnidx) {};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 144770 "face_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " Internal data structure for face representation
+ index + smoothing group."
+      attribute 164354 "smoothing_group_id"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment " smoothing group id. 0 = smoothing groupd is off."
+      end
+
+      attribute 164482 "pad_"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 158850 // vertex_indices (<directional composition>)
+	relation 158850 *-->
+	  stereotype "std::vector"
+	  a role_name "vertex_indices" public
+	    comment " face vertex indices."
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 158850 // vertex_indices (<directional composition>)
+	  b parent class_ref 144642 // vertex_index_t
+      end
+
+      operation 152578 "face_t"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} : smoothing_group_id(0), pad_(0) {};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 144898 "__line_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " Internal data structure for line representation"
+      classrelation 158978 // vertex_indices (<directional composition>)
+	relation 158978 *-->
+	  stereotype "std::vector"
+	  a role_name "vertex_indices" public
+	    comment " l v1/vt1 v2/vt2 ...
+ In the specification, line primitrive does not have normal index, but
+ TinyObjLoader allow it
+"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 158978 // vertex_indices (<directional composition>)
+	  b parent class_ref 144642 // vertex_index_t
+      end
+    end
+
+    class 145026 "__points_t"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment " Internal data structure for points representation"
+      classrelation 159106 // vertex_indices (<directional composition>)
+	relation 159106 *-->
+	  stereotype "std::vector"
+	  a role_name "vertex_indices" public
+	    comment " p v1 v2 ...
+ In the specification, point primitrive does not have normal index and
+ texture coord index, but TinyObjLoader allow it.
+"
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 159106 // vertex_indices (<directional composition>)
+	  b parent class_ref 144642 // vertex_index_t
+      end
+    end
+
+    class 145154 "tag_sizes"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      operation 152706 "tag_sizes"
+	cpp_inline public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract} : num_ints(0), num_reals(0), num_strings(0) {};
+"
+	
+	
+	
+	
+      end
+
+      attribute 164610 "num_ints"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 164738 "num_reals"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 164866 "num_strings"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 145282 "obj_shape"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 159234 // v (<directional composition>)
+	relation 159234 *-->
+	  stereotype "std::vector"
+	  a role_name "v" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 159234 // v (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 159362 // vn (<directional composition>)
+	relation 159362 *-->
+	  stereotype "std::vector"
+	  a role_name "vn" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 159362 // vn (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+
+      classrelation 159490 // vt (<directional composition>)
+	relation 159490 *-->
+	  stereotype "std::vector"
+	  a role_name "vt" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 159490 // vt (<directional composition>)
+	  b parent class_ref 142594 // real_t
+      end
+    end
+
+    class 145410 "PrimGroup"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      comment "
+ Manages group of primitives(face, line, points, ...)"
+      classrelation 159618 // faceGroup (<directional composition>)
+	relation 159618 *-->
+	  stereotype "std::vector"
+	  a role_name "faceGroup" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 159618 // faceGroup (<directional composition>)
+	  b parent class_ref 144770 // face_t
+      end
+
+      classrelation 159746 // lineGroup (<directional composition>)
+	relation 159746 *-->
+	  stereotype "std::vector"
+	  a role_name "lineGroup" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 159746 // lineGroup (<directional composition>)
+	  b parent class_ref 144898 // __line_t
+      end
+
+      classrelation 159874 // pointsGroup (<directional composition>)
+	relation 159874 *-->
+	  stereotype "std::vector"
+	  a role_name "pointsGroup" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 159874 // pointsGroup (<directional composition>)
+	  b parent class_ref 145026 // __points_t
+      end
+
+      operation 152834 "clear"
+	cpp_inline public explicit_return_type "void"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+            faceGroup.clear();
+            lineGroup.clear();
+            pointsGroup.clear();
+        };
+"
+	
+	
+	
+	
+      end
+
+      operation 152962 "IsEmpty"
+	const cpp_inline public explicit_return_type "bool"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+            return faceGroup.empty() && lineGroup.empty() && pointsGroup.empty();
+        };
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  deploymentview 131458 "tinyobj"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 135938 "tiny_obj_loader"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 142594 // real_t
+	class_ref 142722 // texture_type_t
+	class_ref 142850 // texture_option_t
+	class_ref 138370 // material_t
+	class_ref 142978 // tag_t
+	class_ref 143106 // joint_and_weight_t
+	class_ref 143234 // skin_weight_t
+	class_ref 143362 // index_t
+	class_ref 143490 // mesh_t
+	class_ref 143618 // lines_t
+	class_ref 143746 // points_t
+	class_ref 138242 // shape_t
+	class_ref 138114 // attrib_t
+	class_ref 143874 // callback_t
+	class_ref 144002 // MaterialReader
+	class_ref 144130 // MaterialFileReader
+	class_ref 144258 // MaterialStreamReader
+	class_ref 144386 // ObjReaderConfig
+	class_ref 144514 // ObjReader
+	class_ref 144642 // vertex_index_t
+	class_ref 144770 // face_t
+	class_ref 144898 // __line_t
+	class_ref 145026 // __points_t
+	class_ref 145154 // tag_sizes
+	class_ref 145282 // obj_shape
+	class_ref 145410 // PrimGroup
+      end
+    end
+  end
+end

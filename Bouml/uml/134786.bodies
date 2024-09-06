@@ -1,0 +1,4 @@
+class Spinner
+!!!141186.cpp!!!	InvokeUpdate(in deltatime : float) : void
+
+	this->angularVelocity = this->rotateSpeed;

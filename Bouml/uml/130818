@@ -1,0 +1,148 @@
+format 224
+"Particle" // GDPHYSX::Dependencies::include::GD_Engine::Objects::Physics::Particle
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Engine/Objects/Physics/Particle/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Engine/Objects/Physics/Particle/"
+  cpp_namespace "gde"
+  classview 130434 "Particle"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 135042 "ParticleClass"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 139522 // <generalisation>
+	relation 139522 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 139522 // <generalisation>
+	  b parent class_ref 131842 // RigidObject
+      end
+
+      attribute 135938 "radius"
+	private explicit_type "float"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 141698 "ParticleClass"
+	preserve_cpp_body_indent public explicit_return_type ""
+	nparams 1
+	  param in name "radius" explicit_type "float"
+	    defaultvalue "1"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${class}::${name}${(}${)}${volatile}${throw} {
+  ${body}}
+"
+	
+	
+	
+	
+      end
+
+      operation 141826 "GetRadius"
+	preserve_cpp_body_indent public explicit_return_type "float"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  deploymentview 130434 "Particle"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 133378 "ParticleObject"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 135042 // ParticleClass
+      end
+    end
+  end
+end

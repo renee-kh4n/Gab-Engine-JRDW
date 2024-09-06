@@ -1,0 +1,313 @@
+format 224
+"simd" // GDPHYSX::Dependencies::include::glm::simd
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/glm/simd/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/glm/simd/"
+  classview 131970 "simd"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 155266 "glm_f32vec4"
+      visibility package stereotype "typedef" explicit_base_type "float32x4_t"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 155394 "glm_i32vec4"
+      visibility package stereotype "typedef" explicit_base_type "int32x4_t"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 155522 "glm_u32vec4"
+      visibility package stereotype "typedef" explicit_base_type "uint32x4_t"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 155650 "glm_f64vec2"
+      visibility package stereotype "typedef" explicit_base_type "__m128d"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 155778 "glm_i64vec2"
+      visibility package stereotype "typedef" explicit_base_type "__m128i"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 155906 "glm_u64vec2"
+      visibility package stereotype "typedef" explicit_base_type "__m128i"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 156034 "glm_vec4"
+      visibility package stereotype "typedef" base_type class_ref 155266 // glm_f32vec4
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 163074 // <dependency>
+	relation 163074 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 163074 // <dependency>
+	  b parent class_ref 155266 // glm_f32vec4
+      end
+    end
+
+    class 156162 "glm_ivec4"
+      visibility package stereotype "typedef" base_type class_ref 155394 // glm_i32vec4
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 163202 // <dependency>
+	relation 163202 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 163202 // <dependency>
+	  b parent class_ref 155394 // glm_i32vec4
+      end
+    end
+
+    class 156290 "glm_uvec4"
+      visibility package stereotype "typedef" base_type class_ref 155522 // glm_u32vec4
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 163330 // <dependency>
+	relation 163330 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 163330 // <dependency>
+	  b parent class_ref 155522 // glm_u32vec4
+      end
+    end
+
+    class 156418 "glm_dvec2"
+      visibility package stereotype "typedef" base_type class_ref 155650 // glm_f64vec2
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 163458 // <dependency>
+	relation 163458 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 163458 // <dependency>
+	  b parent class_ref 155650 // glm_f64vec2
+      end
+    end
+
+    class 156546 "glm_f64vec4"
+      visibility package stereotype "typedef" explicit_base_type "__m256d"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 156674 "glm_dvec4"
+      visibility package stereotype "typedef" base_type class_ref 156546 // glm_f64vec4
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 163586 // <dependency>
+	relation 163586 -_->
+	  a public
+	    cpp default "#include in source"
+	    classrelation_ref 163586 // <dependency>
+	  b parent class_ref 156546 // glm_f64vec4
+      end
+    end
+
+    class 156802 "glm_i64vec4"
+      visibility package stereotype "typedef" explicit_base_type "__m256i"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 156930 "glm_u64vec4"
+      visibility package stereotype "typedef" explicit_base_type "__m256i"
+      cpp_decl "${comment}typedef ${type} ${name};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+  end
+
+  deploymentview 131842 "simd"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 136450 "platform"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 155266 // glm_f32vec4
+	class_ref 155394 // glm_i32vec4
+	class_ref 155522 // glm_u32vec4
+	class_ref 155650 // glm_f64vec2
+	class_ref 155778 // glm_i64vec2
+	class_ref 155906 // glm_u64vec2
+	class_ref 156034 // glm_vec4
+	class_ref 156162 // glm_ivec4
+	class_ref 156290 // glm_uvec4
+	class_ref 156418 // glm_dvec2
+	class_ref 156546 // glm_f64vec4
+	class_ref 156674 // glm_dvec4
+	class_ref 156802 // glm_i64vec4
+	class_ref 156930 // glm_u64vec4
+      end
+    end
+  end
+end

@@ -1,0 +1,6 @@
+class PerspectiveCamera
+!!!143362.cpp!!!	PerspectiveCamera(inout mWindow : Window, inout mShader : Shader)
+
+!!!143490.cpp!!!	getproj() : glm::mat4
+
+        return glm::perspective(glm::radians(this->angles), (float)mWindow->Get_win_y() / mWindow->Get_win_x(), this->nearClip, this->farClip);

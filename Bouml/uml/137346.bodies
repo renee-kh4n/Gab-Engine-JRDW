@@ -1,0 +1,4 @@
+class ConeLight
+!!!145538.cpp!!!	GetType() : Type
+
+    return Light::CONE;

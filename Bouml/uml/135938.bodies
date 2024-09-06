@@ -1,0 +1,12 @@
+class RenderObject
+!!!143618.cpp!!!	RenderObject(inout mDrawCall : DrawCall)
+
+	this->mDrawCall = mDrawCall;
+	this->mDrawCall->calls.insert_or_assign(this, this->parent_matrix * this->local_matrix);
+	to_update = &this->mDrawCall->calls[this];
+!!!143746.cpp!!!	~RenderObject()
+
+	this->mDrawCall->calls.erase(this);
+!!!143874.cpp!!!	InvokeEarlyUpdate() : void
+
+	*to_update = this->parent_matrix * this->local_matrix;

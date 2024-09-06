@@ -1,0 +1,300 @@
+format 224
+"ParticleSystem" // GDPHYSX::Dependencies::include::GD_Engine::Objects::Physics::ParticleSystem
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Engine/Objects/Physics/ParticleSystem/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Engine/Objects/Physics/ParticleSystem/"
+  cpp_namespace "gde::particlesystem"
+  classview 130562 "ParticleSystem"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 135170 "FloatParameter"
+      visibility package 
+      nactuals 1
+      actual class class_ref 135298 // LerpableParameter
+        rank 0 explicit_value "float"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 139650 // <realization>
+	relation 139650 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 139650 // <realization>
+	  b parent class_ref 135298 // LerpableParameter
+      end
+
+      operation 141954 "GetRandomValue"
+	cpp_override cpp_inline protected explicit_return_type "float"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+				auto range = this->valueB - this->valueA;
+				return this->valueA + (((float)rand() / RAND_MAX) * range);
+			};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 135298 "LerpableParameter"
+      abstract visibility package 
+      nformals 1
+      formal name "TValue" type "typename" explicit_default_value ""
+        explicit_extends ""
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 136066 "random_between_two"
+	public explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 136194 "valueA"
+	public explicit_type "TValue"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 136322 "valueB"
+	public explicit_type "TValue"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 142082 "GetValue"
+	cpp_inline public explicit_return_type "TValue"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+				if (random_between_two == false)
+					return valueA;
+
+				return GetRandomValue();
+			};
+"
+	
+	
+	
+	
+      end
+
+      operation 142210 "GetRandomValue"
+	abstract cpp_virtual cpp_inline protected explicit_return_type "TValue"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 135426 "VectorParameter"
+      visibility package 
+      nactuals 1
+      actual class class_ref 135298 // LerpableParameter
+        rank 0 value class_ref 128386 // Vector3
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 139778 // <realization>
+	relation 139778 -_-|>
+	  stereotype "bind"
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 139778 // <realization>
+	  b parent class_ref 135298 // LerpableParameter
+      end
+
+      operation 142338 "GetRandomValue"
+	cpp_virtual cpp_override cpp_inline protected return_type class_ref 128386 // Vector3
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract} {
+				auto deltavec = this->valueB - this->valueA;
+				auto randomvec = this->valueA;
+
+				auto getrandf = []() {
+					return (float)rand() / RAND_MAX;
+				};
+
+				randomvec.x += getrandf() * deltavec.x;
+				randomvec.y += getrandf() * deltavec.y;
+				randomvec.z += getrandf() * deltavec.z;
+
+				return randomvec;
+			};
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  deploymentview 130562 "ParticleSystem"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 133506 "FloatParameter"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 135170 // FloatParameter
+      end
+    end
+
+    artifact 133634 "LerpableParameter"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 135298 // LerpableParameter
+      end
+    end
+
+    artifact 133762 "VectorParameter"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 135426 // VectorParameter
+      end
+    end
+  end
+end

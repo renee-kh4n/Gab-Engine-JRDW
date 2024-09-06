@@ -1,0 +1,7 @@
+class Collider
+!!!139522.cpp!!!	Collider(in radius : float)
+
+	this->radius = radius;
+!!!139650.cpp!!!	GetWorldRadius() : float
+
+	return this->radius;

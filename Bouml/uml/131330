@@ -1,0 +1,1472 @@
+format 224
+"GD_Graphics" // GDPHYSX::Dependencies::include::GD_Graphics
+  revision 1
+  modified_by 2 "PC"
+  // class settings
+  
+  classdiagramsettings member_max_width 0 end
+  
+  classcompositediagramsettings end
+  
+  usecasediagramsettings end
+  
+  sequencediagramsettings end
+  
+  collaborationdiagramsettings end
+  
+  objectdiagramsettings end
+  
+  objectcompositediagramsettings end
+  
+  componentdiagramsettings
+   end
+  
+  deploymentdiagramsettings
+   end
+  
+  statediagramsettings
+   end
+  
+  activitydiagramsettings
+   end
+  
+  cpp_h_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Graphics/"
+  cpp_src_dir "D:/Documents/GitHub/GDGRAP/GDPHYSX/Dependencies/include/GD_Graphics/"
+  cpp_namespace "gde::rendering"
+  classview 130946 "GD_Graphics"
+    
+    classdiagramsettings member_max_width 0 end
+    
+    classcompositediagramsettings end
+    
+    collaborationdiagramsettings end
+    
+    objectdiagramsettings end
+    
+    objectcompositediagramsettings end
+    
+    sequencediagramsettings end
+    
+    statediagramsettings
+     end
+    
+    
+    activitydiagramsettings
+     end
+    class 136322 "Light"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      class 137090 "Type"
+	visibility package stereotype "enum"
+	cpp_decl "${comment}enum ${name} {
+${items}};
+"
+	java_decl ""
+	php_decl ""
+	python_2_2 python_decl ""
+	idl_decl ""
+	explicit_switch_type ""
+	mysql_decl ""
+	
+	attribute 138498 "POINT"
+	  public type class_ref 137090 // Type
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+
+	attribute 138626 "CONE"
+	  public type class_ref 137090 // Type
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+
+	attribute 138754 "DIRECTION"
+	  public type class_ref 137090 // Type
+	  cpp_decl "  ${name}${value},${comment}"
+	  java_decl ""
+	  php_decl ""
+	  python_decl ""
+	  idl_decl ""
+	  mysql_decl ""
+	  MysqlColumn
+	end
+      end
+
+      attribute 138882 "color"
+	public explicit_type "glm::vec3"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 139010 "intensity"
+	public explicit_type "float"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 139138 "pos"
+	public explicit_type "glm::vec3"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 139266 "changed"
+	public explicit_type "bool"
+	init_value "=  true"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${h_value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 139394 "previous_render_index"
+	public explicit_type "size_t"
+	init_value "=  0"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${h_value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 136578 "DrawCall"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 137730 "calls"
+	public explicit_type "void*, glm::mat4"
+	stereotype "std::unordered_map"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 141954 // m_mesh (<unidirectional association>)
+	relation 141954 --->
+	  a role_name "m_mesh" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 141954 // m_mesh (<unidirectional association>)
+	  b parent class_ref 136706 // Mesh
+      end
+
+      classrelation 142082 // m_material (<unidirectional association>)
+	relation 142082 --->
+	  a role_name "m_material" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 142082 // m_material (<unidirectional association>)
+	  b parent class_ref 136834 // Material
+      end
+
+      operation 145154 "DrawCall"
+	public explicit_return_type ""
+	nparams 2
+	  param inout name "mesh" type class_ref 136706 // Mesh
+	  param inout name "material" type class_ref 136834 // Material
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} * ${p0}${v0}, ${t1} * ${p1}${v1}${)}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 136706 "Mesh"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 142722 // VAO (<directional composition>)
+	relation 142722 *-->
+	  a role_name "VAO" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 142722 // VAO (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      classrelation 142850 // VBO (<directional composition>)
+	relation 142850 *-->
+	  a role_name "VBO" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 142850 // VBO (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      classrelation 142978 // attributes (<directional composition>)
+	relation 142978 *-->
+	  a role_name "attributes" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 142978 // attributes (<directional composition>)
+	  b parent class_ref 138114 // attrib_t
+      end
+
+      classrelation 143106 // shapes (<directional composition>)
+	relation 143106 *-->
+	  stereotype "std::vector"
+	  a role_name "shapes" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 143106 // shapes (<directional composition>)
+	  b parent class_ref 138242 // shape_t
+      end
+
+      classrelation 143234 // material (<directional composition>)
+	relation 143234 *-->
+	  stereotype "std::vector"
+	  a role_name "material" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 143234 // material (<directional composition>)
+	  b parent class_ref 138370 // material_t
+      end
+
+      attribute 141186 "warning"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 141314 "error"
+	public explicit_type "std::string"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      classrelation 143362 // fullVertexData (<directional composition>)
+	relation 143362 *-->
+	  stereotype "std::vector"
+	  a role_name "fullVertexData" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	    classrelation_ref 143362 // fullVertexData (<directional composition>)
+	  b parent class_ref 138498 // GLfloat
+      end
+
+      operation 145794 "Mesh"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "path" explicit_type "std::string"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 136834 "Material"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+    end
+
+    class 136962 "Framebuffer"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 137858 "framebuffer"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 137986 "textureColorbuffer"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 138114 "rbo"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 138242 "quadVAO"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 138370 "quadVBO"
+	public explicit_type "uint"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 145282 "Framebuffer"
+	cpp_inline public explicit_return_type ""
+	nparams 1
+	  param in name "dimensions" explicit_type "glm::vec2"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}${)}${volatile}${throw}${abstract} {
+                //Buffer Quad
+                const float quadVertices[] = {
+                    // positions   // texCoords
+                    -1.0f,  1.0f,  0.0f, 1.0f,
+                    -1.0f, -1.0f,  0.0f, 0.0f,
+                     1.0f, -1.0f,  1.0f, 0.0f,
+
+                    -1.0f,  1.0f,  0.0f, 1.0f,
+                     1.0f, -1.0f,  1.0f, 0.0f,
+                     1.0f,  1.0f,  1.0f, 1.0f
+                };
+                glGenVertexArrays(1, &quadVAO);
+                glGenBuffers(1, &quadVBO);
+                glBindVertexArray(quadVAO);
+                glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+                glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+                glEnableVertexAttribArray(0);
+                glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+                glEnableVertexAttribArray(1);
+                glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+
+                glGenFramebuffers(1, &framebuffer);
+                glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+                // create a color attachment texture
+                glGenTextures(1, &textureColorbuffer);
+                glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, (GLsizei)dimensions.x, (GLsizei)dimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+                // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+                glGenRenderbuffers(1, &rbo);
+                glBindRenderbuffer(GL_RENDERBUFFER, rbo);
+                glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, (GLsizei)dimensions.x, (GLsizei)dimensions.y); // use a single renderbuffer object for both a depth AND stencil buffer.
+                glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
+                // now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+                if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+                    std::cout << \"ERROR::FRAMEBUFFER:: Framebuffer is not complete!\" << std::endl;
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            };
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 137218 "PointLight"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 142210 // <generalisation>
+	relation 142210 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142210 // <generalisation>
+	  b parent class_ref 136322 // Light
+      end
+
+      operation 145410 "GetType"
+	preserve_cpp_body_indent cpp_virtual cpp_override public explicit_return_type "Type"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Inherited via Light"
+      end
+    end
+
+    class 137346 "ConeLight"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 142338 // <generalisation>
+	relation 142338 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142338 // <generalisation>
+	  b parent class_ref 136322 // Light
+      end
+
+      operation 145538 "GetType"
+	preserve_cpp_body_indent cpp_virtual cpp_override public explicit_return_type "Type"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Inherited via Light"
+      end
+
+      attribute 139522 "dir"
+	public explicit_type "glm::vec3"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 139650 "angle"
+	public explicit_type "glm::vec2"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 137474 "DirLight"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 142466 // <generalisation>
+	relation 142466 ---|>
+	  a public
+	    cpp default "${type}"
+	    classrelation_ref 142466 // <generalisation>
+	  b parent class_ref 136322 // Light
+      end
+
+      operation 145666 "GetType"
+	preserve_cpp_body_indent cpp_virtual cpp_override public explicit_return_type "Type"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	cpp_def "${comment}${inline}${typeprefix}${type} ${class}::${name}${(}${)}${const}${volatile}${throw}${staticnl}{
+  ${body}}
+"
+	
+	
+	
+	
+	comment " Inherited via Light"
+      end
+
+      attribute 139778 "dir"
+	public explicit_type "glm::vec3"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 137730 "MaterialOverrideType"
+      visibility package stereotype "enum"
+      cpp_decl "${comment}enum ${name} {
+${items}};
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      attribute 139906 "BOOL"
+	public type class_ref 137730 // MaterialOverrideType
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 140034 "FLOAT"
+	public type class_ref 137730 // MaterialOverrideType
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 140162 "VEC2"
+	public type class_ref 137730 // MaterialOverrideType
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 140290 "VEC3"
+	public type class_ref 137730 // MaterialOverrideType
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 140418 "MAT4"
+	public type class_ref 137730 // MaterialOverrideType
+	cpp_decl "  ${name}${value},${comment}"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 137858 "MaterialOverride"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 142594 // type (<directional composition>)
+	relation 142594 *-->
+	  a role_name "type" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 142594 // type (<directional composition>)
+	  b parent class_ref 137730 // MaterialOverrideType
+      end
+
+      attribute 140546 "value_bool"
+	public explicit_type "bool"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 140674 "value_float"
+	public explicit_type "float"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 140802 "value_vec2"
+	public explicit_type "glm::vec2"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 140930 "value_vec3"
+	public explicit_type "glm::vec3"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 141058 "value_mat4"
+	public explicit_type "glm::mat4"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+    end
+
+    class 138754 "Shader"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 143618 // shaderID (<directional composition>)
+	relation 143618 *-->
+	  a role_name "shaderID" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 143618 // shaderID (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      operation 147074 "Shader"
+	public explicit_return_type ""
+	nparams 2
+	  param in name "vert" explicit_type "std::string"
+	  param in name "frag" explicit_type "std::string"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 147202 "TryCompileShader"
+	class_operation public return_type class_ref 137986 // GLuint
+	nparams 2
+	  param in name "path" explicit_type "std::string"
+	  param in name "compile_type" explicit_type "int"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+	comment "/ <summary>
+/ Helper function to try to compile a shader through OpenGL with error handling.
+/ </summary>
+/ <param name=\"path\"></param>
+/ <param name=\"compile_type\"></param>
+/ <returns></returns>"
+      end
+
+      operation 147330 "check_attached_shaders"
+	class_operation public explicit_return_type "void"
+	nparams 1
+	  param in name "program" type class_ref 137986 // GLuint
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+	comment "/ <summary>
+/ Utility function to check if shaders are compiled correctly
+/ </summary>
+/ <param name=\"program\"></param>"
+      end
+    end
+
+    class 138882 "Skybox"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 143746 // shader (<unidirectional association>)
+	relation 143746 --->
+	  a role_name "shader" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 143746 // shader (<unidirectional association>)
+	  b parent class_ref 138754 // Shader
+      end
+
+      classrelation 143874 // textureCubeMap (<unidirectional association>)
+	relation 143874 --->
+	  a role_name "textureCubeMap" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 143874 // textureCubeMap (<unidirectional association>)
+	  b parent class_ref 139010 // TextureCubeMap
+      end
+
+      classrelation 144002 // VAO (<directional composition>)
+	relation 144002 *-->
+	  a role_name "VAO" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 144002 // VAO (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      classrelation 144130 // VBO (<directional composition>)
+	relation 144130 *-->
+	  a role_name "VBO" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 144130 // VBO (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      classrelation 144258 // EBO (<directional composition>)
+	relation 144258 *-->
+	  a role_name "EBO" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 144258 // EBO (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      attribute 143106 "skyboxVertices"
+	const_attribute public explicit_type "float"
+	multiplicity "[36]"
+	init_value " {
+                -1.f, -1.f, 1.f, //0
+                1.f, -1.f, 1.f,  //1
+                1.f, -1.f, -1.f, //2
+                -1.f, -1.f, -1.f,//3
+                -1.f, 1.f, 1.f,  //4
+                1.f, 1.f, 1.f,   //5
+                1.f, 1.f, -1.f,  //6
+                -1.f, 1.f, -1.f  //7
+            }"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${h_value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 143234 "skyboxIndices"
+	const_attribute public explicit_type "uint"
+	multiplicity "[36]"
+	init_value " {
+                1,2,6,
+                6,5,1,
+
+                0,4,7,
+                7,3,0,
+
+                4,5,6,
+                6,7,4,
+
+                0,3,2,
+                2,1,0,
+
+                0,1,5,
+                5,4,0,
+
+                3,7,6,
+                6,2,3
+            }"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${multiplicity}${h_value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+	comment "Skybox Indices
+"
+      end
+
+      operation 147458 "Skybox"
+	public explicit_return_type ""
+	nparams 0
+	cpp_decl "    ${comment}${inline}${name}${(}${)}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 147586 "Render"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "viewMat" explicit_type "glm::mat4"
+	  param in name "proj" explicit_type "glm::mat4"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 139010 "TextureCubeMap"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 151170 // texID (<directional composition>)
+	relation 151170 *-->
+	  a role_name "texID" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 151170 // texID (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      operation 147842 "TextureCubeMap"
+	public explicit_return_type ""
+	nparams 2
+	  param in name "semiPath" explicit_type "std::string"
+	  param in name "fileExtension" explicit_type "std::string"
+	cpp_decl "    ${comment}${inline}${name}${(}${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+	comment "/ <summary>
+/ Helper function to automatically generate a cubemap with a specified partial path and filetype.
+/ </summary>
+/ <param name=\"semiPath\"></param>
+/ <param name=\"fileExtension\"></param>"
+      end
+    end
+
+    class 142466 "Texture"
+      visibility package stereotype "struct"
+      cpp_decl "${comment}${template}struct ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 150914 // texID (<directional composition>)
+	relation 150914 *-->
+	  a role_name "texID" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	    classrelation_ref 150914 // texID (<directional composition>)
+	  b parent class_ref 137986 // GLuint
+      end
+
+      classrelation 151042 // tex_bytes (<unidirectional association>)
+	relation 151042 --->
+	  a role_name "tex_bytes" public
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 151042 // tex_bytes (<unidirectional association>)
+	  b parent class_ref 139266 // stbi_uc
+      end
+
+      attribute 155650 "img_width"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 155778 "img_height"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 155906 "colorchannels"
+	public explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 147714 "Texture"
+	public explicit_return_type ""
+	nparams 1
+	  param in name "path" explicit_type "char"
+	cpp_decl "    ${comment}${inline}${name}${(}const ${t0} * ${p0}${v0}${)}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+
+    class 145538 "Window"
+      visibility package 
+      cpp_decl "${comment}${template}class ${name}${inherit} {
+${members}};
+${inlines}
+"
+      java_decl ""
+      php_decl ""
+      python_2_2 python_decl ""
+      idl_decl ""
+      explicit_switch_type ""
+      mysql_decl ""
+      
+      classrelation 160002 // window (<unidirectional association>)
+	relation 160002 --->
+	  a role_name "window" private
+	    cpp default "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} * ${name}${value};
+"
+	    classrelation_ref 160002 // window (<unidirectional association>)
+	  b parent class_ref 145666 // GLFWwindow
+      end
+
+      attribute 164994 "win_x"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 165122 "win_y"
+	private explicit_type "int"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${type} ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      attribute 165250 "window_callbacks"
+	private explicit_type "std::string, std::function<void(void*)>"
+	stereotype "std::unordered_map"
+	cpp_decl "    ${comment}${static}${thread_local}${mutable}${volatile}${const}${stereotype}<${type}> ${name}${value};
+"
+	java_decl ""
+	php_decl ""
+	python_decl ""
+	idl_decl ""
+	mysql_decl ""
+	MysqlColumn
+      end
+
+      operation 153090 "Window"
+	public explicit_return_type ""
+	nparams 3
+	  param in name "name" explicit_type "char"
+	  param in name "win_x" explicit_type "int"
+	    defaultvalue "700"
+	  param in name "win_y" explicit_type "int"
+	    defaultvalue "700"
+	cpp_decl "    ${comment}${inline}${name}${(}const ${t0} * ${p0}${v0}, ${t1} ${p1}${v1}, ${t2} ${p2}${v2}${)}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153218 "Get_window"
+	public return_type class_ref 145666 // GLFWwindow
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} * ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153346 "Get_win_x"
+	public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153474 "Get_win_y"
+	public explicit_return_type "int"
+	nparams 0
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153602 "RegisterWindowCallback"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "" explicit_type "std::string"
+	  param in name "" explicit_type "std::function<void(void*)>"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} ${p0}${v0}, ${t1} ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+
+      operation 153730 "InvokeWindowCallback"
+	public explicit_return_type "void"
+	nparams 2
+	  param in name "" explicit_type "std::string"
+	  param inout name "" explicit_type "void"
+	cpp_decl "    ${comment}${friend}${static}${inline}${virtual}${typeprefix}${type} ${name}${(}const ${t0} ${p0}${v0}, ${t1} * ${p1}${v1}${)}${const}${volatile}${throw}${abstract};
+"
+	
+	
+	
+	
+      end
+    end
+  end
+
+  deploymentview 131074 "GD_Graphics"
+    //deployment diagram settings
+    deploymentdiagramsettings
+     end
+    artifact 134530 "DrawCall"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 136578 // DrawCall
+      end
+    end
+
+    artifact 134658 "Framebuffer"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 136962 // Framebuffer
+      end
+    end
+
+    artifact 134786 "Light"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 136322 // Light
+	class_ref 137218 // PointLight
+	class_ref 137346 // ConeLight
+	class_ref 137474 // DirLight
+      end
+    end
+
+    artifact 135042 "Material"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 137730 // MaterialOverrideType
+	class_ref 137858 // MaterialOverride
+      end
+    end
+
+    artifact 135170 "Mesh"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 136706 // Mesh
+      end
+    end
+
+    artifact 135426 "Shader"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 138754 // Shader
+      end
+    end
+
+    artifact 135554 "Skybox"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 138882 // Skybox
+      end
+    end
+
+    artifact 135810 "Texture"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 142466 // Texture
+	class_ref 139010 // TextureCubeMap
+      end
+    end
+
+    artifact 136066 "Window"
+      stereotype "source"
+      cpp_h "#ifndef ${NAMESPACE}_${NAME}_H
+#define ${NAMESPACE}_${NAME}_H
+
+${comment}
+${includes}
+${declarations}
+${namespace_start}
+${definition}
+${namespace_end}
+#endif
+"
+      cpp_src "${comment}
+${includes}
+${namespace_start}
+${members}
+${namespace_end}"
+      associated_elems
+	class_ref 145538 // Window
+      end
+    end
+  end
+
+  package_ref 131586 // gde
+
+  package_ref 131842 // tinyobj
+
+  package_ref 131970 // GD_Graphics
+end
