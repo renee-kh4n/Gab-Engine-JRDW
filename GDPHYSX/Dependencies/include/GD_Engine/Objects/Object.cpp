@@ -137,8 +137,9 @@ void gde::Object::SetRotation(Vector3 euler)
 {
 	auto newmat = glm::mat4(1.0f);
 	newmat = glm::translate(newmat, (glm::vec3)Local()->position);
-	newmat = glm::rotate(glm::mat4(1.0f), glm::radians(euler.y), glm::vec3(1, 0, 0)) * newmat;
-	newmat = glm::rotate(glm::mat4(1.0f), glm::radians(-euler.x), glm::vec3(0, 1, 0)) * newmat;
+	newmat = glm::rotate(newmat, glm::radians(euler.y), glm::vec3(0, 1, 0));
+	newmat = glm::rotate(newmat, glm::radians(euler.x), glm::vec3(1, 0, 0));
+	newmat = glm::rotate(newmat, glm::radians(euler.z), glm::vec3(0, 0, 1));
 	newmat = glm::scale(newmat,(glm::vec3)Local()->scale);
 
 	this->local_matrix = newmat;
