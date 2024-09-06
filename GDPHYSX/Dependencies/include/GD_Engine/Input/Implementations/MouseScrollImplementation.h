@@ -11,12 +11,10 @@ namespace gde {
         private:
             bool initialized_callback;
             Window* window_cache;
-            
-            Vector2 late_delta;
-            Vector2 ontime_delta;
         public:
             // Inherited via ActionImplementation
             void UpdateState(Window* target);
+            virtual void ResetState(Window* target);
         };
     }
 }

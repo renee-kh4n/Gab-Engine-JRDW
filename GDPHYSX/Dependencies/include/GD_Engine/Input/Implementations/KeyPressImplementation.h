@@ -27,6 +27,8 @@ namespace gde {
                     return;
                 }
             }
+
+            virtual void ResetState(Window* target) {}
 		};
 	}
 }

@@ -90,9 +90,6 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -300,9 +297,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\WasdDelta.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.h">

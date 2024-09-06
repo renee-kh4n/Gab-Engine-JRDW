@@ -29,6 +29,13 @@ namespace gde {
 						callback(player_action.first, action_implementation->GetState(), changed);
 					}
 			}
+
+			void ResetStates(Window* target) {
+				for (auto player_action : player_actions)
+					for (auto action_implementation : player_action.second) {
+						action_implementation->ResetState(target);
+					}
+			}
 		};
 	}
 }

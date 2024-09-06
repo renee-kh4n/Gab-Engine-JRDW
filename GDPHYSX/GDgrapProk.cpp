@@ -234,6 +234,9 @@ int main(void)
     {
         cradle_ball->angularVelocity.y = spinspeed;
 
+        /* Poll for and process events */
+        glfwPollEvents();
+
         //Update input system
         mInputSystem->UpdateStates([mInputHandler](std::string name, gde::input::InputAction* action, bool changed) {
             for (auto input_player : mInputHandler->object_list) {
@@ -247,8 +250,7 @@ int main(void)
             }
         }, mWindow);
 
-        /* Poll for and process events */
-        glfwPollEvents();
+        
 
         //Early update
         for (auto updatable : mEarlyUpdate->object_list)
@@ -286,6 +288,8 @@ int main(void)
                 updatable->InvokeLateUpdate(delta_f);
             }
         });
+
+        mInputSystem->ResetStates(mWindow);
 
         //Delete all queued for deletions
         std::list<Object*> toDelete;

@@ -1,5 +1,6 @@
 #include "FlyingCameraControl.h"
 #include "../../Input/Action/MouseDrag.h"
+#include "../../Input/Action/MouseScroll.h"
 
 namespace gde {
 
@@ -37,17 +38,37 @@ namespace gde {
 
 		auto mouserightdrag = new InputCustomer<MouseDrag<GLFW_MOUSE_BUTTON_2>>([this](MouseDrag<GLFW_MOUSE_BUTTON_2>* value, bool changed) {
 			if (value->state != MouseDrag<GLFW_MOUSE_BUTTON_2>::WHILE)
-			return;
+				return;
 
-		this->orbital_rotation += value->delta;
-		if (this->orbital_rotation.y < -70)
-			this->orbital_rotation.y = -70;
-		if (this->orbital_rotation.y > 70)
-			this->orbital_rotation.y = 70;
+			this->orbital_rotation += value->delta;
+			if (this->orbital_rotation.y < -70)
+				this->orbital_rotation.y = -70;
+			if (this->orbital_rotation.y > 70)
+				this->orbital_rotation.y = 70;
 
-		this->SetRotation(Vector3(orbital_rotation.x, orbital_rotation.y, 0));
-			});
+			this->SetRotation(Vector3(orbital_rotation.x, orbital_rotation.y, 0));
+		});
 
 		this->inputreceivers.push_back(mouserightdrag);
+
+		auto mousemiddledrag = new InputCustomer<MouseDrag<GLFW_MOUSE_BUTTON_3>>([this](MouseDrag<GLFW_MOUSE_BUTTON_3>* value, bool changed) {
+			if (value->state != MouseDrag<GLFW_MOUSE_BUTTON_3>::WHILE)
+				return;
+
+			this->TranslateLocal(Vector3(value->delta.x, value->delta.y, 0) * 0.01f);
+		});
+
+		this->inputreceivers.push_back(mousemiddledrag);
+
+		auto mousescroll = new InputCustomer<MouseScroll>([this](MouseScroll* value, bool changed) {
+			if (value->state != InputAction::State::START)
+			return;
+
+		std::cout << value->delta.ToString() << std::endl;
+
+		this->TranslateLocal(Vector3(0, 0, value->delta.y) * 2.f);
+			});
+
+		this->inputreceivers.push_back(mousescroll);
 	}
 }

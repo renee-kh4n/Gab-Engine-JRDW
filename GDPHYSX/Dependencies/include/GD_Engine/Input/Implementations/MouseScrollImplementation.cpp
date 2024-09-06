@@ -4,7 +4,8 @@ void gde::input::MouseScrollImplementation::UpdateState(Window* target)
 {
 	if (this->initialized_callback == false) {
 		target->RegisterWindowCallback(GDE_CALLBACKID_MOUSESCROLL, [this](void* value) {
-			this->ontime_delta = *(Vector2*)value;
+			this->mState.delta = *(Vector2*)value;
+			this->mState.state = InputAction::State::START;
 		});
 
 		window_cache = target;
@@ -12,21 +13,17 @@ void gde::input::MouseScrollImplementation::UpdateState(Window* target)
 			Window* user = (Window*)glfwGetWindowUserPointer(window);
 			user->InvokeWindowCallback(GDE_CALLBACKID_MOUSESCROLL, new Vector2(xoffset, yoffset));
 		});
+
+		this->initialized_callback = true;
+	}
+}
+
+void gde::input::MouseScrollImplementation::ResetState(Window* target)
+{
+	if (this->mState.state == InputAction::State::START) {
+		auto test = 0;
+		test++;
 	}
 
-	if ((this->ontime_delta - this->late_delta).SqrMagnitude() > 0.01f) {
-		this->late_delta = this->ontime_delta;
-
-		if (this->mState.state == InputAction::State::END) {
-			this->mState.state = InputAction::State::START;
-			return;
-		}
-		else
-			this->mState.state = InputAction::State::WHILE;
-		return;
-	}
-	else {
-		this->mState.state = InputAction::State::END;
-		return;
-	}
+	this->mState.state = InputAction::State::END;
 }

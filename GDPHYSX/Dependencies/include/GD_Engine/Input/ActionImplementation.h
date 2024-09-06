@@ -12,6 +12,7 @@ namespace gde {
 		public:
 			virtual bool CheckStateChanged(Window* target) = 0;
 			virtual InputAction* GetState() = 0;
+			virtual void ResetState(Window* target) = 0;
 		};
 
 		template<typename TAction>
