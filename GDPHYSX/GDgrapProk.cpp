@@ -197,7 +197,7 @@ int main(void)
     auto cradle_radius = 20.0f;
 
     auto startheight = length / 2.0f;
-    auto spinspeed = 0.0f;
+    auto spinspeed = 10.0f;
     RigidObject* cradle_ball = nullptr;
     auto cradle_pivot = createswing(Vector3(0, startheight, 0), 0.1f, 1.0f, Vector3::zero, &cradle_ball);
     cradle_ball->amgularDamp = 0.6f;

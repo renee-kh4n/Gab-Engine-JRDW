@@ -57,7 +57,7 @@ namespace gde {
 			if (value->state != MouseDrag<GLFW_MOUSE_BUTTON_3>::WHILE)
 				return;
 
-			this->TranslateLocal(Vector3(value->delta.x, value->delta.y, 0) * 0.01f);
+			this->TranslateLocal(Vector3(value->delta.x, value->delta.y, 0) * 0.2f);
 		});
 
 		this->inputreceivers.push_back(mousemiddledrag);
@@ -68,7 +68,7 @@ namespace gde {
 
 		std::cout << value->delta.ToString() << std::endl;
 
-		this->TranslateLocal(Vector3(0, 0, value->delta.y) * 2.f);
+		this->TranslateLocal(Vector3(0, 0, value->delta.y) * 4.f);
 			});
 
 		this->inputreceivers.push_back(mousescroll);

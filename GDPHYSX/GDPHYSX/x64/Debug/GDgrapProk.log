@@ -1,2 +1,4 @@
-﻿  FlyingCameraControl.cpp
+﻿  GDgrapProk.cpp
+D:\Documents\GitHub\GDGRAP\GDPHYSX\GDgrapProk.cpp(211,52): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+D:\Documents\GitHub\GDGRAP\GDPHYSX\GDgrapProk.cpp(219,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   GDgrapProk.vcxproj -> D:\Documents\GitHub\GDGRAP\GDPHYSX\x64\Debug\GDPHYSX.exe
