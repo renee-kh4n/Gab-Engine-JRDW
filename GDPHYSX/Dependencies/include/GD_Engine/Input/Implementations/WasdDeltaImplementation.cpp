@@ -2,10 +2,10 @@
 
 void gde::input::WasdDeltaImplementation::UpdateState(Window* target)
 {
-    auto w_state = glfwGetKey(target->window, GLFW_KEY_W);
-    auto a_state = glfwGetKey(target->window, GLFW_KEY_A);
-    auto s_state = glfwGetKey(target->window, GLFW_KEY_S);
-    auto d_state = glfwGetKey(target->window, GLFW_KEY_D);
+    auto w_state = glfwGetKey(target->Get_window(), GLFW_KEY_W);
+    auto a_state = glfwGetKey(target->Get_window(), GLFW_KEY_A);
+    auto s_state = glfwGetKey(target->Get_window(), GLFW_KEY_S);
+    auto d_state = glfwGetKey(target->Get_window(), GLFW_KEY_D);
 
     if (w_state == GLFW_PRESS || a_state == GLFW_PRESS || s_state == GLFW_PRESS || d_state == GLFW_PRESS) {
         if (this->mState.state == InputAction::State::END) {

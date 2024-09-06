@@ -13,9 +13,13 @@ namespace gde {
 
 	template<typename TInput>
 	class InputCustomer : public InputCustomer_base {
-	protected:
-		virtual void OnInput(TInput* value, bool changed) = 0;
+	private:
+		std::function<void(TInput*, bool)> OnInput;
 	public:
+		InputCustomer(std::function<void(TInput*, bool)> func) {
+			this->OnInput = func;
+		}
+
 		virtual bool TryReceive(InputAction* value, bool changed) override {
 			auto action_cast = dynamic_cast<TInput*>(value);
 

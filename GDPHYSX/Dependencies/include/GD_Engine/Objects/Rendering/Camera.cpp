@@ -25,7 +25,7 @@ namespace gde {
 
     glm::mat4 PerspectiveCamera::getproj()
     {
-        return glm::perspective(glm::radians(this->angles), (float)mWindow->win_y / mWindow->win_x, this->nearClip, this->farClip);
+        return glm::perspective(glm::radians(this->angles), (float)mWindow->Get_win_y() / mWindow->Get_win_x(), this->nearClip, this->farClip);
     }
 
     OrthographicCamera::OrthographicCamera(Window* mWindow, Shader* mShader) : Camera(mWindow, mShader)

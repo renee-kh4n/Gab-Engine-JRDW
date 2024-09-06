@@ -84,25 +84,13 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\VariableSwitcher.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.cpp">
@@ -147,10 +135,19 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Component\Transform.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarHitter.cpp">
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.cpp">
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Controllers\FlyingCameraControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseScrollImplementation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector2Int.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Controllers\ControllerBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -281,13 +278,7 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\OrbitalControl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputCustomer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\MouseRightDrag.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h">
@@ -296,16 +287,10 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\InputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseRightDragImplementation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\Implementations.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\VariableSwitcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\KeyPress.h">
@@ -318,9 +303,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\WasdDeltaImplementation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarPauser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.h">
@@ -365,13 +347,28 @@
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\SpacebarHitter.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\ActionDoer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Controllers\FlyingCameraControl.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseDragImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\MouseDrag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\MouseScroll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseScrollImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector2Int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Controllers\ControllerBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -14,12 +14,12 @@ void gde::InputPlayer::OnEnterHierarchy(Object* other)
 {
 	Object::OnEnterHierarchy(other);
 
-	inputhandler.TryAdd(other);
+	controllers.TryAdd(other);
 }
 
 void gde::InputPlayer::OnExitHierarchy(Object* other)
 {
 	Object::OnExitHierarchy(other);
 
-	inputhandler.Remove(other);
+	controllers.Remove(other);
 }

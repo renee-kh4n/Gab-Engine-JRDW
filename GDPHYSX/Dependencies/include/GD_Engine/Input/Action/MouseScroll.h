@@ -5,7 +5,7 @@
 
 namespace gde {
 	namespace input {
-		struct MouseRightDrag : public InputAction {
+		struct MouseScroll : public InputAction {
 			Vector2 delta;
 		};
 	}

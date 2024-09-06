@@ -21,10 +21,7 @@
 
 #include <GD_Engine/Objects/Physics/Joints/Spinner.h>
 
-#include <GD_Engine/Objects/Input/VariableSwitcher.h>
-#include <GD_Engine/Objects/Input/OrbitalControl.h>
-#include <GD_Engine/Objects/Input/SpacebarHitter.h>
-#include <GD_Engine/Objects/Input/ActionDoer.h>
+#include <GD_Engine/Objects/Controllers/FlyingCameraControl.h>
 
 using namespace gde;
 
@@ -56,13 +53,16 @@ int main(void)
 
     //RenderPipeline setup
     Camera* active_camera = nullptr;
-    auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->win_x, mWindow->win_y));
+    auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
 #pragma endregion
 
 #pragma region Input
     auto mInputSystem = new InputSystem();
     auto player_name = "MAIN";
-    mInputSystem->RegisterActionListener(player_name, new MouseRightDragImplementation());
+    mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_MOUSE_BUTTON_1>());
+    mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
+    mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<GLFW_MOUSE_BUTTON_2>());
+    mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<GLFW_MOUSE_BUTTON_3>());
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_1>());
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_2>());
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_LEFT>());
@@ -70,7 +70,6 @@ int main(void)
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_Q>());
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_SPACE>());
     mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<GLFW_KEY_ENTER>());
-    mInputSystem->RegisterActionListener(player_name, new WasdDeltaImplementation());
 #pragma endregion
 
 #pragma region Object setup
@@ -93,10 +92,8 @@ int main(void)
     //Camera setup
     auto player_input = new InputPlayer(player_name);
     player_input->SetParent(root_object);
-    auto camera_dolly = new OrbitalControl();
-    camera_dolly->SetParent(player_input);
-    auto camera_parent = new Object();
-    camera_parent->SetParent(camera_dolly);
+    auto camera_parent = new FlyingCameraControl();
+    camera_parent->SetParent(player_input);
 
     auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
     mPerspectiveCam->angles = 60;
@@ -110,12 +107,7 @@ int main(void)
     mOrthoCam->SetParent(camera_parent);
     active_camera = mPerspectiveCam;
 
-    camera_parent->TranslateWorld(Vector3(0, 0, -300));
-
-    auto mCamSwitcher0 = new VariableSwitcher<GLFW_KEY_1>((void*)mPerspectiveCam, (void**)&active_camera);
-    mCamSwitcher0->SetParent(player_input);
-    auto mCamSwitcher1 = new VariableSwitcher<GLFW_KEY_2>((void*)mOrthoCam, (void**)&active_camera);
-    mCamSwitcher1->SetParent(player_input);
+    camera_parent->TranslateWorld(Vector3(0, 0, 0));
 
     //Mesh and material caching
 
@@ -220,43 +212,6 @@ int main(void)
         chain->SetParent(cradle_ball);
     }
 
-    //actions
-    bool alr_up = false;
-    auto startspeed = 20.0f;
-
-    auto initial_force = Vector3(-20, 0, 0);
-    auto mSpacebarStarter = new ActionDoer<GLFW_KEY_SPACE>([startspeed , &spinspeed, &alr_up, cradle_pivot]() {
-        cradle_pivot->SetPosition(Vector3(0, 40, 0));
-        if (alr_up == false)
-            spinspeed = startspeed;
-
-        alr_up = true;
-    });
-    mSpacebarStarter->SetParent(player_input);
-
-    auto mEnterStop = new ActionDoer<GLFW_KEY_ENTER>([&spinspeed, cradle_ball]() {
-        spinspeed = 0;
-    });
-    mEnterStop->SetParent(player_input);
-
-    auto mLeftKey = new ActionDoer<GLFW_KEY_LEFT>([startspeed, &alr_up, &spinspeed, cradle_ball]() {
-        if (!alr_up)
-            return;
-   
-        spinspeed -= 5;
-        if (spinspeed < startspeed)
-            spinspeed = startspeed;
-        });
-    mLeftKey->SetParent(player_input);
-
-    auto mRightKey = new ActionDoer<GLFW_KEY_RIGHT>([&alr_up, startspeed, &spinspeed, cradle_ball]() {
-        if (!alr_up)
-        return;
-
-        spinspeed += 5;
-        });
-    mRightKey->SetParent(player_input);
-
     //physics force setup
     auto gravity_volume = new ForceVolume();
     gravity_volume->shape = ForceVolume::GLOBAL;
@@ -275,7 +230,7 @@ int main(void)
 #pragma endregion
 
     /// MAIN GAME LOOP
-    while (!glfwWindowShouldClose(mWindow->window))
+    while (!glfwWindowShouldClose(mWindow->Get_window()))
     {
         cradle_ball->angularVelocity.y = spinspeed;
 
@@ -285,8 +240,10 @@ int main(void)
                 if (input_player->get_player_name() != name)
                     continue;
 
-                for (auto input_customer : input_player->inputhandler.object_list)
-                    input_customer->TryReceive(action, changed);
+                for (auto controller : input_player->controllers.object_list)
+                    controller->ForEach_inputreceivers([action, changed](InputCustomer_base* input_customer) {
+                        input_customer->TryReceive(action, changed);
+                    });
             }
         }, mWindow);
 
@@ -310,7 +267,7 @@ int main(void)
         mRenderPipeline->SetPostProcessing(active_camera->mShader);
         mRenderPipeline->RenderFrame();
         //Render window
-        glfwSwapBuffers(mWindow->window);
+        glfwSwapBuffers(mWindow->Get_window());
 
         //Update other handlers
         mTime->TickFixed([mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {

@@ -3,7 +3,7 @@
 #include <string>
 
 #include "../Object.h"
-#include "InputCustomer.h"
+#include "../Controllers/ControllerBase.h"
 #include "../../ObjectHandlers/ObjectHandler.h"
 
 namespace gde {
@@ -14,7 +14,7 @@ namespace gde {
 		InputPlayer(std::string player_name);
 		std::string get_player_name();
 
-		ObjectHandler<InputCustomer_base> inputhandler;
+		ObjectHandler<ControllerBase> controllers;
 
 		virtual void OnEnterHierarchy(Object* other);
 		virtual void OnExitHierarchy(Object* other);
