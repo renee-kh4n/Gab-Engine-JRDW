@@ -1,0 +1,464 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{e731ce27-f63b-4562-9bc0-f7beca18eb45}</ProjectGuid>
+    <RootNamespace>GDgrapProk</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>GDPHYSX</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Dependencies\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Dependencies\include\GD_Engine\Component\Transform.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector2.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector2Int.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Input\Implementations\MouseScrollImplementation.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Controllers\ControllerBase.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Controllers\FlyingCameraControl.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Object.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collider\Collider.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\Contact.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Particle\ParticleObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\AnchorSpring.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\LightObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Renderer\LineRenderer.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Root.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Time.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector3.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\DrawCall.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\Light.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\Material.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\Mesh.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\RenderPipeline.cpp" />
+    <ClCompile Include="GDgrapProk.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\Shader.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\Skybox.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\Texture.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\Window.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Graphics\glad.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Dependencies\include\GD_Engine\Component\Transform.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector2Int.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector2.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vectors.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector_base.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\ActionImplementation.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\MouseDrag.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\MouseScroll.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\WasdDelta.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Action\KeyPress.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseDragImplementation.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\MouseScrollImplementation.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\KeyPressImplementation.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\Implementations\Implementations.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\InputAction.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Input\InputSystem.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\InputHandler.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\Members\ContactResolver.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandler.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\ObjectHandlers.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Controllers\ControllerBase.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Controllers\FlyingCameraControl.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputPlayer.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\InputCustomer.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Input\Inputs.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collider\Collider.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Collision\CollisionContact.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Bungee.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\ChainJoint.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\Spinner.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\Rod.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Linking\RigidObjectLink.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Particle\ParticleObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Joints\AnchorSpring.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\DirectionalLight.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\LightObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Lights\PointLight.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Renderer\LineRenderer.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Root.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Object.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Objects.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ForceVolume.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\FloatParameter.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\LerpableParameter.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\ParticleSystem\VectorParameter.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\Physics.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Rendering.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Time.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\EarlyUpdate.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\LateUpdate.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\Update.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\ObjectFunctions.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector3.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\DrawCall.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Framebuffer.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Light.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Lines.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Material.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Mesh.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\RenderPipeline.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Shader.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Skybox.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Texture.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\util.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\Window.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\stb_image.h" />
+    <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\lit.frag">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Shaders\object.vert">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="3D\djSword.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="3D\myCube.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Tex\ayaya.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\cubeacca.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\uw_bk.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\uw_dn.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\uw_ft.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\uw_lf.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\uw_rt.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\uw_up.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <Image Include="Tex\sub1\gloss.png" />
+    <Image Include="Tex\sub7\diff.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Tex\partenza.jpg">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_bk.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_dn.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_ft.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_lf.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_rt.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Tex\Skybox\rainbow_up.png">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)/Tex/Skybox</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\skybox.frag">
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Shaders\skybox.vert">
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="3D\bunny.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\camshader.frag">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+    <CopyFileToFolders Include="Shaders\camshader.vert">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\depth.frag">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="3D\sphere.obj">
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="Shaders\unlit.frag">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)Shaders\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)Shaders\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <CopyFileToFolders Include="3D\plane.obj">
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</DeploymentContent>
+      <FileType>Document</FileType>
+      <DeploymentContent Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</DeploymentContent>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
+      <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
+    </CopyFileToFolders>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
