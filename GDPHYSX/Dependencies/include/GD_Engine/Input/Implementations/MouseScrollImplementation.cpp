@@ -20,10 +20,5 @@ void gde::input::MouseScrollImplementation::UpdateState(Window* target)
 
 void gde::input::MouseScrollImplementation::ResetState(Window* target)
 {
-	if (this->mState.state == InputAction::State::START) {
-		auto test = 0;
-		test++;
-	}
-
 	this->mState.state = InputAction::State::END;
 }
