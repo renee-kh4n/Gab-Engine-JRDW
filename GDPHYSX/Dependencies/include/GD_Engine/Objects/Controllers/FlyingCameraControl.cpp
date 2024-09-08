@@ -66,6 +66,8 @@ namespace gde {
 			if (value->state != InputAction::State::START)
 			return;
 
+		std::cout << value->delta.ToString() << std::endl;
+
 		this->TranslateLocal(Vector3(0, 0, value->delta.y) * 4.f);
 			});
 

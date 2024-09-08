@@ -30,9 +30,6 @@ namespace gde {
 		virtual ~Object();
 		virtual Object* Copy();
 
-		std::string GetSerializedData();
-		void LoadUsingSerializedData();
-
 		Transform* World();
 		Transform* Local();
 		void SetPosition(Vector3 vector);
