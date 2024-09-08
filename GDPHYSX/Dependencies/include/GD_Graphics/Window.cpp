@@ -1,5 +1,8 @@
 #include "Window.h"
 
+#define GLFW_EXPOSE_NATIVE_WIN32
+#include <GLFW/glfw3native.h>
+
 namespace gde {
     using namespace rendering;
 
@@ -9,20 +12,25 @@ namespace gde {
         this->win_y = win_y;
 
         /* Create a windowed mode window and its OpenGL context */
-        this->window = glfwCreateWindow(win_x, win_y, name, NULL, NULL);
-        if (!this->window)
+        this->glfw_window = glfwCreateWindow(win_x, win_y, name, NULL, NULL);
+        if (!this->glfw_window)
         {
             glfwTerminate();
         }
 
-        glfwSetWindowUserPointer(this->window, this);
-
-        /* Make the window's context current */
-        glfwMakeContextCurrent(this->window);
+        glfwSetWindowUserPointer(this->glfw_window, this);
+    }
+    void rendering::Window::SetContextToThis()
+    {
+        glfwMakeContextCurrent(this->glfw_window);
+    }
+    void* rendering::Window::GetNativeHandle()
+    {
+        return glfwGetWin32Window(this->glfw_window);
     }
     GLFWwindow* rendering::Window::Get_window()
     {
-        return this->window;
+        return this->glfw_window;
     }
     int rendering::Window::Get_win_x()
     {

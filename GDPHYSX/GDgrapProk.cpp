@@ -11,13 +11,15 @@
 #include <GD_Graphics/RenderPipeline.h>
 #include <GD_Graphics/Mesh.h>
 
+#include <GD_GUI/GUIPipeline.h>
+
 #include <GD_Engine/Input/Implementations/Implementations.h>
 #include <GD_Engine/Input/InputSystem.h>
 #include <GD_Engine/ObjectHandlers/ObjectHandlers.h>
 #include <GD_Engine/Objects/Objects.h>
 #include <GD_Engine/ObjectFunctions/ObjectFunctions.h>
 #include <GD_Engine/Datatypes/Vectors.h>
-#include <GD_Engine/Time.h>
+#include <GD_Engine/Global/Time.h>
 
 #include <GD_Engine/Objects/Physics/Joints/Spinner.h>
 
@@ -34,7 +36,8 @@ int main(void)
         return -1;
 
     Window* mWindow = new Window("PC02-Rayo", 800, 800);
-    
+    mWindow->SetContextToThis();
+
     /* Initialize GLAD*/
     gladLoadGL();
 
@@ -47,13 +50,14 @@ int main(void)
     auto Cam1stPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
     
     auto CamOrthoPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
-    glUseProgram(CamOrthoPPShader->shaderID);
-    glUniform1f(glGetUniformLocation(CamOrthoPPShader->shaderID, "saturation"), 1.0f);
-    glUniform4fv(glGetUniformLocation(CamOrthoPPShader->shaderID, "tint"), 1, glm::value_ptr(glm::vec4(1, 1, 1, 1)));
+    CamOrthoPPShader->SetOverride("saturation", 1.0f);
+    CamOrthoPPShader->SetOverride("tint", glm::vec4(1, 1, 1, 1));
 
     //RenderPipeline setup
     Camera* active_camera = nullptr;
     auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
+
+    auto mGUIPipeline = new GUIPipeline(mWindow->GetNativeHandle());
 #pragma endregion
 
 #pragma region Input
@@ -232,10 +236,10 @@ int main(void)
     /// MAIN GAME LOOP
     while (!glfwWindowShouldClose(mWindow->Get_window()))
     {
-        cradle_ball->angularVelocity.y = spinspeed;
-
         /* Poll for and process events */
         glfwPollEvents();
+        
+        mGUIPipeline->RenderFrame();
 
         //Update input system
         mInputSystem->UpdateStates([mInputHandler](std::string name, gde::input::InputAction* action, bool changed) {

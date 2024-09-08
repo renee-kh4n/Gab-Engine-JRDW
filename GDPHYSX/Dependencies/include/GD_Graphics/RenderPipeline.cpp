@@ -4,6 +4,10 @@
 
 using namespace gde;
 
+void gde::RenderPipeline::SetRequiredAttribs()
+{
+}
+
 gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions)
 {
     this->from = glm::vec3(1.0f);
@@ -18,6 +22,8 @@ gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions)
     depthShader = new Shader("Shaders/object.vert", "Shaders/depth.frag");
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
+
+    this->SetRequiredAttribs();
 }
 
 void RenderPipeline::SetMaximumLights(int maxlights) {

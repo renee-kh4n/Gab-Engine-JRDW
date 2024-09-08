@@ -8,13 +8,16 @@ namespace gde {
     namespace rendering {
         class Window {
         private:
-            GLFWwindow* window;
+            GLFWwindow* glfw_window;
             int win_x;
             int win_y;
             
             std::unordered_map<std::string, std::function<void(void*)>> window_callbacks;
         public:
             Window(const char* name, int win_x = 700, int win_y = 700);
+
+            void SetContextToThis();
+            void* GetNativeHandle();
 
             GLFWwindow* Get_window();
             int Get_win_x();

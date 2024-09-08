@@ -112,6 +112,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>"$(SolutionDir)Dependencies\*.lib" %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,6 +132,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)Dependencies\lib;%(AdditionalIncludeDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>"$(SolutionDir)Dependencies\*.lib" %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -164,13 +166,14 @@
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Root.cpp" />
-    <ClCompile Include="Dependencies\include\GD_Engine\Time.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Datatypes\Vector3.cpp" />
+    <ClCompile Include="Dependencies\include\GD_Engine\Global\Time.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\DrawCall.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Light.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Material.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Mesh.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\RenderPipeline.cpp" />
+    <ClCompile Include="Dependencies\include\GD_GUI\GUIPipeline.cpp" />
     <ClCompile Include="GDgrapProk.cpp" />
     <ClCompile Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.cpp" />
     <ClCompile Include="Dependencies\include\GD_Graphics\Shader.cpp" />
@@ -231,13 +234,13 @@
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectHandlers\PhysicsHandler.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\RenderObject.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Physics\RigidObject.h" />
-    <ClInclude Include="Dependencies\include\GD_Engine\Time.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\EarlyUpdate.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\LateUpdate.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\Update.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\ObjectFunctions\ObjectFunctions.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Datatypes\Vector3.h" />
     <ClInclude Include="Dependencies\include\GD_Engine\Objects\Rendering\Camera.h" />
+    <ClInclude Include="Dependencies\include\GD_Engine\Global\Time.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\DrawCall.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Framebuffer.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\Light.h" />
@@ -252,6 +255,7 @@
     <ClInclude Include="Dependencies\include\GD_Graphics\Window.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\stb_image.h" />
     <ClInclude Include="Dependencies\include\GD_Graphics\tiny_obj_loader.h" />
+    <ClInclude Include="Dependencies\include\GD_GUI\GUIPipeline.h" />
   </ItemGroup>
   <ItemGroup>
     <CopyFileToFolders Include="Shaders\lit.frag">
@@ -457,6 +461,14 @@
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)3D\</DestinationFolders>
       <DestinationFolders Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)3D\</DestinationFolders>
     </CopyFileToFolders>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Dependencies\lib\glfw3.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Dependencies\lib\glfw3.lib" />
+    <Library Include="Dependencies\lib\glfw3dll.lib" />
+    <Library Include="Dependencies\lib\glfw3_mt.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -34,6 +34,8 @@ namespace gde {
 		int maxlights = 10;
 
 		Skybox* mSkybox;
+
+		void SetRequiredAttribs();
 	public:
 		RenderPipeline(glm::vec2);
 		void RegisterDrawCall(DrawCall*);
