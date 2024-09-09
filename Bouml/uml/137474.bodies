@@ -1,4 +1,0 @@
-class DirLight
-!!!145666.cpp!!!	GetType() : Type
-
-    return Light::DIRECTION;

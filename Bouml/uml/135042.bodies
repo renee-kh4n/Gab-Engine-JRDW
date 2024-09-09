@@ -1,7 +1,0 @@
-class ParticleClass
-!!!141698.cpp!!!	ParticleClass(in radius : float = 1)
-
-	this->radius = radius;
-!!!141826.cpp!!!	GetRadius() : float
-
-	return this->radius;

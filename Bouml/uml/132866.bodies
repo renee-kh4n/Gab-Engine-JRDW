@@ -1,7 +1,0 @@
-class ControllerBase
-!!!136834.cpp!!!	ForEach_inputreceivers(in function : std::function<void(InputCustomer_base*)>) : void
-
-	for (auto receiver : this->inputreceivers)
-	{
-		function(receiver);
-	}

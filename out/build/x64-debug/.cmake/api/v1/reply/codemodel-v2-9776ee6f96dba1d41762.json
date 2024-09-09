@@ -1,0 +1,92 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "gab-engine",
+					"childIndexes" : 
+					[
+						2
+					],
+					"jsonFile" : "directory-gab-engine-Debug-4b0f5e51ca788c205107.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "gab-engine",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "gab-engine/dependencies/glm",
+					"jsonFile" : "directory-gab-engine.dependencies.glm-Debug-5a49637a2cdd740fa0c1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "gab-engine/dependencies/glm"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2
+					],
+					"name" : "gab-engine",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "gab-engine::@3f8e890217629a2f377b",
+					"jsonFile" : "target-gab-engine-Debug-522c4446eedc96590da8.json",
+					"name" : "gab-engine",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "D:/Documents/AAA USER PERTINENT_DOCS/Game Developing/gab-engine/out/build/x64-debug",
+		"source" : "D:/Documents/AAA USER PERTINENT_DOCS/Game Developing/gab-engine"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}

@@ -1,0 +1,5 @@
+# ninja log v5
+12	1480	7475805731537429	gab-engine/CMakeFiles/gab-engine.dir/gab-engine.cpp.obj	cda4cd01ace72e8
+1612	2246	7475797067008276	gab-engine/gab-engine.exe	dcc282e423845ce7
+15	1702	7475809193438884	gab-engine/CMakeFiles/gab-engine.dir/Engine/Engine.cpp.obj	750f6a68ac5d1514
+2	121	7475809246483459	build.ninja	89e84dc06c6e10da

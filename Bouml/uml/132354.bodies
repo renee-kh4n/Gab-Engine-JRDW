@@ -1,5 +1,0 @@
-class RigidObjectLink
-!!!141442.cpp!!!	CurrentLength() : float
-
-    Vector3 ret = objects[0]->World()->position - objects[1]->World()->position;
-    return ret.Magnitude();

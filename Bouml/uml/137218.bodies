@@ -1,4 +1,0 @@
-class PointLight
-!!!145410.cpp!!!	GetType() : Type
-
-    return Light::POINT;
