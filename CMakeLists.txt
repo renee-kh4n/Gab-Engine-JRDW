@@ -1,14 +1,22 @@
-set(DEPENDENCY_DIR ${CMAKE_CURRENT_SOURCE_DIR})
-set(DEPENDENCY_DIR ${DEPENDENCY_DIR} PARENT_SCOPE)
+﻿# CMakeList.txt : Top-level CMake project file, do global configuration
+# and include sub-projects here.
+#
+cmake_minimum_required (VERSION 3.19)
 
-#SDL
-set(SDL2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/SDL2-2.30.7/cmake)
-set(SDL2_DIR ${SDL2_DIR} PARENT_SCOPE)
-#GLM
-add_subdirectory(glm)
-#GLAD
-include_directories(SYSTEM glad)
-#KHR
-include_directories(SYSTEM KHR)
 
-message("[GABENGINE] LOADED: DEPENDENCIES")
+
+# Enable Hot Reload for MSVC compilers if supported.
+if (POLICY CMP0141)
+  cmake_policy(SET CMP0141 NEW)
+  set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
+endif()
+
+project ("gab-engine")
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/dependencies")
+
+#init local dependency library
+add_subdirectory ("dependencies")
+
+# Include sub-projects and libraries.
+add_subdirectory ("gab-engine")

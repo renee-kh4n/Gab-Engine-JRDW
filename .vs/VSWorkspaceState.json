@@ -1,0 +1,23 @@
+{
+  "OutputFoldersPerTargetSystem": {
+    "Local Machine": [
+      "out\\build\\x64-debug",
+      "out\\install\\x64-debug",
+      "out\\build\\x64-release",
+      "out\\install\\x64-release",
+      "out\\build\\x86-debug",
+      "out\\install\\x86-debug",
+      "out\\build\\x86-release",
+      "out\\install\\x86-release"
+    ]
+  },
+  "ExpandedNodes": [
+    "",
+    "\\vcpkg_installed",
+    "\\vcpkg_installed\\vcpkg",
+    "\\vcpkg_installed\\vcpkg\\blds\\glm\\src",
+    "\\vcpkg_installed\\vcpkg\\blds\\glm\\src\\1.0.1-4ce719d489.clean",
+    "\\vcpkg_installed\\vcpkg\\blds\\glm\\src\\1.0.1-4ce719d489.clean\\glm"
+  ],
+  "PreviewInSolutionExplorer": false
+}

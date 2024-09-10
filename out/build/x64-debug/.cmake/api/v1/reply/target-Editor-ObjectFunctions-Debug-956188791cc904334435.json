@@ -1,0 +1,87 @@
+{
+	"archive" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "/machine:x64",
+				"role" : "flags"
+			}
+		]
+	},
+	"artifacts" : 
+	[
+		{
+			"path" : "gab-engine/Editor/ObjectFunctions/Editor-ObjectFunctions.lib"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library"
+		],
+		"files" : 
+		[
+			"gab-engine/Editor/ObjectFunctions/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 2,
+				"parent" : 0
+			}
+		]
+	},
+	"id" : "Editor-ObjectFunctions::@0fc55c07c65a72534e0c",
+	"name" : "Editor-ObjectFunctions",
+	"nameOnDisk" : "Editor-ObjectFunctions.lib",
+	"paths" : 
+	{
+		"build" : "gab-engine/Editor/ObjectFunctions",
+		"source" : "gab-engine/Editor/ObjectFunctions"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "gab-engine/Editor/ObjectFunctions/ObjectFunctions.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "gab-engine/Editor/ObjectFunctions/EarlyUpdate.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "gab-engine/Editor/ObjectFunctions/LateUpdate.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "gab-engine/Editor/ObjectFunctions/Update.h",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

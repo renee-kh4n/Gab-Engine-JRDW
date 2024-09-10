@@ -1,0 +1,12 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "gab-engine.exe (gab-engine\\gab-engine.exe)",
+      "name": "gab-engine.exe (gab-engine\\gab-engine.exe)"
+    }
+  ]
+}

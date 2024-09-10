@@ -1,0 +1,7 @@
+{
+  "dependencies": [
+    "glm",
+    "vcpkg-cmake-config",
+    "vcpkg-cmake"
+  ]
+}
