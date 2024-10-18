@@ -1,5 +1,7 @@
 #include "RenderPipeline.h"
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/gtx/matrix_decompose.hpp>
 
 using namespace gde;

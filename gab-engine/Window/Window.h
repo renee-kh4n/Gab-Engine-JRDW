@@ -10,7 +10,8 @@ Current backend used: SDL2
 #include <functional>
 #include <string>
 
-#include <SDL2-2.30.7/include/SDL.h>
+#include <SDL2/SDL.h>
+
 #include "../Editor/Input/KeyDefines.h"
 
 #include "../Datatypes/Vector2Int.h"

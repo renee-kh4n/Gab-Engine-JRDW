@@ -34,11 +34,6 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/dependencies/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
   include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/cmake_install.cmake")
 endif()
 

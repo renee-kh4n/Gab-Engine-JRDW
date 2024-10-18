@@ -1,30 +1,14 @@
 #pragma once
 
 #include <cmath>
-#include <vector>
-#include "Vector_base.h"
+#include <glm/vec2.hpp>
 
 namespace gde {
-	struct Vector2 : internal::Vector<2, float> {
-	public:
-		union {
-			struct {
-				float x, y;
-			};
-			float values[2];
-		};
-
+	struct Vector2 : glm::vec2 {
 		Vector2();
-		Vector2(const gde::Vector2& from);
-		Vector2(float x, float y);
-
-		virtual float* GetValuePointer(int index);
+		Vector2(float, float);
+		Vector2(glm::vec2 glmvec);
 
 		static const Vector2 zero;
-
-		Vector2 operator-();
-		Vector2 operator*(const float& right);
-		Vector2 operator+(const Vector2& right);
-		Vector2 operator-(const Vector2& right);
 	};
 }

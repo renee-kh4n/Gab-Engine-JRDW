@@ -1,0 +1,8 @@
+# ninja log v5
+2	295	7503507807967234	include/glad/glad.h	b2ce57b54344fffe
+2	295	7503507807967234	src/glad.c	b2ce57b54344fffe
+2	295	7503507807967234	D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/include/glad/glad.h	b2ce57b54344fffe
+2	295	7503507807967234	D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/src/glad.c	b2ce57b54344fffe
+315	546	7503507810961683	CMakeFiles/glad.dir/src/glad.c.obj	6c75bd0322434f64
+547	843	7503507811281695	glad.lib	241033fd977f4cab
+843	910	0	CMakeFiles/install.util	d829fc6ad3ddd6c9

@@ -1,0 +1,77 @@
+Package: vcpkg-cmake-config
+Version: 2024-05-23
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 4fa218e9a5c996d72c4a40b26c3e0e0c14a49829096dfedfb6843dbe8acc430c
+Status: install ok installed
+
+Package: vcpkg-cmake
+Version: 2024-04-18
+Architecture: x64-windows
+Multi-Arch: same
+Abi: b2794506138789fb519f2661ad7773db15f8805478e3d3380d8cfa8113c577c1
+Status: install ok installed
+
+Package: glm
+Version: 1.0.1
+Port-Version: 2
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: df828149b8c39d2829d65a0cfb792b79b5f450ebb2317f1f01153c07db4db42f
+Description: OpenGL Mathematics (GLM)
+Status: install ok installed
+
+Package: sdl2
+Version: 2.30.3
+Depends: vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 72fc034c6b9c02e02f82db8d92a28deaa44eacbb22bb153cd2f997c0824dfbc0
+Description: Simple DirectMedia Layer is a cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+Status: install ok installed
+
+Package: egl-registry
+Version: 2024-01-25
+Architecture: x64-windows
+Multi-Arch: same
+Abi: fb406f4d093848fb55c030d9ad1db60657de9cc77922bc7502e9d80f271f7308
+Description: EGL API and Extension Registry
+Status: install ok installed
+
+Package: opengl-registry
+Version: 2024-02-10
+Port-Version: 1
+Depends: egl-registry
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 089fa82c53845ed05642086f116e0d5d4e7101d3938b200a9c3fe4a0abd090b1
+Description: OpenGL, OpenGL ES, and OpenGL ES-SC API and Extension Registry
+Status: install ok installed
+
+Package: glad
+Version: 0.1.36
+Depends: egl-registry, opengl-registry, vcpkg-cmake, vcpkg-cmake-config
+Architecture: x64-windows
+Multi-Arch: same
+Abi: a9b709e68d1606dd54feef3167c6103a52730d408c169e37c5e22cd39693a43c
+Description: Multi-Language Vulkan/GL/GLES/EGL/GLX/WGL Loader-Generator based on the official specs.
+Default-Features: loader
+Status: install ok installed
+
+Package: glad
+Feature: loader
+Architecture: x64-windows
+Multi-Arch: same
+Description: Generate loader logic.
+Status: install ok installed
+
+Package: stb
+Version: 2023-04-11
+Port-Version: 1
+Architecture: x64-windows
+Multi-Arch: same
+Abi: 4a175a7c3f94394bd9ac2d761a5def86039b565ca4c487ae70b670cc346ada4f
+Description: public domain header-only libraries
+Status: install ok installed
+

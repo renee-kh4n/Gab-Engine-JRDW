@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\KeyPressImplementation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\MouseScrollImplementation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\WasdDeltaImplementation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\KeyDefines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\InputSystem.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\InputAction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\ActionImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\Implementations.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\KeyPressImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\MouseDragImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\MouseScrollImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Implementations\WasdDeltaImplementation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Action\KeyPress.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Action\MouseDrag.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Action\MouseScroll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\Action\WasdDelta.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\Input\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{1C941EB2-20A2-385A-8B63-94894AB67BE2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{541B0F8D-C0E4-3FFF-9A5A-B82966B7B673}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

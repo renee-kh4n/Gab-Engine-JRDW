@@ -83,7 +83,7 @@ namespace gde {
 
         //unlit line rendercall
         auto mat = new Material(unlitShader);
-        mat->setOverride<glm::vec3>("color", Vector3(1, 1, 1));
+        mat->setOverride<glm::vec3>("color", glm::vec3(1, 1, 1));
         auto lineDrawCall = new DrawCall(new Mesh("3D/plane.obj"), mat);
         mRenderPipeline->RegisterDrawCall(lineDrawCall);
 

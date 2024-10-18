@@ -1,0 +1,6 @@
+# CMake generation dependency list for this directory.
+D:/Documents/GitHub/Gab-Engine/gab-engine/gab-engine/Datatypes/CMakeLists.txt
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/share/glm/glmConfig-debug.cmake
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/share/glm/glmConfig-release.cmake
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/share/glm/glmConfig.cmake
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/share/glm/glmConfigVersion.cmake

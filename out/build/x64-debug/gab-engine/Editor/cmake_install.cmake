@@ -32,33 +32,3 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
   set(CMAKE_CROSSCOMPILING "FALSE")
 endif()
 
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/Editor/Component/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/Editor/Global/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/Editor/Input/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/Editor/ObjectFunctions/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/Editor/ObjectHandlers/cmake_install.cmake")
-endif()
-
-if(NOT CMAKE_INSTALL_LOCAL_ONLY)
-  # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/Editor/Objects/cmake_install.cmake")
-endif()
-

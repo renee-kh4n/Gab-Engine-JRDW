@@ -1,21 +1,17 @@
-﻿#LIBRARY LOADING
-add_library(Datatypes "Vectors.h")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector_base.h")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector2.h")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector2.cpp")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector2Int.h")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector2Int.cpp")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector3.h")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector3.cpp")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector4.h")
-target_sources(Datatypes PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/Vector4.cpp")
+﻿# CMakeList.txt : CMake project for gab-engine, include source and define
+# project specific logic here.
+#
 
-#SET DEFAULT PROJECT INCLUDES
-include_gabengine_directories(Datatypes)
+#SUBDIRECTORY LOADING
+add_library(gbe_datatypes 
+	"Vector2.cpp"
+	"Vector2Int.cpp"
+	"Vector3.cpp"
+	"Vector4.cpp"
+)
+add_library(gbe::gbe_datatypes ALIAS gbe_datatypes)
 
-#SET LIBRARY-SPECFIC DEPENDENCIES
-#find_package(glm REQUIRED)
-#target_link_libraries(Datatypes PUBLIC glm::glm)
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(gbe_datatypes PRIVATE glm::glm)
 
-#DEBUG
-message("[GABENGINE] LOADED: Datatypes")
+message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

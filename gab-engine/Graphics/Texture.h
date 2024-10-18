@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
-#include "stbi/stb_image.h"
+#include <stb_image.h>
 #include <string>
 
 namespace gde {

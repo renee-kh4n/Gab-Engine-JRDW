@@ -1,0 +1,21 @@
+Change Dir: 'D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-dbg'
+
+Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja/ninja.exe" -v -v -j13 install
+[1/4] C:\Windows\system32\cmd.exe /C "cd /D D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\vcpkg\blds\glad\src\708967e402-274d415499.clean && C:\Users\PC\AppData\Local\vcpkg\downloads\tools\python\python-3.11.8-x64\python.exe -m glad --profile=compatibility --out-path=D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-dbg --api= --generator=c-debug --extensions= --spec=gl --reproducible"
+[10/11/2024 19:52:59][INFO	][glad   	]: reproducible build, using packaged specification: 'gl.xml'
+[10/11/2024 19:52:59][INFO	][glad.files	]: opening 'gl.xml' from packaged path
+[10/11/2024 19:52:59][INFO	][glad   	]: generating 'gl' bindings: {'gl': None}
+[10/11/2024 19:52:59][INFO	][glad.files	]: opening 'khrplatform.h' from packaged path
+[10/11/2024 19:52:59][INFO	][glad   	]: generating 'gl' bindings - done
+[2/4] C:\PROGRA~1\MICROS~1\2022\COMMUN~1\VC\Tools\MSVC\1441~1.341\bin\Hostx64\x64\cl.exe    -ID:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\vcpkg\blds\glad\x64-windows-dbg\include /nologo /DWIN32 /D_WINDOWS /W3 /utf-8 /MP  /D_DEBUG /MDd /Z7 /Ob0 /Od /RTC1 /showIncludes /FoCMakeFiles\glad.dir\src\glad.c.obj /FdCMakeFiles\glad.dir\glad.pdb /FS -c D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\vcpkg\blds\glad\x64-windows-dbg\src\glad.c
+[3/4] C:\Windows\system32\cmd.exe /C "cd . && C:\PROGRA~1\MICROS~1\2022\COMMUN~1\VC\Tools\MSVC\1441~1.341\bin\Hostx64\x64\lib.exe  /machine:x64 /nologo /out:glad.lib CMakeFiles\glad.dir\src\glad.c.obj && cd ."
+[3/4] C:\-- Install configuration: "Debug"
+-- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/debug/lib/glad.lib
+-- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/debug/include/glad/glad.h
+-- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/debug/include/KHR/khrplatform.h
+-- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/debug/lib/cmake/glad/gladConfig.cmake
+-- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/debug/lib/cmake/glad/gladConfigVersion.cmake
+-- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/debug/lib/cmake/glad/gladTargets.cmake
+-- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/debug/lib/cmake/glad/gladTargets-debug.cmake
+Windows\system32\cmd.exe /C "cd /D D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\vcpkg\blds\glad\x64-windows-dbg && "C:\Program Files\CMake\bin\cmake.exe" -P cmake_install.cmake"
+

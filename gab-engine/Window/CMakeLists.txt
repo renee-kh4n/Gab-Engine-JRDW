@@ -1,12 +1,14 @@
-﻿#LIBRARY LOADING
-add_library(Window "Window.cpp" "Window.h")
+﻿# CMakeList.txt : CMake project for gab-engine, include source and define
+# project specific logic here.
+#
 
-#LIBRARY-SPECIFIC DEPENDENCY LOADING
-find_package(SDL2 REQUIRED)
-target_link_libraries(Window SDL2::SDL2)
+#SUBDIRECTORY LOADING
+add_library(gbe_window
+	"Window.cpp"
+)
+add_library(gbe::gbe_window ALIAS gbe_window)
 
-#SET DEFAULT PROJECT INCLUDES
-include_gabengine_directories(Window)
+find_package(SDL2 CONFIG REQUIRED)
+target_link_libraries(gbe_window PRIVATE SDL2::SDL2)
 
-#DEBUG
-message("[GABENGINE] LOADED: Window")
+message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

@@ -1,7 +1,10 @@
 {
   "dependencies": [
-    "glm",
     "vcpkg-cmake-config",
-    "vcpkg-cmake"
+    "vcpkg-cmake",
+    "sdl2",
+    "glm",
+    "glad",
+    "stb"
   ]
 }

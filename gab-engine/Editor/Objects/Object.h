@@ -4,6 +4,8 @@
 #include <list>
 #include <functional>
 
+#include <glm/mat4x4.hpp>
+
 namespace gde {
 
 	class Object {

@@ -1,0 +1,7 @@
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/lib/glad.lib
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/include/glad/glad.h
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/include/KHR/khrplatform.h
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/lib/cmake/glad/gladConfig.cmake
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/lib/cmake/glad/gladConfigVersion.cmake
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/lib/cmake/glad/gladTargets.cmake
+D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/glad_x64-windows/lib/cmake/glad/gladTargets-release.cmake
