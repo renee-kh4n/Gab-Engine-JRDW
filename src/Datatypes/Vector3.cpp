@@ -36,4 +36,16 @@ float gde::Vector3::Magnitude()
 	return this->length();
 }
 
+gde::Vector3& gde::Vector3::operator+=(const gde::Vector3& b) {
+	(glm::vec3)*this += (glm::vec3)b;
+
+	return *this;
+}
+
+gde::Vector3& gde::Vector3::operator-=(const gde::Vector3& b) {
+	(glm::vec3)*this -= (glm::vec3)b;
+
+	return *this;
+}
+
 const gde::Vector3 gde::Vector3::zero = gde::Vector3(0, 0, 0);
