@@ -4,7 +4,7 @@ gde::CollisionContact* gde::Rod::GetContact()
 {
     auto p0 = this->objects[0]->World()->position;
     auto p1 = this->objects[1]->World()->position;
-    auto delta_p = p1 - p0;
+    Vector3 delta_p = p1 - p0;
     auto delta_mag = delta_p.Magnitude();
 
     if (delta_mag == length)
