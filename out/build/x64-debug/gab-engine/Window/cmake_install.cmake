@@ -1,8 +1,8 @@
-# Install script for directory: D:/Documents/GitHub/Gab-Engine/gab-engine/gab-engine/Window
+# Install script for directory: D:/Documents/GitHub/gab-engine-git/gab-engine/Window
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "D:/Documents/GitHub/Gab-Engine/gab-engine/out/install/x64-debug")
+  set(CMAKE_INSTALL_PREFIX "D:/Documents/GitHub/gab-engine-git/out/install/x64-debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 

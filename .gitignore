@@ -17,3 +17,4 @@ bld/
 out/
 *.ipch
 *.db
+/.vs

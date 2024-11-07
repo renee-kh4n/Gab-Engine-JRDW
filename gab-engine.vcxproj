@@ -22,7 +22,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{6F1E1AD7-4E55-3383-8778-978D3266D99C}</ProjectGuid>
+    <ProjectGuid>{DA0F2921-B2B4-38B6-937E-1E56899D98BC}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <VcpkgEnabled>false</VcpkgEnabled>
     <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
@@ -60,25 +60,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\Debug\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Documents\GitHub\gab-engine-git\Debug\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">gab-engine.dir\Debug\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">gab-engine</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\Release\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Documents\GitHub\gab-engine-git\Release\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">gab-engine.dir\Release\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">gab-engine</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\MinSizeRel\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Documents\GitHub\gab-engine-git\MinSizeRel\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">gab-engine.dir\MinSizeRel\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">gab-engine</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.exe</TargetExt>
     <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkIncremental>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">true</GenerateManifest>
-    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\RelWithDebInfo\</OutDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Documents\GitHub\gab-engine-git\RelWithDebInfo\</OutDir>
     <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">gab-engine.dir\RelWithDebInfo\</IntDir>
     <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">gab-engine</TargetName>
     <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.exe</TargetExt>
@@ -87,8 +87,8 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -107,10 +107,10 @@
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -120,7 +120,7 @@
     <PostBuildEvent>
       <Message>	</Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/Gab-Engine/gab-engine/Debug/gab-engine.exe -installedDir D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/debug/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/Debug/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/debug/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -129,7 +129,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/Gab-Engine/gab-engine/Debug D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/Debug D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/src/Editor/Debug/gbe_editor.dll D:/Documents/GitHub/gab-engine-git/src/Graphics/Debug/gbe_graphics.dll D:/Documents/GitHub/gab-engine-git/src/Window/Debug/gbe_window.dll D:/Documents/GitHub/gab-engine-git/src/Datatypes/Debug/gbe_datatypes.dll D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -139,13 +139,13 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>gab-engine\Editor\Debug\gbe_editor.lib;gab-engine\Datatypes\Debug\gbe_datatypes.lib;gab-engine\Graphics\Debug\gbe_graphics.lib;gab-engine\Window\Debug\gbe_window.lib;vcpkg_installed\x64-windows\debug\lib\SDL2d.lib;vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib;vcpkg_installed\x64-windows\debug\lib\glm.lib;vcpkg_installed\x64-windows\debug\lib\glm.lib;vcpkg_installed\x64-windows\debug\lib\SDL2d.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>vcpkg_installed\x64-windows\debug\lib\SDL2d.lib;vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib;vcpkg_installed\x64-windows\debug\lib\glm.lib;src\Editor\Debug\gbe_editor.lib;src\Graphics\Debug\gbe_graphics.lib;src\Window\Debug\gbe_window.lib;src\Datatypes\Debug\gbe_datatypes.lib;vcpkg_installed\x64-windows\debug\lib\glm.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Documents/GitHub/Gab-Engine/gab-engine/Debug/gab-engine.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Documents/GitHub/Gab-Engine/gab-engine/Debug/gab-engine.pdb</ProgramDataBaseFile>
+      <ImportLibrary>D:/Documents/GitHub/gab-engine-git/Debug/gab-engine.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Documents/GitHub/gab-engine-git/Debug/gab-engine.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -154,8 +154,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -175,10 +175,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -188,7 +188,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message>	</Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/Gab-Engine/gab-engine/Release/gab-engine.exe -installedDir D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/Release/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -197,7 +197,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/Gab-Engine/gab-engine/Release D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin/SDL2.dll D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin/SDL2.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/Release D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin/SDL2.dll D:/Documents/GitHub/gab-engine-git/src/Editor/Release/gbe_editor.dll D:/Documents/GitHub/gab-engine-git/src/Graphics/Release/gbe_graphics.dll D:/Documents/GitHub/gab-engine-git/src/Window/Release/gbe_window.dll D:/Documents/GitHub/gab-engine-git/src/Datatypes/Release/gbe_datatypes.dll D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin/SDL2.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -207,13 +207,13 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>gab-engine\Editor\Release\gbe_editor.lib;gab-engine\Datatypes\Release\gbe_datatypes.lib;gab-engine\Graphics\Release\gbe_graphics.lib;gab-engine\Window\Release\gbe_window.lib;vcpkg_installed\x64-windows\lib\SDL2.lib;vcpkg_installed\x64-windows\lib\manual-link\SDL2main.lib;vcpkg_installed\x64-windows\lib\glm.lib;vcpkg_installed\x64-windows\lib\glm.lib;vcpkg_installed\x64-windows\lib\SDL2.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>vcpkg_installed\x64-windows\lib\SDL2.lib;vcpkg_installed\x64-windows\lib\manual-link\SDL2main.lib;vcpkg_installed\x64-windows\lib\glm.lib;src\Editor\Release\gbe_editor.lib;src\Graphics\Release\gbe_graphics.lib;src\Window\Release\gbe_window.lib;src\Datatypes\Release\gbe_datatypes.lib;vcpkg_installed\x64-windows\lib\glm.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Documents/GitHub/Gab-Engine/gab-engine/Release/gab-engine.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Documents/GitHub/Gab-Engine/gab-engine/Release/gab-engine.pdb</ProgramDataBaseFile>
+      <ImportLibrary>D:/Documents/GitHub/gab-engine-git/Release/gab-engine.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Documents/GitHub/gab-engine-git/Release/gab-engine.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -222,8 +222,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -243,10 +243,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -256,7 +256,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message>	</Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/Gab-Engine/gab-engine/MinSizeRel/gab-engine.exe -installedDir D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/MinSizeRel/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -265,7 +265,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/Gab-Engine/gab-engine/MinSizeRel D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin/SDL2.dll D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin/SDL2.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/MinSizeRel D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin/SDL2.dll D:/Documents/GitHub/gab-engine-git/src/Editor/MinSizeRel/gbe_editor.dll D:/Documents/GitHub/gab-engine-git/src/Graphics/MinSizeRel/gbe_graphics.dll D:/Documents/GitHub/gab-engine-git/src/Window/MinSizeRel/gbe_window.dll D:/Documents/GitHub/gab-engine-git/src/Datatypes/MinSizeRel/gbe_datatypes.dll D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin/SDL2.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -275,13 +275,13 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>gab-engine\Editor\MinSizeRel\gbe_editor.lib;gab-engine\Datatypes\MinSizeRel\gbe_datatypes.lib;gab-engine\Graphics\MinSizeRel\gbe_graphics.lib;gab-engine\Window\MinSizeRel\gbe_window.lib;vcpkg_installed\x64-windows\lib\SDL2.lib;vcpkg_installed\x64-windows\lib\manual-link\SDL2main.lib;vcpkg_installed\x64-windows\lib\glm.lib;vcpkg_installed\x64-windows\lib\glm.lib;vcpkg_installed\x64-windows\lib\SDL2.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>vcpkg_installed\x64-windows\lib\SDL2.lib;vcpkg_installed\x64-windows\lib\manual-link\SDL2main.lib;vcpkg_installed\x64-windows\lib\glm.lib;src\Editor\MinSizeRel\gbe_editor.lib;src\Graphics\MinSizeRel\gbe_graphics.lib;src\Window\MinSizeRel\gbe_window.lib;src\Datatypes\MinSizeRel\gbe_datatypes.lib;vcpkg_installed\x64-windows\lib\glm.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Documents/GitHub/Gab-Engine/gab-engine/MinSizeRel/gab-engine.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Documents/GitHub/Gab-Engine/gab-engine/MinSizeRel/gab-engine.pdb</ProgramDataBaseFile>
+      <ImportLibrary>D:/Documents/GitHub/gab-engine-git/MinSizeRel/gab-engine.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Documents/GitHub/gab-engine-git/MinSizeRel/gab-engine.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -290,8 +290,8 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include" /external:I "D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/include/SDL2"</AdditionalOptions>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -310,10 +310,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ResourceCompile>
     <Midl>
-      <AdditionalIncludeDirectories>D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\gab-engine-git\src\Editor;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\include\SDL2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
       <HeaderFileName>%(Filename).h</HeaderFileName>
       <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
@@ -323,7 +323,7 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <PostBuildEvent>
       <Message>	</Message>
       <Command>setlocal
-C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/Gab-Engine/gab-engine/RelWithDebInfo/gab-engine.exe -installedDir D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin -OutVariable out
+C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/RelWithDebInfo/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin -OutVariable out
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -332,7 +332,7 @@ exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd
 setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/Gab-Engine/gab-engine/RelWithDebInfo D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin/SDL2.dll D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/x64-windows/bin/SDL2.dll
+"C:\Program Files\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/RelWithDebInfo D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin/SDL2.dll D:/Documents/GitHub/gab-engine-git/src/Editor/RelWithDebInfo/gbe_editor.dll D:/Documents/GitHub/gab-engine-git/src/Graphics/RelWithDebInfo/gbe_graphics.dll D:/Documents/GitHub/gab-engine-git/src/Window/RelWithDebInfo/gbe_window.dll D:/Documents/GitHub/gab-engine-git/src/Datatypes/RelWithDebInfo/gbe_datatypes.dll D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/bin/SDL2.dll
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -342,13 +342,13 @@ exit /b %1
 if %errorlevel% neq 0 goto :VCEnd</Command>
     </PostBuildEvent>
     <Link>
-      <AdditionalDependencies>gab-engine\Editor\RelWithDebInfo\gbe_editor.lib;gab-engine\Datatypes\RelWithDebInfo\gbe_datatypes.lib;gab-engine\Graphics\RelWithDebInfo\gbe_graphics.lib;gab-engine\Window\RelWithDebInfo\gbe_window.lib;vcpkg_installed\x64-windows\lib\SDL2.lib;vcpkg_installed\x64-windows\lib\manual-link\SDL2main.lib;vcpkg_installed\x64-windows\lib\glm.lib;vcpkg_installed\x64-windows\lib\glm.lib;vcpkg_installed\x64-windows\lib\SDL2.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalDependencies>vcpkg_installed\x64-windows\lib\SDL2.lib;vcpkg_installed\x64-windows\lib\manual-link\SDL2main.lib;vcpkg_installed\x64-windows\lib\glm.lib;src\Editor\RelWithDebInfo\gbe_editor.lib;src\Graphics\RelWithDebInfo\gbe_graphics.lib;src\Window\RelWithDebInfo\gbe_window.lib;src\Datatypes\RelWithDebInfo\gbe_datatypes.lib;vcpkg_installed\x64-windows\lib\glm.lib;shell32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
-      <ImportLibrary>D:/Documents/GitHub/Gab-Engine/gab-engine/RelWithDebInfo/gab-engine.lib</ImportLibrary>
-      <ProgramDataBaseFile>D:/Documents/GitHub/Gab-Engine/gab-engine/RelWithDebInfo/gab-engine.pdb</ProgramDataBaseFile>
+      <ImportLibrary>D:/Documents/GitHub/gab-engine-git/RelWithDebInfo/gab-engine.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/Documents/GitHub/gab-engine-git/RelWithDebInfo/gab-engine.pdb</ProgramDataBaseFile>
       <SubSystem>Console</SubSystem>
     </Link>
     <ProjectReference>
@@ -356,11 +356,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     </ProjectReference>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeLists.txt">
+    <CustomBuild Include="D:\Documents\GitHub\gab-engine-git\CMakeLists.txt">
       <UseUtf8Encoding>Always</UseUtf8Encoding>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/Documents/GitHub/gab-engine-git/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/Gab-Engine/gab-engine -BD:/Documents/GitHub/Gab-Engine/gab-engine --check-stamp-file D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/gab-engine-git -BD:/Documents/GitHub/gab-engine-git --check-stamp-file D:/Documents/GitHub/gab-engine-git/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -368,12 +368,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg-configuration.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg-configuration.json;D:\Documents\GitHub\gab-engine-git\vcpkg.json;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\Documents\GitHub\gab-engine-git\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/Documents/GitHub/gab-engine-git/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/Gab-Engine/gab-engine -BD:/Documents/GitHub/Gab-Engine/gab-engine --check-stamp-file D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/gab-engine-git -BD:/Documents/GitHub/gab-engine-git --check-stamp-file D:/Documents/GitHub/gab-engine-git/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -381,12 +381,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg-configuration.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg-configuration.json;D:\Documents\GitHub\gab-engine-git\vcpkg.json;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\Documents\GitHub\gab-engine-git\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/Documents/GitHub/gab-engine-git/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/Gab-Engine/gab-engine -BD:/Documents/GitHub/Gab-Engine/gab-engine --check-stamp-file D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/gab-engine-git -BD:/Documents/GitHub/gab-engine-git --check-stamp-file D:/Documents/GitHub/gab-engine-git/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -394,12 +394,12 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg-configuration.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg-configuration.json;D:\Documents\GitHub\gab-engine-git\vcpkg.json;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\Documents\GitHub\gab-engine-git\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
-      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeLists.txt</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/Documents/GitHub/gab-engine-git/CMakeLists.txt</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
-"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/Gab-Engine/gab-engine -BD:/Documents/GitHub/Gab-Engine/gab-engine --check-stamp-file D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeFiles/generate.stamp
+"C:\Program Files\CMake\bin\cmake.exe" -SD:/Documents/GitHub/gab-engine-git -BD:/Documents/GitHub/gab-engine-git --check-stamp-file D:/Documents/GitHub/gab-engine-git/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
@@ -407,36 +407,36 @@ endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
 exit /b %1
 :cmDone
 if %errorlevel% neq 0 goto :VCEnd</Command>
-      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg-configuration.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg.json;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\Gab-Engine\gab-engine\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Documents\GitHub\Gab-Engine\gab-engine\CMakeFiles\generate.stamp</Outputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCXXInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeCommonLanguageInclude.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeDependentOption.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeGenericSystem.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeInitializeConfigs.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeLanguageInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeRCInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInformation.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\CMakeSystemSpecificInitialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\CMakeCommonCompilerMacros.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Compiler\MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\FeatureSummary.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-Initialize.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC-CXX.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows-MSVC.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\Windows.cmake;C:\Program Files\CMake\share\cmake-3.30\Modules\Platform\WindowsPaths.cmake;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\vcpkg\scripts\buildsystems\vcpkg.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeCXXCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeRCCompiler.cmake;D:\Documents\GitHub\gab-engine-git\CMakeFiles\3.30.3\CMakeSystem.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg-configuration.json;D:\Documents\GitHub\gab-engine-git\vcpkg.json;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfig.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\glm\glmConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Config.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2ConfigVersion.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2Targets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-debug.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets-release.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\SDL2mainTargets.cmake;D:\Documents\GitHub\gab-engine-git\vcpkg_installed\x64-windows\share\sdl2\sdlfind.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\Documents\GitHub\gab-engine-git\CMakeFiles\generate.stamp</Outputs>
       <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\gab-engine.cpp" />
-    <ClInclude Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\gab-engine.h" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\gab-engine.cpp" />
+    <ClInclude Include="D:\Documents\GitHub\gab-engine-git\src\gab-engine.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="D:\Documents\GitHub\Gab-Engine\gab-engine\ZERO_CHECK.vcxproj">
-      <Project>{ECFA9C67-ED93-360B-BD25-5B6390E4389F}</Project>
+    <ProjectReference Include="D:\Documents\GitHub\gab-engine-git\ZERO_CHECK.vcxproj">
+      <Project>{5D80B26E-8A9D-3B21-889A-FB807CF706B0}</Project>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </ProjectReference>
-    <ProjectReference Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Datatypes\gbe_datatypes.vcxproj">
-      <Project>{65602442-A5DB-3CC4-A14F-48993B1B6FDE}</Project>
+    <ProjectReference Include="D:\Documents\GitHub\gab-engine-git\src\Datatypes\gbe_datatypes.vcxproj">
+      <Project>{207C0313-34BF-3035-9887-80DD98676A89}</Project>
       <Name>gbe_datatypes</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Editor\gbe_editor.vcxproj">
-      <Project>{81A1B4DF-CB72-3EF5-B679-6AC019EDEE51}</Project>
+    <ProjectReference Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.vcxproj">
+      <Project>{0F6E7D7B-38F2-3D7C-9A13-4F89E21BAA4D}</Project>
       <Name>gbe_editor</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Graphics\gbe_graphics.vcxproj">
-      <Project>{2861D654-FAA8-3046-8EBE-C1D98AAA8AD0}</Project>
+    <ProjectReference Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.vcxproj">
+      <Project>{A8BE6680-6E89-35B6-B1F7-F58125736669}</Project>
       <Name>gbe_graphics</Name>
     </ProjectReference>
-    <ProjectReference Include="D:\Documents\GitHub\Gab-Engine\gab-engine\gab-engine\Window\gbe_window.vcxproj">
-      <Project>{C350D348-1173-36EC-B62A-2D038D6AE786}</Project>
+    <ProjectReference Include="D:\Documents\GitHub\gab-engine-git\src\Window\gbe_window.vcxproj">
+      <Project>{CB5E09C5-704D-32EE-88E0-A474A9172A00}</Project>
       <Name>gbe_window</Name>
     </ProjectReference>
   </ItemGroup>

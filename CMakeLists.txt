@@ -16,33 +16,27 @@ project ("gab-engine" LANGUAGES CXX)
 
 # Setup source
 set(PROJECT_SRCS
-	gab-engine/gab-engine.cpp
-	gab-engine/gab-engine.h
+	src/gab-engine.cpp
+	src/gab-engine.h
 )
 
 # Add source to this project's executable.
 add_executable(${PROJECT_NAME} ${PROJECT_SRCS})
 
 #SUBDIRECTORY LOADING
-add_subdirectory(gab-engine)
+add_subdirectory(src)
+target_link_libraries(${PROJECT_NAME} PRIVATE interface_gbe_engine_src)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC
-    gbe::gbe_editor
-    gbe::gbe_datatypes
-    gbe::gbe_graphics
-    gbe::gbe_window
-)
-
-#Dependency-Specific Loading
+#Dependency Loading
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME}
-    PRIVATE
+    PUBLIC
     SDL2::SDL2
     SDL2::SDL2main
 )
 
-#Directory including
-include_directories(gab-engine)
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PUBLIC glm::glm)
 
 #DEBUG
 get_target_property(LINKED_LIBS ${PROJECT_NAME} LINK_LIBRARIES)

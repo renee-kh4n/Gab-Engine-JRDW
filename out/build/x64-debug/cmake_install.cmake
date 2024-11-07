@@ -1,8 +1,8 @@
-# Install script for directory: D:/Documents/GitHub/Gab-Engine/gab-engine
+# Install script for directory: D:/Documents/GitHub/gab-engine-git
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "D:/Documents/GitHub/Gab-Engine/gab-engine/out/install/x64-debug")
+  set(CMAKE_INSTALL_PREFIX "D:/Documents/GitHub/gab-engine-git/out/install/x64-debug")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for the subdirectory.
-  include("D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/gab-engine/cmake_install.cmake")
+  include("D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/cmake_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -45,5 +45,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "D:/Documents/GitHub/Gab-Engine/gab-engine/out/build/x64-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

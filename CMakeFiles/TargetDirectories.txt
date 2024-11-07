@@ -1,7 +1,7 @@
-D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeFiles/gab-engine.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeFiles/ALL_BUILD.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/CMakeFiles/ZERO_CHECK.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/gab-engine/Datatypes/CMakeFiles/gbe_datatypes.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/gab-engine/Editor/CMakeFiles/gbe_editor.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/gab-engine/Graphics/CMakeFiles/gbe_graphics.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/gab-engine/Window/CMakeFiles/gbe_window.dir
+D:/Documents/GitHub/gab-engine-git/CMakeFiles/gab-engine.dir
+D:/Documents/GitHub/gab-engine-git/CMakeFiles/ALL_BUILD.dir
+D:/Documents/GitHub/gab-engine-git/CMakeFiles/ZERO_CHECK.dir
+D:/Documents/GitHub/gab-engine-git/src/Datatypes/CMakeFiles/gbe_datatypes.dir
+D:/Documents/GitHub/gab-engine-git/src/Graphics/CMakeFiles/gbe_graphics.dir
+D:/Documents/GitHub/gab-engine-git/src/Window/CMakeFiles/gbe_window.dir
+D:/Documents/GitHub/gab-engine-git/src/Editor/CMakeFiles/gbe_editor.dir
