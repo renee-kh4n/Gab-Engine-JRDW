@@ -1,7 +1,7 @@
 Detecting compiler hash for triplet x64-windows...
 Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.41.34120/bin/Hostx64/x64/cl.exe
 All requested packages are currently installed.
-Total install time: 200 ns
+Total install time: 400 ns
 glad provides CMake targets:
 
   # this is heuristically generated, and may not be correct

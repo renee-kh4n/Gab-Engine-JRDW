@@ -12,6 +12,8 @@ int main(int argc, char* argv[])
 
 	auto editor = gde::Editor();
 
+	editor.Run();
+
 	SDL_Quit();
 	return 0;
 }

@@ -34,6 +34,15 @@
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\ControllerBase.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\FlyingCameraControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\OrbitalControl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\VariableSwitcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Input\InputPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -77,6 +86,21 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ParticleSystem\VectorParameter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Lights\DirectionalLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Lights\LightObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Renderer\LineRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\RenderObject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

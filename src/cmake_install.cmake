@@ -37,3 +37,18 @@ if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   include("D:/Documents/GitHub/gab-engine-git/src/Datatypes/cmake_install.cmake")
 endif()
 
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("D:/Documents/GitHub/gab-engine-git/src/Graphics/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("D:/Documents/GitHub/gab-engine-git/src/Window/cmake_install.cmake")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for the subdirectory.
+  include("D:/Documents/GitHub/gab-engine-git/src/Editor/cmake_install.cmake")
+endif()
+

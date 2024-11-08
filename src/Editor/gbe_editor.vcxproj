@@ -292,6 +292,9 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Object.cpp" />
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Root.cpp" />
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\ControllerBase.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\FlyingCameraControl.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\OrbitalControl.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\VariableSwitcher.cpp" />
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Input\InputPlayer.cpp" />
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ForceVolume.cpp" />
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ParticleSystem.cpp" />
@@ -307,6 +310,11 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Particle\ParticleObject.cpp" />
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ParticleSystem\FloatParameter.cpp" />
     <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ParticleSystem\VectorParameter.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Lights\DirectionalLight.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Lights\LightObject.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Renderer\LineRenderer.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Camera.cpp" />
+    <ClCompile Include="D:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\RenderObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="D:\Documents\GitHub\gab-engine-git\ZERO_CHECK.vcxproj">
@@ -314,6 +322,10 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
       <Name>ZERO_CHECK</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.vcxproj">
+      <Project>{A8BE6680-6E89-35B6-B1F7-F58125736669}</Project>
+      <Name>gbe_graphics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

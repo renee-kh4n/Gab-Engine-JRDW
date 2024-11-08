@@ -63,7 +63,7 @@ namespace gde {
         //Camera setup
         auto player_input = new InputPlayer(player_name);
         player_input->SetParent(root_object);
-        auto camera_parent = new FlyingCameraControl();
+        auto camera_parent = new Object();
         camera_parent->SetParent(player_input);
 
         auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
@@ -71,11 +71,7 @@ namespace gde {
         mPerspectiveCam->farClip = 1500.0f;
         mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
         mPerspectiveCam->SetParent(camera_parent);
-        auto mOrthoCam = new OrthographicCamera(mWindow, CamOrthoPPShader);
-        mOrthoCam->orthoRange = 450;
-        mOrthoCam->farClip = 1500.0f;
-        mOrthoCam->WorldUp = Vector3(0, 1, 0);
-        mOrthoCam->SetParent(camera_parent);
+        
         active_camera = mPerspectiveCam;
 
         camera_parent->TranslateWorld(Vector3(0, 0, 0));

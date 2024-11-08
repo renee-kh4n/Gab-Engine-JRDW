@@ -79,7 +79,7 @@ build cmake_object_order_depends_target_gab-engine: phony || cmake_object_order_
 
 build src\CMakeFiles\gab-engine.dir\gab-engine.cpp.obj: CXX_COMPILER__gab-engine_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\gab-engine.cpp || cmake_object_order_depends_target_gab-engine
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include\SDL2 -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include\SDL2 -external:W0
   OBJECT_DIR = src\CMakeFiles\gab-engine.dir
   OBJECT_FILE_DIR = src\CMakeFiles\gab-engine.dir
   TARGET_COMPILE_PDB = src\CMakeFiles\gab-engine.dir\
@@ -93,12 +93,12 @@ build src\CMakeFiles\gab-engine.dir\gab-engine.cpp.obj: CXX_COMPILER__gab-engine
 #############################################
 # Link the executable src\gab-engine.exe
 
-build src\gab-engine.exe: CXX_EXECUTABLE_LINKER__gab-engine_Debug src\CMakeFiles\gab-engine.dir\gab-engine.cpp.obj | vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib src\Datatypes\gbe_datatypes.lib vcpkg_installed\x64-windows\debug\lib\glm.lib src\Window\gbe_window.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib src\Editor\gbe_editor.lib src\Graphics\gbe_graphics.lib vcpkg_installed\x64-windows\debug\lib\glad.lib vcpkg_installed\x64-windows\debug\lib\glm.lib || src\Datatypes\gbe_datatypes.lib src\Editor\gbe_editor.lib src\Graphics\gbe_graphics.lib src\Window\gbe_window.lib
+build src\gab-engine.exe: CXX_EXECUTABLE_LINKER__gab-engine_Debug src\CMakeFiles\gab-engine.dir\gab-engine.cpp.obj | vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib src\Datatypes\gbe_datatypes.lib vcpkg_installed\x64-windows\debug\lib\glm.lib src\Window\gbe_window.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib src\Editor\gbe_editor.lib src\Graphics\gbe_graphics.lib vcpkg_installed\x64-windows\debug\lib\glm.lib || src\Datatypes\gbe_datatypes.lib src\Editor\gbe_editor.lib src\Graphics\gbe_graphics.dll src\Window\gbe_window.lib
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
-  LINK_LIBRARIES = vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  src\Datatypes\gbe_datatypes.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  src\Window\gbe_window.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  src\Editor\gbe_editor.lib  src\Graphics\gbe_graphics.lib  vcpkg_installed\x64-windows\debug\lib\glad.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  shell32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_LIBRARIES = vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  src\Datatypes\gbe_datatypes.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  src\Window\gbe_window.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  src\Editor\gbe_editor.lib  src\Graphics\gbe_graphics.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  shell32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = src\CMakeFiles\gab-engine.dir
-  POST_BUILD = C:\Windows\system32\cmd.exe /C "cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug\src && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin -OutVariable out && cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug\src && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll"
+  POST_BUILD = C:\Windows\system32\cmd.exe /C "cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug\src && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin -OutVariable out && cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug\src && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Graphics/gbe_graphics.dll"
   PRE_LINK = cd .
   TARGET_COMPILE_PDB = src\CMakeFiles\gab-engine.dir\
   TARGET_FILE = src\gab-engine.exe
@@ -229,7 +229,7 @@ build src\Datatypes\rebuild_cache: phony src\Datatypes\CMakeFiles\rebuild_cache.
 # =============================================================================
 
 # =============================================================================
-# Object build statements for STATIC_LIBRARY target gbe_graphics
+# Object build statements for SHARED_LIBRARY target gbe_graphics
 
 
 #############################################
@@ -238,85 +238,96 @@ build src\Datatypes\rebuild_cache: phony src\Datatypes\CMakeFiles\rebuild_cache.
 build cmake_object_order_depends_target_gbe_graphics: phony || .
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\RenderPipeline.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\RenderPipeline.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\Light.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\Light.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\DrawCall.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\DrawCall.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\Material.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\Material.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\Mesh.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\Mesh.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\Shader.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\Shader.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\Skybox.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\Skybox.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 build src\Graphics\CMakeFiles\gbe_graphics.dir\Texture.cpp.obj: CXX_COMPILER__gbe_graphics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Graphics\Texture.cpp || cmake_object_order_depends_target_gbe_graphics
+  DEFINES = -Dgbe_graphics_EXPORTS
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   INCLUDES = -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
   OBJECT_FILE_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 
 # =============================================================================
-# Link build statements for STATIC_LIBRARY target gbe_graphics
+# Link build statements for SHARED_LIBRARY target gbe_graphics
 
 
 #############################################
-# Link the static library src\Graphics\gbe_graphics.lib
+# Link the shared library src\Graphics\gbe_graphics.dll
 
-build src\Graphics\gbe_graphics.lib: CXX_STATIC_LIBRARY_LINKER__gbe_graphics_Debug src\Graphics\CMakeFiles\gbe_graphics.dir\RenderPipeline.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Light.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\DrawCall.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Material.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Mesh.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Shader.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Skybox.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Texture.cpp.obj
+build src\Graphics\gbe_graphics.dll src\Graphics\gbe_graphics.lib: CXX_SHARED_LIBRARY_LINKER__gbe_graphics_Debug src\Graphics\CMakeFiles\gbe_graphics.dir\RenderPipeline.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Light.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\DrawCall.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Material.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Mesh.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Shader.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Skybox.cpp.obj src\Graphics\CMakeFiles\gbe_graphics.dir\Texture.cpp.obj | vcpkg_installed\x64-windows\debug\lib\glad.lib
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  LINK_FLAGS = /machine:x64
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL
+  LINK_LIBRARIES = vcpkg_installed\x64-windows\debug\lib\glad.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = src\Graphics\CMakeFiles\gbe_graphics.dir
-  POST_BUILD = cd .
+  POST_BUILD = C:\Windows\system32\cmd.exe /C "cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug\src\Graphics && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Graphics/gbe_graphics.dll -installedDir D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin -OutVariable out"
   PRE_LINK = cd .
-  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\gbe_graphics.pdb
-  TARGET_FILE = src\Graphics\gbe_graphics.lib
+  RESTAT = 1
+  TARGET_COMPILE_PDB = src\Graphics\CMakeFiles\gbe_graphics.dir\
+  TARGET_FILE = src\Graphics\gbe_graphics.dll
+  TARGET_IMPLIB = src\Graphics\gbe_graphics.lib
   TARGET_PDB = src\Graphics\gbe_graphics.pdb
 
 
@@ -421,7 +432,7 @@ build cmake_object_order_depends_target_gbe_editor: phony || cmake_object_order_
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Editor.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -429,7 +440,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj: CXX_COMPILER__gbe_edi
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Component\Transform.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Component\Transform.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Component
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -437,7 +448,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Component\Transform.cpp.obj: CXX_COMP
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Global\Time.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Global\Time.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Global
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -445,7 +456,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Global\Time.cpp.obj: CXX_COMPILER__gb
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\KeyPressImplementation.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Input\Implementations\KeyPressImplementation.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -453,7 +464,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\KeyPressImpleme
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\MouseScrollImplementation.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Input\Implementations\MouseScrollImplementation.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -461,7 +472,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\MouseScrollImpl
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\WasdDeltaImplementation.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Input\Implementations\WasdDeltaImplementation.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -469,7 +480,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\WasdDeltaImplem
 
 build src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\PhysicsHandler.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\ObjectHandlers\PhysicsHandler.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -477,7 +488,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\PhysicsHandler.cpp.obj
 
 build src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\Members\ContactResolver.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\ObjectHandlers\Members\ContactResolver.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\Members
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -485,7 +496,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\Members\ContactResolve
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Object.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Object.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -493,7 +504,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Object.cpp.obj: CXX_COMPILER_
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Root.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Root.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -501,7 +512,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Root.cpp.obj: CXX_COMPILER__g
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\ControllerBase.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\ControllerBase.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -509,7 +520,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\ControllerBase.cp
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\FlyingCameraControl.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\FlyingCameraControl.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -517,7 +528,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\FlyingCameraContr
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\OrbitalControl.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\OrbitalControl.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -525,7 +536,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\OrbitalControl.cp
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\VariableSwitcher.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Controllers\VariableSwitcher.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -533,7 +544,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\VariableSwitcher.
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Input\InputPlayer.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Input\InputPlayer.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Input
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -541,7 +552,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Input\InputPlayer.cpp.obj: CX
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ForceVolume.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ForceVolume.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -549,7 +560,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ForceVolume.cpp.obj: 
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ParticleSystem.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -557,7 +568,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem.cpp.ob
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\RigidObject.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\RigidObject.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -565,7 +576,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\RigidObject.cpp.obj: 
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collider\Collider.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Collider\Collider.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collider
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -573,7 +584,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collider\Collider.cpp
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collision\Contact.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Collision\Contact.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collision
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -581,7 +592,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collision\Contact.cpp
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\AnchorSpring.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Joints\AnchorSpring.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -589,7 +600,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\AnchorSpring.c
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Bungee.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Joints\Bungee.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -597,7 +608,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Bungee.cpp.obj
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\ChainJoint.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Joints\ChainJoint.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -605,7 +616,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\ChainJoint.cpp
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Spinner.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Joints\Spinner.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -613,7 +624,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Spinner.cpp.ob
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\RigidObjectLink.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Linking\RigidObjectLink.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -621,7 +632,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\RigidObjectLi
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\Rod.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Linking\Rod.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -629,7 +640,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\Rod.cpp.obj: 
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Particle\ParticleObject.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\Particle\ParticleObject.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Particle
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -637,7 +648,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Particle\ParticleObje
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\FloatParameter.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ParticleSystem\FloatParameter.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -645,7 +656,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\FloatP
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\VectorParameter.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Physics\ParticleSystem\VectorParameter.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -653,7 +664,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\Vector
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\DirectionalLight.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Lights\DirectionalLight.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -661,7 +672,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\DirectionalL
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\LightObject.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Lights\LightObject.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -669,7 +680,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\LightObject.
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Renderer\LineRenderer.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Renderer\LineRenderer.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Renderer
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -677,7 +688,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Renderer\LineRender
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Camera.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\Camera.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -685,7 +696,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Camera.cpp.obj: CXX
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\RenderObject.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Objects\Rendering\RenderObject.cpp || cmake_object_order_depends_target_gbe_editor
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Editor -ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug -ID:\Documents\GitHub\gab-engine-git\gbe_graphics -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
@@ -699,7 +710,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\RenderObject.cpp.ob
 #############################################
 # Link the static library src\Editor\gbe_editor.lib
 
-build src\Editor\gbe_editor.lib: CXX_STATIC_LIBRARY_LINKER__gbe_editor_Debug src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Component\Transform.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Global\Time.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\KeyPressImplementation.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\MouseScrollImplementation.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\WasdDeltaImplementation.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\PhysicsHandler.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\Members\ContactResolver.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Object.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Root.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\ControllerBase.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\FlyingCameraControl.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\OrbitalControl.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\VariableSwitcher.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Input\InputPlayer.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ForceVolume.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\RigidObject.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collider\Collider.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collision\Contact.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\AnchorSpring.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Bungee.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\ChainJoint.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Spinner.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\RigidObjectLink.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\Rod.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Particle\ParticleObject.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\FloatParameter.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\VectorParameter.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\DirectionalLight.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\LightObject.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Renderer\LineRenderer.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Camera.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\RenderObject.cpp.obj || src\Graphics\gbe_graphics.lib
+build src\Editor\gbe_editor.lib: CXX_STATIC_LIBRARY_LINKER__gbe_editor_Debug src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Component\Transform.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Global\Time.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\KeyPressImplementation.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\MouseScrollImplementation.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Input\Implementations\WasdDeltaImplementation.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\PhysicsHandler.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\ObjectHandlers\Members\ContactResolver.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Object.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Root.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\ControllerBase.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\FlyingCameraControl.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\OrbitalControl.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Controllers\VariableSwitcher.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Input\InputPlayer.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ForceVolume.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\RigidObject.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collider\Collider.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Collision\Contact.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\AnchorSpring.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Bungee.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\ChainJoint.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Joints\Spinner.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\RigidObjectLink.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Linking\Rod.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\Particle\ParticleObject.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\FloatParameter.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Physics\ParticleSystem\VectorParameter.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\DirectionalLight.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Lights\LightObject.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Renderer\LineRenderer.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\Camera.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\Objects\Rendering\RenderObject.cpp.obj || src\Graphics\gbe_graphics.dll
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
@@ -747,9 +758,9 @@ build gbe_editor: phony src\Editor\gbe_editor.lib
 
 build gbe_editor.lib: phony src\Editor\gbe_editor.lib
 
-build gbe_graphics: phony src\Graphics\gbe_graphics.lib
+build gbe_graphics: phony src\Graphics\gbe_graphics.dll
 
-build gbe_graphics.lib: phony src\Graphics\gbe_graphics.lib
+build gbe_graphics.dll: phony src\Graphics\gbe_graphics.dll
 
 build gbe_window: phony src\Window\gbe_window.lib
 
@@ -791,7 +802,7 @@ build src\Editor\all: phony src\Editor\gbe_editor.lib
 #############################################
 # Folder: D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Graphics
 
-build src\Graphics\all: phony src\Graphics\gbe_graphics.lib
+build src\Graphics\all: phony src\Graphics\gbe_graphics.dll
 
 # =============================================================================
 

@@ -1,9 +1,5 @@
 #pragma once
 
-#define GLM_ENABLE_EXPERIMENTAL
-#define TINYOBJLOADER_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-
 #include <glm/glm.hpp>
 #include <glad/glad.h>
 #include <glm/gtx/matrix_decompose.hpp>

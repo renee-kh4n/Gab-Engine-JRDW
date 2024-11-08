@@ -1,3 +1,6 @@
+#define GLM_ENABLE_EXPERIMENTAL
+#define TINYOBJLOADER_IMPLEMENTATION
+#define STB_IMAGE_IMPLEMENTATION
 #include "RenderPipeline.h"
 
 using namespace gde;

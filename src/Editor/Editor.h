@@ -1,5 +1,6 @@
 #pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include "../Graphics/RenderPipeline.h"
 #include "Input/KeyDefines.h"
 #include "Input/Implementations/Implementations.h"
@@ -9,9 +10,7 @@
 #include "ObjectFunctions/ObjectFunctions.h"
 #include "Global/Time.h"
 		  
-#include "Objects/Physics/Joints/Spinner.h"
-		  
-#include "Objects/Controllers/FlyingCameraControl.h"
+//#include "Objects/Controllers/FlyingCameraControl.h"
 
 namespace gde {
 	class Editor {
