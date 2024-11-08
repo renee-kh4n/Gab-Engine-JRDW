@@ -8,7 +8,7 @@
 #include <list>
 #include <functional>
 
-#include <glm/mat4x4.hpp>
+#include "../Datatypes/Matrix4.h"
 
 namespace gde {
 
@@ -23,11 +23,11 @@ namespace gde {
 
 		void UpdateTransform();
 
-		void MatToTrans(Transform* target, glm::mat4 mat);
+		void MatToTrans(Transform* target, Matrix4 mat);
 	protected:
 		Object* parent;
-		glm::mat4 parent_matrix;
-		glm::mat4 local_matrix;
+		Matrix4 parent_matrix;
+		Matrix4 local_matrix;
 		virtual Object* Copy_self();
 	public:
 		Object();

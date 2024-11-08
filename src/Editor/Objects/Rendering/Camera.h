@@ -5,6 +5,7 @@
 #include "../Window/Window.h"
 
 #include "../Graphics/Shader.h"
+#include "../Datatypes/Matrix4.h"
 
 namespace gde {
     using namespace rendering;
@@ -23,8 +24,8 @@ namespace gde {
 
         Vector3 WorldUp = Vector3(0, 1, 0);
 
-        glm::mat4 GetViewMat();
-        virtual glm::mat4 getproj() = 0;
+        Matrix4 GetViewMat();
+        virtual Matrix4 getproj() = 0;
     };
 
     struct OrthographicCamera : public Camera {
@@ -33,7 +34,7 @@ namespace gde {
         OrthographicCamera(Window* mWindow, Shader* mShader);
 
         // Inherited via GDCamera
-        virtual glm::mat4 getproj() override;
+        virtual Matrix4 getproj() override;
     };
 
     struct PerspectiveCamera : public Camera {
@@ -42,6 +43,6 @@ namespace gde {
         PerspectiveCamera(Window* mWindow, Shader* mShader);
 
         // Inherited via GDCamera
-        virtual glm::mat4 getproj() override;
+        virtual Matrix4 getproj() override;
     };
 }

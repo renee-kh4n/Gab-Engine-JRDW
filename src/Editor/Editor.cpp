@@ -13,23 +13,22 @@ namespace gde {
         auto mTime = new Time();
 
         Window* mWindow = new Window();
-        mWindow->SetContextToThis();
 
 #pragma region Rendering Requisites Setup
-        //Shaders setup
-        auto depthShader = new Shader("Shaders/object.vert", "Shaders/depth.frag");
-        auto litShader = new Shader("Shaders/object.vert", "Shaders/lit.frag");
-        auto unlitShader = new Shader("Shaders/object.vert", "Shaders/unlit.frag");
-        auto Cam3rdPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
-        auto Cam1stPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
-
-        auto CamOrthoPPShader = new Shader("Shaders/camshader.vert", "Shaders/camshader.frag");
-        CamOrthoPPShader->SetOverride("saturation", 1.0f);
-        CamOrthoPPShader->SetOverride("tint", glm::vec4(1, 1, 1, 1));
-
         //RenderPipeline setup
         Camera* active_camera = nullptr;
-        auto mRenderPipeline = new RenderPipeline(glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
+        auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
+        
+        //Shaders setup
+        auto depthShader = new Shader("Assets/Shaders/object.vert", "Assets/Shaders/depth.frag");
+        auto litShader = new Shader("Assets/Shaders/object.vert", "Assets/Shaders/lit.frag");
+        auto unlitShader = new Shader("Assets/Shaders/object.vert", "Assets/Shaders/unlit.frag");
+        auto Cam3rdPPShader = new Shader("Assets/Shaders/camshader.vert", "Assets/Shaders/camshader.frag");
+        auto Cam1stPPShader = new Shader("Assets/Shaders/camshader.vert", "Assets/Shaders/camshader.frag");
+
+        auto CamOrthoPPShader = new Shader("Assets/Shaders/camshader.vert", "Assets/Shaders/camshader.frag");
+        CamOrthoPPShader->SetOverride("saturation", 1.0f);
+        CamOrthoPPShader->SetOverride("tint", glm::vec4(1, 1, 1, 1));
 
         //auto mGUIPipeline = new GUIPipeline(mWindow->GetNativeHandle());
 #pragma endregion
@@ -63,7 +62,7 @@ namespace gde {
         //Camera setup
         auto player_input = new InputPlayer(player_name);
         player_input->SetParent(root_object);
-        auto camera_parent = new Object();
+        auto camera_parent = new FlyingCameraControl();
         camera_parent->SetParent(player_input);
 
         auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
@@ -74,19 +73,19 @@ namespace gde {
         
         active_camera = mPerspectiveCam;
 
-        camera_parent->TranslateWorld(Vector3(0, 0, 0));
+        camera_parent->TranslateWorld(Vector3(0, 0, -10));
 
         //Mesh and material caching
 
         //unlit line rendercall
         auto mat = new Material(unlitShader);
         mat->setOverride<glm::vec3>("color", glm::vec3(1, 1, 1));
-        auto lineDrawCall = new DrawCall(new Mesh("3D/plane.obj"), mat);
+        auto lineDrawCall = new DrawCall(new Mesh("Assets/3D/plane.obj"), mat);
         mRenderPipeline->RegisterDrawCall(lineDrawCall);
 
         //particle rendercall
-        auto sphere_mesh = new Mesh("3D/sphere.obj");
-        auto sphere_tex = new Texture("Tex/cubeacca.jpg");
+        auto sphere_mesh = new Mesh("Assets/3D/sphere.obj");
+        auto sphere_tex = new Texture("Assets/Tex/cubeacca.jpg");
 
         auto create_rendercall = [sphere_tex, sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
             auto mattex = MaterialTexture();
@@ -200,6 +199,7 @@ namespace gde {
         while (!mWindow->ShouldClose())
         {
             /* Poll for and process events */
+            mWindow->UpdateState();
 
             //Update input system
             mInputSystem->UpdateStates([mInputHandler](std::string name, gde::input::InputAction* action, bool changed) {
@@ -213,8 +213,6 @@ namespace gde {
                             });
                 }
                 }, mWindow);
-
-
 
             //Early update
             for (auto updatable : mEarlyUpdate->object_list)
@@ -236,7 +234,7 @@ namespace gde {
             mWindow->SwapBuffers();
 
             //Update other handlers
-            mTime->TickFixed([mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
+            auto onTick = [mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
                 mPhysicsHandler->Update(deltatime);
 
                 float delta_f = (float)deltatime;
@@ -251,7 +249,10 @@ namespace gde {
                 {
                     updatable->InvokeLateUpdate(delta_f);
                 }
-                });
+
+                std::cout << "Frame Completed: " << delta_f << std::endl;
+            };
+            mTime->TickFixed(onTick);
 
             mInputSystem->ResetStates(mWindow);
 

@@ -9,7 +9,7 @@ namespace gde {
     namespace rendering {
         class DrawCall {
         public:
-            std::unordered_map<void*, glm::mat4> calls;
+            std::unordered_map<void*, Matrix4> calls;
 
             Mesh* m_mesh;
             Material* m_material;

@@ -12,6 +12,11 @@
 #include "Light.h"
 #include "Framebuffer.h"
 
+#include <functional>
+
+#include "../Datatypes/Vector3.h"
+#include "../Datatypes/Matrix4.h"
+
 namespace gde {
 	using namespace rendering;
 
@@ -21,9 +26,9 @@ namespace gde {
 		Framebuffer* mFrameBuffer;
 		Framebuffer* mDepthFrameBuffer;
 
-		glm::vec3 from;
-		glm::mat4 viewMat;
-		glm::mat4 projMat;
+		Vector3 from;
+		Matrix4 viewMat;
+		Matrix4 projMat;
 		Shader* postprocess;
 
 		std::vector<DrawCall*> drawcalls;
@@ -35,7 +40,7 @@ namespace gde {
 
 		void SetRequiredAttribs();
 	public:
-		RenderPipeline(glm::vec2);
+		RenderPipeline(void*(*procaddressfunc)(const char*), glm::vec2);
 		void RegisterDrawCall(DrawCall*);
 
 		void SetMaximumLights(int maxlights);
@@ -45,7 +50,7 @@ namespace gde {
 
 		void RenderFrame();
 
-		glm::mat4 GetProjMat();
+		Matrix4 GetProjMat();
 
 		void CleanUp();
 	};

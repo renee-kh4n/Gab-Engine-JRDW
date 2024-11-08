@@ -38,7 +38,7 @@ void gde::PhysicsHandler::Update(double duration)
 
 		auto aV = ro->angularVelocity;
 		aV *= duration;
-		float aVmag = aV.length();
+		float aVmag = aV.Magnitude();
 		Vector3 aVdir = aV * (1.0f / aVmag);
 
 		if (aVmag > 0.0001f) {

@@ -9,11 +9,16 @@ void gde::RenderPipeline::SetRequiredAttribs()
 {
 }
 
-gde::RenderPipeline::RenderPipeline(glm::vec2 dimensions)
+gde::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), glm::vec2 dimensions)
 {
+    auto thing = procaddressfunc("glGetString");
+
+    if (gladLoadGLLoader(procaddressfunc) == 0)
+        throw "ERROR: glad failed to initialize.";
+
     this->from = glm::vec3(1.0f);
-    this->projMat = glm::mat4(1.0f);
-    this->viewMat = glm::mat4(1.0f);
+    this->projMat = Matrix4();
+    this->viewMat = Matrix4();
     this->postprocess = nullptr;
 
     //Skybox setup
@@ -53,7 +58,7 @@ bool RenderPipeline::TryPushLight(rendering::Light* data, bool priority) {
     return true;
 }
 
-glm::mat4 gde::RenderPipeline::GetProjMat() {
+Matrix4 gde::RenderPipeline::GetProjMat() {
     return this->projMat;
 }
 
@@ -145,9 +150,9 @@ void gde::RenderPipeline::RenderFrame()
                     index++;
                 }
                 //Transform data
-                glm::mat4 tmat = call.second;
-                glm::mat4 tmat_VM = tmat;
-                glm::mat4 tmat_PVM = projMat * viewMat * tmat;
+                Matrix4 tmat = call.second;
+                Matrix4 tmat_VM = tmat;
+                Matrix4 tmat_PVM = projMat * viewMat * tmat;
                 setMat4("transform_model", tmat);
                 setMat4("transform_projection", tmat_PVM);
                 setVec3("cameraPos", from);

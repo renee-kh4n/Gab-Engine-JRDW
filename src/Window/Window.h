@@ -21,12 +21,12 @@ namespace gde {
     class Window {
     private:
         SDL_Window* implemented_window;
-
+        SDL_GLContext context;
         Vector2Int mousePos;
-
         std::unordered_map<std::string, std::function<void(void*)>> window_callbacks;
-
-        std::unordered_map<unsigned int, int> keystates;
+        std::unordered_map<unsigned int, bool> keystates;
+        void* (*procaddressfunc)(const char*);
+        bool shouldclose = false;
     public:
         Window();
 
@@ -36,9 +36,6 @@ namespace gde {
 
         bool ShouldClose();
 
-        void SetContextToThis();
-        void* GetNativeHandle();
-
         int Get_win_x();
         int Get_win_y();
 
@@ -47,5 +44,7 @@ namespace gde {
 
         bool GetKeyState(unsigned int keyId);
         Vector2Int GetMousePos();
+
+        void* (*Get_procaddressfunc())(const char*);
     };
 }

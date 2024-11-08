@@ -11,7 +11,7 @@ namespace gde {
         this->mShader = mShader;
     }
 
-    glm::mat4 Camera::GetViewMat()
+    Matrix4 Camera::GetViewMat()
     {
         auto world = this->World();
 
@@ -23,7 +23,7 @@ namespace gde {
     {
     }
 
-    glm::mat4 PerspectiveCamera::getproj()
+    Matrix4 PerspectiveCamera::getproj()
     {
         return glm::perspective(glm::radians(this->angles), (float)mWindow->Get_win_y() / mWindow->Get_win_x(), this->nearClip, this->farClip);
     }
@@ -32,7 +32,7 @@ namespace gde {
     {
     }
 
-    glm::mat4 OrthographicCamera::getproj()
+    Matrix4 OrthographicCamera::getproj()
     {
         return glm::ortho(-orthoRange, orthoRange, -orthoRange, orthoRange, this->nearClip, this->farClip);
     }

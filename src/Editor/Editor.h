@@ -10,7 +10,7 @@
 #include "ObjectFunctions/ObjectFunctions.h"
 #include "Global/Time.h"
 		  
-//#include "Objects/Controllers/FlyingCameraControl.h"
+#include "Objects/Controllers/FlyingCameraControl.h"
 
 namespace gde {
 	class Editor {

@@ -16,3 +16,44 @@ project ("gab-engine" LANGUAGES CXX)
 
 #SUBDIRECTORY LOADING
 add_subdirectory(src)
+
+# Add source to this project's executable.
+add_executable(${PROJECT_NAME} "src/gab-engine.h" "src/gab-engine.cpp")
+target_link_libraries(${PROJECT_NAME} PRIVATE gbe_engine_src)
+
+#Dependency Loading
+find_package(SDL2 CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME}
+    PRIVATE
+    $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
+    $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
+)
+
+#COPY ASSETS TO BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets
+)
+
+#COPY DLL TO BUILD
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${PROJECT_NAME}> $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>
+  COMMAND_EXPAND_LISTS
+)
+
+#DEBUG
+set(DEBUGFILEMESSAGE "")
+set(DEBUGFILEMESSAGE ${DEBUGFILEMESSAGE} "[GABENGINE] copied DLLs from " $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> " to " $<TARGET_FILE_DIR:${PROJECT_NAME}> "\n")
+file(GENERATE OUTPUT cmake_config_debug_output.txt CONTENT "${DEBUGFILEMESSAGE}")
+
+get_target_property(LINKED_LIBS ${PROJECT_NAME} LINK_LIBRARIES)
+# Construct the compiler string for the include directories.
+    foreach(lib ${LINKED_LIBS})
+        string(APPEND LINKED_LIBS_STRING " | ${lib} ")
+    endforeach()
+message("LINKED LIBRARIES: " ${LINKED_LIBS_STRING})
+get_target_property(INCLUDED_DIRS ${PROJECT_NAME} INCLUDE_DIRECTORIES)
+    # Construct the compiler string for the include directories.
+    foreach(dir ${INCLUDED_DIRS})
+        string(APPEND INCLUDED_DIRS_STRING " | ${dir} ")
+    endforeach()
+message("INCLUDED DIRECTORIES: " ${INCLUDED_DIRS_STRING})

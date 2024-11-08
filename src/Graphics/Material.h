@@ -4,6 +4,9 @@
 #include <string>
 #include "Shader.h"
 #include "Texture.h"
+#include "../Datatypes/Matrix4.h"
+#include "../Datatypes/Vector2.h"
+#include "../Datatypes/Vector3.h"
 
 namespace gde {
 	namespace rendering {
@@ -18,12 +21,14 @@ namespace gde {
 		struct MaterialOverride {
 			MaterialOverrideType type;
 
+			MaterialOverride();
+
 			union {
 				bool value_bool;
 				float value_float;
-				glm::vec2 value_vec2;
-				glm::vec3 value_vec3;
-				glm::mat4 value_mat4;
+				Vector2 value_vec2;
+				Vector3 value_vec3;
+				Matrix4 value_mat4;
 			};
 		};
 
@@ -75,7 +80,7 @@ namespace gde {
 				overrides.insert_or_assign(id, materialOverride);
 			}
 			template<>
-			void setOverride<glm::mat4>(const char* id, glm::mat4 value) {
+			void setOverride<Matrix4>(const char* id, Matrix4 value) {
 				auto materialOverride = MaterialOverride();
 				materialOverride.type = MaterialOverrideType::MAT4;
 				materialOverride.value_mat4 = value;

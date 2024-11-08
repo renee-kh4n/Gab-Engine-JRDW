@@ -7,4 +7,8 @@ namespace gde {
 	{
 		this->m_shader = m_shader;
 	}
+
+	MaterialOverride::MaterialOverride() {
+
+	}
 }

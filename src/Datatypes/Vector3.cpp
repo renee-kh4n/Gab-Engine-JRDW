@@ -9,7 +9,7 @@ gde::Vector3::Vector3(float x, float y, float z) : glm::vec3(x, y, z)
 
 }
 
-gde::Vector3::Vector3(glm::vec3 glmvec) : glm::vec3(glmvec)
+gde::Vector3::Vector3(const glm::vec3& glmvec) : glm::vec3(glmvec)
 {
 	
 }
@@ -23,7 +23,7 @@ gde::Vector3& gde::Vector3::Cross(gde::Vector3 b) {
 }
 
 gde::Vector3 gde::Vector3::Normalize() {
-	return (glm::vec3)*this * (1.0f / this->length());
+	return (glm::vec3)*this * (1.0f / this->Magnitude());
 }
 
 float gde::Vector3::Dot(Vector3 b)
@@ -33,7 +33,7 @@ float gde::Vector3::Dot(Vector3 b)
 
 float gde::Vector3::Magnitude()
 {
-	return this->length();
+	return sqrt(this->SqrMagnitude());
 }
 
 gde::Vector3& gde::Vector3::operator+=(const gde::Vector3& b) {

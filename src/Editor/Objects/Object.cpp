@@ -5,7 +5,7 @@
 
 void gde::Object::UpdateTransform()
 {
-	auto newworld_matrix = this->parent_matrix * this->local_matrix;
+	Matrix4 newworld_matrix = this->parent_matrix * this->local_matrix;
 
 	for (auto child : this->children)
 	{
@@ -15,9 +15,12 @@ void gde::Object::UpdateTransform()
 
 	MatToTrans(&this->world, newworld_matrix);
 	MatToTrans(&this->local, this->local_matrix);
+
+	if (isnan(this->local_matrix[0][0]))
+		throw "NAN transform";
 }
 
-void gde::Object::MatToTrans(Transform* target, glm::mat4 mat)
+void gde::Object::MatToTrans(Transform* target, Matrix4 mat)
 {
 	glm::vec3 scale;
 	glm::quat rotation;
@@ -41,8 +44,8 @@ gde::Object* gde::Object::Copy_self()
 
 gde::Object::Object()
 {
-	this->parent_matrix = glm::mat4(1.0f);
-	this->local_matrix = glm::mat4(1.0f);
+	this->parent_matrix = Matrix4(1.0f);
+	this->local_matrix = Matrix4(1.0f);
 	this->parent = nullptr;
 }
 
@@ -115,7 +118,7 @@ void gde::Object::SetScale(Vector3 vector)
 	glm::vec4 perspective;
 	glm::decompose(this->local_matrix, scale, rotation, translation, skew, perspective);
 
-	auto newmat = glm::mat4(1.0f);
+	auto newmat = Matrix4();
 	newmat = glm::translate(newmat, translation);
 	newmat *= glm::toMat4(rotation);
 	newmat = glm::scale(newmat, (glm::vec3)vector);
@@ -127,18 +130,18 @@ void gde::Object::SetScale(Vector3 vector)
 
 void gde::Object::Rotate(Vector3 axis, float deg_angle)
 {
-	this->local_matrix = glm::rotate(glm::mat4(1.0f), glm::radians(deg_angle), (glm::vec3)axis) * this->local_matrix;
+	this->local_matrix = glm::rotate(Matrix4(), glm::radians(deg_angle), (glm::vec3)axis) * this->local_matrix;
 	UpdateTransform();
 }
 
 void gde::Object::SetRotation(Vector3 euler)
 {
-	auto newmat = glm::mat4(1.0f);
+	auto newmat = Matrix4();
 	newmat = glm::translate(newmat, (glm::vec3)Local()->position);
-	newmat = glm::rotate(newmat, glm::radians(euler.y), glm::vec3(0, 1, 0));
-	newmat = glm::rotate(newmat, glm::radians(euler.x), glm::vec3(1, 0, 0));
-	newmat = glm::rotate(newmat, glm::radians(euler.z), glm::vec3(0, 0, 1));
-	newmat = glm::scale(newmat,(glm::vec3)Local()->scale);
+	newmat = glm::rotate(newmat, glm::radians(euler.y), Vector3(0, 1, 0));
+	newmat = glm::rotate(newmat, glm::radians(euler.x), Vector3(1, 0, 0));
+	newmat = glm::rotate(newmat, glm::radians(euler.z), Vector3(0, 0, 1));
+	newmat = glm::scale(newmat, Local()->scale);
 
 	this->local_matrix = newmat;
 
@@ -160,7 +163,7 @@ void gde::Object::Orient(Vector3 forward, Vector3 Up)
 	glm::vec4 perspective;
 	glm::decompose(this->local_matrix, scale, rotation, translation, skew, perspective);
 
-	auto newmat = glm::mat4(1.0f);
+	auto newmat = Matrix4();
 	newmat = glm::translate(newmat, translation);
 	newmat *= lookatmat;
 	newmat = glm::scale(newmat, scale);

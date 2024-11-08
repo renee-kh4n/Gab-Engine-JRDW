@@ -10,7 +10,7 @@ gde::Vector2::Vector2() : glm::vec2(0)
 {
 }
 
-gde::Vector2::Vector2(glm::vec2 glmvec) : glm::vec2(glmvec)
+gde::Vector2::Vector2(const glm::vec2& glmvec) : glm::vec2(glmvec)
 {
 
 }

@@ -5,6 +5,8 @@
 
 #define GDE_CALLBACKID_MOUSESCROLL "GDE_CALLBACKID_MOUSESCROLL"
 
+#include "Input/KeyDefines.h"
+
 namespace gde {
     namespace input {
         class MouseScrollImplementation : public ActionImplementation<MouseScroll> {

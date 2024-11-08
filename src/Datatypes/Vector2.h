@@ -7,7 +7,7 @@ namespace gde {
 	struct Vector2 : public glm::vec2 {
 		Vector2();
 		Vector2(float, float);
-		Vector2(glm::vec2 glmvec);
+		Vector2(const glm::vec2& glmvec);
 
 		Vector2& operator +=(const Vector2& b);
 		Vector2& operator -=(const Vector2& b);
