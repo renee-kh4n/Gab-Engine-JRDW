@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="D:\Documents\GitHub\gab-engine-git\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Datatypes\gbe_datatypes.dir\$(Configuration)\Vector2.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Datatypes\gbe_datatypes.dir\$(Configuration)\Vector2Int.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Datatypes\gbe_datatypes.dir\$(Configuration)\Vector3.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Datatypes\gbe_datatypes.dir\$(Configuration)\Vector4.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Datatypes\gbe_datatypes.dir\$(Configuration)\Matrix4.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\RenderPipeline.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\Light.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\DrawCall.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\Material.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\Mesh.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\Shader.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\Skybox.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Graphics\gbe_graphics.dir\$(Configuration)\Texture.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Window\gbe_window.dir\$(Configuration)\Window.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Editor.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Transform.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Time.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\KeyPressImplementation.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\MouseScrollImplementation.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\WasdDeltaImplementation.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\PhysicsHandler.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\ContactResolver.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Object.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Root.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\ControllerBase.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\InputPlayer.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\ForceVolume.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\ParticleSystem.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\RigidObject.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Collider.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Contact.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\AnchorSpring.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Bungee.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\ChainJoint.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Spinner.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\RigidObjectLink.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\Rod.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\ParticleObject.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\FloatParameter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+    <Object Include="D:\Documents\GitHub\gab-engine-git\src\Editor\gbe_editor.dir\$(Configuration)\VectorParameter.obj">
+      <Filter>Object Libraries</Filter>
+    </Object>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Object Libraries">
+      <UniqueIdentifier>{C68F5633-DC0A-319C-92D1-D4597317E232}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

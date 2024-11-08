@@ -1,6 +1,8 @@
 #include "RenderObject.h"
 #include <glm/gtx/matrix_decompose.hpp>
 
+using namespace gde::rendering;
+
 gde::RenderObject::RenderObject(DrawCall* mDrawCall)
 {
 	this->mDrawCall = mDrawCall;

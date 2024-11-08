@@ -9,6 +9,9 @@ namespace gde {
 		Vector2(float, float);
 		Vector2(glm::vec2 glmvec);
 
+		Vector2& operator +=(const Vector2& b);
+		Vector2& operator -=(const Vector2& b);
+
 		static const Vector2 zero;
 	};
 }

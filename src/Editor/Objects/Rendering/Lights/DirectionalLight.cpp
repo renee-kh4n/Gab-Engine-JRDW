@@ -1,7 +1,7 @@
 #include "DirectionalLight.h"
 
 using namespace gde;
-using namespace rendering;
+using namespace gde::rendering;
 
 rendering::Light* gde::DirectionalLight::GetData()
 {

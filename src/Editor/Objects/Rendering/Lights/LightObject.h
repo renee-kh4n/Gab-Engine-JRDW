@@ -1,11 +1,9 @@
 #pragma once
 
 #include "../../Object.h"
+#include "../Graphics/Light.h"
 
 namespace gde {
-	namespace rendering {
-		struct Light;
-	}
 
 	class LightObject : public Object{
 	protected:

@@ -1,7 +1,7 @@
 ﻿set(CURRENT_CMAKE_LIB gbe_graphics)
 
 #SUBDIRECTORY LOADING
-add_library(${CURRENT_CMAKE_LIB} SHARED
+add_library(${CURRENT_CMAKE_LIB} STATIC
 	"RenderPipeline.cpp"
 	"Light.cpp"
 	"DrawCall.cpp"
@@ -11,9 +11,6 @@ add_library(${CURRENT_CMAKE_LIB} SHARED
 	"Skybox.cpp"
 	"Texture.cpp"
 )
-add_library(gbe::${CURRENT_CMAKE_LIB} ALIAS ${CURRENT_CMAKE_LIB})
-
-target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_datatypes)
 
 find_package(Stb REQUIRED)
 target_include_directories(${CURRENT_CMAKE_LIB} PRIVATE ${Stb_INCLUDE_DIR})

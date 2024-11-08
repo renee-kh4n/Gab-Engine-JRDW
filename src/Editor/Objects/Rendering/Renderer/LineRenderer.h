@@ -11,7 +11,7 @@ namespace gde {
 		Object* camera;
 	
 	public:
-		LineRenderer(DrawCall* drawcall, Object* Camera, Object* a, Object* b);
+		LineRenderer(rendering::DrawCall* drawcall, Object* Camera, Object* a, Object* b);
 
 		Vector3 GetPos(int which);
 		virtual void InvokeEarlyUpdate();

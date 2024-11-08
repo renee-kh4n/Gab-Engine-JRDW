@@ -23,11 +23,13 @@ bool gde::LightObject::CheckChanged()
 
 	auto worldmatrix = this->World();
 
-	if ((this->old_position - worldmatrix->position).SqrMagnitude() > 0.01) {
+	Vector3 delta_pos = (this->old_position - worldmatrix->position);
+	Vector3 delta_dir = (this->old_forward - worldmatrix->Forward);
+	if (delta_pos.SqrMagnitude() > 0.01) {
 		this->old_position = worldmatrix->position;
 		return true;
 	}
-	if ((this->old_forward - worldmatrix->Forward).SqrMagnitude() > 0.01) {
+	if (delta_dir.SqrMagnitude() > 0.01) {
 		this->old_forward = worldmatrix->Forward;
 		return true;
 	}

@@ -2,6 +2,8 @@
 
 #include "ControllerBase.h"
 
+#include "../Datatypes/Vector2.h"
+
 namespace gde {
 	class FlyingCameraControl : public ControllerBase {
 	private:

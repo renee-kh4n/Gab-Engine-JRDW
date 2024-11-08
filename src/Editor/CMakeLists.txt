@@ -1,7 +1,7 @@
 ﻿set(CURRENT_CMAKE_LIB gbe_editor)
 
 #SUBDIRECTORY LOADING
-add_library(${CURRENT_CMAKE_LIB} SHARED
+add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Editor.cpp"
 
 	"Component/Transform.cpp"
@@ -18,11 +18,10 @@ add_library(${CURRENT_CMAKE_LIB} SHARED
 	"Objects/Object.cpp"
 	"Objects/Root.cpp"
 	"Objects/Controllers/ControllerBase.cpp"
-	#"Objects/Controllers/FlyingCameraControl.cpp"
-	#"Objects/Controllers/OrbitalControl.cpp"
-	#"Objects/Controllers/SpacebarHitter.cpp"
-	#"Objects/Controllers/SpacebarPauser.cpp"
-	#"Objects/Controllers/VariableSwitcher.cpp"
+	"Objects/Controllers/FlyingCameraControl.cpp"
+	"Objects/Controllers/OrbitalControl.cpp"
+	
+	"Objects/Controllers/VariableSwitcher.cpp"
 	"Objects/Input/InputPlayer.cpp"
 	"Objects/Physics/ForceVolume.cpp"
 	"Objects/Physics/ParticleSystem.cpp"
@@ -38,14 +37,19 @@ add_library(${CURRENT_CMAKE_LIB} SHARED
 	"Objects/Physics/Particle/ParticleObject.cpp"
 	"Objects/Physics/ParticleSystem/FloatParameter.cpp"
 	"Objects/Physics/ParticleSystem/VectorParameter.cpp"
+	"Objects/Rendering/Lights/DirectionalLight.cpp"
+	"Objects/Rendering/Lights/LightObject.cpp"
+	"Objects/Rendering/Renderer/LineRenderer.cpp"
+	"Objects/Rendering/Camera.cpp"
+	"Objects/Rendering/RenderObject.cpp"
 )
-add_library(gbe::${CURRENT_CMAKE_LIB} ALIAS ${CURRENT_CMAKE_LIB})
-
-target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_datatypes)
-target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)
-target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_window)
 
 target_include_directories(${CURRENT_CMAKE_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 message("[GABENGINE] INCLUDED ROOT DIR TO EDITOR SRCS: " ${CMAKE_CURRENT_SOURCE_DIR})
+
+find_package(glm CONFIG REQUIRED)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glm::glm)
+
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)
 
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

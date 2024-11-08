@@ -2,6 +2,8 @@
 #include "../../Input/Action/MouseDrag.h"
 #include "../../Input/Action/MouseScroll.h"
 
+#include <iostream>
+
 namespace gde {
 
 	/*
@@ -35,6 +37,7 @@ namespace gde {
 	*/
 	FlyingCameraControl::FlyingCameraControl()
 	{
+		/*
 		auto mouserightdrag = new InputCustomer<MouseDrag<GLFW_MOUSE_BUTTON_2>>([this](MouseDrag<GLFW_MOUSE_BUTTON_2>* value, bool changed) {
 			if (value->state != MouseDrag<GLFW_MOUSE_BUTTON_2>::WHILE)
 				return;
@@ -72,5 +75,6 @@ namespace gde {
 			});
 
 		this->inputreceivers.push_back(mousescroll);
+		*/
 	}
 }

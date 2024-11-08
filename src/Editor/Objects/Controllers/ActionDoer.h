@@ -17,8 +17,7 @@ namespace gde {
 			this->action = action;
 		}
 
-		// Inherited via InputCustomer
-		virtual void OnInput(KeyPress<K>* value, bool changed) override {
+		virtual void OnInput(KeyPress<K>* value, bool changed) {
 			if (changed && value->state == input::InputAction::START) {
 				this->action();
 			}

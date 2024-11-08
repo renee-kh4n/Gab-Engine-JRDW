@@ -1,2 +1,12 @@
 # CMake generation dependency list for this directory.
+C:/Program Files/CMake/share/cmake-3.30/Modules/FeatureSummary.cmake
 D:/Documents/GitHub/gab-engine-git/src/CMakeLists.txt
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2Config.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2ConfigVersion.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2Targets-debug.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2Targets-release.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2Targets.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2mainTargets-debug.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2mainTargets-release.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/SDL2mainTargets.cmake
+D:/Documents/GitHub/gab-engine-git/vcpkg_installed/x64-windows/share/sdl2/sdlfind.cmake

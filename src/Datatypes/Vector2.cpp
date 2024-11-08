@@ -15,4 +15,16 @@ gde::Vector2::Vector2(glm::vec2 glmvec) : glm::vec2(glmvec)
 
 }
 
+gde::Vector2& gde::Vector2::operator+=(const gde::Vector2& b) {
+	(glm::vec2)*this += (glm::vec2)b;
+
+	return *this;
+}
+
+gde::Vector2& gde::Vector2::operator-=(const gde::Vector2& b) {
+	(glm::vec2)*this -= (glm::vec2)b;
+
+	return *this;
+}
+
 const gde::Vector2 gde::Vector2::zero = gde::Vector2(0, 0);

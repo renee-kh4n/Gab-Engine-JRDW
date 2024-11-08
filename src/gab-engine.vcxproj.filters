@@ -11,7 +11,7 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="D:\Documents\GitHub\gab-engine-git\CMakeLists.txt" />
+    <CustomBuild Include="D:\Documents\GitHub\gab-engine-git\src\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

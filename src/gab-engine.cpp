@@ -11,7 +11,6 @@ int main(int argc, char* argv[])
 	SDL_Init(SDL_INIT_VIDEO);
 
 	auto editor = gde::Editor();
-	editor.Run();
 
 	SDL_Quit();
 	return 0;
