@@ -6,7 +6,7 @@
 
 #include <glm/vec4.hpp>
 
-namespace gde {
+namespace gbe {
 	struct Vector4 : public glm::vec4 {
 		Vector4();
 		Vector4(float, float, float, float);

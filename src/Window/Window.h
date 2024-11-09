@@ -12,11 +12,11 @@ Current backend used: SDL2
 
 #include <SDL2/SDL.h>
 
-#include "../Editor/Input/KeyDefines.h"
+#include "Engine/Input/KeyDefines.h"
 
 #include "../Datatypes/Vector2Int.h"
 
-namespace gde {
+namespace gbe {
 
     class Window {
     private:

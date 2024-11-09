@@ -8,7 +8,7 @@
 #include "../Datatypes/Vector2.h"
 #include "../Datatypes/Vector3.h"
 
-namespace gde {
+namespace gbe {
 	namespace rendering {
 		enum MaterialOverrideType {
 			BOOL,

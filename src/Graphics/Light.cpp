@@ -1,18 +1,18 @@
 #include "Light.h"
 
-using namespace gde::rendering;
+using namespace gbe::rendering;
 
-Light::Type gde::rendering::PointLight::GetType()
+Light::Type gbe::rendering::PointLight::GetType()
 {
     return Light::POINT;
 }
 
-Light::Type gde::rendering::DirLight::GetType()
+Light::Type gbe::rendering::DirLight::GetType()
 {
     return Light::DIRECTION;
 }
 
-Light::Type gde::rendering::ConeLight::GetType()
+Light::Type gbe::rendering::ConeLight::GetType()
 {
     return Light::CONE;
 }

@@ -1,6 +1,6 @@
 #include "Skybox.h"
 
-namespace gde {
+namespace gbe {
     using namespace rendering;
 
     Skybox::Skybox()

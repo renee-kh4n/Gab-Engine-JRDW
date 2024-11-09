@@ -1,6 +1,6 @@
 #include "Shader.h"
 
-namespace gde {
+namespace gbe {
 
 	using namespace rendering;
 

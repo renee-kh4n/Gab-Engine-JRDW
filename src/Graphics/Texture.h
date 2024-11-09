@@ -4,7 +4,7 @@
 #include <stb_image.h>
 #include <string>
 
-namespace gde {
+namespace gbe {
     namespace rendering {
         struct Texture {
             GLuint texID;

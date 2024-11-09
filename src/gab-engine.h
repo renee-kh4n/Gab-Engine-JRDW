@@ -4,6 +4,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include "Engine/Engine.h"
 #include "Editor/Editor.h"
 
 // TODO: Reference additional headers your program requires here.

@@ -1,6 +1,6 @@
 #include "DrawCall.h"
 
-namespace gde {
+namespace gbe {
     using namespace rendering;
 
     DrawCall::DrawCall(Mesh* mesh, Material* material)

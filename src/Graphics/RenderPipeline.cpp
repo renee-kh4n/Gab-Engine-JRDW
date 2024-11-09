@@ -3,13 +3,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "RenderPipeline.h"
 
-using namespace gde;
+using namespace gbe;
 
-void gde::RenderPipeline::SetRequiredAttribs()
+void gbe::RenderPipeline::SetRequiredAttribs()
 {
 }
 
-gde::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), glm::vec2 dimensions)
+gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), glm::vec2 dimensions)
 {
     auto thing = procaddressfunc("glGetString");
 
@@ -58,11 +58,11 @@ bool RenderPipeline::TryPushLight(rendering::Light* data, bool priority) {
     return true;
 }
 
-Matrix4 gde::RenderPipeline::GetProjMat() {
+Matrix4 gbe::RenderPipeline::GetProjMat() {
     return this->projMat;
 }
 
-void gde::RenderPipeline::RenderFrame()
+void gbe::RenderPipeline::RenderFrame()
 {
 #pragma region Rendering
     auto& lights_mframe = this->lights_this_frame;
@@ -221,12 +221,12 @@ void gde::RenderPipeline::RenderFrame()
 #pragma endregion
 }
 
-void gde::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
+void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
 {
     this->drawcalls.push_back(drawcall);
 }
 
-void gde::RenderPipeline::CleanUp()
+void gbe::RenderPipeline::CleanUp()
 {
     for (size_t o_i = 0; o_i < drawcalls.size(); o_i++)
     {

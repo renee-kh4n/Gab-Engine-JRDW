@@ -5,7 +5,7 @@
 #include "Mesh.h"
 
 
-namespace gde {
+namespace gbe {
     namespace rendering {
         class DrawCall {
         public:

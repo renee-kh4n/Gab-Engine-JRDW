@@ -8,7 +8,7 @@
 #include <vector>
 #include <iostream>
 
-namespace gde {
+namespace gbe {
     namespace rendering {
         class Shader {
         public:

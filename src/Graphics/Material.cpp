@@ -1,6 +1,6 @@
 #include "Material.h"
 
-namespace gde {
+namespace gbe {
 	using namespace rendering;
 
 	Material::Material(Shader* m_shader)

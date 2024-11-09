@@ -3,7 +3,7 @@
 #include <cmath>
 #include <glm/vec2.hpp>
 
-namespace gde {
+namespace gbe {
 	struct Vector2 : public glm::vec2 {
 		Vector2();
 		Vector2(float, float);

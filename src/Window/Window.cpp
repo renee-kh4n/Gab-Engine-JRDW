@@ -1,8 +1,8 @@
 #include "Window.h"
 
-namespace gde {
+namespace gbe {
     
-    gde::Window::Window()
+    gbe::Window::Window()
     {
         // Initialize SDL 
         if (SDL_Init(SDL_INIT_VIDEO) < 0)
@@ -31,12 +31,12 @@ namespace gde {
         // Use v-sync
         SDL_GL_SetSwapInterval(1);
 
-        for (size_t i = 0; i < gde::Keys::_TOTALKEYS; i++)
+        for (size_t i = 0; i < gbe::Keys::_TOTALKEYS; i++)
         {
             this->keystates.insert_or_assign(i, false);
         }
     }
-    void gde::Window::UpdateState()
+    void gbe::Window::UpdateState()
     {
         //Handle events on queue
         SDL_Event sdlevent;
@@ -49,19 +49,19 @@ namespace gde {
             }
             if (sdlevent.type == SDL_MOUSEBUTTONDOWN) {
                 if (sdlevent.button.button == SDL_BUTTON_LEFT)
-                    this->keystates[gde::Keys::MOUSE_LEFT] = true;
+                    this->keystates[gbe::Keys::MOUSE_LEFT] = true;
                 if (sdlevent.button.button == SDL_BUTTON_RIGHT)
-                    this->keystates[gde::Keys::MOUSE_RIGHT] = true;
+                    this->keystates[gbe::Keys::MOUSE_RIGHT] = true;
                 if (sdlevent.button.button == SDL_BUTTON_MIDDLE)
-                    this->keystates[gde::Keys::MOUSE_MIDDLE] = true;
+                    this->keystates[gbe::Keys::MOUSE_MIDDLE] = true;
             }
             if (sdlevent.type == SDL_MOUSEBUTTONUP) {
                 if (sdlevent.button.button == SDL_BUTTON_LEFT)
-                    this->keystates[gde::Keys::MOUSE_LEFT] = false;
+                    this->keystates[gbe::Keys::MOUSE_LEFT] = false;
                 if (sdlevent.button.button == SDL_BUTTON_RIGHT)
-                    this->keystates[gde::Keys::MOUSE_RIGHT] = false;
+                    this->keystates[gbe::Keys::MOUSE_RIGHT] = false;
                 if (sdlevent.button.button == SDL_BUTTON_MIDDLE)
-                    this->keystates[gde::Keys::MOUSE_MIDDLE] = false;
+                    this->keystates[gbe::Keys::MOUSE_MIDDLE] = false;
             }
         }
 
@@ -101,7 +101,7 @@ namespace gde {
             this->window_callbacks[key](parameter_object);
         }
     }
-    bool gde::Window::GetKeyState(unsigned int keyId)
+    bool gbe::Window::GetKeyState(unsigned int keyId)
     {
         return this->keystates[keyId];
     }

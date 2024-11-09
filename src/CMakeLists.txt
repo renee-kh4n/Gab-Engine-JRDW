@@ -4,6 +4,7 @@
 add_subdirectory(Datatypes)
 add_subdirectory(Graphics)
 add_subdirectory(Window)
+add_subdirectory(Engine)
 add_subdirectory(Editor)
 
 add_library(${CURRENT_CMAKE_LIB} INTERFACE)
@@ -11,4 +12,18 @@ add_library(${CURRENT_CMAKE_LIB} INTERFACE)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_datatypes)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_graphics)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_window)
+target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_engine)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_editor)
+
+
+get_target_property(LINKED_LIBS ${CURRENT_CMAKE_LIB} INTERFACE_LINK_LIBRARIES)
+#include directory for all libraries above
+    foreach(lib ${LINKED_LIBS})
+        string(APPEND LINKED_LIBS_STRING " | ${lib} ")
+        target_include_directories(${lib} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    endforeach()
+
+message("LINKED LIBRARIES IN GABENGINE INTERFACE: " ${LINKED_LIBS_STRING})
+
+
+message("[GABENGINE] INCLUDED ROOT DIR TO LIBRARY: " ${CMAKE_CURRENT_SOURCE_DIR})

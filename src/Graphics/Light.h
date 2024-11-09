@@ -2,7 +2,7 @@
 
 #include <glm/glm.hpp>
 
-namespace gde {
+namespace gbe {
 	namespace rendering {
 		struct Light {
 			virtual enum Type {

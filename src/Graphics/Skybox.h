@@ -3,7 +3,7 @@
 #include "Shader.h"
 #include "Texture.h"
 
-namespace gde {
+namespace gbe {
     namespace rendering {
         class Skybox {
         public:

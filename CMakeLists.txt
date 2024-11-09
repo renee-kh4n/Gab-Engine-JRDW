@@ -29,9 +29,10 @@ target_link_libraries(${PROJECT_NAME}
     $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
 
+
 #COPY ASSETS TO BUILD
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_LIST_DIR}/Assets ${CMAKE_CURRENT_BINARY_DIR}/Assets
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets" "${CMAKE_CURRENT_BINARY_DIR}/DefaultAssets"
 )
 
 #COPY DLL TO BUILD

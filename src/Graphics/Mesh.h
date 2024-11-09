@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
-namespace gde {
+namespace gbe {
     namespace rendering {
         struct Mesh {
             GLuint VAO, VBO;

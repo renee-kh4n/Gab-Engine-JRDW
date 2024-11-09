@@ -2,7 +2,7 @@
 
 #include "util.h"
 
-namespace gde {
+namespace gbe {
 	class Lines {
 	};
 }

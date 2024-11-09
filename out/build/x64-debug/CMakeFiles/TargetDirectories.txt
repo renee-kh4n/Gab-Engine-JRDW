@@ -12,6 +12,9 @@ D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Graphics/CMakeFiles/r
 D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Window/CMakeFiles/gbe_window.dir
 D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Window/CMakeFiles/edit_cache.dir
 D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Window/CMakeFiles/rebuild_cache.dir
+D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Engine/CMakeFiles/gbe_engine.dir
+D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Engine/CMakeFiles/edit_cache.dir
+D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Engine/CMakeFiles/rebuild_cache.dir
 D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Editor/CMakeFiles/gbe_editor.dir
 D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Editor/CMakeFiles/edit_cache.dir
 D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/src/Editor/CMakeFiles/rebuild_cache.dir

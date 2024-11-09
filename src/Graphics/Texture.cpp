@@ -1,6 +1,6 @@
 #include "Texture.h"
 
-namespace gde {
+namespace gbe {
 	using namespace rendering;
 	Texture::Texture(const char* path) {
 		std::string pathstr = path;

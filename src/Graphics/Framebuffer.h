@@ -3,7 +3,7 @@
 #include <iostream>
 #include <glad/glad.h>
 
-namespace gde {
+namespace gbe {
     namespace rendering {
         class Framebuffer {
         public:

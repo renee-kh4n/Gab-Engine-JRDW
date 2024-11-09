@@ -17,7 +17,7 @@
 #include "../Datatypes/Vector3.h"
 #include "../Datatypes/Matrix4.h"
 
-namespace gde {
+namespace gbe {
 	using namespace rendering;
 
 	class RenderPipeline {

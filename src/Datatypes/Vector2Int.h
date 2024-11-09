@@ -5,7 +5,7 @@
 
 #include <glm/vec2.hpp>
 
-namespace gde {
+namespace gbe {
 	struct Vector2Int : public glm::ivec2 {
 		Vector2Int();
 		Vector2Int(int, int);

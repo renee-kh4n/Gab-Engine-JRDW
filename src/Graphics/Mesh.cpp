@@ -1,6 +1,6 @@
 #include "Mesh.h"
 
-using namespace gde;
+using namespace gbe;
 using namespace rendering;
 
 Mesh::Mesh(std::string path) {
