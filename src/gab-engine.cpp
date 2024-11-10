@@ -3,19 +3,22 @@
 
 #include "gab-engine.h"
 
-using namespace std;
-
 int main(int argc, char* argv[])
 {
-	auto run_editor = true;
+    bool runengine = true;
+    std::thread enginethread([]() {
+        auto engine = new gbe::Engine();
+        engine->Run();
+    });
 
-	if (run_editor) {
-		auto editor = gbe::Editor();
-		editor.Run();
-	}
-	else {
-		auto engine = gbe::Engine();
-		engine.Run();
-	}
-	return 0;
+    bool runeditor = true;
+    std::thread editorthread([&argc, &argv]() {
+        auto editor = new gbe::Editor();
+        editor->Run(argc, argv);
+    });
+
+    enginethread.join();
+    editorthread.join();
+
+    return 0;
 }

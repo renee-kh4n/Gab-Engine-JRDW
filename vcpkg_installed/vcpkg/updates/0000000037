@@ -1,0 +1,6 @@
+Package: pcre2
+Feature: platform-default-features
+Architecture: x64-windows
+Multi-Arch: same
+Description: Enable default features
+Status: install ok installed

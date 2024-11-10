@@ -50,8 +50,9 @@ cmake_ninja_workdir = D$:\Documents\GitHub\gab-engine-git\out\build\x64-debug\
 build cmake_object_order_depends_target_gab-engine: phony || cmake_object_order_depends_target_gbe_datatypes cmake_object_order_depends_target_gbe_editor cmake_object_order_depends_target_gbe_engine cmake_object_order_depends_target_gbe_graphics cmake_object_order_depends_target_gbe_window
 
 build CMakeFiles\gab-engine.dir\src\gab-engine.cpp.obj: CXX_COMPILER__gab-engine_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\gab-engine.cpp || cmake_object_order_depends_target_gab-engine
+  DEFINES = -DUNICODE -DWXUSINGDLL -D_UNICODE -D__WXMSW__
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Engine -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include\SDL2 -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src\Engine -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include\SDL2 -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\lib\mswud -external:W0
   OBJECT_DIR = CMakeFiles\gab-engine.dir
   OBJECT_FILE_DIR = CMakeFiles\gab-engine.dir\src
   TARGET_COMPILE_PDB = CMakeFiles\gab-engine.dir\
@@ -65,12 +66,12 @@ build CMakeFiles\gab-engine.dir\src\gab-engine.cpp.obj: CXX_COMPILER__gab-engine
 #############################################
 # Link the executable gab-engine.exe
 
-build gab-engine.exe: CXX_EXECUTABLE_LINKER__gab-engine_Debug CMakeFiles\gab-engine.dir\src\gab-engine.cpp.obj | vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib src\Datatypes\gbe_datatypes.lib vcpkg_installed\x64-windows\debug\lib\glm.lib src\Window\gbe_window.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib src\Engine\gbe_engine.lib vcpkg_installed\x64-windows\debug\lib\glm.lib src\Editor\gbe_editor.lib src\Graphics\gbe_graphics.lib vcpkg_installed\x64-windows\debug\lib\glad.lib vcpkg_installed\x64-windows\debug\lib\glm.lib vcpkg_installed\x64-windows\debug\lib\\wxmsw32ud_core.lib vcpkg_installed\x64-windows\debug\lib\\wxbase32ud.lib || src\Datatypes\gbe_datatypes.lib src\Editor\gbe_editor.lib src\Engine\gbe_engine.lib src\Graphics\gbe_graphics.lib src\Window\gbe_window.lib
+build gab-engine.exe: CXX_EXECUTABLE_LINKER__gab-engine_Debug CMakeFiles\gab-engine.dir\src\gab-engine.cpp.obj | vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib vcpkg_installed\x64-windows\debug\lib\\wxmsw32ud_core.lib vcpkg_installed\x64-windows\debug\lib\\wxbase32ud.lib src\Datatypes\gbe_datatypes.lib vcpkg_installed\x64-windows\debug\lib\glm.lib src\Window\gbe_window.lib vcpkg_installed\x64-windows\debug\lib\SDL2d.lib src\Engine\gbe_engine.lib src\Graphics\gbe_graphics.lib vcpkg_installed\x64-windows\debug\lib\glad.lib vcpkg_installed\x64-windows\debug\lib\glm.lib src\Editor\gbe_editor.lib vcpkg_installed\x64-windows\debug\lib\\wxmsw32ud_core.lib vcpkg_installed\x64-windows\debug\lib\\wxbase32ud.lib || src\Datatypes\gbe_datatypes.lib src\Editor\gbe_editor.lib src\Engine\gbe_engine.lib src\Graphics\gbe_graphics.lib src\Window\gbe_window.lib
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
-  LINK_LIBRARIES = vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  src\Datatypes\gbe_datatypes.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  src\Window\gbe_window.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  src\Engine\gbe_engine.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  src\Editor\gbe_editor.lib  src\Graphics\gbe_graphics.lib  vcpkg_installed\x64-windows\debug\lib\glad.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  vcpkg_installed\x64-windows\debug\lib\\wxmsw32ud_core.lib  vcpkg_installed\x64-windows\debug\lib\\wxbase32ud.lib  kernel32.lib  user32.lib  gdi32.lib  comdlg32.lib  winspool.lib  winmm.lib  shlwapi.lib  comctl32.lib  ole32.lib  oleaut32.lib  uuid.lib  rpcrt4.lib  advapi32.lib  version.lib  ws2_32.lib  wininet.lib  oleacc.lib  uxtheme.lib  shell32.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  LINK_LIBRARIES = vcpkg_installed\x64-windows\debug\lib\manual-link\SDL2maind.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  vcpkg_installed\x64-windows\debug\lib\\wxmsw32ud_core.lib  vcpkg_installed\x64-windows\debug\lib\\wxbase32ud.lib  src\Datatypes\gbe_datatypes.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  src\Window\gbe_window.lib  vcpkg_installed\x64-windows\debug\lib\SDL2d.lib  src\Engine\gbe_engine.lib  src\Graphics\gbe_graphics.lib  vcpkg_installed\x64-windows\debug\lib\glad.lib  vcpkg_installed\x64-windows\debug\lib\glm.lib  src\Editor\gbe_editor.lib  vcpkg_installed\x64-windows\debug\lib\\wxmsw32ud_core.lib  vcpkg_installed\x64-windows\debug\lib\\wxbase32ud.lib  kernel32.lib  user32.lib  gdi32.lib  comdlg32.lib  winspool.lib  winmm.lib  shell32.lib  shlwapi.lib  comctl32.lib  ole32.lib  oleaut32.lib  uuid.lib  rpcrt4.lib  advapi32.lib  version.lib  ws2_32.lib  wininet.lib  oleacc.lib  uxtheme.lib  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
   OBJECT_DIR = CMakeFiles\gab-engine.dir
-  POST_BUILD = C:\Windows\system32\cmd.exe /C "cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin -OutVariable out && cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy_directory D:/Documents/GitHub/gab-engine-git/DefaultAssets D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/DefaultAssets && cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/out/build/x64-debug D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin//wxmsw32ud_core_vc_custom.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin//wxbase32ud_vc_custom.dll"
+  POST_BUILD = C:\Windows\system32\cmd.exe /C "cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug && C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -noprofile -executionpolicy Bypass -file "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/msbuild/applocal.ps1" -targetBinary D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/gab-engine.exe -installedDir D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin -OutVariable out && cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy_directory D:/Documents/GitHub/gab-engine-git/DefaultAssets D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/DefaultAssets && cd /D D:\Documents\GitHub\gab-engine-git\out\build\x64-debug && "C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E copy -t D:/Documents/GitHub/gab-engine-git/out/build/x64-debug D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin//wxmsw32ud_core_vc_custom.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin//wxbase32ud_vc_custom.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin/SDL2d.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin//wxmsw32ud_core_vc_custom.dll D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/debug/bin//wxbase32ud_vc_custom.dll"
   PRE_LINK = cd .
   TARGET_COMPILE_PDB = CMakeFiles\gab-engine.dir\
   TARGET_FILE = gab-engine.exe
@@ -744,14 +745,41 @@ build src\Engine\rebuild_cache: phony src\Engine\CMakeFiles\rebuild_cache.util
 #############################################
 # Order-only phony target for gbe_editor
 
-build cmake_object_order_depends_target_gbe_editor: phony || cmake_object_order_depends_target_gbe_graphics
+build cmake_object_order_depends_target_gbe_editor: phony || .
 
 build src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\Editor.cpp || cmake_object_order_depends_target_gbe_editor
   DEFINES = -DUNICODE -DWXUSINGDLL -D_UNICODE -D__WXMSW__
   FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
-  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\lib\mswud -external:W0
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\lib\mswud -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
   OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir
+  TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
+  TARGET_PDB = src\Editor\gbe_editor.pdb
+
+build src\Editor\CMakeFiles\gbe_editor.dir\App\EditorApp.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\App\EditorApp.cpp || cmake_object_order_depends_target_gbe_editor
+  DEFINES = -DUNICODE -DWXUSINGDLL -D_UNICODE -D__WXMSW__
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\lib\mswud -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
+  OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\App
+  TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
+  TARGET_PDB = src\Editor\gbe_editor.pdb
+
+build src\Editor\CMakeFiles\gbe_editor.dir\App\RootWindow.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\App\RootWindow.cpp || cmake_object_order_depends_target_gbe_editor
+  DEFINES = -DUNICODE -DWXUSINGDLL -D_UNICODE -D__WXMSW__
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\lib\mswud -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
+  OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\App
+  TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
+  TARGET_PDB = src\Editor\gbe_editor.pdb
+
+build src\Editor\CMakeFiles\gbe_editor.dir\App\Windows\SceneWindow.cpp.obj: CXX_COMPILER__gbe_editor_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Editor\App\Windows\SceneWindow.cpp || cmake_object_order_depends_target_gbe_editor
+  DEFINES = -DUNICODE -DWXUSINGDLL -D_UNICODE -D__WXMSW__
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\lib\mswud -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir
+  OBJECT_FILE_DIR = src\Editor\CMakeFiles\gbe_editor.dir\App\Windows
   TARGET_COMPILE_PDB = src\Editor\CMakeFiles\gbe_editor.dir\gbe_editor.pdb
   TARGET_PDB = src\Editor\gbe_editor.pdb
 
@@ -763,7 +791,7 @@ build src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj: CXX_COMPILER__gbe_edi
 #############################################
 # Link the static library src\Editor\gbe_editor.lib
 
-build src\Editor\gbe_editor.lib: CXX_STATIC_LIBRARY_LINKER__gbe_editor_Debug src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj || src\Graphics\gbe_graphics.lib
+build src\Editor\gbe_editor.lib: CXX_STATIC_LIBRARY_LINKER__gbe_editor_Debug src\Editor\CMakeFiles\gbe_editor.dir\Editor.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\App\EditorApp.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\App\RootWindow.cpp.obj src\Editor\CMakeFiles\gbe_editor.dir\App\Windows\SceneWindow.cpp.obj
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64
   OBJECT_DIR = src\Editor\CMakeFiles\gbe_editor.dir

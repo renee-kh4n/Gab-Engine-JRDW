@@ -183,6 +183,12 @@ CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 //The directory containing a CMake configuration file for NanoSVG.
 NanoSVG_DIR:PATH=D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/share/nanosvg
 
+//Arguments to supply to pkg-config
+PKG_CONFIG_ARGN:STRING=
+
+//pkg-config executable
+PKG_CONFIG_EXECUTABLE:FILEPATH=PKG_CONFIG_EXECUTABLE-NOTFOUND
+
 //The directory containing a CMake configuration file for SDL2.
 SDL2_DIR:PATH=D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/share/sdl2
 
@@ -513,6 +519,10 @@ CMAKE_TOOLCHAIN_FILE-ADVANCED:INTERNAL=1
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Stb
 FIND_PACKAGE_MESSAGE_DETAILS_Stb:INTERNAL=[D:/Documents/GitHub/gab-engine-git/out/build/x64-debug/vcpkg_installed/x64-windows/include][v()]
+//ADVANCED property for variable: PKG_CONFIG_ARGN
+PKG_CONFIG_ARGN-ADVANCED:INTERNAL=1
+//ADVANCED property for variable: PKG_CONFIG_EXECUTABLE
+PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: Stb_INCLUDE_DIR
 Stb_INCLUDE_DIR-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: VCPKG_VERBOSE

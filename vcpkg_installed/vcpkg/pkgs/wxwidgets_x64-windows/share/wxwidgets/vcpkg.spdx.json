@@ -1,0 +1,352 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/wxwidgets-x64-windows-3.2.5-e8ceeb8d-5ac8-4c27-8803-affc87ee6270",
+  "name": "wxwidgets:x64-windows@3.2.5 4224b41a34c1e17a3ba69124083842aaca699cbceb19013362481ff5c441efdd",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-2024-06-10-02590c430e4ed9215d27870138c2e579cc338772"
+    ],
+    "created": "2024-11-09T05:19:53Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-3"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-4"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-5"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-6"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-7"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-8"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-9"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-10"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-11"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-12"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-3",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-4",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-5",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-6",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-7",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-8",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-9",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-10",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-11",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-12",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "wxwidgets",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "3.2.5",
+      "downloadLocation": "git+https://github.com/microsoft/vcpkg@2eead33770ca2e56204c0dbf6365e804cb2bfd0e",
+      "homepage": "https://github.com/wxWidgets/wxWidgets",
+      "licenseConcluded": "LGPL-2.0-or-later WITH WxWindows-exception-3.1",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Widget toolkit and tools library for creating graphical user interfaces (GUIs) for cross-platform applications. \nSet WXWIDGETS_USE_STL in a custom triplet to build with the wxUSE_STL build option.\nSet WXWIDGETS_USE_STD_CONTAINERS in a custom triplet to build with the wxUSE_STD_CONTAINERS build option.",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "wxwidgets:x64-windows",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "4224b41a34c1e17a3ba69124083842aaca699cbceb19013362481ff5c441efdd",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "LGPL-2.0-or-later WITH WxWindows-exception-3.1",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "wxWidgets/wxWidgets",
+      "downloadLocation": "git+https://github.com/wxWidgets/wxWidgets@v3.2.5",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "6d92635f88fc7b0ee52ef996f87d79d9af34428e2cb4469134b74514135b87b42acbc515c0d2d1e1ff5265b8383c9783ce58655bd410fa9215cfc7a8d528aa87"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/example/CMakeLists.txt",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0e325ce531f40af6557146521574ed96d226e327efcad4faaeb2b7357321af76"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/fix-libs-export.patch",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "69ee54b9ff2925951d9cc98f7a1c469fc9640333d24b0f4162916a64b22adc0d"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/fix-pcre2.patch",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "3bf1fea37c8c75cd043ee8e657b2c1350f4ecf5028f3cf891d6f4a4f31663265"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/gtk3-link-libraries.patch",
+      "SPDXID": "SPDXRef-file-3",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "0224a07af64a03b67b42df31fe7bb1c9974c6806b04cbecbbcb3a8e6ca19b60c"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/install-layout.patch",
+      "SPDXID": "SPDXRef-file-4",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "bcbb9d617f9b3c7bd3a3f30b01db6e54c5ed368d66bc469f0c214c9be12b495c"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/nanosvg-ext-depend.patch",
+      "SPDXID": "SPDXRef-file-5",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "e5ab4b5c2634a2d08fdd31cbcf367e8f3014fbd7e7a048814aab97a15a6ba462"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/portfile.cmake",
+      "SPDXID": "SPDXRef-file-6",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "8c8e294b8a2523b6b21cb863a9dad738fa01304e258d825c49c0d15d1678f1cb"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/relocatable-wx-config.patch",
+      "SPDXID": "SPDXRef-file-7",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "7237691a56cb781a10b340d4e1b5d108da7d39879c6a1c4f67fca70475a64621"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/sdl2.patch",
+      "SPDXID": "SPDXRef-file-8",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6e2e2d1336d0158155627fe362e5131b2cf0e7831f50dd73010768453c4a4f30"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/setup.h.in",
+      "SPDXID": "SPDXRef-file-9",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6ca5f38e7d2771b03c9b3b5da6b27855ac2f8c2728fa5499e445c6ab40a989b4"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/usage",
+      "SPDXID": "SPDXRef-file-10",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "efc263c8cd27a143f40c008e679d86c783deac11037bc00573158ab0eae21467"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/vcpkg-cmake-wrapper.cmake",
+      "SPDXID": "SPDXRef-file-11",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c5ce24bce4b7d82db66cd4fe0e2bed07a9050abb97f1c3c0adb864d450afd250"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./C:/Users/PC/AppData/Local/vcpkg/registries/git-trees/2eead33770ca2e56204c0dbf6365e804cb2bfd0e/vcpkg.json",
+      "SPDXID": "SPDXRef-file-12",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "6b27fd024ab7a531985a5c9b5a4693348984f2b1bf6b56b69a477a8ee8197a78"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

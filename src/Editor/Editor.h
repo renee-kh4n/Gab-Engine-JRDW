@@ -1,13 +1,14 @@
 #pragma once
 
-#include <wx/frame.h>
-#include <wx/filedlg.h>
-
+#include <wx/wx.h>
+#include "App/EditorApp.h"
 
 namespace gbe {
 	class Editor {
+	private:
+
 	public:
 		Editor();
-		void Run();
+		void Run(int& argc, char* argv[]);
 	};
 }

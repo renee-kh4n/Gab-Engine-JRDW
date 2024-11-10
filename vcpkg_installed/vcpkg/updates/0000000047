@@ -1,0 +1,6 @@
+Package: wxwidgets
+Feature: debug-support
+Architecture: x64-windows
+Multi-Arch: same
+Description: Enable wxWidgets debugging support hooks even for release builds (wxDEBUG_LEVEL 1)
+Status: install ok half-installed

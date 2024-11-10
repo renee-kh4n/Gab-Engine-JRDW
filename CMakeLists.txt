@@ -29,6 +29,8 @@ target_link_libraries(${PROJECT_NAME}
     $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
 
+find_package(wxWidgets CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
 
 #COPY ASSETS TO BUILD
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
