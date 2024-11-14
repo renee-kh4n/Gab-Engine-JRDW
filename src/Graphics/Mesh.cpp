@@ -9,6 +9,9 @@ Mesh::Mesh(std::string path) {
 
     //Load the obj file
     bool success = tinyobj::LoadObj(&attributes, &shapes, &material, &warning, &error, path.c_str());
+    if (success == false)
+        throw "Invalid Mesh";
+
     //Loop per triangle
     for (size_t m_i = 0; m_i < shapes[0].mesh.indices.size(); m_i += 3)
     {

@@ -20,13 +20,13 @@ namespace gbe {
         auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
         
         //Shaders setup
-        auto depthShader = new Shader("Assets/Shaders/object.vert", "Assets/Shaders/depth.frag");
-        auto litShader = new Shader("Assets/Shaders/object.vert", "Assets/Shaders/lit.frag");
-        auto unlitShader = new Shader("Assets/Shaders/object.vert", "Assets/Shaders/unlit.frag");
-        auto Cam3rdPPShader = new Shader("Assets/Shaders/camshader.vert", "Assets/Shaders/camshader.frag");
-        auto Cam1stPPShader = new Shader("Assets/Shaders/camshader.vert", "Assets/Shaders/camshader.frag");
+        auto depthShader = new Shader("DefaultDefaultAssets/Shaders/object.vert", "DefaultAssets/Shaders/depth.frag");
+        auto litShader = new Shader("DefaultAssets/Shaders/object.vert", "DefaultAssets/Shaders/lit.frag");
+        auto unlitShader = new Shader("DefaultAssets/Shaders/object.vert", "DefaultAssets/Shaders/unlit.frag");
+        auto Cam3rdPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
+        auto Cam1stPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
 
-        auto CamOrthoPPShader = new Shader("Assets/Shaders/camshader.vert", "Assets/Shaders/camshader.frag");
+        auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", glm::vec4(1, 1, 1, 1));
 
@@ -80,12 +80,12 @@ namespace gbe {
         //unlit line rendercall
         auto mat = new Material(unlitShader);
         mat->setOverride<glm::vec3>("color", glm::vec3(1, 1, 1));
-        auto lineDrawCall = new DrawCall(new Mesh("Assets/3D/plane.obj"), mat);
+        auto lineDrawCall = new DrawCall(new Mesh("DefaultAssets/3D/plane.obj"), mat);
         mRenderPipeline->RegisterDrawCall(lineDrawCall);
 
         //particle rendercall
-        auto sphere_mesh = new Mesh("Assets/3D/sphere.obj");
-        auto sphere_tex = new Texture("Assets/Tex/cubeacca.jpg");
+        auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
+        auto sphere_tex = new Texture("DefaultAssets/Tex/cubeacca.jpg");
 
         auto create_rendercall = [sphere_tex, sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
             auto mattex = MaterialTexture();
