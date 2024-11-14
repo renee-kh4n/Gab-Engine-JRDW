@@ -1,8 +1,0 @@
--- Downloading https://github.com/nothings/stb/archive/5736b15f7ea0ffb08dd38af21067c314d6a3aae9.tar.gz -> nothings-stb-5736b15f7ea0ffb08dd38af21067c314d6a3aae9.tar.gz...
--- Extracting source C:/Users/PC/AppData/Local/vcpkg/downloads/nothings-stb-5736b15f7ea0ffb08dd38af21067c314d6a3aae9.tar.gz
--- Using source at D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/stb/src/14d6a3aae9-dc9b68ccde.clean
--- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/stb_x64-windows/share/stb/FindStb.cmake
--- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/stb_x64-windows/share/stb/vcpkg-cmake-wrapper.cmake
--- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/stb_x64-windows/share/stb/usage
--- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/stb_x64-windows/share/stb/copyright
--- Performing post-build validation

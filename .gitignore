@@ -18,3 +18,4 @@ out/
 *.ipch
 *.db
 /.vs
+/vcpkg_installed

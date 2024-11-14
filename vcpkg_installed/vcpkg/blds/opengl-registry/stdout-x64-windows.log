@@ -1,5 +1,0 @@
--- Downloading https://github.com/KhronosGroup/OpenGL-Registry/archive/3530768138c5ba3dfbb2c43c830493f632f7ea33.tar.gz -> KhronosGroup-OpenGL-Registry-3530768138c5ba3dfbb2c43c830493f632f7ea33.tar.gz...
--- Extracting source C:/Users/PC/AppData/Local/vcpkg/downloads/KhronosGroup-OpenGL-Registry-3530768138c5ba3dfbb2c43c830493f632f7ea33.tar.gz
--- Using source at D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/opengl-registry/src/f632f7ea33-4952f9ace9.clean
--- Installing: D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/pkgs/opengl-registry_x64-windows/share/opengl-registry/copyright
--- Performing post-build validation

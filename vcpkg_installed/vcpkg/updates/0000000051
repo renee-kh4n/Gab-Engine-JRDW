@@ -1,6 +1,0 @@
-Package: wxwidgets
-Feature: sound
-Architecture: x64-windows
-Multi-Arch: same
-Description: Build wxSound support
-Status: install ok installed

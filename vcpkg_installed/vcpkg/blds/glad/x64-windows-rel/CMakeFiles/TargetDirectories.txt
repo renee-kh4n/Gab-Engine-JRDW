@@ -1,7 +1,0 @@
-D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/CMakeFiles/glad-generate-files.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/CMakeFiles/glad.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/CMakeFiles/edit_cache.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/CMakeFiles/rebuild_cache.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/CMakeFiles/list_install_components.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/CMakeFiles/install.dir
-D:/Documents/GitHub/Gab-Engine/gab-engine/vcpkg_installed/vcpkg/blds/glad/x64-windows-rel/CMakeFiles/install/local.dir

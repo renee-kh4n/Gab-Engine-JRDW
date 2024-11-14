@@ -1,6 +1,0 @@
-Package: pcre2
-Feature: jit
-Architecture: x64-windows
-Multi-Arch: same
-Description: Enable support for Just-In-Time compiling regex matchers
-Status: install ok half-installed
