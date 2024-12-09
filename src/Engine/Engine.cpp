@@ -82,12 +82,12 @@ namespace gbe {
         //unlit line rendercall
         auto mat = new Material(unlitShader);
         mat->setOverride<glm::vec3>("color", glm::vec3(1, 1, 1));
-        auto lineDrawCall = new DrawCall(new Mesh("Assets/3D/plane.obj"), mat);
+        auto lineDrawCall = new DrawCall(new Mesh("DefaultAssets/3D/plane.obj"), mat);
         mRenderPipeline->RegisterDrawCall(lineDrawCall);
 
         //particle rendercall
-        auto sphere_mesh = new Mesh("Assets/3D/sphere.obj");
-        auto sphere_tex = new Texture("Assets/Tex/cubeacca.jpg");
+        auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
+        auto sphere_tex = new Texture("DefaultAssets/Tex/cubeacca.jpg");
 
         auto create_rendercall = [sphere_tex, sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
             auto mattex = MaterialTexture();
@@ -118,8 +118,6 @@ namespace gbe {
         auto CreateParticleFunction = [drawcalls, root_object, unlitShader, mRenderPipeline]() {
             //sphere rigidobject setup
             auto sphere_rigidobject = new RigidObject();
-            sphere_rigidobject->damping = 1.0f;
-            sphere_rigidobject->mass = 10;
 
             //sphere renderobject setup
             auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
@@ -135,7 +133,7 @@ namespace gbe {
             auto ball = CreateParticleFunction();
             ball->TranslateLocal(position + offset);
             ball->SetParent(root_object);
-            ball->velocity = Vector3(0, 0, 0);
+            ball->Set_velocity(Vector3(0, 0, 0));
             ball->SetScale(Vector3(1, 1, 1) * (radius));
 
             //Sphere collider
@@ -168,7 +166,6 @@ namespace gbe {
         auto spinspeed = 10.0f;
         RigidObject* cradle_ball = nullptr;
         auto cradle_pivot = createswing(Vector3(0, startheight, 0), 0.1f, 1.0f, Vector3::zero, &cradle_ball);
-        cradle_ball->amgularDamp = 0.6f;
 
         for (size_t i = 0; i < count; i++)
         {

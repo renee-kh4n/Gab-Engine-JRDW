@@ -8,4 +8,6 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 find_package(Bullet CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE ${BULLET_LIBRARIES})
 
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_datatypes)
+
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

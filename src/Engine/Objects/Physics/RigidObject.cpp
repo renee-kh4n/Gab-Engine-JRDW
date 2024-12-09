@@ -1,38 +1,41 @@
 #include "RigidObject.h"
 
 gbe::RigidObject::RigidObject() {
-	this->mass = 1;
-	this->frame_force = Vector3::zero;
-	this->velocity = Vector3(0, 0, 0);
-	this->acceleration = Vector3(0, 0, 0);
 }
 
 gbe::RigidObject::~RigidObject()
 {
 }
 
+float gbe::RigidObject::Get_mass()
+{
+	return 1.0f;
+}
 
 void gbe::RigidObject::AddForce(Vector3 force)
 {
-	this->frame_force += force;
-}
-
-float gbe::RigidObject::MomentOfInertia()
-{
-	float final = 0.0f;
-
-	for (auto col : colliders)
-	{
-		final += ((float)2 / 5) * mass * (col->GetWorldRadius() * col->GetWorldRadius());
-	}
-
-	return final;
 }
 
 void gbe::RigidObject::AddForceAtPoint(Vector3 force, Vector3 relativeWorldPoint)
 {
-	this->AddForce(force);
-	this->accumulatedTorque = relativeWorldPoint.Cross(force);
+}
+
+void gbe::RigidObject::Set_velocity(Vector3)
+{
+}
+
+gbe::Vector3 gbe::RigidObject::Get_velocity()
+{
+	return Vector3();
+}
+
+void gbe::RigidObject::Set_angularVelocity(Vector3)
+{
+}
+
+gbe::Vector3 gbe::RigidObject::Get_angularVelocity()
+{
+	return Vector3();
 }
 
 void gbe::RigidObject::OnEnterHierarchy(Object* newChild)

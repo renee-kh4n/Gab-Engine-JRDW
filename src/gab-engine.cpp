@@ -6,19 +6,24 @@
 int main(int argc, char* argv[])
 {
     bool runengine = true;
-    std::thread enginethread([]() {
-        auto engine = new gbe::Engine();
-        engine->Run();
-    });
+    bool runeditor = false;
 
-    bool runeditor = true;
-    std::thread editorthread([&argc, &argv]() {
+    std::thread editorthread;
+
+    if (runeditor)
+        editorthread = std::thread([&argc, &argv]() {
         auto editor = new gbe::Editor();
         editor->Run(argc, argv);
-    });
+            });
 
-    editorthread.join();
-    enginethread.join();
+    if (runengine)
+    {
+        auto engine = new gbe::Engine();
+        engine->Run();
+    }
+
+    if (runeditor)
+        editorthread.join();
 
     return 0;
 }

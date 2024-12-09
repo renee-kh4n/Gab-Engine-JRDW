@@ -2,5 +2,5 @@
 
 void gbe::Spinner::InvokeUpdate(float deltatime)
 {
-	this->angularVelocity = this->rotateSpeed;
+	this->Set_angularVelocity(this->rotateSpeed);
 }
