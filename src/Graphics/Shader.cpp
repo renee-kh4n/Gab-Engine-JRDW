@@ -25,6 +25,10 @@ namespace gbe {
 
 			return fbuff.str();
 		}(path);
+
+		if (shaderStr.length() <= 1)
+			throw "empty shader!";
+
 		const char* shaderptr = shaderStr.c_str();
 
 		//Compile the shader through OpenGL

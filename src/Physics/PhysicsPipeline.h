@@ -1,6 +1,6 @@
 #pragma once
 
-#include <btBulletDynamicsCommon.h>
+#include <bullet/btBulletDynamicsCommon.h>
 
 namespace gbe {
 	namespace physics {

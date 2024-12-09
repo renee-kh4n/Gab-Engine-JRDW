@@ -25,11 +25,15 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), glm::
     this->mSkybox = NULL;
 
     //Framebuffers setup
-    depthShader = new Shader("Shaders/object.vert", "Shaders/depth.frag");
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
 
     this->SetRequiredAttribs();
+}
+
+void gbe::RenderPipeline::Set_DepthShader(Shader* value)
+{
+    this->depthShader = value;
 }
 
 void RenderPipeline::SetMaximumLights(int maxlights) {
@@ -40,6 +44,10 @@ void RenderPipeline::SetView(glm::vec3 from, glm::mat4 viewMat, glm::mat4 projMa
     this->from = from;
     this->viewMat = viewMat;
     this->projMat = projMat;
+}
+void gbe::RenderPipeline::SetSkybox(Skybox* value)
+{
+    this->mSkybox = value;
 }
 void RenderPipeline::SetPostProcessing(Shader* postprocess) {
     this->postprocess = postprocess;

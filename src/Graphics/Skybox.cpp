@@ -3,8 +3,10 @@
 namespace gbe {
     using namespace rendering;
 
-    Skybox::Skybox()
+    Skybox::Skybox(TextureCubeMap* cubemap)
     {
+        this->textureCubeMap = cubemap;
+
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
