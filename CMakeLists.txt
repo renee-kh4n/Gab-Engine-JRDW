@@ -18,7 +18,7 @@ project ("gab-engine" LANGUAGES CXX)
 add_subdirectory(src)
 
 # Add source to this project's executable.
-add_executable(${PROJECT_NAME} "src/gab-engine.h" "src/gab-engine.cpp")
+add_executable(${PROJECT_NAME} "src/gab-engine.h" "src/gab-engine.cpp" "src/Physics/PhysicsPipeline.h")
 target_link_libraries(${PROJECT_NAME} PRIVATE gbe_engine_src)
 
 #Dependency Loading

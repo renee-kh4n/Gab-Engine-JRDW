@@ -14,7 +14,7 @@ namespace gbe {
 
         Window* mWindow = new Window();
 
-#pragma region Rendering Requisites Setup
+#pragma region Rendering Pipeline Setup
         //RenderPipeline setup
         Camera* active_camera = nullptr;
         auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
@@ -29,8 +29,10 @@ namespace gbe {
         auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", glm::vec4(1, 1, 1, 1));
+#pragma endregion
+#pragma region Physics Pipeline Setup
 
-        //auto mGUIPipeline = new GUIPipeline(mWindow->GetNativeHandle());
+
 #pragma endregion
 
 #pragma region Input

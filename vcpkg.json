@@ -6,6 +6,7 @@
     "glm",
     "glad",
     "stb",
-    "wxwidgets"
+    "wxwidgets",
+    "bullet3"
   ]
 }
