@@ -6,21 +6,13 @@
 
 namespace gbe {
 	class RigidObject : public Object {
+	private:
+		std::list<Collider*> colliders;
 	public:
-		physics::Rigidbody linked_body;
+		physics::Rigidbody body;
 
 		RigidObject();
 		virtual ~RigidObject();
-
-		void AddForce(Vector3 force);
-		float Get_mass();
-		Vector3 Get_angularVelocity();
-		void Set_angularVelocity(Vector3);
-		Vector3 Get_velocity();
-		void Set_velocity(Vector3);
-		void AddForceAtPoint(Vector3 force, Vector3 relativeWorldPoint);
-		
-		std::list<Collider*> colliders;
 
 		virtual void OnEnterHierarchy(Object* newChild);
 	};

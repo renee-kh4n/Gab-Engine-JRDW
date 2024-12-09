@@ -1,6 +1,7 @@
 #pragma once
 
 #include <bullet/btBulletDynamicsCommon.h>
+#include "Rigidbody.h"
 
 namespace gbe {
 	namespace physics {
@@ -14,6 +15,8 @@ namespace gbe {
 			btDiscreteDynamicsWorld* dynamicsWorld;
 		public:
 			bool Init();
+			void Tick(double delta);
+			void RegisterBody(Rigidbody* body);
 		};
 	}
 }

@@ -12,6 +12,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Input/Implementations/MouseScrollImplementation.cpp"
 	"Input/Implementations/WasdDeltaImplementation.cpp"
 
+	
 	"ObjectHandlers/PhysicsHandler.cpp"
 
 	"Objects/Object.cpp"

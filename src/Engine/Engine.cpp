@@ -36,7 +36,8 @@ namespace gbe {
         //mRenderPipeline->SetSkybox(new gbe::rendering::Skybox(new gbe::rendering::TextureCubeMap("")));
 #pragma endregion
 #pragma region Physics Pipeline Setup
-
+        auto mPhysicsPipeline = new physics::PhysicsPipeline();
+        mPhysicsPipeline->Init();
 
 #pragma endregion
 
@@ -52,11 +53,14 @@ namespace gbe {
 #pragma region Object setup
         //Object handlers setup
         auto mPhysicsHandler = new PhysicsHandler();
+        mPhysicsHandler->SetPipeline(mPhysicsPipeline);
+
         auto mInputHandler = new InputHandler();
         auto mLightHandler = new ObjectHandler<gbe::LightObject>();
         auto mEarlyUpdate = new ObjectHandler<EarlyUpdate>();
         auto mUpdate = new ObjectHandler<Update>();
         auto mLateUpdate = new ObjectHandler<LateUpdate>();
+
         //root
         auto root_object = new Root();
         root_object->RegisterHandler(mPhysicsHandler);
@@ -138,7 +142,7 @@ namespace gbe {
             auto ball = CreateParticleFunction();
             ball->TranslateLocal(position + offset);
             ball->SetParent(root_object);
-            ball->Set_velocity(Vector3(0, 0, 0));
+            ball->body.Set_velocity(Vector3(0, 0, 0));
             ball->SetScale(Vector3(1, 1, 1) * (radius));
 
             //Sphere collider
@@ -238,7 +242,8 @@ namespace gbe {
             mWindow->SwapBuffers();
 
             //Update other handlers
-            auto onTick = [mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
+            auto onTick = [mPhysicsPipeline, mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
+                mPhysicsPipeline->Tick(deltatime);
                 mPhysicsHandler->Update(deltatime);
 
                 float delta_f = (float)deltatime;
