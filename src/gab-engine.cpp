@@ -17,8 +17,8 @@ int main(int argc, char* argv[])
         editor->Run(argc, argv);
     });
 
-    enginethread.join();
     editorthread.join();
+    enginethread.join();
 
     return 0;
 }

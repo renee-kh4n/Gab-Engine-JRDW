@@ -76,6 +76,7 @@ void gbe::PhysicsHandler::AddLink(RigidObjectLink* link)
 
 void gbe::PhysicsHandler::GenerateContacts()
 {
+
 	contacts.clear();
 	GetOverlap();
 
