@@ -5,16 +5,18 @@
 
 void gbe::Object::UpdateTransform()
 {
-	Matrix4 newworld_matrix = this->parent_matrix * this->local_matrix;
+	this->world_matrix = this->parent_matrix * this->local_matrix;
 
 	for (auto child : this->children)
 	{
-		child->parent_matrix = newworld_matrix;
+		child->parent_matrix = this->world_matrix;
 		child->UpdateTransform();
 	}
 
-	MatToTrans(&this->world, newworld_matrix);
+	MatToTrans(&this->world, this->world_matrix);
 	MatToTrans(&this->local, this->local_matrix);
+
+	OnChangeMatrix();
 
 	if (isnan(this->local_matrix[0][0]))
 		throw "NAN transform";
@@ -40,6 +42,10 @@ void gbe::Object::MatToTrans(Transform* target, Matrix4 mat)
 gbe::Object* gbe::Object::Copy_self()
 {
 	return new Object(*this);
+}
+
+void gbe::Object::OnChangeMatrix()
+{
 }
 
 gbe::Object::Object()
@@ -74,6 +80,23 @@ gbe::Transform* gbe::Object::World()
 gbe::Transform* gbe::Object::Local()
 {
 	return &this->local;
+}
+
+gbe::Matrix4 gbe::Object::GetLocalMatrix()
+{
+	return this->local_matrix;
+}
+
+gbe::Matrix4 gbe::Object::GetWorldMatrix()
+{
+	return this->world_matrix;
+}
+
+void gbe::Object::SetMatrix(Matrix4 mat)
+{
+	this->local_matrix = mat;
+
+	UpdateTransform();
 }
 
 void gbe::Object::SetPosition(Vector3 vector)

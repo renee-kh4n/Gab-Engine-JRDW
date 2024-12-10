@@ -18,8 +18,9 @@ namespace gbe{
 		float Dot(Vector3 b);
 		float Magnitude();
 
-		Vector3& operator +=(const Vector3& b);
-		Vector3& operator -=(const Vector3& b);
+		Vector3 operator +=(const Vector3& b);
+		Vector3 operator -=(const Vector3& b);
+		operator glm::vec3() const;
 
 		static const Vector3 zero;
 	};

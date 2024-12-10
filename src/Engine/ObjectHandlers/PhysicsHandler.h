@@ -7,26 +7,22 @@
 #include "ObjectHandler.h"
 #include "../Objects/Physics/Physics.h"
 #include "../Objects/Physics/ForceVolume.h"
-#include "Members/ContactResolver.h"
+#include "../Physics/PhysicsPipeline.h"
 
 namespace gbe {
 	class PhysicsHandler : public ObjectHandler<RigidObject>{
 	private:
 		ObjectHandler<ForceVolume> forcevolume_handler;
-		std::vector<CollisionContact*> contacts;
-
-		ContactResolver mContactResolver = ContactResolver(20);
-		std::list<RigidObjectLink*> links;
+		physics::PhysicsPipeline* mPipeline;
 	public:
 
 		PhysicsHandler();
 
-		void Update(double duration);
-		void AddContact(RigidObject* r1, RigidObject* r2, float restitution, float depth);
-		void AddLink(RigidObjectLink* link);
+		void SetPipeline(physics::PhysicsPipeline*);
 
-	protected:
-		void GenerateContacts();
-		void GetOverlap();
+		void Update();
+
+		virtual void OnAdd(RigidObject*) override;
+		virtual void OnRemove(RigidObject*) override;
 	};
 }

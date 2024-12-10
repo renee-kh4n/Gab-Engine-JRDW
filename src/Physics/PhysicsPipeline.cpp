@@ -14,3 +14,13 @@ bool gbe::physics::PhysicsPipeline::Init()
 
 	return true;
 }
+
+void gbe::physics::PhysicsPipeline::Tick(double delta)
+{
+	dynamicsWorld->stepSimulation(delta);
+}
+
+void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::Rigidbody* body)
+{
+	this->dynamicsWorld->addRigidBody(body->GetRegistrant());
+}

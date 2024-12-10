@@ -43,8 +43,11 @@ namespace gbe {
 		RenderPipeline(void*(*procaddressfunc)(const char*), glm::vec2);
 		void RegisterDrawCall(DrawCall*);
 
+		void Set_DepthShader(Shader*);
+
 		void SetMaximumLights(int maxlights);
 		void SetView(glm::vec3 from, glm::mat4 viewMat, glm::mat4 projMat);
+		void SetSkybox(Skybox*);
 		void SetPostProcessing(Shader* postprocess);
 		bool TryPushLight(rendering::Light* data, bool priority = false);
 

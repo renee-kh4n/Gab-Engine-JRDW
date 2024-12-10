@@ -10,6 +10,6 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 )
 
 find_package(glm CONFIG REQUIRED)
-target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glm::glm)
+target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC glm::glm)
 
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

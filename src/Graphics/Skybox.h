@@ -44,7 +44,7 @@ namespace gbe {
                 6,2,3
             };
 
-            Skybox();
+            Skybox(TextureCubeMap*);
             void Render(glm::mat4 viewMat, glm::mat4 proj);
         };
     }

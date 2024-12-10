@@ -12,8 +12,8 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Input/Implementations/MouseScrollImplementation.cpp"
 	"Input/Implementations/WasdDeltaImplementation.cpp"
 
+	
 	"ObjectHandlers/PhysicsHandler.cpp"
-	"ObjectHandlers/Members/ContactResolver.cpp"
 
 	"Objects/Object.cpp"
 	"Objects/Root.cpp"
@@ -24,19 +24,13 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Controllers/VariableSwitcher.cpp"
 	"Objects/Input/InputPlayer.cpp"
 	"Objects/Physics/ForceVolume.cpp"
-	"Objects/Physics/ParticleSystem.cpp"
+	
 	"Objects/Physics/RigidObject.cpp"
 	"Objects/Physics/Collider/Collider.cpp"
-	"Objects/Physics/Collision/Contact.cpp"
 	"Objects/Physics/Joints/AnchorSpring.cpp"
 	"Objects/Physics/Joints/Bungee.cpp"
 	"Objects/Physics/Joints/ChainJoint.cpp"
 	"Objects/Physics/Joints/Spinner.cpp"
-	"Objects/Physics/Linking/RigidObjectLink.cpp"
-	"Objects/Physics/Linking/Rod.cpp"
-	"Objects/Physics/Particle/ParticleObject.cpp"
-	"Objects/Physics/ParticleSystem/FloatParameter.cpp"
-	"Objects/Physics/ParticleSystem/VectorParameter.cpp"
 	"Objects/Rendering/Lights/DirectionalLight.cpp"
 	"Objects/Rendering/Lights/LightObject.cpp"
 	"Objects/Rendering/Renderer/LineRenderer.cpp"

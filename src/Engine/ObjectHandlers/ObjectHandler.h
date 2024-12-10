@@ -19,13 +19,21 @@ namespace gbe {
 	public:
 		std::list<TValue*> object_list;
 
+		virtual void OnAdd(TValue*) {}
+		virtual void OnRemove(TValue*) {}
+
 		virtual void Remove(Object* object) {
 			for (auto subhandler : this->subhandlers)
 				subhandler->Remove(object);
 
-			this->object_list.remove_if([object](TValue* tocheck) {
+			this->object_list.remove_if([this, object](TValue* tocheck) {
 				Object* base_object = dynamic_cast<Object*>(tocheck);
-				return base_object == object;
+				if (base_object == object) {
+					OnRemove(tocheck);
+					return true;
+				}
+
+				return false;
 			});
 		}
 
@@ -43,6 +51,7 @@ namespace gbe {
 					return false;
 
 			object_list.push_back(typed_object);
+			OnAdd(typed_object);
 
 			return true;
 		}
