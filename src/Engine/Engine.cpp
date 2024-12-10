@@ -183,7 +183,7 @@ namespace gbe {
         //Spinner
         auto spinspeed = 10.0f;
         Spinner* cradle_ball = new Spinner();
-        cradle_ball->angularVel = Vector3(0, 1, 0);
+        cradle_ball->angularVel = Vector3(0, 2, 0);
         cradle_ball->SetParent(root_object);
         cradle_ball->body.Set_velocity(Vector3(0, 0, 0));
         cradle_ball->SetScale(Vector3(1, 1, 1)* (radius));

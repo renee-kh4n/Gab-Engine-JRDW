@@ -17,7 +17,7 @@ bool gbe::physics::PhysicsPipeline::Init()
 
 void gbe::physics::PhysicsPipeline::Tick(double delta)
 {
-	dynamicsWorld->stepSimulation(delta);
+	dynamicsWorld->stepSimulation(delta, 20);
 }
 
 void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::Rigidbody* body)

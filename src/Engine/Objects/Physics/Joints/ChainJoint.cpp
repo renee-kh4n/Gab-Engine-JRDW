@@ -22,4 +22,7 @@ void gbe::ChainJoint::InvokeUpdate(float deltatime)
 	Vector3 bringback = -(delta_mag - this->restLen) * delta_dir;
 
 	this->to_rbody->body.Set_velocity((physics::PhysicsVector3)(vel + cancelout + bringback));
+
+	if (delta.SqrMagnitude() > this->restLen * this->restLen)
+		this->to_rbody->SetPosition(this->World()->position + (delta_dir * restLen));
 }
