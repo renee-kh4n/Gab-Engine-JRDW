@@ -2,21 +2,24 @@
 
 void gbe::ChainJoint::InvokeUpdate(float deltatime)
 {
-	Vector3 delta = this->World()->position - this->to_rbody->World()->position;
-	auto vel = this->to_rbody->body.Get_velocity();
+	Vector3 delta = this->to_rbody->World()->position - this->World()->position;
 
 	if (delta.SqrMagnitude() < this->restLen * this->restLen)
 		return;
 
-	Vector3 delta_dir = delta.Normalize();
+	float delta_mag = delta.Magnitude();
+	Vector3 delta_dir = delta / delta_mag;
+	
+	Vector3 velChange = Vector3();
 
-	float dot = vel.Dot(delta_dir);
-	Vector3 velChange = delta_dir * -dot;
+	//cancel out outwards velocity
+	auto vel = this->to_rbody->body.Get_velocity();
+	float projection_len = vel.Dot(delta_dir);
+	Vector3 projection_vec = delta_dir * projection_len;
+	Vector3 cancelout = -projection_vec;
 
-	this->to_rbody->body.Set_velocity((physics::PhysicsVector3)(vel + velChange));
+	//bring back vel
+	Vector3 bringback = -(delta_mag - this->restLen) * delta_dir;
 
-	/*
-	if (delta.SqrMagnitude() > this->restLen * this->restLen)
-		this->to_rbody->SetPosition(this->World()->position + (-delta.Normalize() * restLen));
-	*/
+	this->to_rbody->body.Set_velocity((physics::PhysicsVector3)(vel + cancelout + bringback));
 }

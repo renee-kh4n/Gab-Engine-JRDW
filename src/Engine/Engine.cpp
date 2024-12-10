@@ -171,12 +171,12 @@ namespace gbe {
             return chain;
             };
 
-        auto length = 20.0f;
+        auto length = 4.0f;
         auto radius = 5.0f;
         auto grav_str = -10;
         auto count = 8;
 
-        auto cradle_radius = 20.0f;
+        auto cradle_radius = 5.0f;
 
         auto startheight = length / 2.0f;
 

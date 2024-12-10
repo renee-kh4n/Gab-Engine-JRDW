@@ -28,7 +28,7 @@ gbe::Vector3 gbe::Vector3::Normalize() {
 
 float gbe::Vector3::Dot(Vector3 b)
 {
-	return (this->x * b.x) * (this->y * b.y) + (this->z * b.z);
+	return (this->x * b.x) + (this->y * b.y) + (this->z * b.z);
 }
 
 float gbe::Vector3::Magnitude()
@@ -36,13 +36,13 @@ float gbe::Vector3::Magnitude()
 	return sqrt(this->SqrMagnitude());
 }
 
-gbe::Vector3& gbe::Vector3::operator+=(const gbe::Vector3& b) {
+gbe::Vector3 gbe::Vector3::operator+=(const gbe::Vector3& b) {
 	(glm::vec3)*this += (glm::vec3)b;
 
 	return *this;
 }
 
-gbe::Vector3& gbe::Vector3::operator-=(const gbe::Vector3& b) {
+gbe::Vector3 gbe::Vector3::operator-=(const gbe::Vector3& b) {
 	(glm::vec3)*this -= (glm::vec3)b;
 
 	return *this;
