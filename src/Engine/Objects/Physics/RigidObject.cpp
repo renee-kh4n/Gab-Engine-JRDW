@@ -1,10 +1,16 @@
 #include "RigidObject.h"
 
 gbe::RigidObject::RigidObject() {
+	
 }
 
 gbe::RigidObject::~RigidObject()
 {
+}
+
+void gbe::RigidObject::OnChangeMatrix()
+{
+	this->body.PassCurrentTransformMatrix(this->GetWorldMatrix());
 }
 
 void gbe::RigidObject::OnEnterHierarchy(Object* newChild)

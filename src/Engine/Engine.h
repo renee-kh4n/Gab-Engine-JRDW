@@ -11,6 +11,7 @@
 #include "Global/Time.h"
 		  
 #include "Objects/Controllers/FlyingCameraControl.h"
+#include "Objects/Physics/Joints/Spinner.h"
 
 namespace gbe {
 	class Engine {

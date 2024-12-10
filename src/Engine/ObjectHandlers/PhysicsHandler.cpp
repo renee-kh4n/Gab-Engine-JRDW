@@ -13,10 +13,14 @@ void gbe::PhysicsHandler::SetPipeline(physics::PhysicsPipeline* pipeline)
 	this->mPipeline = pipeline;
 }
 
-void gbe::PhysicsHandler::Update(double duration)
+void gbe::PhysicsHandler::Update()
 {
 	for (auto ro : this->object_list) {
-
+		auto scale = ro->Local()->scale;
+		auto matrix = Matrix4();
+		ro->body.GetCalculatedMatrix(&matrix);
+		ro->SetMatrix(matrix);
+		//ro->Scale(scale);
 	}
 }
 

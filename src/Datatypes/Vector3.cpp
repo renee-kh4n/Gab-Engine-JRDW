@@ -48,4 +48,9 @@ gbe::Vector3& gbe::Vector3::operator-=(const gbe::Vector3& b) {
 	return *this;
 }
 
+gbe::Vector3::operator glm::vec3() const
+{
+	return glm::vec3(this->x, this->y, this->z);
+}
+
 const gbe::Vector3 gbe::Vector3::zero = gbe::Vector3(0, 0, 0);

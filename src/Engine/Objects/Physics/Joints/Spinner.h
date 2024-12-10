@@ -7,9 +7,8 @@
 namespace gbe {
 	class Spinner : public RigidObject, public Update {
 	public:
-
+		Vector3 angularVel = Vector3::zero;
 	private:
-		Vector3 rotateSpeed = Vector3::zero;
 
 		// Inherited via Update
 		virtual void InvokeUpdate(float deltatime) override;

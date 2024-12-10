@@ -18,5 +18,5 @@ void gbe::Bungee::InvokeUpdate(float deltatime)
 	auto force_dir = force * (1.0f / mag);
 	auto spring_force = force_dir * springForce_mag;
 
-	to_rbody->body.AddForce(spring_force);
+	to_rbody->body.AddForce((physics::PhysicsVector3)spring_force);
 }

@@ -373,6 +373,14 @@ build src\Physics\CMakeFiles\gbe_physics.dir\Rigidbody.cpp.obj: CXX_COMPILER__gb
   TARGET_COMPILE_PDB = src\Physics\CMakeFiles\gbe_physics.dir\gbe_physics.pdb
   TARGET_PDB = src\Physics\gbe_physics.pdb
 
+build src\Physics\CMakeFiles\gbe_physics.dir\PhysicsVector.cpp.obj: CXX_COMPILER__gbe_physics_unscanned_Debug D$:\Documents\GitHub\gab-engine-git\src\Physics\PhysicsVector.cpp || cmake_object_order_depends_target_gbe_physics
+  FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
+  INCLUDES = -ID:\Documents\GitHub\gab-engine-git\src -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include\bullet -external:ID:\Documents\GitHub\gab-engine-git\out\build\x64-debug\vcpkg_installed\x64-windows\include -external:W0
+  OBJECT_DIR = src\Physics\CMakeFiles\gbe_physics.dir
+  OBJECT_FILE_DIR = src\Physics\CMakeFiles\gbe_physics.dir
+  TARGET_COMPILE_PDB = src\Physics\CMakeFiles\gbe_physics.dir\gbe_physics.pdb
+  TARGET_PDB = src\Physics\gbe_physics.pdb
+
 
 # =============================================================================
 # Link build statements for STATIC_LIBRARY target gbe_physics
@@ -381,7 +389,7 @@ build src\Physics\CMakeFiles\gbe_physics.dir\Rigidbody.cpp.obj: CXX_COMPILER__gb
 #############################################
 # Link the static library src\Physics\gbe_physics.lib
 
-build src\Physics\gbe_physics.lib: CXX_STATIC_LIBRARY_LINKER__gbe_physics_Debug src\Physics\CMakeFiles\gbe_physics.dir\PhysicsPipeline.cpp.obj src\Physics\CMakeFiles\gbe_physics.dir\Rigidbody.cpp.obj || src\Datatypes\gbe_datatypes.lib
+build src\Physics\gbe_physics.lib: CXX_STATIC_LIBRARY_LINKER__gbe_physics_Debug src\Physics\CMakeFiles\gbe_physics.dir\PhysicsPipeline.cpp.obj src\Physics\CMakeFiles\gbe_physics.dir\Rigidbody.cpp.obj src\Physics\CMakeFiles\gbe_physics.dir\PhysicsVector.cpp.obj || src\Datatypes\gbe_datatypes.lib
   LANGUAGE_COMPILE_FLAGS = /DWIN32 /D_WINDOWS /EHsc /Ob0 /Od /RTC1 -MDd -Zi
   LINK_FLAGS = /machine:x64
   OBJECT_DIR = src\Physics\CMakeFiles\gbe_physics.dir

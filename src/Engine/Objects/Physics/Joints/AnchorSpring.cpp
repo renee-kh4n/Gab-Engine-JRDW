@@ -12,10 +12,10 @@ void gbe::AnchorSpring::InvokeUpdate(float deltatime)
 	float springForce_mag = -springConst * abs(mag - this->restLen);
 
 	auto force_dir = force * (1.0f / mag);
-	auto spring_force = force_dir * springForce_mag;
+	Vector3 spring_force = force_dir * springForce_mag;
 
 	to_rbody->body.AddForce(spring_force);
-	if (this->this_rbody != nullptr) this->this_rbody->body.AddForce(-spring_force);
+	if (this->this_rbody != nullptr) this->this_rbody->body.AddForce((physics::PhysicsVector3) - spring_force);
 }
 
 void gbe::AnchorSpring::SetParent(Object* newParent)

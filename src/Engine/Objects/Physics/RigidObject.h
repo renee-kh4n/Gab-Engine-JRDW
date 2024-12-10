@@ -15,5 +15,6 @@ namespace gbe {
 		virtual ~RigidObject();
 
 		virtual void OnEnterHierarchy(Object* newChild);
+		void OnChangeMatrix() override;
 	};
 }

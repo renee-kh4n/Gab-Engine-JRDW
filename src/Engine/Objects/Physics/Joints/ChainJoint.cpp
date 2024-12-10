@@ -10,11 +10,13 @@ void gbe::ChainJoint::InvokeUpdate(float deltatime)
 
 	Vector3 delta_dir = delta.Normalize();
 
-	auto dot = vel.Dot(delta_dir);
-	auto velChange = delta_dir * -dot;
+	float dot = vel.Dot(delta_dir);
+	Vector3 velChange = delta_dir * -dot;
 
-	this->to_rbody->body.Set_velocity(vel + velChange);
+	this->to_rbody->body.Set_velocity((physics::PhysicsVector3)(vel + velChange));
 
+	/*
 	if (delta.SqrMagnitude() > this->restLen * this->restLen)
 		this->to_rbody->SetPosition(this->World()->position + (-delta.Normalize() * restLen));
+	*/
 }

@@ -24,11 +24,14 @@ namespace gbe {
 		void UpdateTransform();
 
 		void MatToTrans(Transform* target, Matrix4 mat);
-	protected:
-		Object* parent;
+		
 		Matrix4 parent_matrix;
 		Matrix4 local_matrix;
+		Matrix4 world_matrix;
+	protected:
+		Object* parent;
 		virtual Object* Copy_self();
+		virtual void OnChangeMatrix();
 	public:
 		Object();
 		virtual ~Object();
@@ -36,6 +39,9 @@ namespace gbe {
 
 		Transform* World();
 		Transform* Local();
+		Matrix4 GetLocalMatrix();
+		Matrix4 GetWorldMatrix();
+		void SetMatrix(Matrix4 mat);
 		void SetPosition(Vector3 vector);
 		void TranslateWorld(Vector3 vector);
 		void TranslateLocal(Vector3 vector);

@@ -134,11 +134,18 @@ namespace gbe {
             sphere_renderobject->SetParent(sphere_rigidobject);
 
             return sphere_rigidobject;
+        };
+
+        auto EquipWithRenderchild = [drawcalls, root_object, unlitShader, mRenderPipeline](Object* something) {
+            //sphere renderobject setup
+            auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
+            sphere_renderobject->TranslateLocal(Vector3(0, 0, 0));
+            sphere_renderobject->SetParent(something);
             };
 
         //Collision testing
 
-        auto createswing = [camera_parent, lineDrawCall, CreateParticleFunction, root_object](Vector3 position, float length, float radius, Vector3 offset = Vector3::zero, RigidObject** out_ball = nullptr) {
+        auto createballswing = [camera_parent, lineDrawCall, CreateParticleFunction, root_object](Vector3 position, float length, float radius, Vector3 offset = Vector3::zero, void** out_ball = nullptr) {
             auto ball = CreateParticleFunction();
             ball->TranslateLocal(position + offset);
             ball->SetParent(root_object);
@@ -172,17 +179,34 @@ namespace gbe {
         auto cradle_radius = 20.0f;
 
         auto startheight = length / 2.0f;
-        auto spinspeed = 10.0f;
-        RigidObject* cradle_ball = nullptr;
-        auto cradle_pivot = createswing(Vector3(0, startheight, 0), 0.1f, 1.0f, Vector3::zero, &cradle_ball);
 
+        //Spinner
+        auto spinspeed = 10.0f;
+        Spinner* cradle_ball = new Spinner();
+        cradle_ball->angularVel = Vector3(0, 1, 0);
+        cradle_ball->SetParent(root_object);
+        cradle_ball->body.Set_velocity(Vector3(0, 0, 0));
+        cradle_ball->SetScale(Vector3(1, 1, 1)* (radius));
+
+        auto cradle_collider = new Collider(radius);
+        cradle_collider->SetParent(cradle_ball);
+
+        auto cradle_chain = new ChainJoint(1);
+        cradle_chain->to_rbody = cradle_ball;
+        cradle_chain->SetParent(root_object);
+
+        auto cradle_line = new LineRenderer(lineDrawCall, camera_parent, cradle_ball, cradle_chain);
+        cradle_line->SetParent(root_object);
+        EquipWithRenderchild(cradle_ball);
+
+        //balls around
         for (size_t i = 0; i < count; i++)
         {
             auto rad = ((float)i / count) * 360 * ((float)3.14 / 180.0f);
             auto startpos = Vector3(cosf(rad), 0, sinf(rad)) * cradle_radius;
             startpos.y = startheight;
 
-            auto chain = createswing(startpos, length, radius, Vector3::zero);
+            auto chain = createballswing(startpos, length, radius, Vector3::zero);
             chain->SetParent(cradle_ball);
         }
 
@@ -244,7 +268,7 @@ namespace gbe {
             //Update other handlers
             auto onTick = [mPhysicsPipeline, mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
                 mPhysicsPipeline->Tick(deltatime);
-                mPhysicsHandler->Update(deltatime);
+                mPhysicsHandler->Update();
 
                 float delta_f = (float)deltatime;
 

@@ -20,7 +20,7 @@ namespace gbe {
 
 		void SetPipeline(physics::PhysicsPipeline*);
 
-		void Update(double duration);
+		void Update();
 
 		virtual void OnAdd(RigidObject*) override;
 		virtual void OnRemove(RigidObject*) override;
