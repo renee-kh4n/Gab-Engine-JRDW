@@ -47,7 +47,7 @@ namespace gbe {
 			if (this->orbital_rotation.y > 70)
 				this->orbital_rotation.y = 70;
 
-			this->SetRotation(Vector3(orbital_rotation.y, orbital_rotation.x, 0));
+			this->Local().rotation.Set(Quaternion::Euler(Vector3(orbital_rotation.y, orbital_rotation.x, 0)));
 		});
 
 		this->inputreceivers.push_back(mouserightdrag);
@@ -56,7 +56,9 @@ namespace gbe {
 			if (value->state != MouseDrag<Keys::MOUSE_MIDDLE>::WHILE)
 				return;
 
-			this->TranslateLocal(Vector3(value->delta.x, value->delta.y, 0) * 0.2f);
+			auto sensitivity = 0.2f;
+			this->Local().position.Set(this->Local().position.Get() + (this->Local().Up.Get() * (value->delta.y * sensitivity)));
+			this->Local().position.Set(this->Local().position.Get() + (this->Local().Right.Get() * (value->delta.x * sensitivity)));
 		});
 
 		this->inputreceivers.push_back(mousemiddledrag);
@@ -65,7 +67,7 @@ namespace gbe {
 			if (value->state != InputAction::State::START)
 			return;
 
-		this->TranslateLocal(Vector3(0, 0, value->delta.y) * 4.f);
+			this->Local().position.Set(this->Local().position.Get() + (Vector3(0, 0, value->delta.y) * 4.f));
 			});
 
 		this->inputreceivers.push_back(mousescroll);

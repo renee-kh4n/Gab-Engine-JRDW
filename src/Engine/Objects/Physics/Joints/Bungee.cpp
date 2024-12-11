@@ -4,9 +4,9 @@ void gbe::Bungee::InvokeUpdate(float deltatime)
 {
 	if (to_rbody == nullptr) return;
 
-	Vector3 pos = to_rbody->World()->position;
+	Vector3 pos = to_rbody->World().position.Get();
 
-	Vector3 force = pos - this->World()->position;
+	Vector3 force = pos - this->World().position.Get();
 	float mag = force.Magnitude();
 	float delta = mag - this->restLen;
 

@@ -33,7 +33,9 @@ namespace gbe {
         //Reassign to Pipeline
         mRenderPipeline->Set_DepthShader(depthShader);
 
-        //mRenderPipeline->SetSkybox(new gbe::rendering::Skybox(new gbe::rendering::TextureCubeMap("")));
+        auto mSkybox = new gbe::rendering::Skybox(new gbe::rendering::TextureCubeMap("DefaultAssets/Tex/Skybox/rainbow", ".png"));
+        mSkybox->shader = new Shader("DefaultAssets/Shaders/skybox.vert", "DefaultAssets/Shaders/skybox.frag");
+        mRenderPipeline->SetSkybox(mSkybox);
 #pragma endregion
 #pragma region Physics Pipeline Setup
         auto mPhysicsPipeline = new physics::PhysicsPipeline();
@@ -130,7 +132,6 @@ namespace gbe {
 
             //sphere renderobject setup
             auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-            sphere_renderobject->TranslateLocal(Vector3(0, 0, 0));
             sphere_renderobject->SetParent(sphere_rigidobject);
 
             return sphere_rigidobject;
@@ -139,7 +140,6 @@ namespace gbe {
         auto EquipWithRenderchild = [drawcalls, root_object, unlitShader, mRenderPipeline](Object* something) {
             //sphere renderobject setup
             auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-            sphere_renderobject->TranslateLocal(Vector3(0, 0, 0));
             sphere_renderobject->SetParent(something);
             };
 
@@ -147,17 +147,17 @@ namespace gbe {
 
         auto createballswing = [camera_parent, lineDrawCall, CreateParticleFunction, root_object](Vector3 position, float length, float radius, Vector3 offset = Vector3::zero, void** out_ball = nullptr) {
             auto ball = CreateParticleFunction();
-            ball->TranslateLocal(position + offset);
+            ball->Local().position.Set(position + offset);
             ball->SetParent(root_object);
             ball->body.Set_velocity(Vector3(0, 0, 0));
-            ball->SetScale(Vector3(1, 1, 1) * (radius));
+            ball->Local().scale.Set(Vector3(1, 1, 1) * (radius));
 
             //Sphere collider
             auto collider = new Collider(radius);
             collider->SetParent(ball);
 
             auto chain = new ChainJoint(length);
-            chain->TranslateLocal(position);
+            chain->Local().position.Set(position);
             chain->to_rbody = ball;
             chain->SetParent(root_object);
 
@@ -172,7 +172,7 @@ namespace gbe {
             };
 
         auto length = 4.0f;
-        auto radius = 5.0f;
+        auto radius = 2.0f;
         auto grav_str = -10;
         auto count = 8;
 
@@ -186,7 +186,7 @@ namespace gbe {
         cradle_ball->angularVel = Vector3(0, 2, 0);
         cradle_ball->SetParent(root_object);
         cradle_ball->body.Set_velocity(Vector3(0, 0, 0));
-        cradle_ball->SetScale(Vector3(1, 1, 1)* (radius));
+        cradle_ball->Local().scale.Set(Vector3(1, 1, 1)* (radius));
 
         auto cradle_collider = new Collider(radius);
         cradle_collider->SetParent(cradle_ball);
@@ -222,7 +222,7 @@ namespace gbe {
         auto directional_light = new DirectionalLight();
         directional_light->Set_Color(Vector3(1, 1, 1));
         directional_light->Set_Intensity(1);
-        directional_light->Orient(Vector3(0, 0, -1), Vector3(1, 0, 0));
+        directional_light->Local().rotation.Set(Quaternion::LookAtRotation(Vector3(0, 0, -1), Vector3(1, 0, 0)));
         directional_light->SetParent(root_object);
 
 #pragma endregion
@@ -259,7 +259,7 @@ namespace gbe {
                     break;
                 }
             }
-            mRenderPipeline->SetView(active_camera->World()->position, active_camera->GetViewMat(), active_camera->getproj());
+            mRenderPipeline->SetView(active_camera->World().position.Get(), active_camera->GetViewMat(), active_camera->getproj());
             mRenderPipeline->SetPostProcessing(active_camera->mShader);
             mRenderPipeline->RenderFrame();
             //Render window

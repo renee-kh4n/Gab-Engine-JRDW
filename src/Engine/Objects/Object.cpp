@@ -5,7 +5,7 @@
 
 void gbe::Object::UpdateTransform()
 {
-	auto worldmat = this->parent_matrix * this->local_matrix;
+	auto worldmat = this->parent_matrix * this->local.GetMatrix();
 
 	for (auto child : this->children)
 	{
@@ -14,11 +14,10 @@ void gbe::Object::UpdateTransform()
 	}
 
 	MatToTrans(&this->world, worldmat);
-	MatToTrans(&this->local, this->local_matrix);
 
 	OnChangeMatrix();
 
-	if (isnan(this->local_matrix[0][0]))
+	if (isnan(this->local.GetMatrix()[0][0]))
 		throw "NAN transform";
 }
 
@@ -31,12 +30,12 @@ void gbe::Object::MatToTrans(Transform* target, Matrix4 mat)
 	glm::vec4 perspective;
 	glm::decompose(mat, scale, rotation, translation, skew, perspective);
 
-	target->position = translation;
-	target->rotation = glm::eulerAngles(rotation) * (180.0f / (float)M_PI);
-	target->scale = scale;
-	target->Forward = Vector3(mat[2]);
-	target->Up = Vector3(mat[1]);
-	target->Right = Vector3(mat[0]);
+	target->position.Set(translation);
+	target->rotation.Set(rotation);
+	target->scale.Set(scale);
+	target->Forward.Set(Vector3(mat[2]));
+	target->Up.Set(Vector3(mat[1]));
+	target->Right.Set(Vector3(mat[0]));
 }
 
 gbe::Object* gbe::Object::Copy_self()
@@ -51,8 +50,9 @@ void gbe::Object::OnChangeMatrix()
 gbe::Object::Object()
 {
 	this->parent_matrix = Matrix4(1.0f);
-	this->local_matrix = Matrix4(1.0f);
 	this->parent = nullptr;
+
+	UpdateTransform();
 }
 
 gbe::Object::~Object(){
@@ -82,26 +82,21 @@ gbe::Transform& gbe::Object::Local()
 	return this->local;
 }
 
-gbe::Matrix4 gbe::Object::GetLocalMatrix()
+gbe::Matrix4 gbe::Object::GetWorldMatrix(bool include_local_scale)
 {
-	return this->local_matrix;
+	return this->parent_matrix * this->Local().GetMatrix(include_local_scale);
 }
 
-gbe::Matrix4 gbe::Object::GetWorldMatrix()
+void gbe::Object::SetLocalMatrix(Matrix4 mat)
 {
-	return this->parent_matrix * this->local_matrix;
-}
-
-void gbe::Object::SetMatrix(Matrix4 mat)
-{
-	this->local_matrix = mat;
+	MatToTrans(&this->local, mat);
 
 	UpdateTransform();
 }
 
-void gbe::Object::SetPosition(Vector3 vector)
+void gbe::Object::SetWorldPosition(Vector3 vector)
 {
-	auto world_pos = this->World().position;
+	auto world_pos = this->World().position.Get();
 
 	this->TranslateWorld(-world_pos);
 	this->TranslateWorld(vector);
@@ -109,89 +104,15 @@ void gbe::Object::SetPosition(Vector3 vector)
 
 void gbe::Object::TranslateWorld(Vector3 vector)
 {
-	auto curloc = glm::vec3(this->local_matrix[3]);
+	auto curmat = this->local.GetMatrix();
+
+	auto curloc = glm::vec3(curmat[3]);
 	curloc += (glm::vec3)vector;
-	auto newrow4 = glm::vec4(curloc, this->local_matrix[3][3]);
+	auto newrow4 = glm::vec4(curloc, curmat[3][3]);
 
-	this->local_matrix[3] = newrow4;
+	curmat[3] = newrow4;
 
-	UpdateTransform();
-}
-
-void gbe::Object::TranslateLocal(Vector3 vector)
-{
-	this->local_matrix = glm::translate(this->local_matrix, (glm::vec3)vector);
-
-	UpdateTransform();
-}
-
-void gbe::Object::Scale(Vector3 vector)
-{
-	this->local_matrix = glm::scale(this->local_matrix, (glm::vec3)vector);
-
-	UpdateTransform();
-}
-
-void gbe::Object::SetScale(Vector3 vector)
-{
-	glm::vec3 scale;
-	glm::quat rotation;
-	glm::vec3 translation;
-	glm::vec3 skew;
-	glm::vec4 perspective;
-	glm::decompose(this->local_matrix, scale, rotation, translation, skew, perspective);
-
-	auto newmat = Matrix4();
-	newmat = glm::translate(newmat, translation);
-	newmat *= glm::toMat4(rotation);
-	newmat = glm::scale(newmat, (glm::vec3)vector);
-
-	this->local_matrix = newmat;
-
-	UpdateTransform();
-}
-
-void gbe::Object::Rotate(Vector3 axis, float deg_angle)
-{
-	this->local_matrix = glm::rotate(Matrix4(), glm::radians(deg_angle), (glm::vec3)axis) * this->local_matrix;
-	UpdateTransform();
-}
-
-void gbe::Object::SetRotation(Vector3 euler)
-{
-	auto newmat = Matrix4();
-	newmat = glm::translate(newmat, (glm::vec3)Local().position);
-	newmat = glm::rotate(newmat, glm::radians(euler.y), Vector3(0, 1, 0));
-	newmat = glm::rotate(newmat, glm::radians(euler.x), Vector3(1, 0, 0));
-	newmat = glm::rotate(newmat, glm::radians(euler.z), Vector3(0, 0, 1));
-	newmat = glm::scale(newmat, Local().scale);
-
-	this->local_matrix = newmat;
-
-	UpdateTransform();
-}
-
-void gbe::Object::Orient(Vector3 forward, Vector3 Up)
-{
-	if (abs(forward.SqrMagnitude() - 1.0f) > 0.001f || abs(Up.SqrMagnitude() - 1.0f) > 0.001f) {
-		return;
-	}
-
-	auto lookatmat = glm::inverse(glm::lookAt((glm::vec3)Vector3::zero, (glm::vec3)forward, (glm::vec3)Up));
-
-	glm::vec3 scale;
-	glm::quat rotation;
-	glm::vec3 translation;
-	glm::vec3 skew;
-	glm::vec4 perspective;
-	glm::decompose(this->local_matrix, scale, rotation, translation, skew, perspective);
-
-	auto newmat = Matrix4();
-	newmat = glm::translate(newmat, translation);
-	newmat *= lookatmat;
-	newmat = glm::scale(newmat, scale);
-
-	this->local_matrix = newmat;
+	MatToTrans(&this->local, curmat);
 
 	UpdateTransform();
 }

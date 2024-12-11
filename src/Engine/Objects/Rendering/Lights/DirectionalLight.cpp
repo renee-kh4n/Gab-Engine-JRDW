@@ -14,7 +14,7 @@ rendering::Light* gbe::DirectionalLight::GetData()
 
     dir_light->color = this->Color;
     dir_light->intensity = this->intensity;
-    dir_light->dir = this->World()->Forward;
+    dir_light->dir = this->World().Forward.Get();
 
     return this->mLight;
 }

@@ -2,9 +2,10 @@
 
 #include "../Datatypes/Vector3.h"
 #include "../Datatypes/Matrix4.h"
+#include "../Datatypes/Quaternion.h"
 
 #include <bullet/btBulletDynamicsCommon.h>
-#include "PhysicsVector.h"
+#include "PhysicsDatatypes.h"
 
 namespace gbe {
 	namespace physics {
@@ -14,8 +15,9 @@ namespace gbe {
 			btRigidBody* data;
 			btDefaultMotionState* motionstate;
 		public:
-			void PassCurrentTransformMatrix(Matrix4);
-			void GetCalculatedMatrix(Matrix4*);
+			void InjectCurrentTransformMatrix(Matrix4);
+			void PassTransformationData(Vector3&, Quaternion&);
+			void PassTransformationMatrix(Matrix4&);
 
 			Rigidbody();
 			btRigidBody* GetRegistrant();

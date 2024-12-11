@@ -21,16 +21,16 @@ bool gbe::LightObject::CheckChanged()
 		return true;
 	}
 
-	auto worldmatrix = this->World();
+	auto worldTransform = this->World();
 
-	Vector3 delta_pos = (this->old_position - worldmatrix->position);
-	Vector3 delta_dir = (this->old_forward - worldmatrix->Forward);
+	Vector3 delta_pos = (this->old_position - worldTransform.position.Get());
+	Vector3 delta_dir = (this->old_forward - worldTransform.Forward.Get());
 	if (delta_pos.SqrMagnitude() > 0.01) {
-		this->old_position = worldmatrix->position;
+		this->old_position = worldTransform.position.Get();
 		return true;
 	}
 	if (delta_dir.SqrMagnitude() > 0.01) {
-		this->old_forward = worldmatrix->Forward;
+		this->old_forward = worldTransform.Forward.Get();
 		return true;
 	}
 

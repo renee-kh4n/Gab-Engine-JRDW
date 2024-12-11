@@ -4,7 +4,7 @@
 
 void gbe::ForceVolume::TryApply(RigidObject* object)
 {
-	Vector3 delta = object->World()->position - this->World()->position;
+	Vector3 delta = object->World().position.Get() - this->World().position.Get();
 
 	if (this->shape == SPHERE)
 		if (delta.SqrMagnitude() > this->radius * this->radius)

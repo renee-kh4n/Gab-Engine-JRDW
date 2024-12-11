@@ -18,15 +18,14 @@ namespace gbe {
 
 		std::list<Object*> children;
 
-		Transform local;
-		Transform world;
+		Transform local = Transform([this]() {this->UpdateTransform(); });
+		Transform world = Transform([]() {});
 
 		void UpdateTransform();
 
 		void MatToTrans(Transform* target, Matrix4 mat);
 		
 		Matrix4 parent_matrix;
-		Matrix4 local_matrix;
 	protected:
 		Object* parent;
 		virtual Object* Copy_self();
@@ -38,17 +37,10 @@ namespace gbe {
 
 		Transform& World();
 		Transform& Local();
-		Matrix4 GetLocalMatrix();
-		Matrix4 GetWorldMatrix();
-		void SetMatrix(Matrix4 mat);
-		void SetPosition(Vector3 vector);
+		Matrix4 GetWorldMatrix(bool include_local_scale = true);
+		void SetLocalMatrix(Matrix4 mat);
+		void SetWorldPosition(Vector3 vector);
 		void TranslateWorld(Vector3 vector);
-		void TranslateLocal(Vector3 vector);
-		void Rotate(Vector3 axis, float angle);
-		void SetRotation(Vector3 euler);
-		void Orient(Vector3 forward, Vector3 Up);
-		void Scale(Vector3 vector);
-		void SetScale(Vector3 vector);
 
 		virtual void OnEnterHierarchy(Object* newChild);
 		virtual void OnExitHierarchy(Object* newChild);

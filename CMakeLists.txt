@@ -34,7 +34,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
 
 #COPY ASSETS TO BUILD
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets" "${CMAKE_CURRENT_BINARY_DIR}/DefaultAssets"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets" $<TARGET_FILE_DIR:${PROJECT_NAME}>"/DefaultAssets"
 )
 
 #COPY DLL TO BUILD
@@ -42,11 +42,6 @@ add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E copy -t $<TARGET_FILE_DIR:${PROJECT_NAME}> $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}>
   COMMAND_EXPAND_LISTS
 )
-
-#DEBUG
-set(DEBUGFILEMESSAGE "")
-set(DEBUGFILEMESSAGE ${DEBUGFILEMESSAGE} "[GABENGINE] copied DLLs from " $<TARGET_RUNTIME_DLLS:${PROJECT_NAME}> " to " $<TARGET_FILE_DIR:${PROJECT_NAME}> "\n")
-file(GENERATE OUTPUT cmake_config_debug_output.txt CONTENT "${DEBUGFILEMESSAGE}")
 
 get_target_property(LINKED_LIBS ${PROJECT_NAME} LINK_LIBRARIES)
 # Construct the compiler string for the include directories.

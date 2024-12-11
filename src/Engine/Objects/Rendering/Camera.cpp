@@ -15,8 +15,8 @@ namespace gbe {
     {
         auto world = this->World();
 
-        auto this_pos = (glm::vec3)world->position;
-        return glm::lookAt(this_pos, (glm::vec3)world->Forward + this_pos, (glm::vec3)world->Up);
+        auto this_pos = (glm::vec3)world.position.Get();
+        return glm::lookAt(this_pos, (glm::vec3)world.Forward.Get() + this_pos, (glm::vec3)world.Up.Get());
     }
 
     PerspectiveCamera::PerspectiveCamera(Window* mWindow, Shader* mShader) : Camera(mWindow, mShader)

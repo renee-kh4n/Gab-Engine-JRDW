@@ -9,6 +9,11 @@ gbe::Vector3::Vector3(float x, float y, float z) : glm::vec3(x, y, z)
 
 }
 
+gbe::Vector3::Vector3(float u) : glm::vec3(u)
+{
+
+}
+
 gbe::Vector3::Vector3(const glm::vec3& glmvec) : glm::vec3(glmvec)
 {
 	
@@ -36,16 +41,12 @@ float gbe::Vector3::Magnitude()
 	return sqrt(this->SqrMagnitude());
 }
 
-gbe::Vector3 gbe::Vector3::operator+=(const gbe::Vector3& b) {
-	(glm::vec3)*this += (glm::vec3)b;
-
-	return *this;
+gbe::Vector3& gbe::Vector3::operator+=(const gbe::Vector3& b) {
+	return (gbe::Vector3)glm::vec3::operator+=((glm::vec3)b);
 }
 
-gbe::Vector3 gbe::Vector3::operator-=(const gbe::Vector3& b) {
-	(glm::vec3)*this -= (glm::vec3)b;
-
-	return *this;
+gbe::Vector3& gbe::Vector3::operator-=(const gbe::Vector3& b) {
+	return (gbe::Vector3)glm::vec3::operator-=((glm::vec3)b);
 }
 
 gbe::Vector3::operator glm::vec3() const

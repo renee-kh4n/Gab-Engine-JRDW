@@ -36,7 +36,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Rendering/Renderer/LineRenderer.cpp"
 	"Objects/Rendering/Camera.cpp"
 	"Objects/Rendering/RenderObject.cpp"
-)
+ "Objects/Physics/Collider/SphereCollider.h" "Objects/Physics/Collider/SphereCollider.cpp")
 
 target_include_directories(${CURRENT_CMAKE_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 message("[GABENGINE] INCLUDED ROOT DIR TO EDITOR SRCS: " ${CMAKE_CURRENT_SOURCE_DIR})

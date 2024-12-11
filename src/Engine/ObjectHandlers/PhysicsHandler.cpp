@@ -16,11 +16,13 @@ void gbe::PhysicsHandler::SetPipeline(physics::PhysicsPipeline* pipeline)
 void gbe::PhysicsHandler::Update()
 {
 	for (auto ro : this->object_list) {
-		auto scale = ro->Local()->scale;
-		auto matrix = Matrix4();
-		ro->body.GetCalculatedMatrix(&matrix);
-		ro->SetMatrix(matrix);
-		//ro->Scale(scale);
+
+		Vector3 newpos;
+		Quaternion newrot;
+
+		ro->body.PassTransformationData(newpos, newrot);
+		ro->Local().position.Set(newpos);
+		ro->Local().rotation.Set(newrot);
 	}
 }
 

@@ -18,7 +18,7 @@ gbe::Vector3 gbe::LineRenderer::GetPos(int which)
 	else
 		obj = this->b;
 
-	return obj->World()->position;
+	return obj->World().position.Get();
 }
 
 void gbe::LineRenderer::InvokeEarlyUpdate()
@@ -33,12 +33,12 @@ void gbe::LineRenderer::InvokeEarlyUpdate()
 
 		Vector3 new_pos = (v1 + v2) * 0.5f;
 
-		this->SetPosition(new_pos);
+		this->SetWorldPosition(new_pos);
 
-		Vector3 delta_pos = (this->camera->World()->position - new_pos);
+		Vector3 delta_pos = (this->camera->World().position.Get() - new_pos);
 		Vector3 to_eye = delta_pos.Normalize();
-		this->SetScale(Vector3(0.1f, 1, delta_mag / 2));
-		this->Orient(delta_dir, to_eye);
+		this->Local().scale.Set(Vector3(0.1f, 1, delta_mag / 2));
+		this->Local().rotation.Set(Quaternion::LookAtRotation(delta_dir, to_eye));
 	}
 	
 	RenderObject::InvokeEarlyUpdate();

@@ -14,17 +14,24 @@ gbe::physics::Rigidbody::Rigidbody()
 	this->data = new btRigidBody(rbInfo);
 }
 
-void gbe::physics::Rigidbody::PassCurrentTransformMatrix(Matrix4 pos)
+void gbe::physics::Rigidbody::InjectCurrentTransformMatrix(Matrix4 pos)
 {
 	this->transform.setFromOpenGLMatrix(pos.Get_Ptr());
 	this->data->setWorldTransform(this->transform);
 	this->motionstate->setWorldTransform(this->transform);
 }
 
-void gbe::physics::Rigidbody::GetCalculatedMatrix(Matrix4* target)
+void gbe::physics::Rigidbody::PassTransformationData(Vector3& pos, Quaternion& rot)
 {
 	this->data->getMotionState()->getWorldTransform(this->transform);
-	this->transform.getOpenGLMatrix((float*)target);
+	pos = (PhysicsVector3)this->transform.getOrigin();
+	rot = (PhysicsQuaternion)this->transform.getRotation();
+}
+
+void gbe::physics::Rigidbody::PassTransformationMatrix(Matrix4& mat)
+{
+	this->data->getMotionState()->getWorldTransform(this->transform);
+	this->transform.getOpenGLMatrix((float*)mat.Get_Ptr());
 }
 
 btRigidBody* gbe::physics::Rigidbody::GetRegistrant()

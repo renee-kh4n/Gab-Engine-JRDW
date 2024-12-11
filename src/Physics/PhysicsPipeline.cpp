@@ -10,7 +10,7 @@ bool gbe::physics::PhysicsPipeline::Init()
 	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
 	this->solver = new btSequentialImpulseConstraintSolver;
 	this->dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
-	this->dynamicsWorld->setGravity(btVector3(0, -10, 0));
+	this->dynamicsWorld->setGravity(btVector3(0, 0, 0));
 
 	return true;
 }

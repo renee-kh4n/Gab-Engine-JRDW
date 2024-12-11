@@ -7,7 +7,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Vector3.cpp"
 	"Vector4.cpp"
 	"Matrix4.cpp"
-)
+ "Quaternion.h" "Quaternion.cpp" "TrackedVariable.h")
 
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC glm::glm)

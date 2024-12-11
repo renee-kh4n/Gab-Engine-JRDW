@@ -10,7 +10,7 @@ gbe::RigidObject::~RigidObject()
 
 void gbe::RigidObject::OnChangeMatrix()
 {
-	this->body.PassCurrentTransformMatrix(this->GetWorldMatrix());
+	this->body.InjectCurrentTransformMatrix(this->GetWorldMatrix(false));
 }
 
 void gbe::RigidObject::OnEnterHierarchy(Object* newChild)
