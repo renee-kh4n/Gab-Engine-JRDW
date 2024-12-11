@@ -29,6 +29,7 @@ void gbe::PhysicsHandler::OnAdd(RigidObject* ro)
 	this->mPipeline->RegisterBody(&ro->body);
 }
 
-void gbe::PhysicsHandler::OnRemove(RigidObject*)
+void gbe::PhysicsHandler::OnRemove(RigidObject* ro)
 {
+	this->mPipeline->UnRegisterBody(&ro->body);
 }

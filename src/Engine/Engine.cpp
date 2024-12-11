@@ -38,7 +38,6 @@ namespace gbe {
 #pragma region Physics Pipeline Setup
         auto mPhysicsPipeline = new physics::PhysicsPipeline();
         mPhysicsPipeline->Init();
-
 #pragma endregion
 
 #pragma region Input
@@ -50,7 +49,7 @@ namespace gbe {
         mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 #pragma endregion
 
-#pragma region Object setup
+#pragma region Scene Root setup
         //Object handlers setup
         auto mPhysicsHandler = new PhysicsHandler();
         mPhysicsHandler->SetPipeline(mPhysicsPipeline);
@@ -69,7 +68,8 @@ namespace gbe {
         root_object->RegisterHandler(mEarlyUpdate);
         root_object->RegisterHandler(mUpdate);
         root_object->RegisterHandler(mLateUpdate);
-
+#pragma endregion
+#pragma region Scene Objects setup
         //Camera setup
         auto player_input = new InputPlayer(player_name);
         player_input->SetParent(root_object);

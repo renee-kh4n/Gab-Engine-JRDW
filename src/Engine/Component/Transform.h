@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../Datatypes/Vector3.h"
+#include "../Datatypes/Matrix4.h"
 
 namespace gbe {
 	class Transform {
@@ -11,5 +12,7 @@ namespace gbe {
 		Vector3 position;
 		Vector3 scale;
 		Vector3 rotation;
+
+		Matrix4 GetMatrix();
 	};
 }

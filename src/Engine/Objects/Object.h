@@ -18,8 +18,8 @@ namespace gbe {
 
 		std::list<Object*> children;
 
-		Transform world;
 		Transform local;
+		Transform world;
 
 		void UpdateTransform();
 
@@ -27,7 +27,6 @@ namespace gbe {
 		
 		Matrix4 parent_matrix;
 		Matrix4 local_matrix;
-		Matrix4 world_matrix;
 	protected:
 		Object* parent;
 		virtual Object* Copy_self();
@@ -37,8 +36,8 @@ namespace gbe {
 		virtual ~Object();
 		virtual Object* Copy();
 
-		Transform* World();
-		Transform* Local();
+		Transform& World();
+		Transform& Local();
 		Matrix4 GetLocalMatrix();
 		Matrix4 GetWorldMatrix();
 		void SetMatrix(Matrix4 mat);

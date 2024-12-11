@@ -24,3 +24,8 @@ void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::Rigidbody* body)
 {
 	this->dynamicsWorld->addRigidBody(body->GetRegistrant());
 }
+
+void gbe::physics::PhysicsPipeline::UnRegisterBody(Rigidbody* body)
+{
+	this->dynamicsWorld->removeRigidBody(body->GetRegistrant());
+}

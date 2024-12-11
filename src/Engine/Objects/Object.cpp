@@ -5,15 +5,15 @@
 
 void gbe::Object::UpdateTransform()
 {
-	this->world_matrix = this->parent_matrix * this->local_matrix;
+	auto worldmat = this->parent_matrix * this->local_matrix;
 
 	for (auto child : this->children)
 	{
-		child->parent_matrix = this->world_matrix;
+		child->parent_matrix = worldmat;
 		child->UpdateTransform();
 	}
 
-	MatToTrans(&this->world, this->world_matrix);
+	MatToTrans(&this->world, worldmat);
 	MatToTrans(&this->local, this->local_matrix);
 
 	OnChangeMatrix();
@@ -72,14 +72,14 @@ gbe::Object* gbe::Object::Copy()
 	return copy;
 }
 
-gbe::Transform* gbe::Object::World()
+gbe::Transform& gbe::Object::World()
 {
-	return &this->world;
+	return this->world;
 }
 
-gbe::Transform* gbe::Object::Local()
+gbe::Transform& gbe::Object::Local()
 {
-	return &this->local;
+	return this->local;
 }
 
 gbe::Matrix4 gbe::Object::GetLocalMatrix()
@@ -89,7 +89,7 @@ gbe::Matrix4 gbe::Object::GetLocalMatrix()
 
 gbe::Matrix4 gbe::Object::GetWorldMatrix()
 {
-	return this->world_matrix;
+	return this->parent_matrix * this->local_matrix;
 }
 
 void gbe::Object::SetMatrix(Matrix4 mat)
@@ -101,7 +101,7 @@ void gbe::Object::SetMatrix(Matrix4 mat)
 
 void gbe::Object::SetPosition(Vector3 vector)
 {
-	auto world_pos = this->World()->position;
+	auto world_pos = this->World().position;
 
 	this->TranslateWorld(-world_pos);
 	this->TranslateWorld(vector);
@@ -160,11 +160,11 @@ void gbe::Object::Rotate(Vector3 axis, float deg_angle)
 void gbe::Object::SetRotation(Vector3 euler)
 {
 	auto newmat = Matrix4();
-	newmat = glm::translate(newmat, (glm::vec3)Local()->position);
+	newmat = glm::translate(newmat, (glm::vec3)Local().position);
 	newmat = glm::rotate(newmat, glm::radians(euler.y), Vector3(0, 1, 0));
 	newmat = glm::rotate(newmat, glm::radians(euler.x), Vector3(1, 0, 0));
 	newmat = glm::rotate(newmat, glm::radians(euler.z), Vector3(0, 0, 1));
-	newmat = glm::scale(newmat, Local()->scale);
+	newmat = glm::scale(newmat, Local().scale);
 
 	this->local_matrix = newmat;
 
