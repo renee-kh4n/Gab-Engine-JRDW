@@ -2,15 +2,19 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-gbe::physics::Rigidbody::Rigidbody()
+gbe::physics::Rigidbody::Rigidbody(bool is_static)
 {
 	this->transform.setIdentity();
 
-	btScalar mass(1.0f);
+	this->mass = 1.0f;
+
+	btScalar mass(is_static ? 0 : this->mass);
 	btVector3 localInertia(0, 0, 0);
 
+	this->mMainShape = new btCompoundShape();
+
 	this->motionstate = new btDefaultMotionState(this->transform);
-	btRigidBody::btRigidBodyConstructionInfo rbInfo(1.0f, this->motionstate, new btSphereShape(1.0f), localInertia);
+	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, this->motionstate, this->mMainShape, localInertia);
 	this->data = new btRigidBody(rbInfo);
 }
 
@@ -34,8 +38,15 @@ void gbe::physics::Rigidbody::PassTransformationMatrix(Matrix4& mat)
 	this->transform.getOpenGLMatrix((float*)mat.Get_Ptr());
 }
 
-btRigidBody* gbe::physics::Rigidbody::GetRegistrant()
+btRigidBody* gbe::physics::Rigidbody::GetRegistrant(btDynamicsWorld* register_to)
 {
+	this->world = register_to;
+	return this->data;
+}
+
+btRigidBody* gbe::physics::Rigidbody::UnRegister()
+{
+	this->world = nullptr;
 	return this->data;
 }
 
@@ -44,9 +55,13 @@ float gbe::physics::Rigidbody::Get_mass()
 	return 1.0f;
 }
 
+void gbe::physics::Rigidbody::SetStatic(bool value) {
+	throw "not implemented";
+}
+
 void gbe::physics::Rigidbody::AddForce(PhysicsVector3 force)
 {
-
+	this->data->applyCentralForce(force);
 }
 
 void gbe::physics::Rigidbody::AddForceAtPoint(PhysicsVector3 force, PhysicsVector3 relativeWorldPoint)
@@ -72,4 +87,40 @@ void gbe::physics::Rigidbody::Set_angularVelocity(PhysicsVector3 value)
 gbe::physics::PhysicsVector3 gbe::physics::Rigidbody::Get_angularVelocity()
 {
 	return PhysicsVector3();
+}
+
+void gbe::physics::Rigidbody::AddCollider(ColliderData* data) {
+	this->colliders.push_back(data);
+	data->AssignOwner(this);
+
+	this->mMainShape->addChildShape(data->GetInternalTransform(), data->GetShape());
+}
+
+void gbe::physics::Rigidbody::UpdateColliderTransform(ColliderData* data) {
+	static btTransform newtransform;
+	newtransform.setFromOpenGLMatrix(data->GetLocalMatrix().Get_Ptr());
+
+	int index = 0;
+	for (auto col : colliders)
+	{
+		if (col == data)
+			break;
+		index++;
+	}
+
+	this->mMainShape->updateChildTransform(index, data->GetInternalTransform());
+}
+
+void gbe::physics::Rigidbody::RemoveCollider(ColliderData* data) {
+	this->colliders.remove(data);
+	data->RemoveOwner();
+
+	this->mMainShape->removeChildShape(data->GetShape());
+}
+
+void gbe::physics::Rigidbody::UpdateAABB() {
+	if (this->world == nullptr)
+		return;
+
+	this->world->updateSingleAabb(this->data);
 }

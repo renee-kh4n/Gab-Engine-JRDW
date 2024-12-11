@@ -23,6 +23,11 @@ void gbe::PhysicsHandler::Update()
 		ro->body.PassTransformationData(newpos, newrot);
 		ro->Local().position.Set(newpos);
 		ro->Local().rotation.Set(newrot);
+
+		for (auto fv : this->forcevolume_handler.object_list)
+		{
+			fv->TryApply(ro);
+		}
 	}
 }
 

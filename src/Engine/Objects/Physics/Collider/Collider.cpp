@@ -1,11 +1,7 @@
 #include "Collider.h"
 
-gbe::Collider::Collider(float radius)
+void gbe::Collider::OnChangeMatrix()
 {
-	this->radius = radius;
-}
-
-float gbe::Collider::GetWorldRadius()
-{
-	return this->radius;
+	this->GetColliderData()->UpdateLocalTransformation(this->Local().GetMatrix());
+	this->GetColliderData()->UpdateScale(this->World().scale.Get());
 }

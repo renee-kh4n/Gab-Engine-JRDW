@@ -11,10 +11,11 @@ namespace gbe {
 	public:
 		physics::Rigidbody body;
 
-		RigidObject();
+		RigidObject(bool is_static = false);
 		virtual ~RigidObject();
 
 		virtual void OnEnterHierarchy(Object* newChild);
+		virtual void OnExitHierarchy(Object* newChild);
 		void OnChangeMatrix() override;
 	};
 }

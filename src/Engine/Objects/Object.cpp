@@ -169,9 +169,13 @@ void gbe::Object::SetParent(Object* newParent)
 	if (newParent != nullptr) {
 		this->CallRecursively([newParent](Object* child) {newParent->OnEnterHierarchy(child); });
 		newParent->children.push_back(this);
+
+		this->parent_matrix = newParent->GetWorldMatrix();
 	}
 
 	this->parent = newParent;
+
+	this->UpdateTransform();
 }
 
 gbe::Object* gbe::Object::GetChildAt(size_t i)

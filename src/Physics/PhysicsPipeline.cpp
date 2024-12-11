@@ -17,15 +17,15 @@ bool gbe::physics::PhysicsPipeline::Init()
 
 void gbe::physics::PhysicsPipeline::Tick(double delta)
 {
-	dynamicsWorld->stepSimulation(delta, 20);
+	dynamicsWorld->stepSimulation(delta, 30);
 }
 
 void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::Rigidbody* body)
 {
-	this->dynamicsWorld->addRigidBody(body->GetRegistrant());
+	this->dynamicsWorld->addRigidBody(body->GetRegistrant(this->dynamicsWorld));
 }
 
 void gbe::physics::PhysicsPipeline::UnRegisterBody(Rigidbody* body)
 {
-	this->dynamicsWorld->removeRigidBody(body->GetRegistrant());
+	this->dynamicsWorld->removeRigidBody(body->UnRegister());
 }

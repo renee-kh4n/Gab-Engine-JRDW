@@ -2,14 +2,14 @@
 
 #include "Collider.h"
 
-#include "Physics/ColliderData/SphereColliderData.h"
+#include "Physics/ColliderData/BoxColliderData.h"
 
 namespace gbe {
-	class SphereCollider : public Collider {
+	class BoxCollider : public Collider {
 	private:
-		physics::SphereColliderData* mData;
+		physics::BoxColliderData* mData;
 	public:
-		SphereCollider();
+		BoxCollider();
 
 		// Inherited via Collider
 		physics::ColliderData* GetColliderData() override;

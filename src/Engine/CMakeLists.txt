@@ -20,23 +20,27 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Controllers/ControllerBase.cpp"
 	"Objects/Controllers/FlyingCameraControl.cpp"
 	"Objects/Controllers/OrbitalControl.cpp"
+	"Objects/Controllers/GenericController.cpp"
 	
 	"Objects/Controllers/VariableSwitcher.cpp"
 	"Objects/Input/InputPlayer.cpp"
+
 	"Objects/Physics/ForceVolume.cpp"
-	
-	"Objects/Physics/RigidObject.cpp"
-	"Objects/Physics/Collider/Collider.cpp"
-	"Objects/Physics/Joints/AnchorSpring.cpp"
-	"Objects/Physics/Joints/Bungee.cpp"
-	"Objects/Physics/Joints/ChainJoint.cpp"
-	"Objects/Physics/Joints/Spinner.cpp"
 	"Objects/Rendering/Lights/DirectionalLight.cpp"
 	"Objects/Rendering/Lights/LightObject.cpp"
 	"Objects/Rendering/Renderer/LineRenderer.cpp"
 	"Objects/Rendering/Camera.cpp"
 	"Objects/Rendering/RenderObject.cpp"
- "Objects/Physics/Collider/SphereCollider.h" "Objects/Physics/Collider/SphereCollider.cpp")
+
+	"Objects/Physics/RigidObject.cpp"
+	"Objects/Physics/Collider/Collider.cpp"
+	"Objects/Physics/Collider/SphereCollider.cpp"
+	"Objects/Physics/Joints/AnchorSpring.cpp"
+	"Objects/Physics/Joints/Bungee.cpp"
+	"Objects/Physics/Joints/ChainJoint.cpp"
+	"Objects/Physics/Joints/Spinner.cpp"
+	"Objects/Physics/Collider/BoxCollider.cpp"
+)
 
 target_include_directories(${CURRENT_CMAKE_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 message("[GABENGINE] INCLUDED ROOT DIR TO EDITOR SRCS: " ${CMAKE_CURRENT_SOURCE_DIR})

@@ -9,10 +9,11 @@ namespace gbe {
 		Object* a;
 		Object* b;
 		Object* camera;
-	
+		float thickness = 0.1f;
 	public:
 		LineRenderer(rendering::DrawCall* drawcall, Object* Camera, Object* a, Object* b);
 
+		void SetThickness(float value);
 		Vector3 GetPos(int which);
 		virtual void InvokeEarlyUpdate();
 	};

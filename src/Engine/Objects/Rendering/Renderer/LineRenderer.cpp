@@ -9,6 +9,11 @@ gbe::LineRenderer::LineRenderer(DrawCall* drawcall, Object* Camera, Object* a, O
 	this->camera = Camera;
 }
 
+void gbe::LineRenderer::SetThickness(float value)
+{
+	this->thickness = value;
+}
+
 gbe::Vector3 gbe::LineRenderer::GetPos(int which)
 {
 	Object* obj = nullptr;
@@ -37,7 +42,7 @@ void gbe::LineRenderer::InvokeEarlyUpdate()
 
 		Vector3 delta_pos = (this->camera->World().position.Get() - new_pos);
 		Vector3 to_eye = delta_pos.Normalize();
-		this->Local().scale.Set(Vector3(0.1f, 1, delta_mag / 2));
+		this->Local().scale.Set(Vector3(this->thickness, 1, delta_mag / 2));
 		this->Local().rotation.Set(Quaternion::LookAtRotation(delta_dir, to_eye));
 	}
 	

@@ -72,6 +72,22 @@ namespace gbe {
         root_object->RegisterHandler(mLateUpdate);
 #pragma endregion
 #pragma region Scene Objects setup
+        //Global objects
+        //physics force setup
+        auto gravity_volume = new ForceVolume();
+        gravity_volume->shape = ForceVolume::GLOBAL;
+        gravity_volume->mode = ForceVolume::DIRECTIONAL;
+        gravity_volume->vector = Vector3(0.f, -4, 0.f);
+        gravity_volume->forceMode = ForceVolume::VELOCITY;
+        gravity_volume->SetParent(root_object);
+
+        //light
+        auto directional_light = new DirectionalLight();
+        directional_light->Set_Color(Vector3(1, 1, 1));
+        directional_light->Set_Intensity(1);
+        directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(45, 0, 0)));
+        directional_light->SetParent(root_object);
+
         //Camera setup
         auto player_input = new InputPlayer(player_name);
         player_input->SetParent(root_object);
@@ -88,142 +104,126 @@ namespace gbe {
 
         camera_parent->TranslateWorld(Vector3(0, 0, -10));
 
-        //Mesh and material caching
+        //TEXTURE CACHING
+        auto chewbacca_tex = new Texture("DefaultAssets/Tex/cubeacca.jpg");
 
-        //unlit line rendercall
-        auto mat = new Material(unlitShader);
-        mat->setOverride<glm::vec3>("color", glm::vec3(1, 1, 1));
-        auto lineDrawCall = new DrawCall(new Mesh("DefaultAssets/3D/plane.obj"), mat);
-        mRenderPipeline->RegisterDrawCall(lineDrawCall);
-
-        //particle rendercall
+        //MESH CACHING
+        auto plane_mesh = new Mesh("DefaultAssets/3D/plane.obj");
         auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
-        auto sphere_tex = new Texture("DefaultAssets/Tex/cubeacca.jpg");
+        auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
 
-        auto create_rendercall = [sphere_tex, sphere_mesh, litShader, unlitShader, mRenderPipeline](Vector3 color) {
-            auto mattex = MaterialTexture();
-            mattex.parameterName = "texdiffuse";
-            mattex.texture = sphere_tex;
+        //MATERIAL CACHING
+        auto unlit_white_mat = new Material(unlitShader);
+        unlit_white_mat->setOverride<glm::vec3>("color", glm::vec3(1, 1, 1));
 
+        auto mattex = MaterialTexture();
+        mattex.parameterName = "texdiffuse";
+        mattex.texture = chewbacca_tex;
+
+        auto create_lit_colored_mat = [litShader, mattex](Vector3 color) {
             auto mat = new Material(litShader);
             mat->textureOverrides.push_back(mattex);
             mat->setOverride<glm::vec3>("color", color * 0.9f);
             mat->setOverride<bool>("hasDiffuseTex", true);
             mat->setOverride<float>("specStrength", 0.5f);
             mat->setOverride<float>("specPhong", 16);
+
+            return mat;
+        };
+
+        std::vector<Material*> lit_colored_mats = {
+            create_lit_colored_mat(Vector3(1, 0, 0)),
+            create_lit_colored_mat(Vector3(0, 1, 0)),
+            create_lit_colored_mat(Vector3(0, 0, 1)),
+            create_lit_colored_mat(Vector3(1, 1, 0)),
+            create_lit_colored_mat(Vector3(1, 0, 1)),
+            create_lit_colored_mat(Vector3(0, 1, 1))
+        };
+
+        //DRAWCALL CACHING
+        auto line_drawcall = new DrawCall(plane_mesh, unlit_white_mat);
+        mRenderPipeline->RegisterDrawCall(line_drawcall);
+
+        std::vector<DrawCall*> particle_drawcalls;
+
+        for (auto mat : lit_colored_mats)
+        {
             auto new_drawcall = new DrawCall(sphere_mesh, mat);
             mRenderPipeline->RegisterDrawCall(new_drawcall);
-            return new_drawcall;
-            };
-
-        std::vector<DrawCall*> drawcalls = {
-            create_rendercall(Vector3(1, 0, 0)),
-            create_rendercall(Vector3(0, 1, 0)),
-            create_rendercall(Vector3(0, 0, 1)),
-            create_rendercall(Vector3(1, 1, 0)),
-            create_rendercall(Vector3(1, 0, 1)),
-            create_rendercall(Vector3(0, 1, 1)),
-        };
-        //reference sphere renderobject setup
-
-        auto CreateParticleFunction = [drawcalls, root_object, unlitShader, mRenderPipeline]() {
-            //sphere rigidobject setup
-            auto sphere_rigidobject = new RigidObject();
-
-            //sphere renderobject setup
-            auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-            sphere_renderobject->SetParent(sphere_rigidobject);
-
-            return sphere_rigidobject;
-        };
-
-        auto EquipWithRenderchild = [drawcalls, root_object, unlitShader, mRenderPipeline](Object* something) {
-            //sphere renderobject setup
-            auto sphere_renderobject = new RenderObject(drawcalls[rand() % drawcalls.size()]);
-            sphere_renderobject->SetParent(something);
-            };
-
-        //Collision testing
-
-        auto createballswing = [camera_parent, lineDrawCall, CreateParticleFunction, root_object](Vector3 position, float length, float radius, Vector3 offset = Vector3::zero, void** out_ball = nullptr) {
-            auto ball = CreateParticleFunction();
-            ball->Local().position.Set(position + offset);
-            ball->SetParent(root_object);
-            ball->body.Set_velocity(Vector3(0, 0, 0));
-            ball->Local().scale.Set(Vector3(1, 1, 1) * (radius));
-
-            //Sphere collider
-            auto collider = new Collider(radius);
-            collider->SetParent(ball);
-
-            auto chain = new ChainJoint(length);
-            chain->Local().position.Set(position);
-            chain->to_rbody = ball;
-            chain->SetParent(root_object);
-
-            auto line = new LineRenderer(lineDrawCall, camera_parent, ball, chain);
-            line->SetParent(root_object);
-
-            if (out_ball != nullptr) {
-                *out_ball = ball;
-            }
-
-            return chain;
-            };
-
-        auto length = 4.0f;
-        auto radius = 2.0f;
-        auto grav_str = -10;
-        auto count = 8;
-
-        auto cradle_radius = 5.0f;
-
-        auto startheight = length / 2.0f;
-
-        //Spinner
-        auto spinspeed = 10.0f;
-        Spinner* cradle_ball = new Spinner();
-        cradle_ball->angularVel = Vector3(0, 2, 0);
-        cradle_ball->SetParent(root_object);
-        cradle_ball->body.Set_velocity(Vector3(0, 0, 0));
-        cradle_ball->Local().scale.Set(Vector3(1, 1, 1)* (radius));
-
-        auto cradle_collider = new Collider(radius);
-        cradle_collider->SetParent(cradle_ball);
-
-        auto cradle_chain = new ChainJoint(1);
-        cradle_chain->to_rbody = cradle_ball;
-        cradle_chain->SetParent(root_object);
-
-        auto cradle_line = new LineRenderer(lineDrawCall, camera_parent, cradle_ball, cradle_chain);
-        cradle_line->SetParent(root_object);
-        EquipWithRenderchild(cradle_ball);
-
-        //balls around
-        for (size_t i = 0; i < count; i++)
-        {
-            auto rad = ((float)i / count) * 360 * ((float)3.14 / 180.0f);
-            auto startpos = Vector3(cosf(rad), 0, sinf(rad)) * cradle_radius;
-            startpos.y = startheight;
-
-            auto chain = createballswing(startpos, length, radius, Vector3::zero);
-            chain->SetParent(cradle_ball);
+            particle_drawcalls.push_back(new_drawcall);
         }
 
-        //physics force setup
-        auto gravity_volume = new ForceVolume();
-        gravity_volume->shape = ForceVolume::GLOBAL;
-        gravity_volume->mode = ForceVolume::DIRECTIONAL;
-        gravity_volume->vector = Vector3(0.f, grav_str, 0.f);
-        gravity_volume->forceMode = ForceVolume::VELOCITY;
-        gravity_volume->SetParent(root_object);
+        auto AddParticleChild = [particle_drawcalls, root_object, unlitShader, mRenderPipeline](Object* something) {
+            auto sphere_renderobject = new RenderObject(particle_drawcalls[rand() % particle_drawcalls.size()]);
+            sphere_renderobject->SetParent(something);
+        };
 
-        //light
-        auto directional_light = new DirectionalLight();
-        directional_light->Set_Color(Vector3(1, 1, 1));
-        directional_light->Set_Intensity(1);
-        directional_light->Local().rotation.Set(Quaternion::LookAtRotation(Vector3(0, 0, -1), Vector3(1, 0, 0)));
-        directional_light->SetParent(root_object);
+        auto cube_drawcall = new DrawCall(cube_mesh, unlit_white_mat);
+        mRenderPipeline->RegisterDrawCall(cube_drawcall);
+
+        //Actual objects
+
+        //platform
+        RigidObject* platform = new RigidObject(true);
+        platform->SetParent(root_object);
+        platform->Local().position.Set(Vector3(0, -5, 0));
+        platform->Local().scale.Set(Vector3(2, 1, 2));
+        BoxCollider* platform_collider = new BoxCollider();
+        platform_collider->SetParent(platform);
+        platform_collider->Local().position.Set(Vector3(0, 0, 0));
+        RenderObject* platform_renderer = new RenderObject(cube_drawcall);
+        platform_renderer->SetParent(platform_collider);
+
+        //Balls
+        auto spawnball = [AddParticleChild, root_object](Vector3 pos, float radius) {
+            RigidObject* ball = new RigidObject();
+            ball->SetParent(root_object);
+
+            auto cradle_collider = new SphereCollider();
+            cradle_collider->SetParent(ball);
+
+            AddParticleChild(ball);
+
+            ball->Local().position.Set(pos);
+            ball->Local().scale.Set(radius);
+
+            return ball;
+        };
+
+        auto radius = 0.2f;
+        auto startpos = Vector3(0, 0, 0);
+        auto gridsize = Vector3(5, 0, 5);
+        for (int x = 0; x <= gridsize.x; x++)
+            for (int z = 0; z <= gridsize.z; z++)
+            {
+                auto finalpos = startpos + (Vector3(x, 0, z) * radius);
+
+                spawnball(finalpos, radius);
+
+                /*
+                auto cradle_chain = new ChainJoint(15);
+                cradle_chain->to_rbody = cradle_ball;
+                cradle_chain->SetParent(root_object);
+
+                auto cradle_line = new LineRenderer(line_drawcall, camera_parent, cradle_ball, cradle_chain);
+                cradle_line->SetThickness(0.02f);
+                cradle_line->SetParent(root_object);
+                */
+            }
+
+        //BALL SHOOTER
+        auto shooter = new GenericController();
+        shooter->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([spawnball, camera_parent](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
+            if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
+                return;
+
+            auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().Up.Get() * 0.3f);
+
+            auto ball = spawnball(spawnpos, 0.2f);
+            ball->body.AddForce((physics::PhysicsVector3)(camera_parent->World().Forward.Get() * 1000.0f));
+        }));
+        shooter->SetParent(player_input);
+
 
 #pragma endregion
 

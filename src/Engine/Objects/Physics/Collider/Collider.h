@@ -1,13 +1,15 @@
 #pragma once
 
 #include "../../Object.h"
+#include "../Physics/ColliderData/ColliderData.h"
 
 namespace gbe {
 	class Collider : public Object {
 	private:
-		float radius;
+		
 	public:
-		Collider(float radius);
-		float GetWorldRadius();
+		virtual physics::ColliderData* GetColliderData() = 0;
+
+		void OnChangeMatrix() override;
 	};
 }
