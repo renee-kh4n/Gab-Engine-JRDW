@@ -20,9 +20,9 @@ namespace gbe {
         auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
         
         //Shaders setup
-        auto depthShader = new Shader("DefaultAssets/Shaders/object.vert", "DefaultAssets/Shaders/depth.frag");
-        auto litShader = new Shader("DefaultAssets/Shaders/object.vert", "DefaultAssets/Shaders/lit.frag");
-        auto unlitShader = new Shader("DefaultAssets/Shaders/object.vert", "DefaultAssets/Shaders/unlit.frag");
+        auto depthShader = new Shader("DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag");
+        auto litShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
+        auto unlitShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/unlit.frag");
         auto Cam3rdPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
         auto Cam1stPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
 
@@ -83,7 +83,7 @@ namespace gbe {
 
         //light
         auto directional_light = new DirectionalLight();
-        directional_light->Set_Color(Vector3(1, 1, 1));
+        directional_light->Set_Color(Vector3(0, 1, 1));
         directional_light->Set_Intensity(1);
         directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(70, 0, 0)));
         directional_light->SetParent(root_object);
@@ -95,8 +95,8 @@ namespace gbe {
         camera_parent->SetParent(player_input);
 
         auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
-        mPerspectiveCam->angles = 60;
-        mPerspectiveCam->farClip = 50.0f;
+        mPerspectiveCam->angles = 55;
+        mPerspectiveCam->farClip = 40.0f;
         mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
         mPerspectiveCam->SetParent(camera_parent);
         
@@ -161,8 +161,12 @@ namespace gbe {
             particle_drawcalls.push_back(new_drawcall);
         }
 
-        auto AddParticleChild = [whiteball_drawcall, root_object, unlitShader, mRenderPipeline](Object* something) {
-            auto sphere_renderobject = new RenderObject(whiteball_drawcall);
+        const auto get_random_drawcall = [particle_drawcalls]() {
+            return particle_drawcalls[rand() % particle_drawcalls.size()];
+            };
+
+        auto AddParticleChild = [whiteball_drawcall, get_random_drawcall, root_object, unlitShader, mRenderPipeline](Object* something) {
+            auto sphere_renderobject = new RenderObject(get_random_drawcall());
             sphere_renderobject->SetParent(something);
         };
 
@@ -176,8 +180,8 @@ namespace gbe {
         RigidObject* platform = new RigidObject(true);
         platform->SetParent(root_object);
         platform->Local().position.Set(Vector3(0, -5, 0));
-        platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 40, 0)));
-        platform->Local().scale.Set(Vector3(4, 1, 3));
+        platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+        platform->Local().scale.Set(Vector3(10, 1, 10));
         BoxCollider* platform_collider = new BoxCollider();
         platform_collider->SetParent(platform);
         platform_collider->Local().position.Set(Vector3(0, 0, 0));

@@ -1,12 +1,16 @@
-#version 330 core
-//full fledged point light
+#version 430 core
 
+//CONSTS
+const int max_light_count = 10;
+
+//IMPORT FROM GEOMETRY SHADER
 in vec3 pass_camPos;
 in vec2 texCoord;
 in vec3 normCoord;
 in vec3 tanCoord;
 in vec3 fragPos;
-in float depth;
+in vec3 screenPos;
+in vec3 light_space_positions[max_light_count];;
 
 //TEXTURES
 uniform bool hasDiffuseTex = false;
@@ -19,40 +23,31 @@ uniform vec3 color;
 //SKYBOX AMBIENT LIGHT
 uniform samplerCube skybox;
 
-//DIRECTIONAL LIGHT
-uniform struct DirLight
-{
-	vec3 dir;
-	vec3 color;
+const uint DIRECTIONAL_LIGHT = uint(0);
+const uint POINT_LIGHT = uint(1);
+const uint CONE_LIGHT = uint(2);
 
-	sampler2D texshadow;
-	mat4 transform_projection;
-}dirlight;
-
-//POINT LIGHT
-struct PointLight
+layout(location = 32) uniform struct Light
 {
+	bool enabled;
+	int type;
+
+	//GENERIC
 	vec3 pos;
 	vec3 color;
-};
 
-//CONE LIGHT
-struct ConeLight
-{
-	vec3 pos;
+	//DIRECTIONAL
 	vec3 dir;
+
+	//NON DIRECTIONAL
+	float radius;
+
+	//CONE
 	float outer_angle;
 	float inner_angle;
-	vec3 color;
-};
+}lights[max_light_count];
 
-const int pointlight_count = 10;
-const int conelight_count = 10;
-
-layout (std140) uniform LightBlock{
-	PointLight pointlights[pointlight_count];
-	ConeLight conelights[conelight_count];
-};
+uniform sampler2D lightviews[max_light_count];
 
 //AMBIENT LIGHT
 uniform float ambientLightIntensity;
@@ -64,7 +59,11 @@ uniform float specPhong;
 //OUT
 out vec4 FragColor;
 
+//DEBUG
+const bool DEBUG = false;
+
 void main(){
+
 	//Directional Vectors
 	vec3 normalBasis = vec3(0,0,1);
 	if(hasNormalTex){
@@ -80,42 +79,68 @@ void main(){
 
 	vec3 light_total = vec3(0,0,0);
 
-	//Directional light set-up
-	vec3 dirLightDir = normalize(dirlight.dir);
-	float dDiffuse = max(dot(normal, -dirLightDir), 0.0f);
-	//Spec lighting calculation
-	vec3 dReflectDir = reflect(dirLightDir, normal);
-	float dSpec = pow(max(dot(viewDir, dReflectDir), 0.0), specPhong) * specStrength;
-	light_total += (dDiffuse + dSpec) * dirlight.color;
+	for(int i = 0; i < max_light_count; i++){
+		Light curlight = lights[i];
 
-	for(int i = 0; i < pointlight_count; i++){
-		PointLight curlight = pointlights[i];
+		if(curlight.enabled == false){
+			break;
+		}
 
-		vec3 offset = curlight.pos - fragPos;
-		vec3 dir = normalize(offset);
-		float intensity = 1 / (1 + length(offset) + (pow(offset.x, 2) + pow(offset.y, 2)));
-		vec3 finalcolor = curlight.color * intensity;
-		vec3 diffuse = max(dot(normal, dir) * finalcolor, 0.0f);
-		light_total += diffuse;
-	}
+		vec3 this_light_subtotal;
+		vec3 light_space_pos = light_space_positions[i];
+		
+		if(curlight.type == DIRECTIONAL_LIGHT)
+		{
+			vec3 dir = normalize(curlight.dir);
+			float diffuse = max(dot(normal, -dir), 0.0f);
+			//Spec lighting calculation
+			vec3 reflectdir = reflect(dir, normal);
+			float spec = pow(max(dot(viewDir, reflectdir), 0.0), specPhong) * specStrength;
+			this_light_subtotal = (diffuse + spec) * curlight.color;
+			//Directional Shadow calculation
+			
+			float totalshadow = 0.0;
+			vec2 texelSize = 1.0 / textureSize(lightviews[i], 0);
+			for(int x = -1; x <= 1; ++x)
+			{
+				for(int y = -1; y <= 1; ++y)
+				{
+					float dSpaceNearestDepth = texture(lightviews[i], light_space_pos.xy + vec2(x, y) * texelSize).r; 
+					totalshadow += step(light_space_pos.z, dSpaceNearestDepth + 0.005);
+				}    
+			}
+			totalshadow /= 9.0;
 
-	for(int i = 0; i < conelight_count; i++){
-		ConeLight curlight = conelights[i];
+			this_light_subtotal *= totalshadow;
+		}
+		/*
+		else if(curlight.type == POINT_LIGHT){
+			vec3 offset = curlight.pos - fragPos;
+			vec3 dir = normalize(offset);
+			float intensity = 1 / (1 + length(offset) + (pow(offset.x, 2) + pow(offset.y, 2)));
+			vec3 finalcolor = curlight.color * intensity;
+			vec3 diffuse = max(dot(normal, dir) * finalcolor, 0.0f);
+			light_total += diffuse;
+		}
+		else if(curlight.type == CONE_LIGHT){
+			vec3 cLightOffset = curlight.pos - fragPos;
+			vec3 cLightDir = normalize(cLightOffset);
+			float cLightIntensity = 1 / (1 + length(cLightOffset) + (pow(cLightOffset.x, 2) + pow(cLightOffset.y, 2)));
+			vec3 cLightFinalColor = curlight.color * cLightIntensity;
+			float cTheta     = acos(dot(cLightDir, normalize(-curlight.dir)));
+			float cEpsilon   = curlight.inner_angle - curlight.outer_angle;
+			float cIntensity = smoothstep(0.0, 1.0, (cTheta - curlight.outer_angle) / cEpsilon);
+			vec3 cDiffuse = max(dot(normal, cLightDir) * cLightFinalColor * cIntensity, 0.0f);
 
-		vec3 cLightOffset = curlight.pos - fragPos;
-		vec3 cLightDir = normalize(cLightOffset);
-		float cLightIntensity = 1 / (1 + length(cLightOffset) + (pow(cLightOffset.x, 2) + pow(cLightOffset.y, 2)));
-		vec3 cLightFinalColor = curlight.color * cLightIntensity;
-		float cTheta     = acos(dot(cLightDir, normalize(-curlight.dir)));
-		float cEpsilon   = curlight.inner_angle - curlight.outer_angle;
-		float cIntensity = smoothstep(0.0, 1.0, (cTheta - curlight.outer_angle) / cEpsilon);
-		vec3 cDiffuse = max(dot(normal, cLightDir) * cLightFinalColor * cIntensity, 0.0f);
+			//Spec lighting calculation
+			vec3 cReflectDir = reflect(-cLightDir, normal);
+			float cSpec = pow(max(dot(cReflectDir, viewDir), 0.01), specPhong);
+			vec3 cSpecColor = cSpec * specStrength * cDiffuse;
+			light_total += cDiffuse + cSpecColor;
+		}
+		*/
 
-		//Spec lighting calculation
-		vec3 cReflectDir = reflect(-cLightDir, normal);
-		float cSpec = pow(max(dot(cReflectDir, viewDir), 0.01), specPhong);
-		vec3 cSpecColor = cSpec * specStrength * cDiffuse;
-		light_total += cDiffuse + cSpecColor;
+		light_total += this_light_subtotal * float(curlight.enabled);
 	}
 
 	//Ambient calculation
@@ -151,5 +176,6 @@ void main(){
 		final_color = final_color * vec3(max(texture(texdiffuse, texCoord), 0.001));
 	}
 
-	FragColor = vec4(final_color, 1.0f);
+	if(DEBUG == false)
+		FragColor = vec4(final_color, 1.0f);
 }

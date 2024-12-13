@@ -14,7 +14,7 @@ Light::Type gbe::rendering::DirLight::GetType()
 
 gbe::rendering::DirLight::DirLight()
 {
-    this->shadowmap = new Framebuffer(Vector2(1080, 1080));
+    this->shadowmap = new Framebuffer(Vector2(800, 800));
 }
 
 Light::Type gbe::rendering::ConeLight::GetType()

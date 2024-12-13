@@ -10,6 +10,9 @@
 
 #include "../Datatypes/Matrix4.h"
 #include "../Datatypes/Vectors.h"
+#include "Framebuffer.h"
+
+#include "Texture.h"
 
 namespace gbe {
     namespace rendering {
@@ -28,6 +31,12 @@ namespace gbe {
 			void SetOverride<bool>(const char* id, bool value) {
 				glUseProgram(shaderID);
 				glUniform1i(glGetUniformLocation(shaderID, id), value);
+			}
+			template<>
+			void SetOverride<int>(const char* id, int value) {
+				glUseProgram(shaderID);
+				auto loc = glGetUniformLocation(shaderID, id);
+				glUniform1i(loc, value);
 			}
 			template<>
 			void SetOverride<float>(const char* id, float value) {
@@ -52,8 +61,13 @@ namespace gbe {
 			template<>
 			void SetOverride<Matrix4>(const char* id, Matrix4 value) {
 				glUseProgram(shaderID);
-				glUniformMatrix4fv(glGetUniformLocation(shaderID, id), 1, GL_FALSE, value.Get_Ptr());
+				auto loc = glGetUniformLocation(shaderID, id);
+				glUniformMatrix4fv(loc, 1, GL_FALSE, value.Get_Ptr());
 			}
+
+			void SetTextureOverride(const char* id, Texture* value, int gpu_tex_slot);
+			void SetTextureOverride(const char* id, TextureCubeMap* value, int gpu_tex_slot);
+			void SetTextureOverride(const char* id, Framebuffer* value, int gpu_tex_slot);
 
             /// <summary>
             /// Helper function to try to compile a shader through OpenGL with error handling.

@@ -19,6 +19,30 @@ namespace gbe {
 		glLinkProgram(shaderID);
 	}
 
+	void Shader::SetTextureOverride(const char* id, Texture* value, int gpu_tex_slot) {
+		glUseProgram(shaderID);
+		GLuint texAddress = glGetUniformLocation(shaderID, id);
+
+		glBindTexture(GL_TEXTURE_2D, value->texID);
+		glUniform1i(texAddress, gpu_tex_slot);
+	}
+
+	void Shader::SetTextureOverride(const char* id, TextureCubeMap* value, int gpu_tex_slot) {
+		glUseProgram(shaderID);
+		GLuint texAddress = glGetUniformLocation(shaderID, id);
+
+		glBindTexture(GL_TEXTURE_2D, value->texID);
+		glUniform1i(texAddress, gpu_tex_slot);
+	}
+
+	void Shader::SetTextureOverride(const char* id, Framebuffer* value, int gpu_tex_slot) {
+		glUseProgram(shaderID);
+		GLuint texAddress = glGetUniformLocation(shaderID, id);
+
+		glBindTexture(GL_TEXTURE_2D, value->textureColorbuffer);
+		glUniform1i(texAddress, gpu_tex_slot);
+	}
+
 	GLuint Shader::TryCompileShader(std::string path, int compile_type) {
 		//Load the text file
 		auto shaderStr = [](std::string path) {

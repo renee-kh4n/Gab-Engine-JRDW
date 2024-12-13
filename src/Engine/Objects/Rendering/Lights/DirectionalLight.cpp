@@ -10,8 +10,6 @@ rendering::Light* gbe::DirectionalLight::GetData()
 
     auto dir_light = (DirLight*)this->mLight;
 
-    dir_light->changed = this->CheckChanged();
-
     dir_light->color = this->Color;
     dir_light->intensity = this->intensity;
     dir_light->dir = this->World().GetForward();

@@ -14,25 +14,16 @@ void LightObject::Set_Intensity(float intensity) {
 	this->changed = true;
 }
 
-bool gbe::LightObject::CheckChanged()
+void gbe::LightObject::OnLocalTransformationChange(TransformChangeType type)
 {
-	if (this->changed) {
-		this->changed = false;
-		return true;
-	}
+	Object::OnLocalTransformationChange(type);
 
-	auto worldTransform = this->World();
+	this->changed = true;
+}
 
-	Vector3 delta_pos = (this->old_position - worldTransform.position.Get());
-	Vector3 delta_dir = (this->old_forward - worldTransform.GetForward());
-	if (delta_pos.SqrMagnitude() > 0.01) {
-		this->old_position = worldTransform.position.Get();
-		return true;
-	}
-	if (delta_dir.SqrMagnitude() > 0.01) {
-		this->old_forward = worldTransform.GetForward();
-		return true;
-	}
+void gbe::LightObject::OnExternalTransformationChange(TransformChangeType type, Matrix4 parentmat)
+{
+	Object::OnExternalTransformationChange(type, parentmat);
 
-	return false;
+	this->changed = true;
 }

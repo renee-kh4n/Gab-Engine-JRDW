@@ -21,8 +21,9 @@ namespace gbe {
 		float Get_Intensity();
 		void Set_Intensity(float intensity);
 
-		bool CheckChanged();
-
 		virtual rendering::Light* GetData() = 0;
+
+		void OnLocalTransformationChange(TransformChangeType) override;
+		void OnExternalTransformationChange(TransformChangeType, Matrix4 parentmat) override;
 	};
 }

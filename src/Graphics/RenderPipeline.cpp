@@ -100,18 +100,13 @@ void gbe::RenderPipeline::RenderFrame()
                 auto& textureOverride = obj->m_material->textureOverrides[i];
 
                 auto tex_slot = SelectEmptyTextureSlot();
-                GLuint texAddress = glGetUniformLocation(obj->m_material->m_shader->shaderID, textureOverride.parameterName);
-
-                glBindTexture(GL_TEXTURE_2D, textureOverride.texture->texID);
-                glUniform1i(texAddress, tex_slot);
+                curshader->SetTextureOverride(textureOverride.parameterName, textureOverride.texture, tex_slot);
             }
 
             //Attach skybox texture for ambient lighting
             if (false) {
                 auto tex_slot = SelectEmptyTextureSlot();
-                GLuint skyboxAddress = glGetUniformLocation(obj->m_material->m_shader->shaderID, "skybox");
-                glBindTexture(GL_TEXTURE_2D, mSkybox->textureCubeMap->texID);
-                glUniform1i(skyboxAddress, tex_slot);
+                curshader->SetTextureOverride("skybox", mSkybox->textureCubeMap, tex_slot);
             }
 
             //Pass the necessary CPU-computed data to the object shader
@@ -121,18 +116,33 @@ void gbe::RenderPipeline::RenderFrame()
                 size_t index = 0;
                 for (auto lightdata : lights_mframe)
                 {
-                    if (lightdata->changed == false && lightdata->previous_render_index == index)
+                    if (lightdata->changed == false)
                         continue;
+
+                    std::string index_fix = "[" + std::to_string(index) + "]";
+                    curshader->SetOverride(("lights" + index_fix + ".enabled").c_str(), true);
 
                     if (lightdata->GetType() == Light::DIRECTION) {
                         auto dirlight = (DirLight*)lightdata;
-                        curshader->SetOverride("dirlight.color", (Vector3)(dirlight->color * dirlight->intensity));
-                        curshader->SetOverride("dirlight.dir", dirlight->dir);
+
+                        curshader->SetOverride(("lights" + index_fix + ".type").c_str(), (int)Light::DIRECTION);
+                        curshader->SetOverride(("lights" + index_fix + ".color").c_str(), (Vector3)(dirlight->color * dirlight->intensity));
+                        curshader->SetOverride(("lights" + index_fix + ".dir").c_str(), dirlight->dir);
                         
+                        curshader->SetOverride(("light_view_matrixes" + index_fix).c_str(), lightdata->view_projection_matrix);
+
+                        auto tex_slot = SelectEmptyTextureSlot();
+                        curshader->SetTextureOverride(("lightviews" + index_fix).c_str(), dirlight->shadowmap, tex_slot);
                     }
 
                     index++;
                 }
+                for (size_t cont = index; cont < 10; cont++)
+                {
+                    std::string index_fix = "[" + std::to_string(cont) + "]";
+                    curshader->SetOverride(("lights" + index_fix + ".enabled").c_str(), false);
+                }
+
                 //Transform data
                 Matrix4 tmat = call.second;
                 curshader->SetOverride("transform_model", tmat);
@@ -224,6 +234,7 @@ void gbe::RenderPipeline::RenderFrame()
     auto frustrum_center = get_frustrum_center(frustrum_corners);
 
     Matrix4 main_light_pv;
+    Framebuffer* main_light_depthbuffer = nullptr;
 
     for (auto light : lights_this_frame)
     {
@@ -231,7 +242,7 @@ void gbe::RenderPipeline::RenderFrame()
             auto dirlight = static_cast<DirLight*>(light);
 
             auto backtrack_dist = 20.0f;
-            auto overshoot_dist = 50.0f;
+            auto overshoot_dist = 100.0f;
 
             const auto lightView = glm::lookAt(
                 frustrum_center - (dirlight->dir * backtrack_dist),
@@ -258,9 +269,13 @@ void gbe::RenderPipeline::RenderFrame()
 
             main_light_pv = lightProjection * lightView;
 
+            dirlight->view_projection_matrix = main_light_pv;
+
             SelectBuffer(dirlight->shadowmap);
             render_scene_to_active_buffer(main_light_pv, depthShader);
             DeSelectBuffer();
+
+            main_light_depthbuffer = dirlight->shadowmap;
         }
     }
 
@@ -276,6 +291,7 @@ void gbe::RenderPipeline::RenderFrame()
     //Draw to the depth buffer using a depth shader
     SelectBuffer(mDepthFrameBuffer);
     render_scene_to_active_buffer(projMat * viewMat, depthShader);
+
     DeSelectBuffer();
 
     //Assign camera shader as post-processing
@@ -286,14 +302,10 @@ void gbe::RenderPipeline::RenderFrame()
 
     //Attach the color texture to the post-process shader
     glActiveTexture(GL_TEXTURE0);
-    GLuint colorBufferTextureSampler = glGetUniformLocation(camShaderId, "colorBufferTexture");
-    glBindTexture(GL_TEXTURE_2D, mFrameBuffer->textureColorbuffer);
-    glUniform1i(colorBufferTextureSampler, 0);
+    postprocess->SetTextureOverride("colorBufferTexture", mFrameBuffer, 0);
     //Attach the depth texture to the post-process shader
     glActiveTexture(GL_TEXTURE1);
-    GLuint depthBufferTextureSampler = glGetUniformLocation(camShaderId, "depthBufferTexture");
-    glBindTexture(GL_TEXTURE_2D, mDepthFrameBuffer->textureColorbuffer);
-    glUniform1i(depthBufferTextureSampler, 1);
+    postprocess->SetTextureOverride("depthBufferTexture", mDepthFrameBuffer, 1);
 
     //Output the buffer
     glDrawArrays(GL_TRIANGLES, 0, 6);
