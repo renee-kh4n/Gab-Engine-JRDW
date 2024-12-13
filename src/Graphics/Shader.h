@@ -8,19 +8,26 @@
 #include <vector>
 #include <iostream>
 
+#include "../Datatypes/Matrix4.h"
+#include "../Datatypes/Vectors.h"
+
 namespace gbe {
     namespace rendering {
         class Shader {
+		private:
         public:
             GLuint shaderID;
 
             Shader(std::string vert, std::string frag);
             
-            template <typename TValue>
-            void SetOverride(const char* id, TValue value) {}
-
+			template <typename TValue>
+			void SetOverride(const char* id, TValue value) {
+				throw "Creating new version of restricted template!";
+			}
 			template<>
 			void SetOverride<bool>(const char* id, bool value) {
+				glUseProgram(shaderID);
+				glUniform1i(glGetUniformLocation(shaderID, id), value);
 			}
 			template<>
 			void SetOverride<float>(const char* id, float value) {
@@ -28,24 +35,24 @@ namespace gbe {
 				glUniform1f(glGetUniformLocation(shaderID, id), value);
 			}
 			template<>
-			void SetOverride<glm::vec2>(const char* id, glm::vec2 value) {
+			void SetOverride<Vector2>(const char* id, Vector2 value) {
 				glUseProgram(shaderID);
-				glUniform2fv(glGetUniformLocation(shaderID, id), 1, glm::value_ptr(value));
+				glUniform2fv(glGetUniformLocation(shaderID, id), 1, value.Get_Ptr());
 			}
 			template<>
-			void SetOverride<glm::vec3>(const char* id, glm::vec3 value) {
+			void SetOverride<Vector3>(const char* id, Vector3 value) {
 				glUseProgram(shaderID);
-				glUniform3fv(glGetUniformLocation(shaderID, id), 1, glm::value_ptr(value));
+				glUniform3fv(glGetUniformLocation(shaderID, id), 1, value.Get_Ptr());
 			}
 			template<>
-			void SetOverride<glm::vec4>(const char* id, glm::vec4 value) {
+			void SetOverride<Vector4>(const char* id, Vector4 value) {
 				glUseProgram(shaderID);
-				glUniform4fv(glGetUniformLocation(shaderID, id), 1, glm::value_ptr(value));
+				glUniform4fv(glGetUniformLocation(shaderID, id), 1, value.Get_Ptr());
 			}
 			template<>
-			void SetOverride<glm::mat4>(const char* id, glm::mat4 value) {
+			void SetOverride<Matrix4>(const char* id, Matrix4 value) {
 				glUseProgram(shaderID);
-				glUniformMatrix4fv(glGetUniformLocation(shaderID, id), 1, GL_FALSE, glm::value_ptr(value));
+				glUniformMatrix4fv(glGetUniformLocation(shaderID, id), 1, GL_FALSE, value.Get_Ptr());
 			}
 
             /// <summary>

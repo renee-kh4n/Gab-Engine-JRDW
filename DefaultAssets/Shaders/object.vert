@@ -20,7 +20,7 @@ out vec3 fragPos;
 out float depth;
 
 void main(){
-	gl_Position = transform_projection * vec4(aPos, 1.0);
+	gl_Position = transform_projection * transform_model * vec4(aPos, 1.0);
 	
 	pass_camPos = cameraPos;
 	texCoord = aTex;

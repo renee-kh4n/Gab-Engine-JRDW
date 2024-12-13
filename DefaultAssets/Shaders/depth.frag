@@ -1,5 +1,4 @@
 #version 330 core
-//full fledged point light
 
 in float depth;
 

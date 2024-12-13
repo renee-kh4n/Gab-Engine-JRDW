@@ -4,12 +4,19 @@
 #include "../Physics/ColliderData/ColliderData.h"
 
 namespace gbe {
+	class RigidObject;
+
 	class Collider : public Object {
 	private:
-		
+		RigidObject* rigidparent;
 	public:
 		virtual physics::ColliderData* GetColliderData() = 0;
 
-		void OnChangeMatrix() override;
+		RigidObject* GetRigidbody();
+		void AssignToRigidbody(RigidObject*);
+		void UnAssignRigidbody();
+
+		void OnLocalTransformationChange(TransformChangeType) override;
+		void OnExternalTransformationChange(TransformChangeType, Matrix4 newparentmat) override;
 	};
 }

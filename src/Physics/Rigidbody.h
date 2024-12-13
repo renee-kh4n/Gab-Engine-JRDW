@@ -21,7 +21,6 @@ namespace gbe {
 			btDefaultMotionState* motionstate;
 
 			btCompoundShape* mMainShape;
-			std::list<ColliderData*> colliders;
 		public:
 			void InjectCurrentTransformMatrix(Matrix4);
 			void PassTransformationData(Vector3&, Quaternion&);

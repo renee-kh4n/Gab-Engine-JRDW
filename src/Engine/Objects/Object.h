@@ -5,6 +5,7 @@
 #include <glm/gtx/quaternion.hpp>
 
 #include "Component/Transform.h"
+#include "Component/TransformChangeType.h"
 #include <list>
 #include <functional>
 
@@ -18,10 +19,8 @@ namespace gbe {
 
 		std::list<Object*> children;
 
-		Transform local = Transform([this]() {this->UpdateTransform(); });
-		Transform world = Transform([]() {});
-
-		void UpdateTransform();
+		Transform local = Transform([this](TransformChangeType type) {this->OnLocalTransformationChange(type); });
+		Transform world = Transform([](TransformChangeType type) {});
 
 		void MatToTrans(Transform* target, Matrix4 mat);
 		
@@ -29,7 +28,8 @@ namespace gbe {
 	protected:
 		Object* parent;
 		virtual Object* Copy_self();
-		virtual void OnChangeMatrix();
+		virtual void OnLocalTransformationChange(TransformChangeType changetype);
+		virtual void OnExternalTransformationChange(TransformChangeType changetype, Matrix4 newparentmatrix);
 	public:
 		Object();
 		virtual ~Object();

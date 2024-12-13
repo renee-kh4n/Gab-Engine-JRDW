@@ -6,6 +6,7 @@ in vec2 texCoord;
 in vec3 normCoord;
 in vec3 tanCoord;
 in vec3 fragPos;
+in float depth;
 
 //TEXTURES
 uniform bool hasDiffuseTex = false;
@@ -23,6 +24,9 @@ uniform struct DirLight
 {
 	vec3 dir;
 	vec3 color;
+
+	sampler2D texshadow;
+	mat4 transform_projection;
 }dirlight;
 
 //POINT LIGHT
@@ -84,7 +88,6 @@ void main(){
 	float dSpec = pow(max(dot(viewDir, dReflectDir), 0.0), specPhong) * specStrength;
 	light_total += (dDiffuse + dSpec) * dirlight.color;
 
-	//Point light set-up + intensity calculation from distance
 	for(int i = 0; i < pointlight_count; i++){
 		PointLight curlight = pointlights[i];
 
@@ -136,11 +139,11 @@ void main(){
 			ambientOutput += texture(skybox, from_uv);
         }
     }
-    
     // Output to screen
     ambientOutput /= ambientReflectionLayersApplied + 1;
 	vec3 ambient = ambientOutput.xyz * ambientLightIntensity;
 	
+
 	//Combine all light sources
 	vec3 final_color = (light_total + ambient) * color;
 

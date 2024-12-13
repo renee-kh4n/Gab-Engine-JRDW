@@ -32,10 +32,12 @@ target_link_libraries(${PROJECT_NAME}
 find_package(wxWidgets CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
 
-#COPY ASSETS TO BUILD
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+#COPY ASSETS TO BUILD TARGET COMMAND
+add_custom_target(COPY_ASSETS_COMMAND
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets" $<TARGET_FILE_DIR:${PROJECT_NAME}>"/DefaultAssets"
 )
+
+add_dependencies(${PROJECT_NAME} COPY_ASSETS_COMMAND)
 
 #COPY DLL TO BUILD
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

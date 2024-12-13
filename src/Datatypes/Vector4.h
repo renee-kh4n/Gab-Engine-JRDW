@@ -12,6 +12,8 @@ namespace gbe {
 		Vector4(float, float, float, float);
 		Vector4(glm::vec4 glmvec);
 
+		const float* Get_Ptr();
+
 		static const Vector4 zero;
 	};
 }

@@ -2,6 +2,7 @@
 
 #include "Shader.h"
 #include "Texture.h"
+#include "../Datatypes/Matrix4.h"
 
 namespace gbe {
     namespace rendering {
@@ -45,7 +46,7 @@ namespace gbe {
             };
 
             Skybox(TextureCubeMap*);
-            void Render(glm::mat4 viewMat, glm::mat4 proj);
+            void Render(Matrix4 viewMat, Matrix4 proj);
         };
     }
 }

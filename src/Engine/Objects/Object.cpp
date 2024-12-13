@@ -3,24 +3,6 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-void gbe::Object::UpdateTransform()
-{
-	auto worldmat = this->parent_matrix * this->local.GetMatrix();
-
-	for (auto child : this->children)
-	{
-		child->parent_matrix = worldmat;
-		child->UpdateTransform();
-	}
-
-	MatToTrans(&this->world, worldmat);
-
-	OnChangeMatrix();
-
-	if (isnan(this->local.GetMatrix()[0][0]))
-		throw "NAN transform";
-}
-
 void gbe::Object::MatToTrans(Transform* target, Matrix4 mat)
 {
 	glm::vec3 scale;
@@ -33,9 +15,6 @@ void gbe::Object::MatToTrans(Transform* target, Matrix4 mat)
 	target->position.Set(translation);
 	target->rotation.Set(rotation);
 	target->scale.Set(scale);
-	target->Forward.Set(Vector3(mat[2]));
-	target->Up.Set(Vector3(mat[1]));
-	target->Right.Set(Vector3(mat[0]));
 }
 
 gbe::Object* gbe::Object::Copy_self()
@@ -43,8 +22,32 @@ gbe::Object* gbe::Object::Copy_self()
 	return new Object(*this);
 }
 
-void gbe::Object::OnChangeMatrix()
+void gbe::Object::OnLocalTransformationChange(TransformChangeType changetype)
 {
+	auto worldmat = this->parent_matrix * this->local.GetMatrix();
+
+	for (auto child : this->children)
+	{
+		child->OnExternalTransformationChange(changetype, worldmat);
+	}
+
+	MatToTrans(&this->world, worldmat);
+
+	if (isnan(this->local.GetMatrix()[0][0]))
+		throw "NAN transform";
+}
+
+void gbe::Object::OnExternalTransformationChange(TransformChangeType changetype, Matrix4 newparentmatrix)
+{
+	this->parent_matrix = newparentmatrix;
+	auto worldmat = this->parent_matrix * this->local.GetMatrix();
+
+	for (auto child : this->children)
+	{
+		child->OnExternalTransformationChange(changetype, worldmat);
+	}
+
+	MatToTrans(&this->world, worldmat);
 }
 
 gbe::Object::Object()
@@ -52,7 +55,8 @@ gbe::Object::Object()
 	this->parent_matrix = Matrix4(1.0f);
 	this->parent = nullptr;
 
-	UpdateTransform();
+	OnLocalTransformationChange(TransformChangeType::ALL);
+	OnExternalTransformationChange(TransformChangeType::ALL, this->parent_matrix);
 }
 
 gbe::Object::~Object(){
@@ -91,7 +95,7 @@ void gbe::Object::SetLocalMatrix(Matrix4 mat)
 {
 	MatToTrans(&this->local, mat);
 
-	UpdateTransform();
+	OnLocalTransformationChange(TransformChangeType::ALL);
 }
 
 void gbe::Object::SetWorldPosition(Vector3 vector)
@@ -114,7 +118,7 @@ void gbe::Object::TranslateWorld(Vector3 vector)
 
 	MatToTrans(&this->local, curmat);
 
-	UpdateTransform();
+	OnLocalTransformationChange(TransformChangeType::TRANSLATION);
 }
 
 void gbe::Object::OnEnterHierarchy(Object* newChild)
@@ -129,29 +133,26 @@ void gbe::Object::OnEnterHierarchy(Object* newChild)
 		}
 	};
 
-	propagate_upwards(newChild);
-	
-	UpdateTransform();
+	newChild->CallRecursively([propagate_upwards](Object* child) {
+		propagate_upwards(child);
+	});
 }
 
 void gbe::Object::OnExitHierarchy(Object* newChild)
 {
-	auto propagate_upwards = [this](Object* object) {
+	auto propagate_upwards = [this](Object* message) {
 		Object* current = this->parent;
 
 		while (current != nullptr)
 		{
-			current->OnExitHierarchy(object);
+			current->OnExitHierarchy(message);
 			current = current->parent;
 		}
 	};
 
-	for (auto subchild : newChild->children)
-	{
-		propagate_upwards(subchild);
-	}
-
-	propagate_upwards(newChild);
+	newChild->CallRecursively([propagate_upwards](Object* child) {
+		propagate_upwards(child);
+	});
 }
 
 gbe::Object* gbe::Object::GetParent()
@@ -164,10 +165,12 @@ void gbe::Object::SetParent(Object* newParent)
 	if (parent != nullptr) {
 		parent->OnExitHierarchy(this);
 		parent->children.remove_if([this](Object* child) {return child == this; });
+
+		this->parent_matrix = Matrix4(1.0f);
 	}
 
 	if (newParent != nullptr) {
-		this->CallRecursively([newParent](Object* child) {newParent->OnEnterHierarchy(child); });
+		newParent->OnEnterHierarchy(this);
 		newParent->children.push_back(this);
 
 		this->parent_matrix = newParent->GetWorldMatrix();
@@ -175,7 +178,8 @@ void gbe::Object::SetParent(Object* newParent)
 
 	this->parent = newParent;
 
-	this->UpdateTransform();
+	OnLocalTransformationChange(TransformChangeType::ALL);
+	OnExternalTransformationChange(TransformChangeType::ALL, this->parent_matrix);
 }
 
 gbe::Object* gbe::Object::GetChildAt(size_t i)

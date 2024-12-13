@@ -28,7 +28,7 @@ namespace gbe {
 
         auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
-        CamOrthoPPShader->SetOverride("tint", glm::vec4(1, 1, 1, 1));
+        CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
 
         //Reassign to Pipeline
         mRenderPipeline->Set_DepthShader(depthShader);
@@ -85,7 +85,7 @@ namespace gbe {
         auto directional_light = new DirectionalLight();
         directional_light->Set_Color(Vector3(1, 1, 1));
         directional_light->Set_Intensity(1);
-        directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(45, 0, 0)));
+        directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(70, 0, 0)));
         directional_light->SetParent(root_object);
 
         //Camera setup
@@ -96,7 +96,7 @@ namespace gbe {
 
         auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
         mPerspectiveCam->angles = 60;
-        mPerspectiveCam->farClip = 1500.0f;
+        mPerspectiveCam->farClip = 50.0f;
         mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
         mPerspectiveCam->SetParent(camera_parent);
         
@@ -114,7 +114,13 @@ namespace gbe {
 
         //MATERIAL CACHING
         auto unlit_white_mat = new Material(unlitShader);
-        unlit_white_mat->setOverride<glm::vec3>("color", glm::vec3(1, 1, 1));
+        unlit_white_mat->setOverride("color", Vector3(1, 1, 1));
+
+        auto lit_white_mat = new Material(litShader);
+        lit_white_mat->setOverride("color", Vector3(1, 1, 1));
+        lit_white_mat->setOverride<bool>("hasDiffuseTex", false);
+        lit_white_mat->setOverride<float>("specStrength", 0.5f);
+        lit_white_mat->setOverride<float>("specPhong", 16);
 
         auto mattex = MaterialTexture();
         mattex.parameterName = "texdiffuse";
@@ -123,10 +129,10 @@ namespace gbe {
         auto create_lit_colored_mat = [litShader, mattex](Vector3 color) {
             auto mat = new Material(litShader);
             mat->textureOverrides.push_back(mattex);
-            mat->setOverride<glm::vec3>("color", color * 0.9f);
-            mat->setOverride<bool>("hasDiffuseTex", true);
-            mat->setOverride<float>("specStrength", 0.5f);
-            mat->setOverride<float>("specPhong", 16);
+            mat->setOverride("color", color * 0.9f);
+            mat->setOverride("hasDiffuseTex", true);
+            mat->setOverride("specStrength", 0.5f);
+            mat->setOverride("specPhong", 16);
 
             return mat;
         };
@@ -144,6 +150,8 @@ namespace gbe {
         auto line_drawcall = new DrawCall(plane_mesh, unlit_white_mat);
         mRenderPipeline->RegisterDrawCall(line_drawcall);
 
+        auto whiteball_drawcall = new DrawCall(sphere_mesh, lit_white_mat);
+        mRenderPipeline->RegisterDrawCall(whiteball_drawcall);
         std::vector<DrawCall*> particle_drawcalls;
 
         for (auto mat : lit_colored_mats)
@@ -153,27 +161,29 @@ namespace gbe {
             particle_drawcalls.push_back(new_drawcall);
         }
 
-        auto AddParticleChild = [particle_drawcalls, root_object, unlitShader, mRenderPipeline](Object* something) {
-            auto sphere_renderobject = new RenderObject(particle_drawcalls[rand() % particle_drawcalls.size()]);
+        auto AddParticleChild = [whiteball_drawcall, root_object, unlitShader, mRenderPipeline](Object* something) {
+            auto sphere_renderobject = new RenderObject(whiteball_drawcall);
             sphere_renderobject->SetParent(something);
         };
 
-        auto cube_drawcall = new DrawCall(cube_mesh, unlit_white_mat);
+        auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
         mRenderPipeline->RegisterDrawCall(cube_drawcall);
 
         //Actual objects
 
         //platform
+        
         RigidObject* platform = new RigidObject(true);
         platform->SetParent(root_object);
         platform->Local().position.Set(Vector3(0, -5, 0));
-        platform->Local().scale.Set(Vector3(2, 1, 2));
+        platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 40, 0)));
+        platform->Local().scale.Set(Vector3(4, 1, 3));
         BoxCollider* platform_collider = new BoxCollider();
         platform_collider->SetParent(platform);
         platform_collider->Local().position.Set(Vector3(0, 0, 0));
         RenderObject* platform_renderer = new RenderObject(cube_drawcall);
         platform_renderer->SetParent(platform_collider);
-
+        
         //Balls
         auto spawnball = [AddParticleChild, root_object](Vector3 pos, float radius) {
             RigidObject* ball = new RigidObject();
@@ -190,11 +200,11 @@ namespace gbe {
             return ball;
         };
 
-        auto radius = 0.2f;
+        auto radius = 0.3f;
         auto startpos = Vector3(0, 0, 0);
-        auto gridsize = Vector3(5, 0, 5);
-        for (int x = 0; x <= gridsize.x; x++)
-            for (int z = 0; z <= gridsize.z; z++)
+        auto gridsize = Vector3(10, 0, 10);
+        for (int x = 0; x < gridsize.x; x++)
+            for (int z = 0; z < gridsize.z; z++)
             {
                 auto finalpos = startpos + (Vector3(x, 0, z) * radius);
 
@@ -217,10 +227,10 @@ namespace gbe {
             if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
                 return;
 
-            auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().Up.Get() * 0.3f);
+            auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().GetUp() * 0.3f);
 
             auto ball = spawnball(spawnpos, 0.2f);
-            ball->body.AddForce((physics::PhysicsVector3)(camera_parent->World().Forward.Get() * 1000.0f));
+            ball->body.AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
         }));
         shooter->SetParent(player_input);
 

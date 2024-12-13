@@ -57,8 +57,8 @@ namespace gbe {
 				return;
 
 			auto sensitivity = 0.2f;
-			this->Local().position.Set(this->Local().position.Get() + (this->Local().Up.Get() * (value->delta.y * sensitivity)));
-			this->Local().position.Set(this->Local().position.Get() + (this->Local().Right.Get() * (value->delta.x * sensitivity)));
+			this->Local().position.Set(this->Local().position.Get() + (this->Local().GetUp() * (value->delta.y * sensitivity)));
+			this->Local().position.Set(this->Local().position.Get() + (this->Local().GetRight() * (value->delta.x * sensitivity)));
 		});
 
 		this->inputreceivers.push_back(mousemiddledrag);

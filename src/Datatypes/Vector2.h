@@ -12,6 +12,8 @@ namespace gbe {
 		Vector2& operator +=(const Vector2& b);
 		Vector2& operator -=(const Vector2& b);
 
+		const float* Get_Ptr();
+
 		static const Vector2 zero;
 	};
 }

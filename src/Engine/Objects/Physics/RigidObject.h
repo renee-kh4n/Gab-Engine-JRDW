@@ -16,6 +16,10 @@ namespace gbe {
 
 		virtual void OnEnterHierarchy(Object* newChild);
 		virtual void OnExitHierarchy(Object* newChild);
-		void OnChangeMatrix() override;
+
+		void OnLocalTransformationChange(TransformChangeType) override;
+		void OnExternalTransformationChange(TransformChangeType, Matrix4 parentmat) override;
+
+		void UpdateCollider(Collider* what);
 	};
 }

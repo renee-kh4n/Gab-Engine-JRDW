@@ -24,13 +24,13 @@ bool gbe::LightObject::CheckChanged()
 	auto worldTransform = this->World();
 
 	Vector3 delta_pos = (this->old_position - worldTransform.position.Get());
-	Vector3 delta_dir = (this->old_forward - worldTransform.Forward.Get());
+	Vector3 delta_dir = (this->old_forward - worldTransform.GetForward());
 	if (delta_pos.SqrMagnitude() > 0.01) {
 		this->old_position = worldTransform.position.Get();
 		return true;
 	}
 	if (delta_dir.SqrMagnitude() > 0.01) {
-		this->old_forward = worldTransform.Forward.Get();
+		this->old_forward = worldTransform.GetForward();
 		return true;
 	}
 

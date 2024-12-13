@@ -1,6 +1,8 @@
 #pragma once
 
-#include <glm/glm.hpp>
+
+#include "../Datatypes/Vectors.h"
+#include "Framebuffer.h"
 
 namespace gbe {
 	namespace rendering {
@@ -11,9 +13,9 @@ namespace gbe {
 				DIRECTION
 			} GetType() = 0;
 
-			glm::vec3 color;
+			Vector3 color;
 			float intensity;
-			glm::vec3 pos;
+			Vector3 pos;
 
 			bool changed = true;
 			size_t previous_render_index = 0;
@@ -28,15 +30,19 @@ namespace gbe {
 			// Inherited via Light
 			virtual Type GetType() override;
 
-			glm::vec3 dir;
-			glm::vec2 angle;
+			Vector3 dir;
+			Vector2 angle;
 		};
 
 		struct DirLight : public Light {
+			Framebuffer* shadowmap;
+
 			// Inherited via Light
 			virtual Type GetType() override;
 
-			glm::vec3 dir;
+			Vector3 dir;
+
+			DirLight();
 		};
 	}
 }

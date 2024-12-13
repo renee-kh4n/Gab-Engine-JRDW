@@ -5,6 +5,7 @@
 #include <glm/gtx/matrix_decompose.hpp>
 
 #include <vector>
+#include <algorithm>
 #include "Shader.h"
 #include "Texture.h"
 #include "DrawCall.h"
@@ -26,6 +27,7 @@ namespace gbe {
 		Framebuffer* mFrameBuffer;
 		Framebuffer* mDepthFrameBuffer;
 
+		Vector2 resolution;
 		Vector3 from;
 		Matrix4 viewMat;
 		Matrix4 projMat;
@@ -40,13 +42,13 @@ namespace gbe {
 
 		void SetRequiredAttribs();
 	public:
-		RenderPipeline(void*(*procaddressfunc)(const char*), glm::vec2);
+		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2);
 		void RegisterDrawCall(DrawCall*);
 
 		void Set_DepthShader(Shader*);
 
 		void SetMaximumLights(int maxlights);
-		void SetView(glm::vec3 from, glm::mat4 viewMat, glm::mat4 projMat);
+		void SetView(Vector3 from, Matrix4 viewMat, Matrix4 projMat);
 		void SetSkybox(Skybox*);
 		void SetPostProcessing(Shader* postprocess);
 		bool TryPushLight(rendering::Light* data, bool priority = false);

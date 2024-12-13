@@ -23,6 +23,8 @@ namespace gbe{
 		Vector3& operator-=(Vector3 const& v);
 		operator glm::vec3() const;
 
+		const float* Get_Ptr();
+
 		static const Vector3 zero;
 	};
 }

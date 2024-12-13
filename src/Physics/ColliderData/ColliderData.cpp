@@ -2,6 +2,10 @@
 
 #include "../Rigidbody.h"
 
+gbe::physics::ColliderData::ColliderData() {
+	
+}
+
 gbe::Matrix4& gbe::physics::ColliderData::GetLocalMatrix() {
 	return this->local;
 }
@@ -13,21 +17,10 @@ btTransform& gbe::physics::ColliderData::GetInternalTransform() {
 void gbe::physics::ColliderData::UpdateLocalTransformation(Matrix4 mat) {
 	this->local = mat;
 	this->transform.setFromOpenGLMatrix(mat.Get_Ptr());
-
-	this->owner->UpdateColliderTransform(this);
+	//this->transform.setOrigin((PhysicsVector3)Vector3(0, 0, 0));
 }
 
 void gbe::physics::ColliderData::UpdateScale(PhysicsVector3 vec) {
 	this->scale = vec;
 	this->GetShape()->setLocalScaling(vec);
-
-	this->owner->UpdateAABB();
-}
-
-void gbe::physics::ColliderData::AssignOwner(Rigidbody* owner) {
-	this->owner = owner;
-}
-
-void gbe::physics::ColliderData::RemoveOwner() {
-	this->owner = nullptr;
 }

@@ -13,6 +13,7 @@ namespace gbe {
 		shaderID = glCreateProgram();
 		glAttachShader(shaderID, vertShader);
 		glAttachShader(shaderID, fragShader);
+		std::cout << "Compiling: " + vert + " | " + frag << std::endl;
 		check_attached_shaders(shaderID);
 
 		glLinkProgram(shaderID);

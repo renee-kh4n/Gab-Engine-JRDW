@@ -10,21 +10,19 @@ namespace gbe {
 
 		class ColliderData {
 		private:
-			Rigidbody* owner;
-
 			Matrix4 local;
+			PhysicsVector3 scale;
+
 			btTransform transform;
 
-			PhysicsVector3 scale;
 		public:
+			ColliderData();
+
 			Matrix4& GetLocalMatrix();
 			btTransform& GetInternalTransform();
 
 			void UpdateLocalTransformation(Matrix4);
 			void UpdateScale(PhysicsVector3);
-
-			void AssignOwner(Rigidbody* owner);
-			void RemoveOwner();
 
 			virtual btCollisionShape* GetShape() = 0;
 		};

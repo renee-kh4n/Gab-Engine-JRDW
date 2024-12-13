@@ -64,7 +64,7 @@ namespace gbe {
 				overrides.insert_or_assign(id, materialOverride);
 			}
 			template<>
-			void setOverride<glm::vec2>(const char* id, glm::vec2 value) {
+			void setOverride<Vector2>(const char* id, Vector2 value) {
 				auto materialOverride = MaterialOverride();
 				materialOverride.type = MaterialOverrideType::VEC2;
 				materialOverride.value_vec2 = value;
@@ -72,7 +72,7 @@ namespace gbe {
 				overrides.insert_or_assign(id, materialOverride);
 			}
 			template<>
-			void setOverride<glm::vec3>(const char* id, glm::vec3 value) {
+			void setOverride<Vector3>(const char* id, Vector3 value) {
 				auto materialOverride = MaterialOverride();
 				materialOverride.type = MaterialOverrideType::VEC3;
 				materialOverride.value_vec3 = value;

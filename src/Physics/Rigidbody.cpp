@@ -90,31 +90,24 @@ gbe::physics::PhysicsVector3 gbe::physics::Rigidbody::Get_angularVelocity()
 }
 
 void gbe::physics::Rigidbody::AddCollider(ColliderData* data) {
-	this->colliders.push_back(data);
-	data->AssignOwner(this);
-
 	this->mMainShape->addChildShape(data->GetInternalTransform(), data->GetShape());
 }
 
 void gbe::physics::Rigidbody::UpdateColliderTransform(ColliderData* data) {
-	static btTransform newtransform;
-	newtransform.setFromOpenGLMatrix(data->GetLocalMatrix().Get_Ptr());
-
+	
 	int index = 0;
-	for (auto col : colliders)
+	for (size_t i = 0; i < this->mMainShape->getNumChildShapes(); i++)
 	{
-		if (col == data)
+		if (this->mMainShape->getChildShape(i) == data->GetShape()) {
+			index = i;
 			break;
-		index++;
+		}
 	}
 
 	this->mMainShape->updateChildTransform(index, data->GetInternalTransform());
 }
 
 void gbe::physics::Rigidbody::RemoveCollider(ColliderData* data) {
-	this->colliders.remove(data);
-	data->RemoveOwner();
-
 	this->mMainShape->removeChildShape(data->GetShape());
 }
 

@@ -15,4 +15,8 @@ gbe::Vector4::Vector4(glm::vec4 glmvec) : glm::vec4(glmvec)
 
 }
 
+const float* gbe::Vector4::Get_Ptr() {
+	return &((*this).x);
+}
+
 const gbe::Vector4 gbe::Vector4::zero = gbe::Vector4(0, 0, 0, 0);

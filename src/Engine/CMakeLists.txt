@@ -40,6 +40,8 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Physics/Joints/ChainJoint.cpp"
 	"Objects/Physics/Joints/Spinner.cpp"
 	"Objects/Physics/Collider/BoxCollider.cpp"
+	
+	"Component/TransformChangeType.h"
 )
 
 target_include_directories(${CURRENT_CMAKE_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

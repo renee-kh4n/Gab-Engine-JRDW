@@ -1,5 +1,7 @@
 #include "Vector3.h"
 
+#include <glm/gtc/type_ptr.hpp>
+
 gbe::Vector3::Vector3() : glm::vec3(0)
 {
 }
@@ -53,5 +55,10 @@ gbe::Vector3::operator glm::vec3() const
 {
 	return glm::vec3(this->x, this->y, this->z);
 }
+
+const float* gbe::Vector3::Get_Ptr() {
+	return &((*this).x);
+}
+
 
 const gbe::Vector3 gbe::Vector3::zero = gbe::Vector3(0, 0, 0);

@@ -27,17 +27,17 @@ namespace gbe {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
 
-    void Skybox::Render(glm::mat4 viewMat, glm::mat4 proj)
+    void Skybox::Render(Matrix4 viewMat, Matrix4 proj)
     {
         glDepthMask(GL_FALSE);
         glDepthFunc(GL_LEQUAL);
         glUseProgram(this->shader->shaderID);
 
-        glm::mat4 sky_view = glm::mat4(1.f);
-        sky_view = glm::mat4(glm::mat3(viewMat));
+        Matrix4 sky_view = Matrix4(1.f);
+        sky_view = Matrix4(Matrix4(viewMat));
 
-        glUniformMatrix4fv(glGetUniformLocation(this->shader->shaderID, "view"), 1, GL_FALSE, glm::value_ptr(sky_view));
-        glUniformMatrix4fv(glGetUniformLocation(this->shader->shaderID, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
+        glUniformMatrix4fv(glGetUniformLocation(this->shader->shaderID, "view"), 1, GL_FALSE, sky_view.Get_Ptr());
+        glUniformMatrix4fv(glGetUniformLocation(this->shader->shaderID, "projection"), 1, GL_FALSE, proj.Get_Ptr());
 
         glBindVertexArray(this->VAO);
         glActiveTexture(GL_TEXTURE0);
