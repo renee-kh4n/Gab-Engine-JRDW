@@ -13,8 +13,13 @@ namespace gbe {
 		shaderID = glCreateProgram();
 		glAttachShader(shaderID, vertShader);
 		glAttachShader(shaderID, fragShader);
-		std::cout << "Compiling: " + vert + " | " + frag << std::endl;
-		check_attached_shaders(shaderID);
+		std::cout << "Compiling: " + vert + " | " + frag << "INTO ->" << std::to_string(shaderID) << std::endl;
+		
+		GLsizei count = 0;
+		GLuint shaders[] = { 0, 0, 0, 0 };
+		glGetAttachedShaders(shaderID, 4, &count, shaders);
+		printf("\tnumber of shaders: %d\n", count);
+		for (int i = 0; i < count; i++) printf("\tshader_id: %d\n", shaders[i]);
 
 		glLinkProgram(shaderID);
 	}
@@ -83,13 +88,5 @@ namespace gbe {
 		}
 
 		return shaderint;
-	}
-	void Shader::check_attached_shaders(GLuint program)
-	{
-		GLsizei count = 0;
-		GLuint shaders[] = { 0, 0, 0, 0 };
-		glGetAttachedShaders(program, 4, &count, shaders);
-		printf("\tnumber of shaders: %d\n", count);
-		for (int i = 0; i < count; i++) printf("\tshader_id: %d\n", shaders[i]);
 	}
 }

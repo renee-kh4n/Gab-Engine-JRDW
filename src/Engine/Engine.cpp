@@ -12,7 +12,7 @@ namespace gbe {
 	{
         auto mTime = new Time();
 
-        Window* mWindow = new Window();
+        Window* mWindow = new Window(Vector2Int(800, 800));
 
 #pragma region Rendering Pipeline Setup
         //RenderPipeline setup
@@ -87,6 +87,7 @@ namespace gbe {
         directional_light->Set_Intensity(1);
         directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(70, 0, 0)));
         directional_light->SetParent(root_object);
+        directional_light->Set_ShadowmapResolutions(1080);
 
         //Camera setup
         auto player_input = new InputPlayer(player_name);
@@ -273,9 +274,9 @@ namespace gbe {
                     break;
                 }
             }
-            mRenderPipeline->SetView(active_camera->World().position.Get(), active_camera->GetViewMat(), active_camera->getproj());
             mRenderPipeline->SetPostProcessing(active_camera->mShader);
-            mRenderPipeline->RenderFrame();
+            Matrix4 frustrum = active_camera->getproj() * active_camera->GetViewMat();
+            mRenderPipeline->RenderFrame(active_camera->World().position.Get(), active_camera->World().GetForward(), frustrum, active_camera->nearClip, active_camera->farClip);
             //Render window
             mWindow->SwapBuffers();
 

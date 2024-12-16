@@ -6,6 +6,8 @@ namespace gbe {
 			MOUSE_LEFT = 0,
 			MOUSE_RIGHT,
 			MOUSE_MIDDLE,
+			MOUSE_SCROLL_UP,
+			MOUSE_SCROLL_DOWN,
 			A,
 			B,
 			C,

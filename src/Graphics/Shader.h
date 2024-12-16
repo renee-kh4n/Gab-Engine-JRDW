@@ -30,7 +30,8 @@ namespace gbe {
 			template<>
 			void SetOverride<bool>(const char* id, bool value) {
 				glUseProgram(shaderID);
-				glUniform1i(glGetUniformLocation(shaderID, id), value);
+				auto loc = glGetUniformLocation(shaderID, id);
+				glUniform1i(loc, value);
 			}
 			template<>
 			void SetOverride<int>(const char* id, int value) {
@@ -41,7 +42,8 @@ namespace gbe {
 			template<>
 			void SetOverride<float>(const char* id, float value) {
 				glUseProgram(shaderID);
-				glUniform1f(glGetUniformLocation(shaderID, id), value);
+				auto loc = glGetUniformLocation(shaderID, id);
+				glUniform1f(loc, value);
 			}
 			template<>
 			void SetOverride<Vector2>(const char* id, Vector2 value) {
@@ -51,7 +53,8 @@ namespace gbe {
 			template<>
 			void SetOverride<Vector3>(const char* id, Vector3 value) {
 				glUseProgram(shaderID);
-				glUniform3fv(glGetUniformLocation(shaderID, id), 1, value.Get_Ptr());
+				auto loc = glGetUniformLocation(shaderID, id);
+				glUniform3fv(loc, 1, value.Get_Ptr());
 			}
 			template<>
 			void SetOverride<Vector4>(const char* id, Vector4 value) {
@@ -76,12 +79,6 @@ namespace gbe {
             /// <param name="compile_type"></param>
             /// <returns></returns>
             static GLuint TryCompileShader(std::string path, int compile_type);
-
-            /// <summary>
-            /// Utility function to check if shaders are compiled correctly
-            /// </summary>
-            /// <param name="program"></param>
-            static void check_attached_shaders(GLuint program);
         };
     }
 }

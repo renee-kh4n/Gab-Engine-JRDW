@@ -2,8 +2,10 @@
 
 namespace gbe {
     
-    gbe::Window::Window()
+    gbe::Window::Window(Vector2Int dimentions)
     {
+        this->dimentions = dimentions; 
+
         // Initialize SDL 
         if (SDL_Init(SDL_INIT_VIDEO) < 0)
             throw "Couldn't initialize SDL";
@@ -18,7 +20,7 @@ namespace gbe {
         SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
         SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-        implemented_window = SDL_CreateWindow("GabEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 800, 800, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+        implemented_window = SDL_CreateWindow("GabEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, dimentions.x, dimentions.y, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
         this->context = SDL_GL_CreateContext(implemented_window);
         if (this->context == nullptr)
@@ -38,6 +40,9 @@ namespace gbe {
     }
     void gbe::Window::UpdateState()
     {
+        this->keystates[gbe::Keys::MOUSE_SCROLL_UP] = false;
+        this->keystates[gbe::Keys::MOUSE_SCROLL_DOWN] = false;
+
         //Handle events on queue
         SDL_Event sdlevent;
         while (SDL_PollEvent(&sdlevent) != 0)
@@ -63,6 +68,12 @@ namespace gbe {
                 if (sdlevent.button.button == SDL_BUTTON_MIDDLE)
                     this->keystates[gbe::Keys::MOUSE_MIDDLE] = false;
             }
+            if (sdlevent.type == SDL_MOUSEWHEEL) {
+                if (sdlevent.wheel.y > 0)
+                    this->keystates[gbe::Keys::MOUSE_SCROLL_UP] = true;
+                if(sdlevent.wheel.y < 0)
+                    this->keystates[gbe::Keys::MOUSE_SCROLL_DOWN] = true;
+            }
         }
 
         auto sdl_keyboardstates = SDL_GetKeyboardState(nullptr);
@@ -82,11 +93,11 @@ namespace gbe {
     }
     int Window::Get_win_x()
     {
-        return 800;
+        return this->dimentions.x;
     }
     int Window::Get_win_y()
     {
-        return 800;
+        return this->dimentions.y;
     }
     void Window::RegisterWindowCallback(const std::string key, std::function<void(void*)> func)
     {

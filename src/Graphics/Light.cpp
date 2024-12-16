@@ -14,7 +14,22 @@ Light::Type gbe::rendering::DirLight::GetType()
 
 gbe::rendering::DirLight::DirLight()
 {
-    this->shadowmap = new Framebuffer(Vector2(800, 800));
+    this->cascade_splits = { 0.07, 0.3f, 0.5f };
+    int map_count = this->cascade_splits.size() + 1;
+    this->shadowmaps = std::vector<Framebuffer*>(map_count);
+    this->cascade_projections = std::vector<Matrix4>(map_count);
+
+    for (size_t i = 0; i < map_count; i++)
+    {
+        this->shadowmaps[i] = new Framebuffer(Vector2(512, 512));
+    }
+}
+
+void gbe::rendering::DirLight::SetShadowmapResolution(int res) {
+    for (size_t i = 0; i < this->cascade_splits.size() + 1; i++)
+    {
+        this->shadowmaps[i] = new Framebuffer(Vector2(res, res));
+    }
 }
 
 Light::Type gbe::rendering::ConeLight::GetType()

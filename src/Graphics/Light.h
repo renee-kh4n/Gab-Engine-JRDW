@@ -17,10 +17,11 @@ namespace gbe {
 			Vector3 color;
 			float intensity;
 			Vector3 pos;
-			Matrix4 view_projection_matrix;
 
 			bool changed = true;
 			size_t previous_render_index = 0;
+
+			virtual void SetShadowmapResolution(int res) = 0;
 		};
 
 		struct PointLight : public Light {
@@ -37,7 +38,9 @@ namespace gbe {
 		};
 
 		struct DirLight : public Light {
-			Framebuffer* shadowmap;
+			std::vector<Framebuffer*> shadowmaps;
+			std::vector<float> cascade_splits;
+			std::vector<Matrix4> cascade_projections;
 
 			// Inherited via Light
 			virtual Type GetType() override;
@@ -45,6 +48,7 @@ namespace gbe {
 			Vector3 dir;
 
 			DirLight();
+			virtual void SetShadowmapResolution(int res);
 		};
 	}
 }

@@ -28,9 +28,6 @@ namespace gbe {
 		Framebuffer* mDepthFrameBuffer;
 
 		Vector2 resolution;
-		Vector3 from;
-		Matrix4 viewMat;
-		Matrix4 projMat;
 		Shader* postprocess;
 
 		std::vector<DrawCall*> drawcalls;
@@ -48,14 +45,11 @@ namespace gbe {
 		void Set_DepthShader(Shader*);
 
 		void SetMaximumLights(int maxlights);
-		void SetView(Vector3 from, Matrix4 viewMat, Matrix4 projMat);
 		void SetSkybox(Skybox*);
 		void SetPostProcessing(Shader* postprocess);
 		bool TryPushLight(rendering::Light* data, bool priority = false);
 
-		void RenderFrame();
-
-		Matrix4 GetProjMat();
+		void RenderFrame(Vector3& from, Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);
 
 		void CleanUp();
 	};

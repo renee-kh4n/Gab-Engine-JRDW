@@ -65,9 +65,10 @@ namespace gbe {
 
 		auto mousescroll = new InputCustomer<MouseScroll>([this](MouseScroll* value, bool changed) {
 			if (value->state != InputAction::State::START)
-			return;
+				return;
 
-			this->Local().position.Set(this->Local().position.Get() + (Vector3(0, 0, value->delta.y) * 4.f));
+			auto delta = this->World().GetForward() * (value->delta.y * 1.f);
+			this->Local().position.Set(this->Local().position.Get() + delta);
 			});
 
 		this->inputreceivers.push_back(mousescroll);

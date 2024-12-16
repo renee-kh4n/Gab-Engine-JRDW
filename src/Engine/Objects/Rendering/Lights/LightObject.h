@@ -17,9 +17,11 @@ namespace gbe {
 		float intensity;
 
 	public:
+
 		void Set_Color(Vector3 color);
 		float Get_Intensity();
 		void Set_Intensity(float intensity);
+		void Set_ShadowmapResolutions(int res);
 
 		virtual rendering::Light* GetData() = 0;
 

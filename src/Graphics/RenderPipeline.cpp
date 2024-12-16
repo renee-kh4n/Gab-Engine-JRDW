@@ -12,20 +12,19 @@ void gbe::RenderPipeline::SetRequiredAttribs()
 gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vector2 dimensions)
 {
     this->resolution = dimensions;
+
     auto thing = procaddressfunc("glGetString");
 
     if (gladLoadGLLoader(procaddressfunc) == 0)
         throw "ERROR: glad failed to initialize.";
 
-    this->from = glm::vec3(1.0f);
-    this->projMat = Matrix4();
-    this->viewMat = Matrix4();
     this->postprocess = nullptr;
 
     //Skybox setup
     this->mSkybox = NULL;
 
     //Framebuffers setup
+    glViewport(0, 0, dimensions.x, dimensions.y);
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
 
@@ -39,12 +38,6 @@ void gbe::RenderPipeline::Set_DepthShader(Shader* value)
 
 void RenderPipeline::SetMaximumLights(int maxlights) {
     this->maxlights = maxlights;
-}
-
-void RenderPipeline::SetView(Vector3 from, Matrix4 viewMat, Matrix4 projMat) {
-    this->from = from;
-    this->viewMat = viewMat;
-    this->projMat = projMat;
 }
 void gbe::RenderPipeline::SetSkybox(Skybox* value)
 {
@@ -67,26 +60,22 @@ bool RenderPipeline::TryPushLight(rendering::Light* data, bool priority) {
     return true;
 }
 
-Matrix4 gbe::RenderPipeline::GetProjMat() {
-    return this->projMat;
-}
-
-void gbe::RenderPipeline::RenderFrame()
+void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
 {
 #pragma region Rendering
     auto& lights_mframe = this->lights_this_frame;
     /* =============== Render here =============== */
     const auto render_scene_to_active_buffer = [=,&lights_mframe](Matrix4 tmat_PV, Shader* overrideShader = nullptr) {
-        int last_used_texture_slot = -1;
-        const auto SelectEmptyTextureSlot = [&last_used_texture_slot]() {
-            last_used_texture_slot++;
-            glActiveTexture(GL_TEXTURE0 + last_used_texture_slot);
-            return last_used_texture_slot;
-        };
-        
         //Loop through all objects
         for (auto& obj : drawcalls)
         {
+            int last_used_texture_slot = -1;
+            const auto SelectEmptyTextureSlot = [&last_used_texture_slot]() {
+                last_used_texture_slot++;
+                glActiveTexture(GL_TEXTURE0 + last_used_texture_slot);
+                return last_used_texture_slot;
+            };
+
             auto curshader = obj->m_material->m_shader;
 
             //Enable chosen shader program
@@ -110,37 +99,58 @@ void gbe::RenderPipeline::RenderFrame()
             }
 
             //Pass the necessary CPU-computed data to the object shader
-
             for (auto& call : obj->calls) {
 
-                size_t index = 0;
-                for (auto lightdata : lights_mframe)
-                {
-                    if (lightdata->changed == false)
-                        continue;
+                //check if shader has light array
+                auto checkloc = glGetUniformLocation(curshader->shaderID, "lights[0].enabled");
 
-                    std::string index_fix = "[" + std::to_string(index) + "]";
-                    curshader->SetOverride(("lights" + index_fix + ".enabled").c_str(), true);
+                if (checkloc >= 0) {
+                    size_t index = 0;
+                    int group_index = 0;
+                    for (auto lightdata : lights_mframe)
+                    {
+                        if (lightdata->changed == false)
+                            continue;
 
-                    if (lightdata->GetType() == Light::DIRECTION) {
-                        auto dirlight = (DirLight*)lightdata;
+                        auto index_fix = [&index]() {return "[" + std::to_string(index) + "]"; };
 
-                        curshader->SetOverride(("lights" + index_fix + ".type").c_str(), (int)Light::DIRECTION);
-                        curshader->SetOverride(("lights" + index_fix + ".color").c_str(), (Vector3)(dirlight->color * dirlight->intensity));
-                        curshader->SetOverride(("lights" + index_fix + ".dir").c_str(), dirlight->dir);
-                        
-                        curshader->SetOverride(("light_view_matrixes" + index_fix).c_str(), lightdata->view_projection_matrix);
+                        if (lightdata->GetType() == Light::DIRECTION) {
+                            auto dirlight = (DirLight*)lightdata;
 
-                        auto tex_slot = SelectEmptyTextureSlot();
-                        curshader->SetTextureOverride(("lightviews" + index_fix).c_str(), dirlight->shadowmap, tex_slot);
+                            auto prev_split = 0.0f;
+
+                            for (size_t i = 0; i < dirlight->shadowmaps.size(); i++)
+                            {
+                                auto next_split = 1.0f;
+
+                                if (i < dirlight->cascade_splits.size())
+                                    next_split = dirlight->cascade_splits[i];
+
+                                prev_split = next_split;
+
+                                curshader->SetOverride(("lights" + index_fix() + ".enabled").c_str(), true);
+                                curshader->SetOverride(("lights" + index_fix() + ".group_id").c_str(), group_index);
+                                curshader->SetOverride(("lights" + index_fix() + ".type").c_str(), (int)Light::DIRECTION);
+                                curshader->SetOverride(("lights" + index_fix() + ".color").c_str(), (Vector3)(dirlight->color * dirlight->intensity));
+                                curshader->SetOverride(("lights" + index_fix() + ".dir").c_str(), dirlight->dir);
+
+
+                                curshader->SetOverride(("light_view_matrixes" + index_fix()).c_str(), dirlight->cascade_projections[i]);
+
+                                auto tex_slot = SelectEmptyTextureSlot();
+                                curshader->SetTextureOverride(("lightviews" + index_fix()).c_str(), dirlight->shadowmaps[i], tex_slot);
+
+                                index++;
+                            }
+                        }
+
+                        group_index++;
                     }
-
-                    index++;
-                }
-                for (size_t cont = index; cont < 10; cont++)
-                {
-                    std::string index_fix = "[" + std::to_string(cont) + "]";
-                    curshader->SetOverride(("lights" + index_fix + ".enabled").c_str(), false);
+                    for (size_t cont = index; cont < 10; cont++)
+                    {
+                        std::string index_fix = "[" + std::to_string(cont) + "]";
+                        curshader->SetOverride(("lights" + index_fix + ".enabled").c_str(), false);
+                    }
                 }
 
                 //Transform data
@@ -148,6 +158,8 @@ void gbe::RenderPipeline::RenderFrame()
                 curshader->SetOverride("transform_model", tmat);
                 curshader->SetOverride("transform_projection", tmat_PV);
                 curshader->SetOverride("cameraPos", from);
+                curshader->SetOverride("near_clip", nearclip);
+                curshader->SetOverride("far_clip", farclip);
 
                 for (auto& iterator : obj->m_material->overrides) {
                     switch (iterator.second.type)
@@ -180,6 +192,8 @@ void gbe::RenderPipeline::RenderFrame()
     };
     
     auto SelectBuffer = [=, &lights_mframe](Framebuffer* buffer) {
+        glViewport(0, 0, buffer->dimensions.x, buffer->dimensions.y);
+
         //Initialize the buffer
         glBindFramebuffer(GL_FRAMEBUFFER, buffer->framebuffer);
         glEnable(GL_DEPTH_TEST); //Enable depthtest again
@@ -196,15 +210,13 @@ void gbe::RenderPipeline::RenderFrame()
 
     /*SHADOW PASS*/
 
-    const auto get_frustrum_corners = [](const glm::mat4& proj, const glm::mat4& view) {
-        const auto inv = glm::inverse(proj * view);
+    const auto get_frustrum_corners = [_frustrum]() {
+        const auto inv = glm::inverse(_frustrum);
 
-        std::vector<glm::vec4> frustumCorners;
-        for (unsigned int x = 0; x < 2; ++x)
-        {
+        std::vector<Vector4> frustumCorners;
+        for (unsigned int z = 0; z < 2; ++z)
             for (unsigned int y = 0; y < 2; ++y)
-            {
-                for (unsigned int z = 0; z < 2; ++z)
+                for (unsigned int x = 0; x < 2; ++x)
                 {
                     const glm::vec4 pt =
                         inv * glm::vec4(
@@ -214,12 +226,10 @@ void gbe::RenderPipeline::RenderFrame()
                             1.0f);
                     frustumCorners.push_back(pt / pt.w);
                 }
-            }
-        }
         return frustumCorners;
-    };
+        };
 
-    const auto get_frustrum_center = [](std::vector<glm::vec4> corners) {
+    const auto get_frustrum_center = [](std::vector<Vector4> corners) {
         glm::vec3 center = glm::vec3(0, 0, 0);
         for (const auto& v : corners)
         {
@@ -230,11 +240,37 @@ void gbe::RenderPipeline::RenderFrame()
         return center;
     };
 
-    auto frustrum_corners = get_frustrum_corners(projMat, viewMat);
+    std::vector<Vector4> frustrum_corners = get_frustrum_corners();
+    auto frustrum_basis = std::vector<Vector3>();
+
+    for (size_t i = 0; i < 4; i++)
+    {
+        frustrum_basis.push_back(-(Vector3)(frustrum_corners[i] - frustrum_corners[i + 4]));
+    }
+
+    auto get_subfrustrum_corners = [frustrum_basis, frustrum_corners](float from, float to) {
+        auto subfrustrum_corners = std::vector<Vector4>();
+
+        for (size_t i = 0; i < 4; i++)
+        {
+            Vector3 delta = frustrum_basis[i] * from;
+            Vector3 final = (Vector3)frustrum_corners[i] + delta;
+            subfrustrum_corners.push_back(Vector4(final.x, final.y, final.z, 1.0f));
+        }
+
+        for (size_t i = 0; i < 4; i++)
+        {
+            Vector3 delta = frustrum_basis[i] * to;
+            Vector3 final = (Vector3)frustrum_corners[i] + delta;
+            subfrustrum_corners.push_back(Vector4(final.x, final.y, final.z, 1.0f));
+        }
+
+        return subfrustrum_corners;
+    };
     auto frustrum_center = get_frustrum_center(frustrum_corners);
 
-    Matrix4 main_light_pv;
-    Framebuffer* main_light_depthbuffer = nullptr;
+    //DEBUG
+    DirLight *mainlight;
 
     for (auto light : lights_this_frame)
     {
@@ -244,38 +280,52 @@ void gbe::RenderPipeline::RenderFrame()
             auto backtrack_dist = 20.0f;
             auto overshoot_dist = 100.0f;
 
-            const auto lightView = glm::lookAt(
-                frustrum_center - (dirlight->dir * backtrack_dist),
-                frustrum_center,
-                glm::vec3(0.0f, 1.0f, 0.0f)
-            );
+            auto prev_split = 0.0f;
 
-            float minX = std::numeric_limits<float>::max();
-            float maxX = std::numeric_limits<float>::lowest();
-            float minY = std::numeric_limits<float>::max();
-            float maxY = std::numeric_limits<float>::lowest();
-            float maxZ = std::numeric_limits<float>::lowest();
-            for (const auto& v : frustrum_corners)
+            for (size_t i = 0; i < dirlight->shadowmaps.size(); i++)
             {
-                const auto trf = lightView * v;
-                minX = std::min(minX, trf.x);
-                maxX = std::max(maxX, trf.x);
-                minY = std::min(minY, trf.y);
-                maxY = std::max(maxY, trf.y);
-                maxZ = std::max(maxZ, trf.z);
+                auto next_split = 1.0f;
+
+                if (i < dirlight->cascade_splits.size())
+                    next_split = dirlight->cascade_splits[i];
+
+                auto subfrustrum_corners = get_subfrustrum_corners(prev_split, next_split);
+                
+                if (i < dirlight->cascade_splits.size())
+                    prev_split = dirlight->cascade_splits[i];
+
+                Matrix4 lightView = glm::lookAt(
+                    frustrum_center - (dirlight->dir * backtrack_dist),
+                    frustrum_center,
+                    forward
+                );
+
+                float minX = std::numeric_limits<float>::max();
+                float maxX = std::numeric_limits<float>::lowest();
+                float minY = std::numeric_limits<float>::max();
+                float maxY = std::numeric_limits<float>::lowest();
+                float maxZ = std::numeric_limits<float>::lowest();
+                for (const auto& v : subfrustrum_corners)
+                {
+                    const auto trf = lightView * v;
+                    minX = std::min(minX, trf.x);
+                    maxX = std::max(maxX, trf.x);
+                    minY = std::min(minY, trf.y);
+                    maxY = std::max(maxY, trf.y);
+                    maxZ = std::max(maxZ, trf.z);
+                }
+
+                const glm::mat4 lightProjection = glm::ortho(minX, maxX, minY, maxY, 0.0f, maxZ + overshoot_dist);
+
+                dirlight->cascade_projections[i] = lightProjection * lightView;
+
+                SelectBuffer(dirlight->shadowmaps[i]);
+                render_scene_to_active_buffer(lightProjection * lightView, depthShader);
+                DeSelectBuffer();
+
+                //DEBUG
+                mainlight = dirlight;
             }
-
-            const glm::mat4 lightProjection = glm::ortho(minX, maxX, minY, maxY, 0.0f, maxZ + overshoot_dist);
-
-            main_light_pv = lightProjection * lightView;
-
-            dirlight->view_projection_matrix = main_light_pv;
-
-            SelectBuffer(dirlight->shadowmap);
-            render_scene_to_active_buffer(main_light_pv, depthShader);
-            DeSelectBuffer();
-
-            main_light_depthbuffer = dirlight->shadowmap;
         }
     }
 
@@ -286,11 +336,11 @@ void gbe::RenderPipeline::RenderFrame()
     if (mSkybox != NULL) {
         //mSkybox->Render(viewMat, projMat);
     }
-    render_scene_to_active_buffer(projMat * viewMat);
+    render_scene_to_active_buffer(_frustrum);
     DeSelectBuffer();
     //Draw to the depth buffer using a depth shader
     SelectBuffer(mDepthFrameBuffer);
-    render_scene_to_active_buffer(projMat * viewMat, depthShader);
+    render_scene_to_active_buffer(_frustrum, depthShader);
 
     DeSelectBuffer();
 

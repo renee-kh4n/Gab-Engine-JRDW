@@ -23,6 +23,7 @@ namespace gbe {
         SDL_Window* implemented_window;
         SDL_GLContext context;
         Vector2Int mousePos;
+        Vector2Int dimentions;
 
         std::unordered_map<std::string, std::function<void(void*)>> window_callbacks;
         std::unordered_map<unsigned int, bool> keystates;
@@ -30,7 +31,7 @@ namespace gbe {
         void* (*procaddressfunc)(const char*);
         bool shouldclose = false;
     public:
-        Window();
+        Window(Vector2Int dimentions);
 
         void UpdateState();
         void SwapBuffers();

@@ -7,6 +7,8 @@
 
 #include "Input/KeyDefines.h"
 
+#include "../Window/Window.h"
+
 namespace gbe {
     namespace input {
         class MouseScrollImplementation : public ActionImplementation<MouseScroll> {
