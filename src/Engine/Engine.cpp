@@ -20,7 +20,6 @@ namespace gbe {
         auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
         
         //Shaders setup
-        auto depthShader = new Shader("DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag");
         auto litShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
         auto unlitShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/unlit.frag");
         auto Cam3rdPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
@@ -29,9 +28,6 @@ namespace gbe {
         auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
-
-        //Reassign to Pipeline
-        mRenderPipeline->Set_DepthShader(depthShader);
 
         auto mSkybox = new gbe::rendering::Skybox(new gbe::rendering::TextureCubeMap("DefaultAssets/Tex/Skybox/rainbow", ".png"));
         mSkybox->shader = new Shader("DefaultAssets/Shaders/skybox.vert", "DefaultAssets/Shaders/skybox.frag");

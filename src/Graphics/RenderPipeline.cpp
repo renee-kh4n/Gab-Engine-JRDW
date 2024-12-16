@@ -28,12 +28,9 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
 
-    this->SetRequiredAttribs();
-}
+    this->depthShader = new Shader("DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag");
 
-void gbe::RenderPipeline::Set_DepthShader(Shader* value)
-{
-    this->depthShader = value;
+    this->SetRequiredAttribs();
 }
 
 void RenderPipeline::SetMaximumLights(int maxlights) {
@@ -281,6 +278,7 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
             auto overshoot_dist = 100.0f;
 
             auto prev_split = 0.0f;
+            Matrix4 higherResolution_avoid;
 
             for (size_t i = 0; i < dirlight->shadowmaps.size(); i++)
             {
@@ -320,8 +318,18 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
                 dirlight->cascade_projections[i] = lightProjection * lightView;
 
                 SelectBuffer(dirlight->shadowmaps[i]);
+                if (i > 0) {
+                    depthShader->SetOverride("avoid_enabled", true);
+                    depthShader->SetOverride("avoid_matrix", higherResolution_avoid);
+                }
+
                 render_scene_to_active_buffer(lightProjection * lightView, depthShader);
+                
+                depthShader->SetOverride("avoid_enabled", false);
+                
                 DeSelectBuffer();
+
+                higherResolution_avoid = lightProjection * lightView;
 
                 //DEBUG
                 mainlight = dirlight;

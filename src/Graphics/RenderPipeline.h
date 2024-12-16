@@ -24,6 +24,7 @@ namespace gbe {
 	class RenderPipeline {
 	private:
 		Shader* depthShader;
+
 		Framebuffer* mFrameBuffer;
 		Framebuffer* mDepthFrameBuffer;
 
@@ -41,8 +42,6 @@ namespace gbe {
 	public:
 		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2);
 		void RegisterDrawCall(DrawCall*);
-
-		void Set_DepthShader(Shader*);
 
 		void SetMaximumLights(int maxlights);
 		void SetSkybox(Skybox*);
