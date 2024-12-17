@@ -23,28 +23,29 @@ namespace gbe {
 
 	class RenderPipeline {
 	private:
-		Shader* depthShader;
-
-		Framebuffer* mFrameBuffer;
-		Framebuffer* mDepthFrameBuffer;
-
 		Vector2 resolution;
 		Shader* postprocess;
 
 		std::vector<DrawCall*> drawcalls;
 
 		std::list<rendering::Light*> lights_this_frame;
-		int maxlights = 10;
+		const int maxlights = 10;
 
-		Skybox* mSkybox;
+		//--------CACHE--------//
+		//SHADERS
+		Shader* depthShader;
+		Shader* uiShader;
 
-		void SetRequiredAttribs();
+		//MESHES
+		Mesh* default_quad;
+
+		//BUFFERS
+		Framebuffer* mFrameBuffer;
+		Framebuffer* mDepthFrameBuffer;
 	public:
 		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2);
 		void RegisterDrawCall(DrawCall*);
 
-		void SetMaximumLights(int maxlights);
-		void SetSkybox(Skybox*);
 		void SetPostProcessing(Shader* postprocess);
 		bool TryPushLight(rendering::Light* data, bool priority = false);
 

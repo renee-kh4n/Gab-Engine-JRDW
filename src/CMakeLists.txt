@@ -6,6 +6,7 @@ add_subdirectory(Graphics)
 add_subdirectory(Physics)
 add_subdirectory(Window)
 add_subdirectory(Engine)
+add_subdirectory(GUI)
 add_subdirectory(Editor)
 
 add_library(${CURRENT_CMAKE_LIB} INTERFACE)
@@ -15,6 +16,7 @@ target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_graphics)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_physics)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_window)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_engine)
+target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_gui)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_editor)
 
 

@@ -5,10 +5,6 @@
 
 using namespace gbe;
 
-void gbe::RenderPipeline::SetRequiredAttribs()
-{
-}
-
 gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vector2 dimensions)
 {
     this->resolution = dimensions;
@@ -20,26 +16,19 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
 
     this->postprocess = nullptr;
 
-    //Skybox setup
-    this->mSkybox = NULL;
-
     //Framebuffers setup
     glViewport(0, 0, dimensions.x, dimensions.y);
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
 
+    //Shaders
     this->depthShader = new Shader("DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag");
+    this->uiShader = new Shader("DefaultAssets/Shaders/gui.vert", "DefaultAssets/Shaders/gui.frag");
 
-    this->SetRequiredAttribs();
+    //Mesh
+    this->default_quad = new Mesh("DefaultAssets/3D/plane.obj");
 }
 
-void RenderPipeline::SetMaximumLights(int maxlights) {
-    this->maxlights = maxlights;
-}
-void gbe::RenderPipeline::SetSkybox(Skybox* value)
-{
-    this->mSkybox = value;
-}
 void RenderPipeline::SetPostProcessing(Shader* postprocess) {
     this->postprocess = postprocess;
 }
@@ -87,12 +76,6 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
 
                 auto tex_slot = SelectEmptyTextureSlot();
                 curshader->SetTextureOverride(textureOverride.parameterName, textureOverride.texture, tex_slot);
-            }
-
-            //Attach skybox texture for ambient lighting
-            if (false) {
-                auto tex_slot = SelectEmptyTextureSlot();
-                curshader->SetTextureOverride("skybox", mSkybox->textureCubeMap, tex_slot);
             }
 
             //Pass the necessary CPU-computed data to the object shader
@@ -341,9 +324,6 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
     
     //Draw to the main display buffer
     SelectBuffer(mFrameBuffer);
-    if (mSkybox != NULL) {
-        //mSkybox->Render(viewMat, projMat);
-    }
     render_scene_to_active_buffer(_frustrum);
     DeSelectBuffer();
     //Draw to the depth buffer using a depth shader
@@ -365,7 +345,38 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
     glActiveTexture(GL_TEXTURE1);
     postprocess->SetTextureOverride("depthBufferTexture", mDepthFrameBuffer, 1);
 
-    //Output the buffer
+    glDrawArrays(GL_TRIANGLES, 0, 6);
+
+    //RENDER GUI HERE
+    Vector2 bl_pivot = Vector2(-1, -1);
+    Vector2 tr_pivot = Vector2(-1, -1);
+
+    Vector2 bl_offset = Vector2(50, 50);
+    Vector2 tr_offset = Vector2(200, 100);
+
+    Vector2 normalizer = this->resolution * 0.5f;
+    Vector3 final_bl = Vector3(bl_pivot.x, bl_pivot.y, 0) + Vector3(bl_offset.x / normalizer.x, bl_offset.y / normalizer.y, 0);
+    Vector3 final_tr = Vector3(tr_pivot.x, tr_pivot.y, 0) + Vector3(tr_offset.x / normalizer.x, tr_offset.y / normalizer.y, 0);
+    Vector3 rect_center = (final_tr + final_bl) * 0.5f;
+    Vector3 rect_scale = (final_tr - final_bl) * 0.5f;
+
+    Matrix4 canvas_transform = Matrix4(1.0f);
+    canvas_transform *= glm::translate(rect_center);
+    canvas_transform *= glm::scale(rect_scale);
+    
+
+    glUseProgram(this->uiShader->shaderID);
+    this->uiShader->SetOverride("color", Vector4(1, 1, 1, 1));
+    this->uiShader->SetOverride("viewport_size", this->resolution);
+    this->uiShader->SetOverride("bl_pivot", bl_pivot);
+    this->uiShader->SetOverride("tr_pivot", tr_pivot);
+    this->uiShader->SetOverride("bl_offset", bl_offset);
+    this->uiShader->SetOverride("tr_offset", tr_offset);
+    this->uiShader->SetOverride("transform", canvas_transform);
+
+
+    glBindVertexArray(this->default_quad->VAO);
+
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
     this->lights_this_frame.clear();

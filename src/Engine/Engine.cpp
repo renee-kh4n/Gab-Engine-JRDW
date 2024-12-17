@@ -22,16 +22,12 @@ namespace gbe {
         //Shaders setup
         auto litShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
         auto unlitShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/unlit.frag");
-        auto Cam3rdPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
-        auto Cam1stPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
+        auto Cam3rdPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
+        auto Cam1stPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
 
-        auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/camshader.vert", "DefaultAssets/Shaders/camshader.frag");
+        auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
-
-        auto mSkybox = new gbe::rendering::Skybox(new gbe::rendering::TextureCubeMap("DefaultAssets/Tex/Skybox/rainbow", ".png"));
-        mSkybox->shader = new Shader("DefaultAssets/Shaders/skybox.vert", "DefaultAssets/Shaders/skybox.frag");
-        mRenderPipeline->SetSkybox(mSkybox);
 #pragma endregion
 #pragma region Physics Pipeline Setup
         auto mPhysicsPipeline = new physics::PhysicsPipeline();
