@@ -52,6 +52,11 @@ namespace gbe {
             {
                 shouldclose = true;
             }
+            if (sdlevent.type == SDL_WINDOWEVENT) {
+                if (sdlevent.window.event == SDL_WINDOWEVENT_RESIZED)
+                    this->dimentions = Vector2Int(sdlevent.window.data1, sdlevent.window.data2);
+            }
+
             if (sdlevent.type == SDL_MOUSEBUTTONDOWN) {
                 if (sdlevent.button.button == SDL_BUTTON_LEFT)
                     this->keystates[gbe::Keys::MOUSE_LEFT] = true;
@@ -91,13 +96,9 @@ namespace gbe {
     {
         return this->shouldclose;
     }
-    int Window::Get_win_x()
+    Vector2Int Window::Get_dimentions()
     {
-        return this->dimentions.x;
-    }
-    int Window::Get_win_y()
-    {
-        return this->dimentions.y;
+        return this->dimentions;
     }
     void Window::RegisterWindowCallback(const std::string key, std::function<void(void*)> func)
     {

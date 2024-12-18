@@ -1,11 +1,19 @@
 #include "gb_canvas.h"
 
-void gbe::gui::gb_canvas::DrawToCurrentBuffer(glm::ivec2 target_resolution)
+gbe::gui::gb_canvas::gb_canvas(glm::ivec2 reference_resolution) : root(this)
 {
-	for (auto child : this->children)
-	{
-		child->Render(glm::mat4(1.0f));
-	}
+	this->reference_resolution = reference_resolution;
+}
+
+gbe::gui::gb_rect* gbe::gui::gb_canvas::QueryAtPosition(glm::vec2 normalized_centered_position)
+{
+	return this->root.QueryAtPosition(normalized_centered_position);
+}
+
+void gbe::gui::gb_canvas::Draw(glm::ivec2 target_resolution)
+{
+	this->root.UpdateTransform();
+	this->root.Render();
 }
 
 glm::ivec2 gbe::gui::gb_canvas::Get_reference_resolution()
@@ -13,7 +21,11 @@ glm::ivec2 gbe::gui::gb_canvas::Get_reference_resolution()
 	return this->reference_resolution;
 }
 
-std::list<gbe::gui::gb_rect*>& gbe::gui::gb_canvas::Get_children()
+void gbe::gui::gb_canvas::Update(double delta) {
+	this->root.Update(delta);
+}
+
+void gbe::gui::gb_canvas::AddRootChild(gb_rect* other)
 {
-	return this->children;
+	other->SetParent(&this->root);
 }

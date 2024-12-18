@@ -7,14 +7,14 @@ namespace gbe {
     namespace rendering {
         class Framebuffer {
         public:
-            Vector2 dimensions;
+            Vector2Int dimensions;
             unsigned int framebuffer;
             unsigned int textureColorbuffer;
             unsigned int rbo;
 
             unsigned int quadVAO, quadVBO;
 
-            Framebuffer(Vector2 dimensions) {
+            Framebuffer(Vector2Int dimensions) {
                 this->dimensions = dimensions;
 
                 //Buffer Quad

@@ -15,7 +15,7 @@
 
 #include <functional>
 
-#include "../Datatypes/Vector3.h"
+#include "../Datatypes/Vectors.h"
 #include "../Datatypes/Matrix4.h"
 
 namespace gbe {
@@ -23,7 +23,7 @@ namespace gbe {
 
 	class RenderPipeline {
 	private:
-		Vector2 resolution;
+		Vector2Int resolution;
 		Shader* postprocess;
 
 		std::vector<DrawCall*> drawcalls;
@@ -34,16 +34,12 @@ namespace gbe {
 		//--------CACHE--------//
 		//SHADERS
 		Shader* depthShader;
-		Shader* uiShader;
-
-		//MESHES
-		Mesh* default_quad;
 
 		//BUFFERS
 		Framebuffer* mFrameBuffer;
 		Framebuffer* mDepthFrameBuffer;
 	public:
-		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2);
+		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2Int);
 		void RegisterDrawCall(DrawCall*);
 
 		void SetPostProcessing(Shader* postprocess);

@@ -39,8 +39,7 @@ namespace gbe {
 
         bool ShouldClose();
 
-        int Get_win_x();
-        int Get_win_y();
+        Vector2Int Get_dimentions();
 
         void RegisterWindowCallback(const std::string, std::function<void(void*)>);
         void InvokeWindowCallback(const std::string, void*);

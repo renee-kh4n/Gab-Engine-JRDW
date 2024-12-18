@@ -11,19 +11,41 @@ namespace gbe {
 		class gb_canvas;
 
 		class gb_rect {
-		private:
-			gb_canvas* belongs_to;
+		public:
+			enum PointerEventHandleType {
+				PASS,
+				BLOCK,
+				PARENT,
+				BLOCK_AND_PARENT
+			};
+		protected:
+			gb_canvas* canvas;
 
+			PointerEventHandleType pointerEventHandleType;
+			gb_rect* parent;
+			std::list<gb_rect*> children;
+
+			glm::mat4 world_transform;
+		public:
 			glm::vec2 bl_offset;
 			glm::vec2 tr_offset;
 
-			glm::vec2 bl_anchor;
-			glm::vec2 tr_anchor;
+			glm::vec2 bl_pivot;
+			glm::vec2 tr_pivot;
 
-			std::list<gb_rect*> children;
-		public:
-			virtual void Render(glm::mat4& parent_transform);
-			virtual void Get_BlocksPointerEvents() = 0;
+			gb_rect();
+
+			glm::mat4& Get_world_transform();
+
+			PointerEventHandleType Get_handleType();
+			void Set_handleType(PointerEventHandleType);
+			gb_rect* QueryAtPosition(glm::vec2 normalized_centered_position);
+
+			void UpdateTransform();
+			virtual void Render();
+			virtual void Update(float delta);
+
+			void SetParent(gb_rect* other);
 		};
 	}
 }

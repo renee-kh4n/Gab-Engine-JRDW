@@ -10,30 +10,97 @@ namespace gbe {
 
 	void Engine::Run()
 	{
-        auto mTime = new Time();
-
+        //WINDOW
         Window* mWindow = new Window(Vector2Int(800, 800));
 
 #pragma region Rendering Pipeline Setup
         //RenderPipeline setup
         Camera* active_camera = nullptr;
-        auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), glm::vec2(mWindow->Get_win_x(), mWindow->Get_win_y()));
-        
-        //Shaders setup
+        auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
+#pragma endregion
+#pragma region Asset Loading
+        //SHADER CACHING
         auto litShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
         auto unlitShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/unlit.frag");
         auto Cam3rdPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
         auto Cam1stPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
+        auto uiShader = new Shader("DefaultAssets/Shaders/gui.vert", "DefaultAssets/Shaders/gui.frag");
+
 
         auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
+        //TEXTURE CACHING
+        auto chewbacca_tex = new Texture("DefaultAssets/Tex/cubeacca.jpg");
+
+        //MESH CACHING
+        auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
+        auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
+        auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
+
+        //MATERIAL CACHING
+        auto unlit_white_mat = new Material(unlitShader);
+        unlit_white_mat->setOverride("color", Vector3(1, 1, 1));
+
+        auto lit_white_mat = new Material(litShader);
+        lit_white_mat->setOverride("color", Vector3(1, 1, 1));
+        lit_white_mat->setOverride<bool>("hasDiffuseTex", false);
+        lit_white_mat->setOverride<float>("specStrength", 0.5f);
+        lit_white_mat->setOverride<float>("specPhong", 16);
+
+        auto mattex = MaterialTexture();
+        mattex.parameterName = "texdiffuse";
+        mattex.texture = chewbacca_tex;
+
+        auto create_lit_colored_mat = [litShader, mattex](Vector3 color) {
+            auto mat = new Material(litShader);
+            mat->textureOverrides.push_back(mattex);
+            mat->setOverride("color", color * 0.9f);
+            mat->setOverride("hasDiffuseTex", true);
+            mat->setOverride("specStrength", 0.5f);
+            mat->setOverride("specPhong", 16);
+
+            return mat;
+            };
+
+        std::vector<Material*> lit_colored_mats = {
+            create_lit_colored_mat(Vector3(1, 0, 0)),
+            create_lit_colored_mat(Vector3(0, 1, 0)),
+            create_lit_colored_mat(Vector3(0, 0, 1)),
+            create_lit_colored_mat(Vector3(1, 1, 0)),
+            create_lit_colored_mat(Vector3(1, 0, 1)),
+            create_lit_colored_mat(Vector3(0, 1, 1))
+        };
+
+        //DRAWCALL CACHING
+        auto line_drawcall = new DrawCall(quad_mesh, unlit_white_mat);
+        mRenderPipeline->RegisterDrawCall(line_drawcall);
+
+        auto whiteball_drawcall = new DrawCall(sphere_mesh, lit_white_mat);
+        mRenderPipeline->RegisterDrawCall(whiteball_drawcall);
+        std::vector<DrawCall*> particle_drawcalls;
+
+        for (auto mat : lit_colored_mats)
+        {
+            auto new_drawcall = new DrawCall(sphere_mesh, mat);
+            mRenderPipeline->RegisterDrawCall(new_drawcall);
+            particle_drawcalls.push_back(new_drawcall);
+        }
+
+        const auto get_random_drawcall = [particle_drawcalls]() {
+            return particle_drawcalls[rand() % particle_drawcalls.size()];
+        };
+
+        auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
+        mRenderPipeline->RegisterDrawCall(cube_drawcall);
+#pragma endregion
+#pragma region GUI Pipeline Setup
+        auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->shaderID);
 #pragma endregion
 #pragma region Physics Pipeline Setup
         auto mPhysicsPipeline = new physics::PhysicsPipeline();
         mPhysicsPipeline->Init();
 #pragma endregion
-
 #pragma region Input
         auto mInputSystem = new InputSystem();
         auto player_name = "MAIN";
@@ -42,7 +109,6 @@ namespace gbe {
         mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
         mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 #pragma endregion
-
 #pragma region Scene Root setup
         //Object handlers setup
         auto mPhysicsHandler = new PhysicsHandler();
@@ -97,79 +163,19 @@ namespace gbe {
 
         camera_parent->TranslateWorld(Vector3(0, 0, -10));
 
-        //TEXTURE CACHING
-        auto chewbacca_tex = new Texture("DefaultAssets/Tex/cubeacca.jpg");
+        //GUI COMMUNICATOR
+        auto gui_communicator = new GenericController();
+        gui_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([mGUIPipeline](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
+            if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
+                return;
 
-        //MESH CACHING
-        auto plane_mesh = new Mesh("DefaultAssets/3D/plane.obj");
-        auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
-        auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
-
-        //MATERIAL CACHING
-        auto unlit_white_mat = new Material(unlitShader);
-        unlit_white_mat->setOverride("color", Vector3(1, 1, 1));
-
-        auto lit_white_mat = new Material(litShader);
-        lit_white_mat->setOverride("color", Vector3(1, 1, 1));
-        lit_white_mat->setOverride<bool>("hasDiffuseTex", false);
-        lit_white_mat->setOverride<float>("specStrength", 0.5f);
-        lit_white_mat->setOverride<float>("specPhong", 16);
-
-        auto mattex = MaterialTexture();
-        mattex.parameterName = "texdiffuse";
-        mattex.texture = chewbacca_tex;
-
-        auto create_lit_colored_mat = [litShader, mattex](Vector3 color) {
-            auto mat = new Material(litShader);
-            mat->textureOverrides.push_back(mattex);
-            mat->setOverride("color", color * 0.9f);
-            mat->setOverride("hasDiffuseTex", true);
-            mat->setOverride("specStrength", 0.5f);
-            mat->setOverride("specPhong", 16);
-
-            return mat;
-        };
-
-        std::vector<Material*> lit_colored_mats = {
-            create_lit_colored_mat(Vector3(1, 0, 0)),
-            create_lit_colored_mat(Vector3(0, 1, 0)),
-            create_lit_colored_mat(Vector3(0, 0, 1)),
-            create_lit_colored_mat(Vector3(1, 1, 0)),
-            create_lit_colored_mat(Vector3(1, 0, 1)),
-            create_lit_colored_mat(Vector3(0, 1, 1))
-        };
-
-        //DRAWCALL CACHING
-        auto line_drawcall = new DrawCall(plane_mesh, unlit_white_mat);
-        mRenderPipeline->RegisterDrawCall(line_drawcall);
-
-        auto whiteball_drawcall = new DrawCall(sphere_mesh, lit_white_mat);
-        mRenderPipeline->RegisterDrawCall(whiteball_drawcall);
-        std::vector<DrawCall*> particle_drawcalls;
-
-        for (auto mat : lit_colored_mats)
-        {
-            auto new_drawcall = new DrawCall(sphere_mesh, mat);
-            mRenderPipeline->RegisterDrawCall(new_drawcall);
-            particle_drawcalls.push_back(new_drawcall);
-        }
-
-        const auto get_random_drawcall = [particle_drawcalls]() {
-            return particle_drawcalls[rand() % particle_drawcalls.size()];
-            };
-
-        auto AddParticleChild = [whiteball_drawcall, get_random_drawcall, root_object, unlitShader, mRenderPipeline](Object* something) {
-            auto sphere_renderobject = new RenderObject(get_random_drawcall());
-            sphere_renderobject->SetParent(something);
-        };
-
-        auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
-        mRenderPipeline->RegisterDrawCall(cube_drawcall);
+            mGUIPipeline->Click();
+            
+            }));
+        gui_communicator->SetParent(player_input);
 
         //Actual objects
-
         //platform
-        
         RigidObject* platform = new RigidObject(true);
         platform->SetParent(root_object);
         platform->Local().position.Set(Vector3(0, -5, 0));
@@ -182,14 +188,15 @@ namespace gbe {
         platform_renderer->SetParent(platform_collider);
         
         //Balls
-        auto spawnball = [AddParticleChild, root_object](Vector3 pos, float radius) {
+        auto spawnball = [get_random_drawcall, root_object](Vector3 pos, float radius) {
             RigidObject* ball = new RigidObject();
             ball->SetParent(root_object);
 
             auto cradle_collider = new SphereCollider();
             cradle_collider->SetParent(ball);
 
-            AddParticleChild(ball);
+            auto sphere_renderobject = new RenderObject(get_random_drawcall());
+            sphere_renderobject->SetParent(ball);
 
             ball->Local().position.Set(pos);
             ball->Local().scale.Set(radius);
@@ -204,35 +211,43 @@ namespace gbe {
             for (int z = 0; z < gridsize.z; z++)
             {
                 auto finalpos = startpos + (Vector3(x, 0, z) * radius);
-
                 spawnball(finalpos, radius);
-
-                /*
-                auto cradle_chain = new ChainJoint(15);
-                cradle_chain->to_rbody = cradle_ball;
-                cradle_chain->SetParent(root_object);
-
-                auto cradle_line = new LineRenderer(line_drawcall, camera_parent, cradle_ball, cradle_chain);
-                cradle_line->SetThickness(0.02f);
-                cradle_line->SetParent(root_object);
-                */
             }
 
         //BALL SHOOTER
-        auto shooter = new GenericController();
-        shooter->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([spawnball, camera_parent](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
-            if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
-                return;
-
+        auto shoot_func = [spawnball, camera_parent]() {
             auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().GetUp() * 0.3f);
 
             auto ball = spawnball(spawnpos, 0.2f);
             ball->body.AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
-        }));
-        shooter->SetParent(player_input);
+        };
+#pragma endregion
+#pragma region GUI OBJECTS SETUP
+        gbe::gui::gb_canvas* main_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
+        mGUIPipeline->SetActiveCanvas(main_canvas);
 
+        gbe::gui::gb_button* button = new gbe::gui::gb_button();
+        button->bl_pivot = Vector2(-1, -1);
+        button->tr_pivot = button->bl_pivot;
+        button->bl_offset = Vector2(150, 50);
+        button->tr_offset = button->bl_offset + Vector2(300, 100);
+        button->normal_color = Vector4(0, 0, 1, 1);
+        button->hovered_color = Vector4(1, 0, 0, 1);
+        main_canvas->AddRootChild(button);
+        gbe::gui::gb_button* side_button = new gbe::gui::gb_button();
+        side_button->normal_color = Vector4(0, 1, 0, 1);
+        side_button->hovered_color = Vector4(1, 0, 0, 1);
+        side_button->bl_pivot = Vector2(-1, -1);
+        side_button->tr_pivot = Vector2(-1, 1);
+        side_button->tr_offset = Vector2(-10, 0);
+        side_button->bl_offset = Vector2(-110, 0);
+        side_button->Set_onClickAction(shoot_func);
+        side_button->SetParent(button);
 
 #pragma endregion
+#pragma region MAIN LOOP
+        //GLOBAL RUNTIME COMPONENTS
+        auto mTime = new Time();
 
         /// MAIN GAME LOOP
         while (!mWindow->ShouldClose())
@@ -251,7 +266,11 @@ namespace gbe {
                         input_customer->TryReceive(action, changed);
                             });
                 }
-                }, mWindow);
+            }, mWindow);
+            //Update GUI system
+            auto bl_pivoted_mousepos = mWindow->GetMousePos();
+            bl_pivoted_mousepos.y = mWindow->Get_dimentions().y - bl_pivoted_mousepos.y;
+            mGUIPipeline->PassScreenSpaceMousePos(bl_pivoted_mousepos);
 
             //Early update
             for (auto updatable : mEarlyUpdate->object_list)
@@ -269,11 +288,13 @@ namespace gbe {
             mRenderPipeline->SetPostProcessing(active_camera->mShader);
             Matrix4 frustrum = active_camera->getproj() * active_camera->GetViewMat();
             mRenderPipeline->RenderFrame(active_camera->World().position.Get(), active_camera->World().GetForward(), frustrum, active_camera->nearClip, active_camera->farClip);
-            //Render window
+            mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
+            mGUIPipeline->DrawActiveCanvas();
+            //Update the window
             mWindow->SwapBuffers();
 
             //Update other handlers
-            auto onTick = [mPhysicsPipeline, mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
+            auto onTick = [mWindow, mGUIPipeline, mPhysicsPipeline, mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
                 mPhysicsPipeline->Tick(deltatime);
                 mPhysicsHandler->Update();
 
@@ -289,6 +310,9 @@ namespace gbe {
                 {
                     updatable->InvokeLateUpdate(delta_f);
                 }
+
+                //GUI
+                mGUIPipeline->Update(deltatime);
             };
             mTime->TickFixed(onTick);
 
@@ -308,9 +332,8 @@ namespace gbe {
                 delete deletee;
             }
         }
-
+#pragma endregion
         mRenderPipeline->CleanUp();
-
         mWindow->Terminate();
 	}
 }

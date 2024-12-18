@@ -6,6 +6,9 @@ gbe::Vector4::Vector4(float x, float y, float z, float w) : glm::vec4(x, y, z, w
 
 }
 
+gbe::Vector4::Vector4(float x) : glm::vec4(x) {
+
+}
 gbe::Vector4::Vector4() : glm::vec4(0)
 {
 }

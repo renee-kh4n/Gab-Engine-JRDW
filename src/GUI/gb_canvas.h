@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gb_rect.h"
+#include "rect_types/gb_root.h"
 #include <glm/matrix.hpp>
 
 #include <glad/glad.h>
@@ -12,11 +13,16 @@ namespace gbe {
 		class gb_canvas {
 		private:
 			glm::ivec2 reference_resolution;
-			std::list<gb_rect*> children;
+			gb_root root;
 		public:
-			void DrawToCurrentBuffer(glm::ivec2 target_resolution);
+			gb_canvas(glm::ivec2 reference_resolution);
+
+			gb_rect* QueryAtPosition(glm::vec2 normalized_centered_position);
+			void Draw(glm::ivec2 target_resolution);
 			glm::ivec2 Get_reference_resolution();
-			std::list<gb_rect*>& Get_children();
+			void Update(double delta);
+
+			void AddRootChild(gb_rect* other);
 		};
 	}
 }

@@ -5,7 +5,7 @@
 
 using namespace gbe;
 
-gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vector2 dimensions)
+gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vector2Int dimensions)
 {
     this->resolution = dimensions;
 
@@ -23,10 +23,6 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
 
     //Shaders
     this->depthShader = new Shader("DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag");
-    this->uiShader = new Shader("DefaultAssets/Shaders/gui.vert", "DefaultAssets/Shaders/gui.frag");
-
-    //Mesh
-    this->default_quad = new Mesh("DefaultAssets/3D/plane.obj");
 }
 
 void RenderPipeline::SetPostProcessing(Shader* postprocess) {
@@ -346,40 +342,9 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
     postprocess->SetTextureOverride("depthBufferTexture", mDepthFrameBuffer, 1);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
-
-    //RENDER GUI HERE
-    Vector2 bl_pivot = Vector2(-1, -1);
-    Vector2 tr_pivot = Vector2(-1, -1);
-
-    Vector2 bl_offset = Vector2(50, 50);
-    Vector2 tr_offset = Vector2(200, 100);
-
-    Vector2 normalizer = this->resolution * 0.5f;
-    Vector3 final_bl = Vector3(bl_pivot.x, bl_pivot.y, 0) + Vector3(bl_offset.x / normalizer.x, bl_offset.y / normalizer.y, 0);
-    Vector3 final_tr = Vector3(tr_pivot.x, tr_pivot.y, 0) + Vector3(tr_offset.x / normalizer.x, tr_offset.y / normalizer.y, 0);
-    Vector3 rect_center = (final_tr + final_bl) * 0.5f;
-    Vector3 rect_scale = (final_tr - final_bl) * 0.5f;
-
-    Matrix4 canvas_transform = Matrix4(1.0f);
-    canvas_transform *= glm::translate(rect_center);
-    canvas_transform *= glm::scale(rect_scale);
     
-
-    glUseProgram(this->uiShader->shaderID);
-    this->uiShader->SetOverride("color", Vector4(1, 1, 1, 1));
-    this->uiShader->SetOverride("viewport_size", this->resolution);
-    this->uiShader->SetOverride("bl_pivot", bl_pivot);
-    this->uiShader->SetOverride("tr_pivot", tr_pivot);
-    this->uiShader->SetOverride("bl_offset", bl_offset);
-    this->uiShader->SetOverride("tr_offset", tr_offset);
-    this->uiShader->SetOverride("transform", canvas_transform);
-
-
-    glBindVertexArray(this->default_quad->VAO);
-
-    glDrawArrays(GL_TRIANGLES, 0, 6);
-
     this->lights_this_frame.clear();
+
 #pragma endregion
 }
 

@@ -21,14 +21,14 @@ gbe::rendering::DirLight::DirLight()
 
     for (size_t i = 0; i < map_count; i++)
     {
-        this->shadowmaps[i] = new Framebuffer(Vector2(512, 512));
+        this->shadowmaps[i] = new Framebuffer(Vector2Int(512, 512));
     }
 }
 
 void gbe::rendering::DirLight::SetShadowmapResolution(int res) {
     for (size_t i = 0; i < this->cascade_splits.size() + 1; i++)
     {
-        this->shadowmaps[i] = new Framebuffer(Vector2(res, res));
+        this->shadowmaps[i] = new Framebuffer(Vector2Int(res, res));
     }
 }
 

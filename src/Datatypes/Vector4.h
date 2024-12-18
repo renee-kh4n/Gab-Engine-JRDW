@@ -9,6 +9,7 @@
 namespace gbe {
 	struct Vector4 : public glm::vec4 {
 		Vector4();
+		Vector4(float);
 		Vector4(float, float, float, float);
 		Vector4(glm::vec4 glmvec);
 

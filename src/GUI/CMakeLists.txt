@@ -4,9 +4,11 @@ set(CURRENT_CMAKE_LIB gbe_gui)
 add_library(${CURRENT_CMAKE_LIB} STATIC
 	"gb_canvas.cpp"
  "gb_rect.cpp" 
- "rect_types/gb_image.h" 
- "gbuiPipeline.h" 
  "gbuiPipeline.cpp"
+ "rect_types/gb_root.cpp"
+ "rect_types/gb_button.cpp"
+ "interfaces/gb_onClick.h"
+ "interfaces/gb_onExit.h"
 )
 
 find_package(glm CONFIG REQUIRED)
