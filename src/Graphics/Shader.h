@@ -8,8 +8,7 @@
 #include <vector>
 #include <iostream>
 
-#include "../Math/Matrix4.h"
-#include "../Math/Vectors.h"
+#include "Math/gbe_math.h"
 #include "Framebuffer.h"
 
 #include "Texture.h"

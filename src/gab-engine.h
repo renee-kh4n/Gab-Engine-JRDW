@@ -3,8 +3,8 @@
 
 #pragma once
 
-#include "Editor/Editor.h"
-#include "Engine/Engine.h"
+#include "Editor/gbe_editor.h"
+#include "Engine/gbe_engine.h"
 #include <thread>
 
 // TODO: Reference additional headers your program requires here.

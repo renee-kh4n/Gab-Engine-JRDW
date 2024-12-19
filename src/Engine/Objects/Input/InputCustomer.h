@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../Input/InputAction.h"
-#include "../Object.h"
+#include "Engine/Input/InputAction.h"
+#include "Engine/Objects/Object.h"
 
 namespace gbe {
 	using namespace input;

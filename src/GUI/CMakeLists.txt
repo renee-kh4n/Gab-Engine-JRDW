@@ -9,7 +9,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
  "rect_types/gb_button.cpp"
  "interfaces/gb_onClick.h"
  "interfaces/gb_onExit.h"
-)
+ "gbe_gui.h")
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC gbe_math)
 

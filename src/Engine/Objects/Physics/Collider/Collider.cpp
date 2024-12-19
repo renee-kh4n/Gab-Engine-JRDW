@@ -1,5 +1,5 @@
 #include "Collider.h"
-#include "../RigidObject.h"
+#include "Engine/Objects/Physics/RigidObject.h"
 
 gbe::RigidObject* gbe::Collider::GetRigidbody()
 {

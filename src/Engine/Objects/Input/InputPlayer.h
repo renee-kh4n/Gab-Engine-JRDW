@@ -1,10 +1,9 @@
 #pragma once
 
 #include <string>
-
-#include "../Object.h"
-#include "../Controllers/ControllerBase.h"
-#include "../../ObjectHandlers/ObjectHandler.h"
+#include "Engine/ObjectHandlers/ObjectHandler.h"
+#include "Engine/Objects/Controllers/ControllerBase.h"
+#include "Engine/Objects/Object.h"
 
 namespace gbe {
 	class InputPlayer : public Object {

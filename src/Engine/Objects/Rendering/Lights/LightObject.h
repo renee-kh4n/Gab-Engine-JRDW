@@ -1,7 +1,7 @@
 #pragma once
 
-#include "../../Object.h"
-#include "../Graphics/Light.h"
+#include "Engine/Objects/Object.h"
+#include "Graphics/gbe_graphics.h"
 
 namespace gbe {
 

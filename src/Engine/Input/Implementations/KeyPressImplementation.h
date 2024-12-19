@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Input/ActionImplementation.h"
-#include "Input/Action/KeyPress.h"
+#include "Engine/Input/ActionImplementation.h"
+#include "Engine/Input/Action/KeyPress.h"
+#include "Window/gbe_window.h"
 
 namespace gbe {
 	namespace input {

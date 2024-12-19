@@ -4,12 +4,11 @@
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-#include "Component/Transform.h"
-#include "Component/TransformChangeType.h"
 #include <list>
 #include <functional>
-
-#include "../Math/Matrix4.h"
+#include "Math/gbe_math.h"
+#include "Engine/Component/Transform.h"
+#include "Engine/Component/TransformChangeType.h"
 
 namespace gbe {
 

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Object.h"
-#include "../ObjectHandlers/ObjectHandlers.h"
+#include "Engine/Objects/Object.h"
+#include "Engine/ObjectHandlers/ObjectHandler.h"
 
 namespace gbe{
 	class Root : public Object {

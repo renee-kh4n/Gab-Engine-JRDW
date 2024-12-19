@@ -22,7 +22,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Controllers/OrbitalControl.cpp"
 	"Objects/Controllers/GenericController.cpp"
 	
-	"Objects/Controllers/VariableSwitcher.cpp"
+	
 	"Objects/Input/InputPlayer.cpp"
 
 	"Objects/Physics/ForceVolume.cpp"
@@ -35,17 +35,9 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Physics/RigidObject.cpp"
 	"Objects/Physics/Collider/Collider.cpp"
 	"Objects/Physics/Collider/SphereCollider.cpp"
-	"Objects/Physics/Joints/AnchorSpring.cpp"
-	"Objects/Physics/Joints/Bungee.cpp"
-	"Objects/Physics/Joints/ChainJoint.cpp"
-	"Objects/Physics/Joints/Spinner.cpp"
 	"Objects/Physics/Collider/BoxCollider.cpp"
-	
-	"Component/TransformChangeType.h"
 )
 
-target_include_directories(${CURRENT_CMAKE_LIB} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-message("[GABENGINE] INCLUDED ROOT DIR TO EDITOR SRCS: " ${CMAKE_CURRENT_SOURCE_DIR})
 
 find_package(glm CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glm::glm)

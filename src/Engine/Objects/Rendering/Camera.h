@@ -2,10 +2,9 @@
 
 #include "../../Objects/Object.h"
 
-#include "../Window/Window.h"
-
-#include "../Graphics/Shader.h"
-#include "../Math/Matrix4.h"
+#include "Window/gbe_window.h"
+#include "Math/gbe_math.h"
+#include "Graphics/gbe_graphics.h"
 
 namespace gbe {
     using namespace rendering;

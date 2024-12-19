@@ -1,7 +1,6 @@
 #pragma once
-
-#include "../Objects/Input/Inputs.h"
 #include "ObjectHandler.h"
+#include "Engine/Objects/Input/InputPlayer.h"
 
 
 namespace gbe {

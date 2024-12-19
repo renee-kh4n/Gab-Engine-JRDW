@@ -1,9 +1,6 @@
 #pragma once
 
-#include "../Math/Vector3.h"
-#include "../Math/Quaternion.h"
-#include "../Math/Matrix4.h"
-#include "../Math/TrackedVariable.h"
+#include "Math/gbe_math.h"
 #include "TransformChangeType.h"
 #include <functional>
 

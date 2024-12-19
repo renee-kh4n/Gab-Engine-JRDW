@@ -2,11 +2,7 @@
 
 #include "ControllerBase.h"
 
-#include "../Math/Vector2.h"
-#include "../../Input/Action/MouseDrag.h"
-#include "../../Input/Action/MouseScroll.h"
-#include "Input/KeyDefines.h"
-#include <iostream>
+#include "Math/gbe_math.h"
 
 namespace gbe {
 	class FlyingCameraControl : public ControllerBase {

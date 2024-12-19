@@ -3,7 +3,7 @@
 #SUBDIRECTORY LOADING
 add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Window.cpp"
- "WindowEvents.h")
+ "WindowEvents.h" "gbe_window.h")
 
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB}

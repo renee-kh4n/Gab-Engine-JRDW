@@ -15,8 +15,7 @@
 
 #include <functional>
 
-#include "../Math/Vectors.h"
-#include "../Math/Matrix4.h"
+#include "Math/gbe_math.h"
 
 namespace gbe {
 	using namespace rendering;

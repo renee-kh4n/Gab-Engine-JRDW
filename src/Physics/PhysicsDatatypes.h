@@ -1,7 +1,6 @@
 #pragma once
 
-#include "../Math/Vectors.h"
-#include "../Math/Quaternion.h"
+#include "Math/gbe_math.h"
 
 #include <bullet/btBulletDynamicsCommon.h>
 

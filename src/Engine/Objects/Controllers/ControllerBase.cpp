@@ -1,4 +1,5 @@
 #include "ControllerBase.h"
+#include "Engine/Objects/Input/InputCustomer.h"
 
 void gbe::ControllerBase::ForEach_inputreceivers(std::function<void(InputCustomer_base*)> function)
 {

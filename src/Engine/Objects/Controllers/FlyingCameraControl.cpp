@@ -1,36 +1,10 @@
 #include "FlyingCameraControl.h"
 
+#include "Engine/Input/Action/MouseDrag.h"
+#include "Engine/Input/Action/MouseScroll.h"
+#include "Engine/Input/KeyDefines.h"
+
 namespace gbe {
-
-	/*
-	void gde::FlyingCameraControl::OnInput(MouseDrag<GLFW_MOUSE_BUTTON_2>* value, bool changed)
-	{
-		if (value->state != MouseDrag<GLFW_MOUSE_BUTTON_2>::WHILE)
-			return;
-
-		this->orbital_rotation += value->delta;
-		if (this->orbital_rotation.y < -70)
-			this->orbital_rotation.y = -70;
-		if (this->orbital_rotation.y > 70)
-			this->orbital_rotation.y = 70;
-
-		this->SetRotation(Vector3(orbital_rotation.x, orbital_rotation.y, 0));
-	}
-
-	void gde::FlyingCameraControl::OnInput(MouseDrag<GLFW_MOUSE_BUTTON_3>* value, bool changed)
-	{
-		if (value->state != MouseDrag<GLFW_MOUSE_BUTTON_3>::WHILE)
-			return;
-
-		this->orbital_rotation += value->delta;
-		if (this->orbital_rotation.y < -70)
-			this->orbital_rotation.y = -70;
-		if (this->orbital_rotation.y > 70)
-			this->orbital_rotation.y = 70;
-
-		this->SetRotation(Vector3(orbital_rotation.x, orbital_rotation.y, 0));
-	}
-	*/
 	FlyingCameraControl::FlyingCameraControl()
 	{
 		auto mouserightdrag = new InputCustomer<MouseDrag<Keys::MOUSE_RIGHT>>([this](MouseDrag<Keys::MOUSE_RIGHT>* value, bool changed) {

@@ -1,20 +1,14 @@
 #pragma once
 
-#include "../ActionImplementation.h"
-#include "../Action/MouseScroll.h"
+#include "Engine/Input/ActionImplementation.h"
+#include "Engine/Input/Action/MouseScroll.h"
+#include "Engine/Input/KeyDefines.h"
 
-#define GDE_CALLBACKID_MOUSESCROLL "GDE_CALLBACKID_MOUSESCROLL"
-
-#include "Input/KeyDefines.h"
-
-#include "../Window/Window.h"
+#include "Window/gbe_window.h"
 
 namespace gbe {
     namespace input {
         class MouseScrollImplementation : public ActionImplementation<MouseScroll> {
-        private:
-            bool initialized_callback;
-            Window* window_cache;
         public:
             // Inherited via ActionImplementation
             void UpdateState(Window* target);

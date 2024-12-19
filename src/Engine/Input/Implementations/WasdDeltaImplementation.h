@@ -1,7 +1,10 @@
 #pragma once
 
-#include "Input/ActionImplementation.h"
-#include "Input/Action/WasdDelta.h"
+
+#include "Engine/Input/ActionImplementation.h"
+#include "Engine/Input/Action/WasdDelta.h"
+
+#include "Window/gbe_window.h"
 
 namespace gbe {
 	namespace input {

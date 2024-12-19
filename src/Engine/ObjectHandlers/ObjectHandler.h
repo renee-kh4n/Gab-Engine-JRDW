@@ -2,8 +2,7 @@
 
 #include <list>
 #include <functional>
-
-#include "../Objects/Object.h"
+#include "Engine/Objects/Object.h"
 
 namespace gbe {
 	class Handler {

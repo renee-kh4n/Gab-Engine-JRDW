@@ -1,8 +1,7 @@
 #pragma once
 
-#include "../Object.h"
-#include "Objects/Input/InputCustomer.h"
-#include "../../Input/Action/WasdDelta.h"
+#include "Engine/Objects/Input/InputCustomer.h"
+#include "Engine/Input/Action/WasdDelta.h"
 
 namespace gbe {
 	class OrbitalControl : public Object, public InputCustomer<WasdDelta> {

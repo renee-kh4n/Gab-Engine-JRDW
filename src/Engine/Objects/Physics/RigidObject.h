@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Object.h"
+#include "Engine/Objects/Object.h"
 #include "Collider/Collider.h"
-#include "../Physics/Rigidbody.h"
+#include "Physics/gbe_physics.h"
 
 namespace gbe {
 	class RigidObject : public Object {

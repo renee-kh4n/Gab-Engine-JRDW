@@ -4,9 +4,7 @@
 #include <string>
 #include "Shader.h"
 #include "Texture.h"
-#include "../Math/Matrix4.h"
-#include "../Math/Vector2.h"
-#include "../Math/Vector3.h"
+#include "Math/gbe_math.h"
 
 namespace gbe {
 	namespace rendering {

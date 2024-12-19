@@ -1,7 +1,6 @@
 #pragma once
-
-#include "../../Object.h"
-#include "../Physics/ColliderData/ColliderData.h"
+#include "Physics/ColliderData/ColliderData.h"
+#include "Engine/Objects/Object.h"
 
 namespace gbe {
 	class RigidObject;

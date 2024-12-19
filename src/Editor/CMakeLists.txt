@@ -6,7 +6,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"App/EditorApp.cpp" 
 	"App/RootWindow.cpp"
 	"App/Windows/SceneWindow.cpp"
-)
+ "gbe_editor.h")
 
 find_package(wxWidgets CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE wx::core wx::base)
