@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Input/InputAction.h"
-#include "../Datatypes/Vector2Int.h"
+#include "../Math/Vector2Int.h"
 
 namespace gbe {
 	namespace input {

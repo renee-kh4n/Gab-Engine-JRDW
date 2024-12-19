@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Objects/Physics/RigidObject.h"
-#include "../Datatypes/Vector3.h"
+#include "../Math/Vector3.h"
 #include "ObjectFunctions/Update.h"
 
 namespace gbe {

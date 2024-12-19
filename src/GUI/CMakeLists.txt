@@ -11,8 +11,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
  "interfaces/gb_onExit.h"
 )
 
-find_package(glm CONFIG REQUIRED)
-target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC glm::glm)
+target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC gbe_math)
 
 find_package(glad CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glad::glad)

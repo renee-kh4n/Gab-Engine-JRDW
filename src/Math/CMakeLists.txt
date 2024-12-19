@@ -1,4 +1,4 @@
-﻿set(CURRENT_CMAKE_LIB gbe_datatypes)
+﻿set(CURRENT_CMAKE_LIB gbe_math)
 
 #SUBDIRECTORY LOADING
 add_library(${CURRENT_CMAKE_LIB} STATIC

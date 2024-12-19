@@ -15,7 +15,7 @@ Current backend used: SDL2
 
 #include "Engine/Input/KeyDefines.h"
 
-#include "../Datatypes/Vector2Int.h"
+#include "../Math/Vector2Int.h"
 #include "Window/WindowEvents.h"
 
 namespace gbe {

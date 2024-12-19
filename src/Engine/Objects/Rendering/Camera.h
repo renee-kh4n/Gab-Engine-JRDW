@@ -5,7 +5,7 @@
 #include "../Window/Window.h"
 
 #include "../Graphics/Shader.h"
-#include "../Datatypes/Matrix4.h"
+#include "../Math/Matrix4.h"
 
 namespace gbe {
     using namespace rendering;

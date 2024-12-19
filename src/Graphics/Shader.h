@@ -8,8 +8,8 @@
 #include <vector>
 #include <iostream>
 
-#include "../Datatypes/Matrix4.h"
-#include "../Datatypes/Vectors.h"
+#include "../Math/Matrix4.h"
+#include "../Math/Vectors.h"
 #include "Framebuffer.h"
 
 #include "Texture.h"

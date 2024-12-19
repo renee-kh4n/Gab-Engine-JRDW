@@ -2,7 +2,7 @@
 
 #include "Shader.h"
 #include "Texture.h"
-#include "../Datatypes/Matrix4.h"
+#include "../Math/Matrix4.h"
 
 namespace gbe {
     namespace rendering {

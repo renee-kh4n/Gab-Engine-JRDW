@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../Datatypes/Vector3.h"
-#include "../Datatypes/Matrix4.h"
-#include "../Datatypes/Quaternion.h"
+#include "../Math/Vector3.h"
+#include "../Math/Matrix4.h"
+#include "../Math/Quaternion.h"
 
 #include <bullet/btBulletDynamicsCommon.h>
 #include "PhysicsDatatypes.h"

@@ -1,8 +1,8 @@
 #pragma once
 
 
-#include "../Datatypes/Vectors.h"
-#include "../Datatypes/Matrix4.h"
+#include "../Math/Vectors.h"
+#include "../Math/Matrix4.h"
 #include "Framebuffer.h"
 
 namespace gbe {

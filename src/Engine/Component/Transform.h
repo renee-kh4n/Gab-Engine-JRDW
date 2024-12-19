@@ -1,9 +1,9 @@
 #pragma once
 
-#include "../Datatypes/Vector3.h"
-#include "../Datatypes/Quaternion.h"
-#include "../Datatypes/Matrix4.h"
-#include "../Datatypes/TrackedVariable.h"
+#include "../Math/Vector3.h"
+#include "../Math/Quaternion.h"
+#include "../Math/Matrix4.h"
+#include "../Math/TrackedVariable.h"
 #include "TransformChangeType.h"
 #include <functional>
 
