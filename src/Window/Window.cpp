@@ -31,15 +31,26 @@ namespace gbe {
         auto thing = this->procaddressfunc("glGetString");
 
         // Use v-sync
-        SDL_GL_SetSwapInterval(1);
+        SDL_GL_SetSwapInterval(0);
 
         for (size_t i = 0; i < gbe::Keys::_TOTALKEYS; i++)
         {
             this->keystates.insert_or_assign(i, false);
         }
     }
+
+    bool gbe::Window::PollEvents(gbe::window::WindowEventType& event_type) {
+        if (this->event_queue.empty())
+            return false;
+
+        event_type = this->event_queue.front();
+        this->event_queue.pop();
+        return true;
+    }
+
     void gbe::Window::UpdateState()
     {
+        //States to reset
         this->keystates[gbe::Keys::MOUSE_SCROLL_UP] = false;
         this->keystates[gbe::Keys::MOUSE_SCROLL_DOWN] = false;
 
@@ -53,8 +64,10 @@ namespace gbe {
                 shouldclose = true;
             }
             if (sdlevent.type == SDL_WINDOWEVENT) {
-                if (sdlevent.window.event == SDL_WINDOWEVENT_RESIZED)
+                if (sdlevent.window.event == SDL_WINDOWEVENT_RESIZED) {
                     this->dimentions = Vector2Int(sdlevent.window.data1, sdlevent.window.data2);
+                    this->event_queue.push(window::WindowEventType::RESIZE);
+                }
             }
 
             if (sdlevent.type == SDL_MOUSEBUTTONDOWN) {

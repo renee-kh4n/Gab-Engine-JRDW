@@ -9,12 +9,14 @@ Current backend used: SDL2
 #include <unordered_map>
 #include <functional>
 #include <string>
+#include <queue>
 
 #include <SDL2/SDL.h>
 
 #include "Engine/Input/KeyDefines.h"
 
 #include "../Datatypes/Vector2Int.h"
+#include "Window/WindowEvents.h"
 
 namespace gbe {
 
@@ -30,8 +32,12 @@ namespace gbe {
         
         void* (*procaddressfunc)(const char*);
         bool shouldclose = false;
+
+        std::queue<gbe::window::WindowEventType> event_queue;
     public:
         Window(Vector2Int dimentions);
+
+        bool PollEvents(gbe::window::WindowEventType& event_type);
 
         void UpdateState();
         void SwapBuffers();

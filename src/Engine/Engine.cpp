@@ -11,7 +11,7 @@ namespace gbe {
 	void Engine::Run()
 	{
         //WINDOW
-        Window* mWindow = new Window(Vector2Int(800, 800));
+        Window* mWindow = new Window(Vector2Int(1280, 720));
 
 #pragma region Rendering Pipeline Setup
         //RenderPipeline setup
@@ -26,12 +26,11 @@ namespace gbe {
         auto Cam1stPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
         auto uiShader = new Shader("DefaultAssets/Shaders/gui.vert", "DefaultAssets/Shaders/gui.frag");
 
-
         auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
         //TEXTURE CACHING
-        auto chewbacca_tex = new Texture("DefaultAssets/Tex/cubeacca.jpg");
+        auto chewbacca_tex = new Texture("DefaultAssets/Tex/Maps/Model/cubeacca.jpg");
 
         //MESH CACHING
         auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
@@ -96,6 +95,7 @@ namespace gbe {
 #pragma endregion
 #pragma region GUI Pipeline Setup
         auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->shaderID);
+        mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Physics Pipeline Setup
         auto mPhysicsPipeline = new physics::PhysicsPipeline();
@@ -254,6 +254,15 @@ namespace gbe {
         {
             /* Poll for and process events */
             mWindow->UpdateState();
+            gbe::window::WindowEventType windoweventtype;
+            while (mWindow->PollEvents(windoweventtype))
+            {
+                if (windoweventtype == gbe::window::WindowEventType::RESIZE) {
+                    auto newdimensions = mWindow->Get_dimentions();
+                    mGUIPipeline->Set_target_resolution(newdimensions);
+                    mRenderPipeline->SetResolution(newdimensions);
+                }
+            }
 
             //Update input system
             mInputSystem->UpdateStates([mInputHandler](std::string name, gbe::input::InputAction* action, bool changed) {
@@ -288,7 +297,6 @@ namespace gbe {
             mRenderPipeline->SetPostProcessing(active_camera->mShader);
             Matrix4 frustrum = active_camera->getproj() * active_camera->GetViewMat();
             mRenderPipeline->RenderFrame(active_camera->World().position.Get(), active_camera->World().GetForward(), frustrum, active_camera->nearClip, active_camera->farClip);
-            mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
             mGUIPipeline->DrawActiveCanvas();
             //Update the window
             mWindow->SwapBuffers();

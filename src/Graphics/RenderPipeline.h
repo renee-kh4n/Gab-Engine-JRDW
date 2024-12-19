@@ -45,6 +45,7 @@ namespace gbe {
 		void SetPostProcessing(Shader* postprocess);
 		bool TryPushLight(rendering::Light* data, bool priority = false);
 
+		void SetResolution(Vector2Int newresolution);
 		void RenderFrame(Vector3& from, Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);
 
 		void CleanUp();

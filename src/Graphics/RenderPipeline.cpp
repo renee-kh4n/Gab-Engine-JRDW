@@ -17,7 +17,6 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
     this->postprocess = nullptr;
 
     //Framebuffers setup
-    glViewport(0, 0, dimensions.x, dimensions.y);
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
 
@@ -40,6 +39,13 @@ bool RenderPipeline::TryPushLight(rendering::Light* data, bool priority) {
 
     this->lights_this_frame.push_back(data);
     return true;
+}
+
+void gbe::RenderPipeline::SetResolution(Vector2Int newresolution) {
+    this->resolution = newresolution;
+
+    mFrameBuffer = new Framebuffer(newresolution);
+    mDepthFrameBuffer = new Framebuffer(newresolution);
 }
 
 void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)

@@ -12,10 +12,13 @@ namespace gbe {
 	namespace gui {
 		class gb_canvas {
 		private:
+			glm::ivec2 basis_resolution;
 			glm::ivec2 reference_resolution;
 			gb_root root;
+
+			float xbasis_scale_factor = 1.0f;
 		public:
-			gb_canvas(glm::ivec2 reference_resolution);
+			gb_canvas(glm::ivec2 basis_resolution);
 
 			gb_rect* QueryAtPosition(glm::vec2 normalized_centered_position);
 			void Draw(glm::ivec2 target_resolution);
