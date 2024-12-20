@@ -5,6 +5,7 @@
 #include "GUI/gbe_gui.h"
 #include "Math/gbe_math.h"
 #include "Physics/gbe_physics.h"
+#include "Asset/gbe_asset.h"
 #include "gbe_engine.h"
 
 namespace gbe {

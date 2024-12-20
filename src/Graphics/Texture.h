@@ -5,16 +5,7 @@
 #include <string>
 
 namespace gbe {
-    namespace rendering {
-        struct Texture {
-            GLuint texID;
-            stbi_uc* tex_bytes;
-            int img_width;
-            int img_height;
-            int colorchannels;
-
-            Texture(const char* path);
-        };
+    namespace gfx {
 
         struct TextureCubeMap {
             GLuint texID;

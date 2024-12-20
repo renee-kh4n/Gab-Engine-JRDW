@@ -1,7 +1,7 @@
 #include "Skybox.h"
 
 namespace gbe {
-    using namespace rendering;
+    using namespace gfx;
 
     Skybox::Skybox(TextureCubeMap* cubemap)
     {

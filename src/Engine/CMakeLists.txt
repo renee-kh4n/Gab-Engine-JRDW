@@ -38,10 +38,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Physics/Collider/BoxCollider.cpp"
 )
 
-
-find_package(glm CONFIG REQUIRED)
-target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glm::glm)
-
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
 
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

@@ -8,13 +8,13 @@
 #include <vector>
 #include <iostream>
 
+#include "Asset/gbe_asset.h"
 #include "Math/gbe_math.h"
 #include "Framebuffer.h"
-
 #include "Texture.h"
 
 namespace gbe {
-    namespace rendering {
+    namespace gfx {
         class Shader {
 		private:
         public:
@@ -67,7 +67,7 @@ namespace gbe {
 				glUniformMatrix4fv(loc, 1, GL_FALSE, value.Get_Ptr());
 			}
 
-			void SetTextureOverride(const char* id, Texture* value, int gpu_tex_slot);
+			void SetTextureOverride(const char* id, asset::Texture* value, int gpu_tex_slot);
 			void SetTextureOverride(const char* id, TextureCubeMap* value, int gpu_tex_slot);
 			void SetTextureOverride(const char* id, Framebuffer* value, int gpu_tex_slot);
 

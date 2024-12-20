@@ -1,7 +1,7 @@
 #include "RenderObject.h"
 #include <glm/gtx/matrix_decompose.hpp>
 
-using namespace gbe::rendering;
+using namespace gbe::gfx;
 
 gbe::RenderObject::RenderObject(DrawCall* mDrawCall)
 {

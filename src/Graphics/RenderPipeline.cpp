@@ -27,7 +27,7 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
 void RenderPipeline::SetPostProcessing(Shader* postprocess) {
     this->postprocess = postprocess;
 }
-bool RenderPipeline::TryPushLight(rendering::Light* data, bool priority) {
+bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
 
     if (this->lights_this_frame.size() == this->maxlights)
         return false;

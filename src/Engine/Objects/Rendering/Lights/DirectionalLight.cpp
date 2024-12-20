@@ -1,9 +1,9 @@
 #include "DirectionalLight.h"
 
 using namespace gbe;
-using namespace gbe::rendering;
+using namespace gbe::gfx;
 
-rendering::Light* gbe::DirectionalLight::GetData()
+gfx::Light* gbe::DirectionalLight::GetData()
 {
     if (this->mLight == nullptr)
         this->mLight = new DirLight();

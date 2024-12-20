@@ -18,7 +18,7 @@
 #include "Math/gbe_math.h"
 
 namespace gbe {
-	using namespace rendering;
+	using namespace gfx;
 
 	class RenderPipeline {
 	private:
@@ -27,7 +27,7 @@ namespace gbe {
 
 		std::vector<DrawCall*> drawcalls;
 
-		std::list<rendering::Light*> lights_this_frame;
+		std::list<gfx::Light*> lights_this_frame;
 		const int maxlights = 10;
 
 		//--------CACHE--------//
@@ -42,7 +42,7 @@ namespace gbe {
 		void RegisterDrawCall(DrawCall*);
 
 		void SetPostProcessing(Shader* postprocess);
-		bool TryPushLight(rendering::Light* data, bool priority = false);
+		bool TryPushLight(gfx::Light* data, bool priority = false);
 
 		void SetResolution(Vector2Int newresolution);
 		void RenderFrame(Vector3& from, Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);

@@ -1,6 +1,6 @@
 #include "LineRenderer.h"
 
-using namespace gbe::rendering;
+using namespace gbe::gfx;
 
 gbe::LineRenderer::LineRenderer(DrawCall* drawcall, Object* Camera, Object* a, Object* b) : RenderObject(drawcall)
 {

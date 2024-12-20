@@ -1,7 +1,7 @@
 #include "Camera.h"
 
 namespace gbe {
-    using namespace rendering;
+    using namespace gfx;
 
     Camera::Camera(Window* mWindow, Shader* mShader)
     {

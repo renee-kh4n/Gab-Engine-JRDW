@@ -9,10 +9,10 @@ namespace gbe {
 	class RenderObject : public Object, public EarlyUpdate {
 	private:
 		//Rendering stuff
-		rendering::DrawCall* mDrawCall;
+		gfx::DrawCall* mDrawCall;
 		Matrix4* to_update;
 	public:
-		RenderObject(rendering::DrawCall* mDrawCall);
+		RenderObject(gfx::DrawCall* mDrawCall);
 		virtual ~RenderObject();
 
 		// Inherited via EarlyUpdate

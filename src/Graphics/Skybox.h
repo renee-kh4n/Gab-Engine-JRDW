@@ -5,7 +5,7 @@
 #include "../Math/Matrix4.h"
 
 namespace gbe {
-    namespace rendering {
+    namespace gfx {
         class Skybox {
         public:
             Shader* shader;

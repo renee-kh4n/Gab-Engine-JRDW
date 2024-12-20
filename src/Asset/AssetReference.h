@@ -15,6 +15,10 @@ namespace gbe {
 					asset_ptr = nullptr;
 				}
 			}
+
+			AssetT* Get_asset() {
+				return this->asset_ptr;
+			}
 		};
 	}
 }

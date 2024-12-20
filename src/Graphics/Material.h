@@ -3,11 +3,11 @@
 #include <unordered_map>
 #include <string>
 #include "Shader.h"
-#include "Texture.h"
+#include "Asset/gbe_asset.h"
 #include "Math/gbe_math.h"
 
 namespace gbe {
-	namespace rendering {
+	namespace gfx {
 		enum MaterialOverrideType {
 			BOOL,
 			FLOAT,
@@ -31,7 +31,7 @@ namespace gbe {
 		};
 
 		struct MaterialTexture {
-			Texture* texture;
+			asset::Texture* texture;
 			const char* parameterName;
 		};
 

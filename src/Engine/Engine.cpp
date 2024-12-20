@@ -18,6 +18,13 @@ namespace gbe {
         Camera* active_camera = nullptr;
         auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
 #pragma endregion
+#pragma region Physics Pipeline Setup
+        auto mPhysicsPipeline = new physics::PhysicsPipeline();
+        mPhysicsPipeline->Init();
+#pragma endregion
+#pragma region Asset Loader Assigning
+        asset::TextureLoader::Set_load_func(gfx::GraphicsAssetLoader::Load_Texture);
+#pragma endregion
 #pragma region Asset Loading
         //SHADER CACHING
         auto litShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
@@ -30,7 +37,7 @@ namespace gbe {
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
         //TEXTURE CACHING
-        auto chewbacca_tex = new Texture("DefaultAssets/Tex/Maps/Model/cubeacca.jpg");
+        auto chewbacca_tex = new asset::Texture("spheretex", "DefaultAssets/Tex/Maps/Model/cubeacca.jpg");
 
         //MESH CACHING
         auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
@@ -96,10 +103,6 @@ namespace gbe {
 #pragma region GUI Pipeline Setup
         auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->shaderID);
         mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
-#pragma endregion
-#pragma region Physics Pipeline Setup
-        auto mPhysicsPipeline = new physics::PhysicsPipeline();
-        mPhysicsPipeline->Init();
 #pragma endregion
 #pragma region Input
         auto mInputSystem = new InputSystem();

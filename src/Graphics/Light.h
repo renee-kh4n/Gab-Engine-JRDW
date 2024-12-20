@@ -5,7 +5,7 @@
 #include "Framebuffer.h"
 
 namespace gbe {
-	namespace rendering {
+	namespace gfx {
 		struct Light {
 			virtual enum Type {
 				DIRECTION = 0,

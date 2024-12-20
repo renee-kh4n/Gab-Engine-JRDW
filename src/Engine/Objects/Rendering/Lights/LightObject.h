@@ -7,7 +7,7 @@ namespace gbe {
 
 	class LightObject : public Object{
 	protected:
-		rendering::Light* mLight;
+		gfx::Light* mLight;
 		
 		Vector3 old_position;
 		Vector3 old_forward;
@@ -23,7 +23,7 @@ namespace gbe {
 		void Set_Intensity(float intensity);
 		void Set_ShadowmapResolutions(int res);
 
-		virtual rendering::Light* GetData() = 0;
+		virtual gfx::Light* GetData() = 0;
 
 		void OnLocalTransformationChange(TransformChangeType) override;
 		void OnExternalTransformationChange(TransformChangeType, Matrix4 parentmat) override;

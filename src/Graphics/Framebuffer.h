@@ -4,7 +4,7 @@
 #include <glad/glad.h>
 
 namespace gbe {
-    namespace rendering {
+    namespace gfx {
         class Framebuffer {
         public:
             Vector2Int dimensions;

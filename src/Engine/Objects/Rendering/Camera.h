@@ -7,7 +7,7 @@
 #include "Graphics/gbe_graphics.h"
 
 namespace gbe {
-    using namespace rendering;
+    using namespace gfx;
 
     /// <summary>
     /// Generic camera class with assignable project matrix and utility functions for rendering.

@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 
 namespace gbe {
-    namespace rendering {
+    namespace gfx {
         struct Mesh {
             GLuint VAO, VBO;
             tinyobj::attrib_t attributes;

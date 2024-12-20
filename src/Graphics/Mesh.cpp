@@ -1,7 +1,7 @@
 #include "Mesh.h"
 
 using namespace gbe;
-using namespace rendering;
+using namespace gfx;
 
 Mesh::Mesh(std::string path) {
     //Specify the data length of a singular vertex

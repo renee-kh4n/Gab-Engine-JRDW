@@ -1,10 +1,11 @@
 #include "Shader.h"
 #include <string>
 #include <iostream>
+#include "Asset/gbe_asset.h"
 
 namespace gbe {
 
-	using namespace rendering;
+	using namespace gfx;
 
 	Shader::Shader(std::string vert, std::string frag) {
 		auto vertShader = TryCompileShader(vert, GL_VERTEX_SHADER);
@@ -24,11 +25,11 @@ namespace gbe {
 		glLinkProgram(shaderID);
 	}
 
-	void Shader::SetTextureOverride(const char* id, Texture* value, int gpu_tex_slot) {
+	void Shader::SetTextureOverride(const char* id, asset::Texture* value, int gpu_tex_slot) {
 		glUseProgram(shaderID);
 		GLuint texAddress = glGetUniformLocation(shaderID, id);
 
-		glBindTexture(GL_TEXTURE_2D, value->texID);
+		glBindTexture(GL_TEXTURE_2D, value->Get_gl_id());
 		glUniform1i(texAddress, gpu_tex_slot);
 	}
 

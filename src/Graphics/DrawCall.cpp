@@ -1,7 +1,7 @@
 #include "DrawCall.h"
 
 namespace gbe {
-    using namespace rendering;
+    using namespace gfx;
 
     DrawCall::DrawCall(Mesh* mesh, Material* material)
     {

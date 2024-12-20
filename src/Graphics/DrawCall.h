@@ -6,7 +6,7 @@
 
 
 namespace gbe {
-    namespace rendering {
+    namespace gfx {
         class DrawCall {
         public:
             std::unordered_map<void*, Matrix4> calls;
