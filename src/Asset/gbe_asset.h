@@ -6,4 +6,3 @@
 #include "AssetTypes/Texture.h"
 #include "AssetTypes/Mesh.h"
 #include "AssetTypes/Shader.h"
-#include "AssetTypeLoaders/TextureLoader.h"

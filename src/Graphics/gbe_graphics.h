@@ -1,5 +1,5 @@
 #pragma once
 
 #include "RenderPipeline.h"
-#include "GraphicsAssetLoader.h"
 #include "DrawCall.h"
+#include "AssetLoaders/TextureLoader.h"

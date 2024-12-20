@@ -22,9 +22,6 @@ namespace gbe {
         auto mPhysicsPipeline = new physics::PhysicsPipeline();
         mPhysicsPipeline->Init();
 #pragma endregion
-#pragma region Asset Loader Assigning
-        asset::TextureLoader::Set_load_func(gfx::GraphicsAssetLoader::Load_Texture);
-#pragma endregion
 #pragma region Asset Loading
         //SHADER CACHING
         auto litShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
@@ -56,7 +53,7 @@ namespace gbe {
 
         auto mattex = MaterialTexture();
         mattex.parameterName = "texdiffuse";
-        mattex.texture = chewbacca_tex;
+        mattex.textureRef.Assign(chewbacca_tex);
 
         auto create_lit_colored_mat = [litShader, mattex](Vector3 color) {
             auto mat = new Material(litShader);

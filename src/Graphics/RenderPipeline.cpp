@@ -14,18 +14,20 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
     if (gladLoadGLLoader(procaddressfunc) == 0)
         throw "ERROR: glad failed to initialize.";
 
-    this->postprocess = nullptr;
-
     //Framebuffers setup
     mFrameBuffer = new Framebuffer(dimensions);
     mDepthFrameBuffer = new Framebuffer(dimensions);
 
     //Shaders
-    this->depthShader = new Shader("DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag");
+    this->depth_shader.Assign(new asset::Shader("shader_depth", "DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag"));
+
+    //Asset Loaders
+    auto TextureLoader = new gfx::TextureLoader();
+    TextureLoader->AssignSelfAsLoader();
 }
 
-void RenderPipeline::SetPostProcessing(Shader* postprocess) {
-    this->postprocess = postprocess;
+void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
+    this->camera_shader.Assign(camshader);
 }
 bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
 
@@ -53,7 +55,7 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
 #pragma region Rendering
     auto& lights_mframe = this->lights_this_frame;
     /* =============== Render here =============== */
-    const auto render_scene_to_active_buffer = [=,&lights_mframe](Matrix4 tmat_PV, Shader* overrideShader = nullptr) {
+    const auto render_scene_to_active_buffer = [=,&lights_mframe](Matrix4 tmat_PV, asset::Shader* overrideShader = nullptr) {
         //Loop through all objects
         for (auto& obj : drawcalls)
         {
@@ -77,7 +79,7 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
                 auto& textureOverride = obj->m_material->textureOverrides[i];
 
                 auto tex_slot = SelectEmptyTextureSlot();
-                curshader->SetTextureOverride(textureOverride.parameterName, textureOverride.texture, tex_slot);
+                curshader->SetTextureOverride(textureOverride.parameterName, textureOverride.textureRef.Get_asset(), tex_slot);
             }
 
             //Pass the necessary CPU-computed data to the object shader
@@ -304,13 +306,13 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
 
                 SelectBuffer(dirlight->shadowmaps[i]);
                 if (i > 0) {
-                    depthShader->SetOverride("avoid_enabled", true);
-                    depthShader->SetOverride("avoid_matrix", higherResolution_avoid);
+                    depth_shader.Get_asset()->SetOverride("avoid_enabled", true);
+                    depth_shader.Get_asset()->SetOverride("avoid_matrix", higherResolution_avoid);
                 }
 
-                render_scene_to_active_buffer(lightProjection * lightView, depthShader);
+                render_scene_to_active_buffer(lightProjection * lightView, depth_shader.Get_asset());
                 
-                depthShader->SetOverride("avoid_enabled", false);
+                depth_shader.Get_asset()->SetOverride("avoid_enabled", false);
                 
                 DeSelectBuffer();
 
@@ -330,22 +332,25 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& 
     DeSelectBuffer();
     //Draw to the depth buffer using a depth shader
     SelectBuffer(mDepthFrameBuffer);
-    render_scene_to_active_buffer(_frustrum, depthShader);
+    render_scene_to_active_buffer(_frustrum, depth_shader.Get_asset());
 
     DeSelectBuffer();
 
     //Assign camera shader as post-processing
-    auto camShaderId = postprocess->shaderID;
+    auto camShaderId = camera_shader.Get_asset()->Get_gl_id();
     glUseProgram(camShaderId);
     glBindVertexArray(mFrameBuffer->quadVAO);
     glDisable(GL_DEPTH_TEST); //Temporarily disable depth test
 
     //Attach the color texture to the post-process shader
     glActiveTexture(GL_TEXTURE0);
-    postprocess->SetTextureOverride("colorBufferTexture", mFrameBuffer, 0);
-    //Attach the depth texture to the post-process shader
+    GLuint texAddress = glGetUniformLocation(camShaderId, "colorBufferTexture");
+    glBindTexture(GL_TEXTURE_2D, mFrameBuffer->textureColorbuffer);
+    glUniform1i(texAddress, 0);
     glActiveTexture(GL_TEXTURE1);
-    postprocess->SetTextureOverride("depthBufferTexture", mDepthFrameBuffer, 1);
+    GLuint texAddress = glGetUniformLocation(camShaderId, "depthBufferTexture");
+    glBindTexture(GL_TEXTURE_2D, mDepthFrameBuffer->textureColorbuffer);
+    glUniform1i(texAddress, 1);
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
     

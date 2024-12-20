@@ -3,10 +3,8 @@
 namespace gbe {
     using namespace gfx;
 
-    Skybox::Skybox(TextureCubeMap* cubemap)
+    Skybox::Skybox()
     {
-        this->textureCubeMap = cubemap;
-
         glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
@@ -29,6 +27,7 @@ namespace gbe {
 
     void Skybox::Render(Matrix4 viewMat, Matrix4 proj)
     {
+        /*
         glDepthMask(GL_FALSE);
         glDepthFunc(GL_LEQUAL);
         glUseProgram(this->shader->shaderID);
@@ -41,11 +40,12 @@ namespace gbe {
 
         glBindVertexArray(this->VAO);
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_CUBE_MAP, this->textureCubeMap->texID);
+        //glBindTexture(GL_TEXTURE_CUBE_MAP, this->textureCubeMap->texID);
         glUniform1i(glGetUniformLocation(this->shader->shaderID, "skybox"), 0);
 
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
         glDepthMask(GL_TRUE);
         glDepthFunc(GL_LESS);
+        */
     }
 }

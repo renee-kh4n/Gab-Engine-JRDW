@@ -1,15 +1,11 @@
 #pragma once
-
-#include "Shader.h"
-#include "Texture.h"
-#include "../Math/Matrix4.h"
+#include "Math/gbe_math.h"
+#include <glad/glad.h>
 
 namespace gbe {
     namespace gfx {
         class Skybox {
         public:
-            Shader* shader;
-            TextureCubeMap* textureCubeMap;
 
             GLuint VAO, VBO, EBO;
 
@@ -45,7 +41,7 @@ namespace gbe {
                 6,2,3
             };
 
-            Skybox(TextureCubeMap*);
+            Skybox();
             void Render(Matrix4 viewMat, Matrix4 proj);
         };
     }

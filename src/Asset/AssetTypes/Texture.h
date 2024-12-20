@@ -12,6 +12,8 @@ namespace gbe {
 				unsigned int gl_id = 0;
 				Vector2Int dimensions;
 				int colorchannels;
+				bool loaded_in_gpu = false;
+				unsigned int gpu_texture_address;
 			};
 		private:
 			TextureData data;
@@ -19,6 +21,8 @@ namespace gbe {
 			Texture(std::string id, const char* path);
 
 			unsigned int Get_gl_id();
+
+			bool CheckGpuLoaded(int& address);
 		};
 	}
 }

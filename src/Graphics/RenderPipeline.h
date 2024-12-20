@@ -6,16 +6,17 @@
 
 #include <vector>
 #include <algorithm>
-#include "Shader.h"
-#include "Texture.h"
-#include "DrawCall.h"
-#include "Skybox.h"
-#include "Light.h"
-#include "Framebuffer.h"
 
 #include <functional>
 
 #include "Math/gbe_math.h"
+#include "Asset/gbe_asset.h"
+
+#include "DrawCall.h"
+#include "Skybox.h"
+#include "Light.h"
+#include "Framebuffer.h"
+#include "AssetLoaders/TextureLoader.h"
 
 namespace gbe {
 	using namespace gfx;
@@ -23,7 +24,7 @@ namespace gbe {
 	class RenderPipeline {
 	private:
 		Vector2Int resolution;
-		Shader* postprocess;
+		asset::AssetReference<asset::Shader> camera_shader;
 
 		std::vector<DrawCall*> drawcalls;
 
@@ -32,7 +33,7 @@ namespace gbe {
 
 		//--------CACHE--------//
 		//SHADERS
-		Shader* depthShader;
+		asset::AssetReference<asset::Shader> depth_shader;
 
 		//BUFFERS
 		Framebuffer* mFrameBuffer;
@@ -41,7 +42,7 @@ namespace gbe {
 		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2Int);
 		void RegisterDrawCall(DrawCall*);
 
-		void SetPostProcessing(Shader* postprocess);
+		void SetCameraShader(asset::Shader* postprocess);
 		bool TryPushLight(gfx::Light* data, bool priority = false);
 
 		void SetResolution(Vector2Int newresolution);

@@ -1,7 +1,8 @@
-#include "GraphicsAssetLoader.h"
+#include "TextureLoader.h"
 
-bool gbe::gfx::GraphicsAssetLoader::Load_Texture(asset::Texture* target, asset::Texture::TextureData& data)
-{
+gbe::gfx::TextureLoader mTextureLoader;
+
+bool gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* target, gbe::asset::Texture::TextureData* data) {
 	std::string pathstr = target->GetPath();
 
 	GLuint texID;
@@ -20,9 +21,14 @@ bool gbe::gfx::GraphicsAssetLoader::Load_Texture(asset::Texture* target, asset::
 	glGenerateMipmap(GL_TEXTURE_2D);
 	stbi_image_free(tex_bytes);
 
-	data.gl_id = texID;
-	data.colorchannels = colorchannels;
-	data.dimensions = Vector2Int(img_width, img_height);
+	data->gl_id = texID;
+	data->colorchannels = colorchannels;
+	data->dimensions = Vector2Int(img_width, img_height);
 
 	return true;
+}
+
+void gbe::gfx::TextureLoader::AssignSelfAsLoader()
+{
+	this->load_func = [this](auto target, auto data) {return this->LoadAsset_(target, data); };
 }

@@ -19,6 +19,10 @@ namespace gbe {
 			AssetT* Get_asset() {
 				return this->asset_ptr;
 			}
+
+			void Assign(AssetT* valueptr) {
+				this->asset_ptr = valueptr;
+			}
 		};
 	}
 }

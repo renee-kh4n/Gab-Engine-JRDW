@@ -7,10 +7,9 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"DrawCall.cpp"
 	"Material.cpp"
 	"Mesh.cpp"
-	"Shader.cpp"
 	"Skybox.cpp"
-	"Texture.cpp"
- "GraphicsAssetLoader.h" "GraphicsAssetLoader.cpp")
+	
+	"AssetLoaders/TextureLoader.cpp" "AssetLoaders/ShaderLoader.h" "AssetLoaders/ShaderLoader.cpp")
 
 find_package(Stb REQUIRED)
 target_include_directories(${CURRENT_CMAKE_LIB} PRIVATE ${Stb_INCLUDE_DIR})

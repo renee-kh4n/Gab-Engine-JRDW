@@ -2,7 +2,6 @@
 
 #include <unordered_map>
 #include <string>
-#include "Shader.h"
 #include "Asset/gbe_asset.h"
 #include "Math/gbe_math.h"
 
@@ -31,16 +30,16 @@ namespace gbe {
 		};
 
 		struct MaterialTexture {
-			asset::Texture* texture;
+			asset::AssetReference<asset::Texture> textureRef;
 			const char* parameterName;
 		};
 
 		struct Material {
 			std::unordered_map<const char*, MaterialOverride> overrides;
 			std::vector<MaterialTexture> textureOverrides;
-			Shader* m_shader;
+			asset::AssetReference<asset::Shader> m_shader;
 
-			Material(Shader*);
+			Material(asset::Shader*);
 
 			template <typename TValue>
 			void setOverride(const char* id, TValue value) {}
