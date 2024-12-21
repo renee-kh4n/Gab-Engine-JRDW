@@ -6,23 +6,16 @@
 namespace gbe {
 	namespace asset {
 
-		class Texture : public BaseAsset {
-		public:
+		namespace data {
 			struct TextureData {
-				unsigned int gl_id = 0;
 				Vector2Int dimensions;
 				int colorchannels;
-				bool loaded_in_gpu = false;
-				unsigned int gpu_texture_address;
 			};
-		private:
-			TextureData data;
+		}
+
+		class Texture : public BaseAsset<Texture, data::TextureData> {
 		public:
 			Texture(std::string id, const char* path);
-
-			unsigned int Get_gl_id();
-
-			bool CheckGpuLoaded(int& address);
 		};
 	}
 }

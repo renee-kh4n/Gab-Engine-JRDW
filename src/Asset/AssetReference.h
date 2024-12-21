@@ -1,10 +1,12 @@
 #pragma once
+#include <string>
 
 namespace gbe {
 	namespace asset {
 		template<class AssetT>
 		class AssetReference {
 		private:
+			std::string asset_id;
 			AssetT* asset_ptr;
 		public:
 			void ValidateAsset() {
@@ -22,6 +24,7 @@ namespace gbe {
 
 			void Assign(AssetT* valueptr) {
 				this->asset_ptr = valueptr;
+				this->asset_id = valueptr->Get_assetId();
 			}
 		};
 	}

@@ -8,8 +8,8 @@ namespace gbe {
         class Framebuffer {
         public:
             Vector2Int dimensions;
-            unsigned int framebuffer;
-            unsigned int textureColorbuffer;
+            unsigned int id;
+            unsigned int outputId;
             unsigned int rbo;
 
             unsigned int quadVAO, quadVBO;
@@ -38,11 +38,11 @@ namespace gbe {
                 glEnableVertexAttribArray(1);
                 glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
-                glGenFramebuffers(1, &framebuffer);
-                glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
+                glGenFramebuffers(1, &id);
+                glBindFramebuffer(GL_FRAMEBUFFER, id);
                 // create a color attachment texture
-                glGenTextures(1, &textureColorbuffer);
-                glBindTexture(GL_TEXTURE_2D, textureColorbuffer);
+                glGenTextures(1, &outputId);
+                glBindTexture(GL_TEXTURE_2D, outputId);
                 glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, (GLsizei)dimensions.x, (GLsizei)dimensions.y, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -50,7 +50,7 @@ namespace gbe {
                 glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_BORDER);
                 constexpr float borderColor[] = { 1.0f, 1.0f, 1.0f, 1.0f };
                 glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, borderColor);
-                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, outputId, 0);
                 // create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
                 glGenRenderbuffers(1, &rbo);
                 glBindRenderbuffer(GL_RENDERBUFFER, rbo);   

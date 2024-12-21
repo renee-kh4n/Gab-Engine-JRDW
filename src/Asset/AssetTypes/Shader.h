@@ -1,12 +1,14 @@
 #pragma once
 
 #include "Asset/BaseAsset.h"
-#include <functional>;
+#include <functional>
+#include "Asset/AssetTypes/Texture.h"
+#include "Math/gbe_math.h"
 
 namespace gbe {
 	namespace asset {
-		class Shader : public BaseAsset {
-		public:
+
+		namespace data {
 			struct ShaderData {
 				unsigned int gl_id = 0;
 
@@ -19,15 +21,16 @@ namespace gbe {
 					std::function<void(const char*, Vector4)> SetOverride_Vector4;
 					std::function<void(const char*, Matrix4)> SetOverride_Matrix4;
 					std::function<void(const char*, asset::Texture*)> SetOverride_Texture;
+					std::function<void(const char*, unsigned int)> SetOverride_TextureId;
 				}overridefunctions;
 			};
-		private:
-			ShaderData data;
+		}
+
+		class Shader : public BaseAsset<Shader, data::ShaderData> {
 		public:
 			Shader(std::string id, const char* vert, const char* frag);
 
 			unsigned int Get_gl_id();
-			void SetFunctions(ShaderData::ShaderOverrideFunctions& funcs);
 
 			//OVERRIDE FUNCTIONS
 			template <typename TValue>
@@ -62,7 +65,8 @@ namespace gbe {
 			void SetOverride<Matrix4>(const char* id, Matrix4 value) {
 				data.overridefunctions.SetOverride_Matrix4(id, value);
 			}
-			void SetTextureOverride(const char* id, asset::Texture* value, int gpu_tex_slot);
+			void SetTextureOverride(const char* id, asset::Texture* value);
+			void SetTextureIdOverride(const char* id, unsigned int value);
 
 		};
 	}

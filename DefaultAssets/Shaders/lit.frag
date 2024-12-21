@@ -64,9 +64,6 @@ uniform float specPhong;
 //OUT
 out vec4 FragColor;
 
-//DEBUG
-const bool DEBUG = false;
-
 vec3 hsv2rgb(vec3 c)
 {
     vec4 K = vec4(1.0, 2.0 / 3.0, 1.0 / 3.0, 3.0);
@@ -137,10 +134,6 @@ void main(){
 			totalshadow /= 9.0;
 
 			group_total *= totalshadow;
-
-			if(DEBUG){
-				FragColor = vec4(light_space_pos.xy, 1, 1);
-			}
 		}
 		/*
 		else if(curlight.type == POINT_LIGHT){
@@ -180,9 +173,6 @@ void main(){
 
 	light_total += group_total;
 
-	if(DEBUG)
-		return;
-
 	//Ambient calculation
 	float Pi = 6.28318530718;
 	vec3 ambientReflectDir = reflect(-viewDir, normal);
@@ -210,12 +200,11 @@ void main(){
 	
 
 	//Combine all light sources
-	vec3 final_color = (light_total + ambient) * color;
+	vec3 final_color = (light_total) * color;
 
 	if(hasDiffuseTex){
 		final_color = final_color * vec3(max(texture(texdiffuse, texCoord), 0.001));
 	}
-
-	if(DEBUG == false)
-		FragColor = vec4(final_color, 1.0f);
+	
+	FragColor = vec4(final_color, 1.0f);
 }

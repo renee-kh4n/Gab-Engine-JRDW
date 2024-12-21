@@ -3,12 +3,11 @@
 namespace gbe {
     using namespace gfx;
 
-    Camera::Camera(Window* mWindow, Shader* mShader)
+    Camera::Camera(Window* mWindow)
     {
         this->nearClip = 0.1f;
         this->farClip = 100.0f;
         this->mWindow = mWindow;
-        this->mShader = mShader;
     }
 
     Matrix4 Camera::GetViewMat()
@@ -19,7 +18,7 @@ namespace gbe {
         return glm::lookAt(this_pos, (glm::vec3)world.GetForward() + this_pos, (glm::vec3)world.GetUp());
     }
 
-    PerspectiveCamera::PerspectiveCamera(Window* mWindow, Shader* mShader) : Camera(mWindow, mShader)
+    PerspectiveCamera::PerspectiveCamera(Window* mWindow) : Camera(mWindow)
     {
     }
 
@@ -28,7 +27,7 @@ namespace gbe {
         return glm::perspective(glm::radians(this->angles), (float)mWindow->Get_dimentions().x / mWindow->Get_dimentions().y, this->nearClip, this->farClip);
     }
 
-    OrthographicCamera::OrthographicCamera(Window* mWindow, Shader* mShader) : Camera(mWindow, mShader)
+    OrthographicCamera::OrthographicCamera(Window* mWindow) : Camera(mWindow)
     {
     }
 

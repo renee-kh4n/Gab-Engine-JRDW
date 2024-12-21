@@ -4,9 +4,15 @@
 
 namespace gbe {
 	namespace asset {
-		class Mesh : public BaseAsset {
-		private:
-			unsigned int gl_id;
+
+		namespace data {
+			struct MeshData {
+				unsigned int gl_id;
+
+			};
+		}
+
+		class Mesh : public BaseAsset<Mesh, data::MeshData> {
 		public:
 
 		};

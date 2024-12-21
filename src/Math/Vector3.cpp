@@ -1,5 +1,6 @@
 #include "Vector3.h"
 
+#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 gbe::Vector3::Vector3() : glm::vec3(0)
@@ -57,7 +58,7 @@ gbe::Vector3::operator glm::vec3() const
 }
 
 const float* gbe::Vector3::Get_Ptr() {
-	return &((*this).x);
+	return glm::value_ptr((glm::vec3)*this);
 }
 
 

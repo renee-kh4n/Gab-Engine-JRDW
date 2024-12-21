@@ -17,6 +17,7 @@
 #include "Light.h"
 #include "Framebuffer.h"
 #include "AssetLoaders/TextureLoader.h"
+#include "AssetLoaders/ShaderLoader.h"
 
 namespace gbe {
 	using namespace gfx;
@@ -32,6 +33,10 @@ namespace gbe {
 		const int maxlights = 10;
 
 		//--------CACHE--------//
+		//Loaders
+		ShaderLoader shaderloader;
+		TextureLoader textureloader;
+		
 		//SHADERS
 		asset::AssetReference<asset::Shader> depth_shader;
 

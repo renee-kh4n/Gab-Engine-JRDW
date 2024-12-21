@@ -3,9 +3,9 @@
 namespace gbe {
 	using namespace gfx;
 
-	Material::Material(Shader* m_shader)
+	Material::Material(asset::Shader* m_shader)
 	{
-		this->m_shader = m_shader;
+		this->m_shader.Assign(m_shader);
 	}
 
 	MaterialOverride::MaterialOverride() {

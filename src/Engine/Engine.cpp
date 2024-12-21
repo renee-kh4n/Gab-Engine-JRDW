@@ -24,17 +24,17 @@ namespace gbe {
 #pragma endregion
 #pragma region Asset Loading
         //SHADER CACHING
-        auto litShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
-        auto unlitShader = new Shader("DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/unlit.frag");
-        auto Cam3rdPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
-        auto Cam1stPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
-        auto uiShader = new Shader("DefaultAssets/Shaders/gui.vert", "DefaultAssets/Shaders/gui.frag");
+        auto litShader = new asset::Shader("shader_lit", "DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
+        auto unlitShader = new asset::Shader("shader_unlit", "DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/unlit.frag");
+        auto uiShader = new asset::Shader("shader_gui", "DefaultAssets/Shaders/gui.vert", "DefaultAssets/Shaders/gui.frag");
 
-        auto CamOrthoPPShader = new Shader("DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
+        auto CamOrthoPPShader = new asset::Shader("shader_camera", "DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
+
+        mRenderPipeline->SetCameraShader(CamOrthoPPShader);
         //TEXTURE CACHING
-        auto chewbacca_tex = new asset::Texture("spheretex", "DefaultAssets/Tex/Maps/Model/cubeacca.jpg");
+        auto ball_tex = new asset::Texture("spheretex", "DefaultAssets/Tex/Maps/Model/basketball.jpg");
 
         //MESH CACHING
         auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
@@ -53,12 +53,12 @@ namespace gbe {
 
         auto mattex = MaterialTexture();
         mattex.parameterName = "texdiffuse";
-        mattex.textureRef.Assign(chewbacca_tex);
+        mattex.textureRef.Assign(ball_tex);
 
         auto create_lit_colored_mat = [litShader, mattex](Vector3 color) {
             auto mat = new Material(litShader);
             mat->textureOverrides.push_back(mattex);
-            mat->setOverride("color", color * 0.9f);
+            mat->setOverride("color", color);
             mat->setOverride("hasDiffuseTex", true);
             mat->setOverride("specStrength", 0.5f);
             mat->setOverride("specPhong", 16);
@@ -98,7 +98,7 @@ namespace gbe {
         mRenderPipeline->RegisterDrawCall(cube_drawcall);
 #pragma endregion
 #pragma region GUI Pipeline Setup
-        auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->shaderID);
+        auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->Get_gl_id());
         mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Input
@@ -141,7 +141,7 @@ namespace gbe {
 
         //light
         auto directional_light = new DirectionalLight();
-        directional_light->Set_Color(Vector3(0, 1, 1));
+        directional_light->Set_Color(Vector3(1, 1, 1));
         directional_light->Set_Intensity(1);
         directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(70, 0, 0)));
         directional_light->SetParent(root_object);
@@ -153,7 +153,7 @@ namespace gbe {
         auto camera_parent = new FlyingCameraControl();
         camera_parent->SetParent(player_input);
 
-        auto mPerspectiveCam = new PerspectiveCamera(mWindow, CamOrthoPPShader);
+        auto mPerspectiveCam = new PerspectiveCamera(mWindow);
         mPerspectiveCam->angles = 55;
         mPerspectiveCam->farClip = 40.0f;
         mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
@@ -294,7 +294,7 @@ namespace gbe {
                     break;
                 }
             }
-            mRenderPipeline->SetPostProcessing(active_camera->mShader);
+            
             Matrix4 frustrum = active_camera->getproj() * active_camera->GetViewMat();
             mRenderPipeline->RenderFrame(active_camera->World().position.Get(), active_camera->World().GetForward(), frustrum, active_camera->nearClip, active_camera->farClip);
             mGUIPipeline->DrawActiveCanvas();
