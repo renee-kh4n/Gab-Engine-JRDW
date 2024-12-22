@@ -2,12 +2,18 @@
 
 #include <string>
 #include <vector>
-#include "AssetLoader.h"
+#include "Asset/AssetLoading/AssetLoader.h"
 
 namespace gbe {
 	namespace asset {
+		namespace internal {
+			class BaseAsset_base {
+
+			};
+		}
+
 		template<class TFinal, class TData>
-		class BaseAsset {
+		class BaseAsset : internal::BaseAsset_base {
 		private:
 
 			std::vector<std::string> paths;

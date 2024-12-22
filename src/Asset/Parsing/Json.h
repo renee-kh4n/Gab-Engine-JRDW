@@ -2,9 +2,10 @@
 
 namespace gbe {
 	namespace asset {
-		class AssetDeserializer {
-		public:
+		namespace serialization {
+			class Json {
 
-		};
+			};
+		}
 	}
 }

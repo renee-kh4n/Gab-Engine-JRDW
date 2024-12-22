@@ -6,8 +6,15 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
  "AssetTypes/Texture.cpp"
  "AssetTypes/Shader.cpp"
  "AssetTypes/Mesh.cpp"
- "AssetSocket.h" "AssetSocket.cpp" "AssetDeserializer.h")
+ "AssetInjection/AssetSocket.h" 
+ "AssetInjection/AssetSocket.cpp" 
+ "AssetLoading/AssetDeserializer.h"
+ "AssetLoading/AssetLoader.h"
+ "Parsing/Json.h" "AssetLoading/AssetDeserializer.cpp")
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
+
+find_package(glaze CONFIG REQUIRED)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glaze::glaze)
 
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})
