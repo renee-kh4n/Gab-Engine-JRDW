@@ -26,7 +26,7 @@ float gbe::Vector3::SqrMagnitude() {
 	return (this->x * this->x) + (this->y * this->y) + (this->z * this->z);
 }
 
-gbe::Vector3& gbe::Vector3::Cross(gbe::Vector3 b) {
+gbe::Vector3 gbe::Vector3::Cross(gbe::Vector3 b) {
 	return Vector3((this->y * b.z) - (this->z * b.y), (this->x * b.z) - (this->z * b.x), (this->x * b.y) - (this->y * b.x));
 }
 
@@ -45,11 +45,13 @@ float gbe::Vector3::Magnitude()
 }
 
 gbe::Vector3& gbe::Vector3::operator+=(const gbe::Vector3& b) {
-	return (gbe::Vector3)glm::vec3::operator+=((glm::vec3)b);
+	glm::vec3::operator+=((glm::vec3)b);
+	return *this;
 }
 
 gbe::Vector3& gbe::Vector3::operator-=(const gbe::Vector3& b) {
-	return (gbe::Vector3)glm::vec3::operator-=((glm::vec3)b);
+	glm::vec3::operator-=((glm::vec3)b);
+	return *this;
 }
 
 gbe::Vector3::operator glm::vec3() const

@@ -14,7 +14,7 @@ namespace gbe{
 		Vector3(const glm::vec3& glmvec);
 
 		float SqrMagnitude();
-		Vector3& Cross(Vector3);
+		Vector3 Cross(Vector3);
 		Vector3 Normalize();
 		float Dot(Vector3 b);
 		float Magnitude();

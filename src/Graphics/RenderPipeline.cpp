@@ -22,7 +22,7 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
 	mDepthFrameBuffer = new Framebuffer(dimensions);
 
 	//Shaders
-	this->depth_shader.Assign(new asset::Shader("shader_depth", "DefaultAssets/Shaders/simple.vert", "DefaultAssets/Shaders/depth.frag"));
+	this->depth_shader.Assign(new asset::Shader("DefaultAssets/Shaders/depth.shader.gbe"));
 }
 
 void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
@@ -49,7 +49,7 @@ void gbe::RenderPipeline::SetResolution(Vector2Int newresolution) {
 	mDepthFrameBuffer = new Framebuffer(newresolution);
 }
 
-void gbe::RenderPipeline::RenderFrame(Vector3& from, Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
+void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
 {
 #pragma region Rendering
 	//PRIVATE MEMBERS NEEDED BY LOCAL FUNCTION

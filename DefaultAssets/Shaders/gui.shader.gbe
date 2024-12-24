@@ -1,0 +1,6 @@
+{
+  "asset_type": "texture",
+  "asset_id": "texture_sphere",
+  "vert": "gui.vert",
+  "frag": "gui.frag"
+}

@@ -3,14 +3,17 @@
 #include <fstream>
 #include <sstream>
 
-bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, asset::data::ShaderData* data) {
-	auto vertShader = TryCompileShader(asset->GetPath(0), GL_VERTEX_SHADER);
-	auto fragShader = TryCompileShader(asset->GetPath(1), GL_FRAGMENT_SHADER);
+bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
+	auto vertpath = asset->Get_asset_directory() + importdata.vert;
+	auto fragpath = asset->Get_asset_directory() + importdata.frag;
+	
+	auto vertShader = TryCompileShader(vertpath, GL_VERTEX_SHADER);
+	auto fragShader = TryCompileShader(fragpath, GL_FRAGMENT_SHADER);
 
 	unsigned int shaderID = glCreateProgram();
 	glAttachShader(shaderID, vertShader);
 	glAttachShader(shaderID, fragShader);
-	std::cout << "Compiling: " + asset->GetPath(0) + " | " + asset->GetPath(1) << " INTO -> " << std::to_string(shaderID) << std::endl;
+	std::cout << "Compiling: " + vertpath + " | " + fragpath << " INTO -> " << std::to_string(shaderID) << std::endl;
 
 	GLsizei count = 0;
 	GLuint shaders[] = { 0, 0, 0, 0 };
@@ -74,7 +77,7 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, asset::data::Shade
 	return true;
 }
 
-void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, asset::data::ShaderData* data) {
+void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
 
 }
 

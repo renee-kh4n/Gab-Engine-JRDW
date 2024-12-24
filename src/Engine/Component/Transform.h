@@ -21,9 +21,9 @@ namespace gbe {
 		Vector3 Forward;
 	public:
 
-		Vector3 GetRight();
-		Vector3 GetUp();
-		Vector3 GetForward();
+		const Vector3& GetRight();
+		const Vector3& GetUp();
+		const Vector3& GetForward();
 
 		TrackedVariable<Vector3> position = TrackedVariable<Vector3>([this](auto var) {this->OnComponentChange(TransformChangeType::TRANSLATION); });
 		TrackedVariable<Vector3> scale = TrackedVariable<Vector3>([this](auto var) {this->OnComponentChange(TransformChangeType::SCALE); });

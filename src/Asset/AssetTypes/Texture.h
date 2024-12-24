@@ -7,15 +7,19 @@ namespace gbe {
 	namespace asset {
 
 		namespace data {
-			struct TextureData {
+			struct TextureImportData
+			{
+				std::string filename;
+			};
+			struct TextureLoadData {
 				Vector2Int dimensions;
 				int colorchannels;
 			};
 		}
 
-		class Texture : public BaseAsset<Texture, data::TextureData> {
+		class Texture : public BaseAsset<Texture, data::TextureImportData, data::TextureLoadData> {
 		public:
-			Texture(std::string id, const char* path);
+			Texture(std::string asset_path);
 		};
 	}
 }

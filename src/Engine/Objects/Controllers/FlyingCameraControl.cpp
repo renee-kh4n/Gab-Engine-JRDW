@@ -11,7 +11,7 @@ namespace gbe {
 			if (value->state != MouseDrag<Keys::MOUSE_RIGHT>::WHILE)
 				return;
 
-			Vector2 drag_delta = value->delta;
+			Vector2Int drag_delta = value->delta;
 			drag_delta *= 0.5f;
 
 			this->orbital_rotation.x -= drag_delta.x;

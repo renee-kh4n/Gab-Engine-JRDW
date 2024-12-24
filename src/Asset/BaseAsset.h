@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Asset/AssetLoading/AssetLoader.h"
+#include "Asset/Parsing/gbeParser.h"
 
 namespace gbe {
 	namespace asset {
@@ -12,29 +13,29 @@ namespace gbe {
 			};
 		}
 
-		template<class TFinal, class TData>
+		template<class TFinal, class TImportData, class TLoadData>
 		class BaseAsset : internal::BaseAsset_base {
 		private:
-
-			std::vector<std::string> paths;
 			std::string asset_identifier;
+			std::string asset_directory;
 			bool destroy_queued;
 		protected:
-			TData data;
+			struct BaseImportData {
+				std::string asset_type;
+				std::string asset_id;
+			}base_import_data;
+
+			TImportData import_data;
+
+			TLoadData load_data;
 		public:
-			template<typename... Args>
-			BaseAsset(std::string id, Args... args) {
-				this->asset_identifier = id;
-				for (const auto arg : {args...})
-				{
-					paths.push_back(arg);
-				}
-
-				AssetLoader<TFinal, TData>::LoadAsset(static_cast<TFinal*>(this), &this->data);
+			BaseAsset(std::string asset_path) {
+				gbe::asset::serialization::gbeParser::PopulateClass(this->base_import_data, asset_path);
+				gbe::asset::serialization::gbeParser::PopulateClass(this->import_data, asset_path);
+				AssetLoader<TFinal, TImportData, TLoadData>::LoadAsset(static_cast<TFinal*>(this), this->import_data, &this->load_data);
 			}
-
-			std::string GetPath(int index = 0) {
-				return this->paths[index];
+			std::string Get_asset_directory() {
+				return this->asset_directory;
 			}
 			std::string Get_assetId() {
 				return this->asset_identifier;

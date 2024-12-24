@@ -24,17 +24,17 @@ namespace gbe {
 #pragma endregion
 #pragma region Asset Loading
         //SHADER CACHING
-        auto litShader = new asset::Shader("shader_lit", "DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/lit.frag");
-        auto unlitShader = new asset::Shader("shader_unlit", "DefaultAssets/Shaders/lit.vert", "DefaultAssets/Shaders/unlit.frag");
-        auto uiShader = new asset::Shader("shader_gui", "DefaultAssets/Shaders/gui.vert", "DefaultAssets/Shaders/gui.frag");
+        auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");
+        auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
+        auto uiShader = new asset::Shader("DefaultAssets/Shaders/gui.shader.gbe");
 
-        auto CamOrthoPPShader = new asset::Shader("shader_camera", "DefaultAssets/Shaders/frame.vert", "DefaultAssets/Shaders/frame.frag");
+        auto CamOrthoPPShader = new asset::Shader("DefaultAssets/Shaders/frame.shader.gbe");
         CamOrthoPPShader->SetOverride("saturation", 1.0f);
         CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
 
         mRenderPipeline->SetCameraShader(CamOrthoPPShader);
         //TEXTURE CACHING
-        auto ball_tex = new asset::Texture("spheretex", "DefaultAssets/Tex/Maps/Model/basketball.jpg");
+        auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.jpg.gbe");
 
         //MESH CACHING
         auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");

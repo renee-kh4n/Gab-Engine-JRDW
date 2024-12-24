@@ -9,7 +9,11 @@ namespace gbe {
 	namespace asset {
 
 		namespace data {
-			struct ShaderData {
+			struct ShaderImportData {
+				std::string vert;
+				std::string frag;
+			};
+			struct ShaderLoadData {
 				unsigned int gl_id = 0;
 
 				struct ShaderOverrideFunctions {
@@ -26,9 +30,9 @@ namespace gbe {
 			};
 		}
 
-		class Shader : public BaseAsset<Shader, data::ShaderData> {
+		class Shader : public BaseAsset<Shader, data::ShaderImportData, data::ShaderLoadData> {
 		public:
-			Shader(std::string id, const char* vert, const char* frag);
+			Shader(std::string path);
 
 			unsigned int Get_gl_id();
 
@@ -39,31 +43,31 @@ namespace gbe {
 			}
 			template<>
 			void SetOverride<bool>(const char* id, bool value) {
-				data.overridefunctions.SetOverride_bool(id, value);
+				load_data.overridefunctions.SetOverride_bool(id, value);
 			}
 			template<>
 			void SetOverride<int>(const char* id, int value) {
-				data.overridefunctions.SetOverride_int(id, value);
+				load_data.overridefunctions.SetOverride_int(id, value);
 			}
 			template<>
 			void SetOverride<float>(const char* id, float value) {
-				data.overridefunctions.SetOverride_float(id, value);
+				load_data.overridefunctions.SetOverride_float(id, value);
 			}
 			template<>
 			void SetOverride<Vector2>(const char* id, Vector2 value) {
-				data.overridefunctions.SetOverride_Vector2(id, value);
+				load_data.overridefunctions.SetOverride_Vector2(id, value);
 			}
 			template<>
 			void SetOverride<Vector3>(const char* id, Vector3 value) {
-				data.overridefunctions.SetOverride_Vector3(id, value);
+				load_data.overridefunctions.SetOverride_Vector3(id, value);
 			}
 			template<>
 			void SetOverride<Vector4>(const char* id, Vector4 value) {
-				data.overridefunctions.SetOverride_Vector4(id, value);
+				load_data.overridefunctions.SetOverride_Vector4(id, value);
 			}
 			template<>
 			void SetOverride<Matrix4>(const char* id, Matrix4 value) {
-				data.overridefunctions.SetOverride_Matrix4(id, value);
+				load_data.overridefunctions.SetOverride_Matrix4(id, value);
 			}
 			void SetTextureOverride(const char* id, asset::Texture* value);
 			void SetTextureIdOverride(const char* id, unsigned int value);

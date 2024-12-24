@@ -12,10 +12,10 @@
 #include "Math/gbe_math.h"
 #include "Asset/gbe_asset.h"
 
-#include "DrawCall.h"
-#include "Skybox.h"
-#include "Light.h"
-#include "Framebuffer.h"
+#include "Data/DrawCall.h"
+#include "Data/Skybox.h"
+#include "Data/Light.h"
+#include "Data/Framebuffer.h"
 #include "AssetLoaders/TextureLoader.h"
 #include "AssetLoaders/ShaderLoader.h"
 
@@ -51,7 +51,7 @@ namespace gbe {
 		bool TryPushLight(gfx::Light* data, bool priority = false);
 
 		void SetResolution(Vector2Int newresolution);
-		void RenderFrame(Vector3& from, Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);
+		void RenderFrame(Vector3& from, const Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);
 
 		void CleanUp();
 	};

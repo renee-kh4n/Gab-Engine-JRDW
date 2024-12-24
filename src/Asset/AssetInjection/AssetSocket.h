@@ -1,7 +1,7 @@
 #pragma once
 
 #include <list>
-#include "Asset/AssetReference.h"
+#include "Asset/AssetInjection/AssetReference.h"
 
 namespace gbe {
 	namespace asset {

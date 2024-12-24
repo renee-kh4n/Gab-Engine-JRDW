@@ -1,5 +1,5 @@
 #pragma once
-#include "tiny_obj_loader.h"
+#include "Graphics/tiny_obj_loader.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 

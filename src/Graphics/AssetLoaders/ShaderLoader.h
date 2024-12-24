@@ -7,12 +7,12 @@
 
 namespace gbe {
 	namespace gfx {
-		class ShaderLoader : public asset::AssetLoader<asset::Shader, asset::data::ShaderData> {
+		class ShaderLoader : public asset::AssetLoader<asset::Shader, asset::data::ShaderImportData, asset::data::ShaderLoadData> {
 		private:
 			unsigned int TryCompileShader(std::string path, int compile_type);
 		protected:
-			bool LoadAsset_(asset::Shader* asset, asset::data::ShaderData* data) override;
-			void UnLoadAsset_(asset::Shader* asset, asset::data::ShaderData* data) override;
+			bool LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) override;
+			void UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) override;
 		};
 	}
 }

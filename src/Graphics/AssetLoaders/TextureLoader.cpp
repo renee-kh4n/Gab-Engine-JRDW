@@ -1,7 +1,7 @@
 #include "TextureLoader.h"
 
-bool gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* target, gbe::asset::data::TextureData* data) {
-	std::string pathstr = target->GetPath();
+bool gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* target, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* data) {
+	std::string pathstr = target->Get_asset_directory() + importdata.filename;
 
 	GLuint texID;
 	stbi_uc* tex_bytes;
@@ -27,7 +27,7 @@ bool gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* target, gbe::asset
 
 	return true;
 }
-void gbe::gfx::TextureLoader::UnLoadAsset_(gbe::asset::Texture* target, gbe::asset::data::TextureData* data) {
+void gbe::gfx::TextureLoader::UnLoadAsset_(gbe::asset::Texture* target, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* data) {
 
 }
 

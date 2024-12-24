@@ -34,16 +34,16 @@ void gbe::Transform::OnComponentChange(TransformChangeType value)
 		this->onChange(value);
 }
 
-gbe::Vector3 gbe::Transform::GetRight()
+const gbe::Vector3& gbe::Transform::GetRight()
 {
 	return this->Right;
 }
 
-gbe::Vector3 gbe::Transform::GetUp()
+const gbe::Vector3& gbe::Transform::GetUp()
 {
 	return this->Up;
 }
-gbe::Vector3 gbe::Transform::GetForward()
+const gbe::Vector3& gbe::Transform::GetForward()
 {
 	return this->Forward;
 }
