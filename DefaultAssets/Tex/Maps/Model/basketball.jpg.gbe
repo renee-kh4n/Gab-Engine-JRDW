@@ -1,4 +1,5 @@
 {
-  "asset_type": "texture"
-  "asset_id": "texture_sphere"
+  "asset_type": "texture",
+  "asset_id": "texture_sphere",
+  "filename": "basketball.jpg"
 }

@@ -32,6 +32,14 @@ namespace gbe {
 			BaseAsset(std::string asset_path) {
 				gbe::asset::serialization::gbeParser::PopulateClass(this->base_import_data, asset_path);
 				gbe::asset::serialization::gbeParser::PopulateClass(this->import_data, asset_path);
+				
+				this->asset_directory = asset_path;
+
+				while (this->asset_directory.back() != '/')
+				{
+					this->asset_directory.pop_back();
+				}
+				
 				AssetLoader<TFinal, TImportData, TLoadData>::LoadAsset(static_cast<TFinal*>(this), this->import_data, &this->load_data);
 			}
 			std::string Get_asset_directory() {
