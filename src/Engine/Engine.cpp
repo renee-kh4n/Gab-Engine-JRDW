@@ -135,7 +135,7 @@ namespace gbe {
         auto gravity_volume = new ForceVolume();
         gravity_volume->shape = ForceVolume::GLOBAL;
         gravity_volume->mode = ForceVolume::DIRECTIONAL;
-        gravity_volume->vector = Vector3(0.f, -4, 0.f);
+        gravity_volume->vector = Vector3(0.f, -10, 0.f);
         gravity_volume->forceMode = ForceVolume::VELOCITY;
         gravity_volume->SetParent(root_object);
 
