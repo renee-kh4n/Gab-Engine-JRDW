@@ -21,6 +21,7 @@ namespace gbe {
 	private:
 		//Current Root and its handlers
 		Root* current_root;
+		Root* queued_rootchange;
 
 		PhysicsHandler* mPhysicsHandler;
 		InputHandler* mInputHandler;
@@ -28,6 +29,8 @@ namespace gbe {
 		ObjectHandler<EarlyUpdate>* mEarlyUpdate;
 		ObjectHandler<Update>* mUpdate;
 		ObjectHandler<LateUpdate>* mLateUpdate;
+
+		void UpdateHandlers();
 	public:
 		Engine();
 		bool ChangeRoot(Root* newroot);

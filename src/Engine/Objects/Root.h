@@ -8,6 +8,7 @@ namespace gbe{
 	private:
 		std::list<Handler*> handlers;
 	public:
+		~Root();
 		void RegisterHandler(Handler* handler);
 
 		virtual void OnEnterHierarchy(Object* newChild);
@@ -15,7 +16,17 @@ namespace gbe{
 
 		template<typename T>
 		T* GetHandler() {
+			T* toreturn = nullptr;
 
+			for (auto handler : this->handlers)
+			{
+				toreturn = dynamic_cast<T*>(handler);
+
+				if (toreturn != nullptr)
+					break;
+			}
+
+			return toreturn;
 		}
 	};
 }
