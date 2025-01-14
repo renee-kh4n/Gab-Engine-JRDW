@@ -8,6 +8,32 @@ namespace gbe {
 
 	}
 
+    bool Engine::ChangeRoot(Root* newroot)
+    {
+        //Object handlers setup
+        mPhysicsHandler = new PhysicsHandler(mPhysicsPipeline);
+        mInputHandler = new InputHandler();
+        mLightHandler = new ObjectHandler<gbe::LightObject>();
+        mEarlyUpdate = new ObjectHandler<EarlyUpdate>();
+        mUpdate = new ObjectHandler<Update>();
+        mLateUpdate = new ObjectHandler<LateUpdate>();
+
+        return true;
+    }
+
+    Root* Engine::CreateBlankRoot()
+    {
+        auto root_object = new Root();
+        root_object->RegisterHandler(new PhysicsHandler(mPhysicsPipeline));
+        root_object->RegisterHandler(new InputHandler());
+        root_object->RegisterHandler(new ObjectHandler<gbe::LightObject>());
+        root_object->RegisterHandler(new ObjectHandler<EarlyUpdate>());
+        root_object->RegisterHandler(new ObjectHandler<Update>());
+        root_object->RegisterHandler(new ObjectHandler<LateUpdate>());
+
+        return root_object;
+    }
+
 	void Engine::Run()
 	{
         //WINDOW
@@ -16,10 +42,10 @@ namespace gbe {
 #pragma region Rendering Pipeline Setup
         //RenderPipeline setup
         Camera* active_camera = nullptr;
-        auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
+        mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Physics Pipeline Setup
-        auto mPhysicsPipeline = new physics::PhysicsPipeline();
+        mPhysicsPipeline = new physics::PhysicsPipeline();
         mPhysicsPipeline->Init();
 #pragma endregion
 #pragma region Asset Loading
@@ -98,11 +124,11 @@ namespace gbe {
         mRenderPipeline->RegisterDrawCall(cube_drawcall);
 #pragma endregion
 #pragma region GUI Pipeline Setup
-        auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->Get_gl_id());
+        mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->Get_gl_id());
         mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Input
-        auto mInputSystem = new InputSystem();
+        mInputSystem = new InputSystem();
         auto player_name = "MAIN";
         mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::MOUSE_LEFT>());
         mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
@@ -110,24 +136,9 @@ namespace gbe {
         mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 #pragma endregion
 #pragma region Scene Root setup
-        //Object handlers setup
-        auto mPhysicsHandler = new PhysicsHandler();
-        mPhysicsHandler->SetPipeline(mPhysicsPipeline);
+        auto new_root = this->CreateBlankRoot();
+        this->ChangeRoot(new_root);
 
-        auto mInputHandler = new InputHandler();
-        auto mLightHandler = new ObjectHandler<gbe::LightObject>();
-        auto mEarlyUpdate = new ObjectHandler<EarlyUpdate>();
-        auto mUpdate = new ObjectHandler<Update>();
-        auto mLateUpdate = new ObjectHandler<LateUpdate>();
-
-        //root
-        auto root_object = new Root();
-        root_object->RegisterHandler(mPhysicsHandler);
-        root_object->RegisterHandler(mInputHandler);
-        root_object->RegisterHandler(mLightHandler);
-        root_object->RegisterHandler(mEarlyUpdate);
-        root_object->RegisterHandler(mUpdate);
-        root_object->RegisterHandler(mLateUpdate);
 #pragma endregion
 #pragma region Scene Objects setup
         //Global objects

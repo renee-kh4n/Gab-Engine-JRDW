@@ -12,5 +12,10 @@ namespace gbe{
 
 		virtual void OnEnterHierarchy(Object* newChild);
 		virtual void OnExitHierarchy(Object* newChild);
+
+		template<typename T>
+		T* GetHandler() {
+
+		}
 	};
 }

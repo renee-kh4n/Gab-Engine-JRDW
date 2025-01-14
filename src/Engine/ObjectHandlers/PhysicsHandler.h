@@ -17,9 +17,7 @@ namespace gbe {
 		physics::PhysicsPipeline* mPipeline;
 	public:
 
-		PhysicsHandler();
-
-		void SetPipeline(physics::PhysicsPipeline*);
+		PhysicsHandler(physics::PhysicsPipeline*);
 
 		void Update();
 

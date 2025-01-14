@@ -2,14 +2,9 @@
 
 #include <iostream>
 
-gbe::PhysicsHandler::PhysicsHandler()
+gbe::PhysicsHandler::PhysicsHandler(physics::PhysicsPipeline* pipeline)
 {
 	this->subhandlers.push_back(&this->forcevolume_handler);
-	this->mPipeline = nullptr;
-}
-
-void gbe::PhysicsHandler::SetPipeline(physics::PhysicsPipeline* pipeline)
-{
 	this->mPipeline = pipeline;
 }
 
