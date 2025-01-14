@@ -5,24 +5,26 @@
 #include "GUI/gbe_gui.h"
 #include "Math/gbe_math.h"
 #include "Physics/gbe_physics.h"
+#include "Window/gbe_window.h"
 #include "Asset/gbe_asset.h"
-#include "gbe_engine.h"
+#include "Objects/Root.h"
+#include "ObjectHandlers/PhysicsHandler.h"
+#include "ObjectHandlers/ObjectHandler.h"
+#include "ObjectHandlers/InputHandler.h"
+#include "ObjectFunctions/EarlyUpdate.h"
+#include "ObjectFunctions/LateUpdate.h"
+#include "ObjectFunctions/Update.h"
+#include "Objects/Rendering/Lights/LightObject.h"
 
 namespace gbe {
 	class Engine {
 	private:
-		//Global Pipelines
-		RenderPipeline* mRenderPipeline;
-		physics::PhysicsPipeline* mPhysicsPipeline;
-		gbe::gui::gbuiPipeline* mGUIPipeline;
-		InputSystem* mInputSystem;
-
 		//Current Root and its handlers
 		Root* current_root;
 
 		PhysicsHandler* mPhysicsHandler;
 		InputHandler* mInputHandler;
-		ObjectHandler<gbe::LightObject>* mLightHandler;
+		ObjectHandler<LightObject>* mLightHandler;
 		ObjectHandler<EarlyUpdate>* mEarlyUpdate;
 		ObjectHandler<Update>* mUpdate;
 		ObjectHandler<LateUpdate>* mLateUpdate;

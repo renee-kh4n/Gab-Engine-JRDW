@@ -1,6 +1,8 @@
 
 #include "Engine.h"
 
+#include "gbe_engine.h"
+
 namespace gbe {
     
     Engine::Engine()
@@ -11,20 +13,22 @@ namespace gbe {
     bool Engine::ChangeRoot(Root* newroot)
     {
         //Object handlers setup
-        mPhysicsHandler = new PhysicsHandler(mPhysicsPipeline);
+        mPhysicsHandler = new PhysicsHandler(physics::PhysicsPipeline::Get_Instance());
         mInputHandler = new InputHandler();
         mLightHandler = new ObjectHandler<gbe::LightObject>();
         mEarlyUpdate = new ObjectHandler<EarlyUpdate>();
         mUpdate = new ObjectHandler<Update>();
         mLateUpdate = new ObjectHandler<LateUpdate>();
 
+        this->current_root = newroot;
+        
         return true;
     }
 
     Root* Engine::CreateBlankRoot()
     {
         auto root_object = new Root();
-        root_object->RegisterHandler(new PhysicsHandler(mPhysicsPipeline));
+        root_object->RegisterHandler(new PhysicsHandler(physics::PhysicsPipeline::Get_Instance()));
         root_object->RegisterHandler(new InputHandler());
         root_object->RegisterHandler(new ObjectHandler<gbe::LightObject>());
         root_object->RegisterHandler(new ObjectHandler<EarlyUpdate>());
@@ -42,10 +46,11 @@ namespace gbe {
 #pragma region Rendering Pipeline Setup
         //RenderPipeline setup
         Camera* active_camera = nullptr;
-        mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
+        auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
+        mRenderPipeline->Init();
 #pragma endregion
 #pragma region Physics Pipeline Setup
-        mPhysicsPipeline = new physics::PhysicsPipeline();
+        auto mPhysicsPipeline = new physics::PhysicsPipeline();
         mPhysicsPipeline->Init();
 #pragma endregion
 #pragma region Asset Loading
@@ -124,23 +129,20 @@ namespace gbe {
         mRenderPipeline->RegisterDrawCall(cube_drawcall);
 #pragma endregion
 #pragma region GUI Pipeline Setup
-        mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->Get_gl_id());
+        auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->Get_gl_id());
         mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Input
-        mInputSystem = new InputSystem();
+        auto mInputSystem = new InputSystem();
         auto player_name = "MAIN";
         mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::MOUSE_LEFT>());
         mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
         mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
         mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 #pragma endregion
-#pragma region Scene Root setup
-        auto new_root = this->CreateBlankRoot();
-        this->ChangeRoot(new_root);
-
-#pragma endregion
-#pragma region Scene Objects setup
+#pragma region Main Game Root setup
+        auto game_root = this->CreateBlankRoot();
+        
         //Global objects
         //physics force setup
         auto gravity_volume = new ForceVolume();
@@ -148,19 +150,19 @@ namespace gbe {
         gravity_volume->mode = ForceVolume::DIRECTIONAL;
         gravity_volume->vector = Vector3(0.f, -10, 0.f);
         gravity_volume->forceMode = ForceVolume::VELOCITY;
-        gravity_volume->SetParent(root_object);
+        gravity_volume->SetParent(game_root);
 
         //light
         auto directional_light = new DirectionalLight();
         directional_light->Set_Color(Vector3(1, 1, 1));
         directional_light->Set_Intensity(1);
         directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(70, 0, 0)));
-        directional_light->SetParent(root_object);
+        directional_light->SetParent(game_root);
         directional_light->Set_ShadowmapResolutions(1080);
 
         //Camera setup
         auto player_input = new InputPlayer(player_name);
-        player_input->SetParent(root_object);
+        player_input->SetParent(game_root);
         auto camera_parent = new FlyingCameraControl();
         camera_parent->SetParent(player_input);
 
@@ -176,7 +178,7 @@ namespace gbe {
 
         //GUI COMMUNICATOR
         auto gui_communicator = new GenericController();
-        gui_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([mGUIPipeline](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
+        gui_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([=](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
             if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
                 return;
 
@@ -188,7 +190,7 @@ namespace gbe {
         //Actual objects
         //platform
         RigidObject* platform = new RigidObject(true);
-        platform->SetParent(root_object);
+        platform->SetParent(game_root);
         platform->Local().position.Set(Vector3(0, -5, 0));
         platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
         platform->Local().scale.Set(Vector3(10, 1, 10));
@@ -199,9 +201,9 @@ namespace gbe {
         platform_renderer->SetParent(platform_collider);
         
         //Balls
-        auto spawnball = [get_random_drawcall, root_object](Vector3 pos, float radius) {
+        auto spawnball = [get_random_drawcall, game_root](Vector3 pos, float radius) {
             RigidObject* ball = new RigidObject();
-            ball->SetParent(root_object);
+            ball->SetParent(game_root);
 
             auto cradle_collider = new SphereCollider();
             cradle_collider->SetParent(ball);
@@ -232,8 +234,8 @@ namespace gbe {
             auto ball = spawnball(spawnpos, 0.2f);
             ball->body.AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
         };
-#pragma endregion
-#pragma region GUI OBJECTS SETUP
+
+        //SCENE GUI
         gbe::gui::gb_canvas* main_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
         mGUIPipeline->SetActiveCanvas(main_canvas);
 
@@ -254,9 +256,12 @@ namespace gbe {
         side_button->bl_offset = Vector2(-110, 0);
         side_button->Set_onClickAction(shoot_func);
         side_button->SetParent(button);
-
 #pragma endregion
+        
+        this->ChangeRoot(game_root);
+
 #pragma region MAIN LOOP
+
         //GLOBAL RUNTIME COMPONENTS
         auto mTime = new Time();
 
@@ -276,7 +281,7 @@ namespace gbe {
             }
 
             //Update input system
-            mInputSystem->UpdateStates([mInputHandler](std::string name, gbe::input::InputAction* action, bool changed) {
+            mInputSystem->UpdateStates([this](std::string name, gbe::input::InputAction* action, bool changed) {
                 for (auto input_player : mInputHandler->object_list) {
                     if (input_player->get_player_name() != name)
                         continue;
@@ -313,8 +318,8 @@ namespace gbe {
             mWindow->SwapBuffers();
 
             //Update other handlers
-            auto onTick = [mWindow, mGUIPipeline, mPhysicsPipeline, mPhysicsHandler, mUpdate, mLateUpdate, root_object](double deltatime) {
-                mPhysicsPipeline->Tick(deltatime);
+            auto onTick = [=](double deltatime) {
+                physics::PhysicsPipeline::Get_Instance()->Tick(deltatime);
                 mPhysicsHandler->Update();
 
                 float delta_f = (float)deltatime;
@@ -340,7 +345,7 @@ namespace gbe {
             //Delete all queued for deletions
             std::list<Object*> toDelete;
 
-            root_object->CallRecursively([&toDelete](Object* object) {
+            this->current_root->CallRecursively([&toDelete](Object* object) {
                 if (object->get_isDestroyed()) {
                     toDelete.push_back(object);
                 }

@@ -11,7 +11,6 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Input/Implementations/KeyPressImplementation.cpp"
 	"Input/Implementations/MouseScrollImplementation.cpp"
 	"Input/Implementations/WasdDeltaImplementation.cpp"
-
 	
 	"ObjectHandlers/PhysicsHandler.cpp"
 
@@ -40,5 +39,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_window)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_gui)
 
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

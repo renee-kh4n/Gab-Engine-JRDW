@@ -1,5 +1,11 @@
 #include "PhysicsPipeline.h"
 
+gbe::physics::PhysicsPipeline* gbe::physics::PhysicsPipeline::Instance;
+
+gbe::physics::PhysicsPipeline* gbe::physics::PhysicsPipeline::Get_Instance() {
+	return gbe::physics::PhysicsPipeline::Instance;
+}
+
 bool gbe::physics::PhysicsPipeline::Init()
 {
 	this->collisionConfiguration = new btDefaultCollisionConfiguration();
@@ -11,6 +17,8 @@ bool gbe::physics::PhysicsPipeline::Init()
 	this->solver = new btSequentialImpulseConstraintSolver;
 	this->dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 	this->dynamicsWorld->setGravity(btVector3(0, 0, 0));
+
+	this->Instance = this;
 
 	return true;
 }

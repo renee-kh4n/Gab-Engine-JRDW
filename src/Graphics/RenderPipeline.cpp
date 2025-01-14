@@ -5,6 +5,16 @@
 
 using namespace gbe;
 
+gbe::RenderPipeline* gbe::RenderPipeline::Instance;
+
+gbe::RenderPipeline* gbe::RenderPipeline::Get_Instance() {
+	return gbe::RenderPipeline::Instance;
+}
+
+void gbe::RenderPipeline::Init() {
+	this->Instance = this;
+}
+
 gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vector2Int dimensions)
 {
 	this->resolution = dimensions;

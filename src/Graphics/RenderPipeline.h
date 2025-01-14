@@ -24,6 +24,8 @@ namespace gbe {
 
 	class RenderPipeline {
 	private:
+		static RenderPipeline* Instance;
+
 		Vector2Int resolution;
 		asset::AssetReference<asset::Shader> camera_shader;
 
@@ -44,6 +46,8 @@ namespace gbe {
 		Framebuffer* mFrameBuffer;
 		Framebuffer* mDepthFrameBuffer;
 	public:
+		static RenderPipeline* Get_Instance();
+
 		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2Int);
 		void RegisterDrawCall(DrawCall*);
 
@@ -54,5 +58,6 @@ namespace gbe {
 		void RenderFrame(Vector3& from, const Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);
 
 		void CleanUp();
+		void Init();
 	};
 }
