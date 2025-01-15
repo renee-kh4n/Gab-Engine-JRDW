@@ -36,7 +36,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
 
 #COPY ASSETS TO BUILD TARGET COMMAND
 add_custom_target(COPY_ASSETS_COMMAND
-    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets" $<TARGET_FILE_DIR:${PROJECT_NAME}>"/DefaultAssets"
+    COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/DefaultAssets"
 )
 
 add_dependencies(${PROJECT_NAME} COPY_ASSETS_COMMAND)
