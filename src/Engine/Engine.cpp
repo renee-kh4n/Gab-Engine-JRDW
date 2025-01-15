@@ -9,6 +9,7 @@ namespace gbe {
 		mPhysicsHandler = this->current_root->GetHandler<PhysicsHandler>();
 		mInputHandler = this->current_root->GetHandler<InputHandler>();
 		mLightHandler = this->current_root->GetHandler<ObjectHandler<gbe::LightObject>>();
+		mCameraHandler = this->current_root->GetHandler<ObjectHandler<gbe::Camera>>();
 		mEarlyUpdate = this->current_root->GetHandler<ObjectHandler<EarlyUpdate>>();
 		mUpdate = this->current_root->GetHandler<ObjectHandler<Update>>();
 		mLateUpdate = this->current_root->GetHandler<ObjectHandler<LateUpdate>>();
@@ -31,6 +32,7 @@ namespace gbe {
 		root_object->RegisterHandler(new PhysicsHandler(physics::PhysicsPipeline::Get_Instance()));
 		root_object->RegisterHandler(new InputHandler());
 		root_object->RegisterHandler(new ObjectHandler<gbe::LightObject>());
+		root_object->RegisterHandler(new ObjectHandler<gbe::Camera>());
 		root_object->RegisterHandler(new ObjectHandler<EarlyUpdate>());
 		root_object->RegisterHandler(new ObjectHandler<Update>());
 		root_object->RegisterHandler(new ObjectHandler<LateUpdate>());
@@ -45,7 +47,6 @@ namespace gbe {
 
 #pragma region Rendering Pipeline Setup
 		//RenderPipeline setup
-		Camera* active_camera = nullptr;
 		auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
 		mRenderPipeline->Init();
 #pragma endregion
@@ -222,8 +223,6 @@ namespace gbe {
 			mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
 			mPerspectiveCam->SetParent(camera_parent);
 
-			active_camera = mPerspectiveCam;
-
 			camera_parent->TranslateWorld(Vector3(0, 0, -10));
 
 			//GUI COMMUNICATOR
@@ -269,7 +268,7 @@ namespace gbe {
 
 			auto radius = 0.3f;
 			auto startpos = Vector3(0, 0, 0);
-			auto gridsize = Vector3(10, 0, 10);
+			auto gridsize = Vector3(1, 0, 1);
 			for (int x = 0; x < gridsize.x; x++)
 				for (int z = 0; z < gridsize.z; z++)
 				{
@@ -367,9 +366,10 @@ namespace gbe {
 				}
 			}
 
-			if (active_camera != nullptr) {
-				Matrix4 frustrum = active_camera->getproj() * active_camera->GetViewMat();
-				mRenderPipeline->RenderFrame(active_camera->World().position.Get(), active_camera->World().GetForward(), frustrum, active_camera->nearClip, active_camera->farClip);
+			if (this->mCameraHandler->object_list.size() > 0) {
+				auto current_camera = this->mCameraHandler->object_list.front();
+				Matrix4 frustrum = current_camera->getproj() * current_camera->GetViewMat();
+				mRenderPipeline->RenderFrame(current_camera->World().position.Get(), current_camera->World().GetForward(), frustrum, current_camera->nearClip, current_camera->farClip);
 			}
 
 			mGUIPipeline->DrawActiveCanvas();
@@ -407,12 +407,6 @@ namespace gbe {
 				{
 					this->current_root->Destroy();
 				}
-
-				//Object handlers setup
-				this->current_root = this->queued_rootchange;
-				this->queued_rootchange = nullptr;
-
-				this->UpdateHandlers();
 			}
 
 			//Delete all queued for deletions
@@ -427,6 +421,14 @@ namespace gbe {
 			for (auto deletee : toDelete)
 			{
 				delete deletee;
+			}
+
+			if (this->queued_rootchange != nullptr) {
+				//Object handlers setup
+				this->current_root = this->queued_rootchange;
+				this->queued_rootchange = nullptr;
+
+				this->UpdateHandlers();
 			}
 		}
 #pragma endregion

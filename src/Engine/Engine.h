@@ -15,6 +15,7 @@
 #include "ObjectFunctions/LateUpdate.h"
 #include "ObjectFunctions/Update.h"
 #include "Objects/Rendering/Lights/LightObject.h"
+#include "Objects/Rendering/Camera.h"
 
 namespace gbe {
 	class Engine {
@@ -25,6 +26,7 @@ namespace gbe {
 
 		PhysicsHandler* mPhysicsHandler;
 		InputHandler* mInputHandler;
+		ObjectHandler<Camera>* mCameraHandler;
 		ObjectHandler<LightObject>* mLightHandler;
 		ObjectHandler<EarlyUpdate>* mEarlyUpdate;
 		ObjectHandler<Update>* mUpdate;
