@@ -366,11 +366,22 @@ namespace gbe {
 				}
 			}
 
-			if (this->mCameraHandler->object_list.size() > 0) {
-				auto current_camera = this->mCameraHandler->object_list.front();
-				Matrix4 frustrum = current_camera->getproj() * current_camera->GetViewMat();
-				mRenderPipeline->RenderFrame(current_camera->World().position.Get(), current_camera->World().GetForward(), frustrum, current_camera->nearClip, current_camera->farClip);
-			}
+				auto pos = Vector3::zero;
+				auto forward = Vector3::zero;
+				auto frustrum = Matrix4();
+				auto nearclip = 0.0f;
+				auto farclip = 0.0f;
+			
+				if (this->mCameraHandler->object_list.size() > 0) {
+					auto current_camera = this->mCameraHandler->object_list.front();
+					pos = current_camera->World().position.Get();
+					forward = current_camera->World().GetForward();
+					frustrum = current_camera->getproj() * current_camera->GetViewMat();
+					nearclip = current_camera->nearClip;
+					farclip = current_camera->farClip;
+				}
+				mRenderPipeline->RenderFrame(pos, forward, frustrum, nearclip, farclip);
+			
 
 			mGUIPipeline->DrawActiveCanvas();
 			//Update the window
