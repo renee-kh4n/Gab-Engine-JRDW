@@ -35,6 +35,9 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Physics/Collider/Collider.cpp"
 	"Objects/Physics/Collider/SphereCollider.cpp"
 	"Objects/Physics/Collider/BoxCollider.cpp"
+	"Objects/Physics/PhysicsObject.cpp"
+	"Objects/Physics/TriggerRigidObject.cpp"
+
 )
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)

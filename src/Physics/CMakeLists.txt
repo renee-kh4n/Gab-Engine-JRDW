@@ -6,7 +6,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"PhysicsDatatypes.cpp" 
 	"Rigidbody.cpp"
 	"ColliderData/SphereColliderData.cpp"
- "ColliderData/ColliderData.cpp" "ColliderData/BoxColliderData.h" "ColliderData/BoxColliderData.cpp" "gbe_physics.h")
+ "ColliderData/ColliderData.cpp" "ColliderData/BoxColliderData.h" "ColliderData/BoxColliderData.cpp" "gbe_physics.h" "TriggerRigidBody.h" "PhysicsBody.h")
 
 find_package(Bullet CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE ${BULLET_LIBRARIES})

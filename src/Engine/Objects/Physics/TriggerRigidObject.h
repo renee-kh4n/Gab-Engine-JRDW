@@ -6,13 +6,8 @@
 #include "PhysicsObject.h"
 
 namespace gbe {
-	class RigidObject : public PhysicsObject {
+	class TriggerRigidObject : PhysicsObject {
 	public:
-		physics::Rigidbody body;
-
-		RigidObject(bool is_static = false);
-		~RigidObject();
-		
 		void OnAddCollider(Collider* what) override;
 		void OnRemoveCollider(Collider* what) override;
 		void UpdateCollider(Collider* what) override;
