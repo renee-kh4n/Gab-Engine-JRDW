@@ -20,8 +20,8 @@ namespace gbe {
 			
 			bool Init();
 			void Tick(double delta);
-			void RegisterBody(Rigidbody* body);
-			void UnRegisterBody(Rigidbody* body);
+			void RegisterBody(PhysicsBody* body);
+			void UnRegisterBody(PhysicsBody* body);
 		};
 	}
 }

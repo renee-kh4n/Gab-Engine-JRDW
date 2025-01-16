@@ -3,33 +3,18 @@
 #include "RigidObject.h"
 #include "RigidObject.h"
 
-gbe::RigidObject::RigidObject(bool is_static) : body(is_static) {
-	
-}
-
-void gbe::RigidObject::OnAddCollider(Collider* what)
-{
-	this->body.AddCollider(what->GetColliderData());
-	what->AssignToRigidbody(this);
-}
-
-void gbe::RigidObject::OnRemoveCollider(Collider* what)
-{
-	this->body.RemoveCollider(what->GetColliderData());
-	what->UnAssignRigidbody();
+gbe::RigidObject::RigidObject(bool is_static) {
+	this->body = new physics::Rigidbody(is_static);
 }
 
 gbe::RigidObject::~RigidObject()
 {
 }
 
-void gbe::RigidObject::UpdateCollider(Collider* what)
+gbe::physics::Rigidbody* gbe::RigidObject::GetRigidbody()
 {
-	this->body.UpdateColliderTransform(what->GetColliderData());
-	this->body.UpdateAABB();
-}
+	if (this->body == nullptr)
+		throw "Null rigidbody";
 
-void gbe::RigidObject::UpdatePhysicsTransformationMatrix()
-{
-	this->body.InjectCurrentTransformMatrix(this->GetWorldMatrix(false));
+	return static_cast<physics::Rigidbody*>(this->body);
 }

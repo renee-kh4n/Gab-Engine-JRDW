@@ -8,11 +8,5 @@
 namespace gbe {
 	class TriggerRigidObject : PhysicsObject {
 	public:
-		void OnAddCollider(Collider* what) override;
-		void OnRemoveCollider(Collider* what) override;
-		void UpdateCollider(Collider* what) override;
-
-		// Inherited via PhysicsObject
-		void UpdatePhysicsTransformationMatrix() override;
 	};
 }

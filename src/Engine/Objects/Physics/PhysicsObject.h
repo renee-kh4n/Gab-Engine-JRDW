@@ -8,6 +8,7 @@ namespace gbe {
 	class PhysicsObject : public Object {
 	protected:
 		std::list<Collider*> colliders;
+		physics::PhysicsBody* body;
 	public:
 		virtual ~PhysicsObject();
 
@@ -17,9 +18,6 @@ namespace gbe {
 		void OnLocalTransformationChange(TransformChangeType) override;
 		void OnExternalTransformationChange(TransformChangeType, Matrix4 parentmat) override;
 
-		virtual void OnAddCollider(Collider* what) = 0;
-		virtual void OnRemoveCollider(Collider* what) = 0;
-		virtual void UpdatePhysicsTransformationMatrix() = 0;
-		virtual void UpdateCollider(Collider* what) = 0;
+		void UpdateCollider(Collider* what);
 	};
 }

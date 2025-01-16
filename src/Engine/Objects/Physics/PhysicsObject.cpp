@@ -7,15 +7,19 @@ gbe::PhysicsObject::~PhysicsObject()
 void gbe::PhysicsObject::OnLocalTransformationChange(TransformChangeType type)
 {
 	Object::OnLocalTransformationChange(type);
-	this->UpdatePhysicsTransformationMatrix();
+	this->body->InjectCurrentTransformMatrix(this->GetWorldMatrix(false));
 }
 
 void gbe::PhysicsObject::OnExternalTransformationChange(TransformChangeType type, Matrix4 parentmat)
 {
 	Object::OnExternalTransformationChange(type, parentmat);
+	this->body->InjectCurrentTransformMatrix(this->GetWorldMatrix(false));
+}
 
-
-	this->UpdatePhysicsTransformationMatrix();
+void gbe::PhysicsObject::UpdateCollider(Collider* what)
+{
+	this->body->UpdateColliderTransform(what->GetColliderData());
+	this->body->UpdateAABB();
 }
 
 void gbe::PhysicsObject::OnEnterHierarchy(Object* newChild)
@@ -28,7 +32,8 @@ void gbe::PhysicsObject::OnEnterHierarchy(Object* newChild)
 		return;
 
 	this->colliders.push_back(col);
-	this->OnAddCollider(col);
+	this->body->AddCollider(col->GetColliderData());
+	col->AssignToBody(this);
 }
 
 void gbe::PhysicsObject::OnExitHierarchy(Object* newChild)
@@ -40,7 +45,7 @@ void gbe::PhysicsObject::OnExitHierarchy(Object* newChild)
 	if (col == nullptr)
 		return;
 
-	col->UnAssignRigidbody();
+	col->UnAssignBody();
+	this->body->RemoveCollider(col->GetColliderData());
 	this->colliders.remove(col);
-	this->OnRemoveCollider(col);
 }

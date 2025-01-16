@@ -14,11 +14,25 @@ namespace gbe {
 			btDynamicsWorld* world;
 
 			btTransform transform;
-			float mass;
-			btCollisionObject* data;
+			btCollisionObject* base_data;
 			btDefaultMotionState* motionstate;
 
 			btCompoundShape* mMainShape;
+			PhysicsBody();
+		public:
+			void InjectCurrentTransformMatrix(Matrix4);
+			void PassTransformationData(Vector3&, Quaternion&);
+			void PassTransformationMatrix(Matrix4&);
+
+			btCollisionObject* GetRegistrant(btDynamicsWorld* register_to);
+			btCollisionObject* UnRegister();
+
+			void AddCollider(ColliderData*);
+			void UpdateColliderTransform(ColliderData*);
+			void RemoveCollider(ColliderData*);
+
+			void UpdateAABB();
+			virtual void ForceUpdateTransform() = 0;
 		};
 	}
 }

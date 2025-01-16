@@ -143,8 +143,8 @@ namespace gbe {
 #pragma endregion
 #pragma region Root Loaders
 		//forward declared load functions
-		std::function<Root*()> create_main_game;
-		std::function<Root*()> create_main_menu;
+		std::function<Root* ()> create_main_game;
+		std::function<Root* ()> create_main_menu;
 
 		create_main_menu = [&]() {
 			auto game_root = this->CreateBlankRoot();
@@ -189,7 +189,7 @@ namespace gbe {
 			side_button->SetParent(button);
 
 			return game_root;
-		};
+			};
 
 		create_main_game = [&]() {
 			auto game_root = this->CreateBlankRoot();
@@ -281,7 +281,7 @@ namespace gbe {
 				auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().GetUp() * 0.3f);
 
 				auto ball = spawnball(spawnpos, 0.2f);
-				ball->body.AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
+				ball->GetRigidbody()->AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
 				};
 
 			//SCENE GUI
@@ -308,7 +308,7 @@ namespace gbe {
 			side_button->SetParent(button);
 
 			return game_root;
-		};
+			};
 #pragma endregion
 
 		auto initial_root = create_main_menu();
@@ -366,22 +366,22 @@ namespace gbe {
 				}
 			}
 
-				auto pos = Vector3::zero;
-				auto forward = Vector3::zero;
-				auto frustrum = Matrix4();
-				auto nearclip = 0.0f;
-				auto farclip = 0.0f;
-			
-				if (this->mCameraHandler->object_list.size() > 0) {
-					auto current_camera = this->mCameraHandler->object_list.front();
-					pos = current_camera->World().position.Get();
-					forward = current_camera->World().GetForward();
-					frustrum = current_camera->getproj() * current_camera->GetViewMat();
-					nearclip = current_camera->nearClip;
-					farclip = current_camera->farClip;
-				}
-				mRenderPipeline->RenderFrame(pos, forward, frustrum, nearclip, farclip);
-			
+			auto pos = Vector3::zero;
+			auto forward = Vector3::zero;
+			auto frustrum = Matrix4();
+			auto nearclip = 0.0f;
+			auto farclip = 0.0f;
+
+			if (this->mCameraHandler->object_list.size() > 0) {
+				auto current_camera = this->mCameraHandler->object_list.front();
+				pos = current_camera->World().position.Get();
+				forward = current_camera->World().GetForward();
+				frustrum = current_camera->getproj() * current_camera->GetViewMat();
+				nearclip = current_camera->nearClip;
+				farclip = current_camera->farClip;
+			}
+			mRenderPipeline->RenderFrame(pos, forward, frustrum, nearclip, farclip);
+
 
 			mGUIPipeline->DrawActiveCanvas();
 			//Update the window

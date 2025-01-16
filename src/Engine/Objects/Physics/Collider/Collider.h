@@ -3,17 +3,17 @@
 #include "Engine/Objects/Object.h"
 
 namespace gbe {
-	class RigidObject;
+	class PhysicsObject;
 
 	class Collider : public Object {
 	private:
-		RigidObject* rigidparent;
+		PhysicsObject* holder;
 	public:
 		virtual physics::ColliderData* GetColliderData() = 0;
 
-		RigidObject* GetRigidbody();
-		void AssignToRigidbody(RigidObject*);
-		void UnAssignRigidbody();
+		PhysicsObject* GetBody();
+		void AssignToBody(PhysicsObject*);
+		void UnAssignBody();
 
 		void OnLocalTransformationChange(TransformChangeType) override;
 		void OnExternalTransformationChange(TransformChangeType, Matrix4 newparentmat) override;

@@ -1,19 +1,19 @@
 #include "Collider.h"
 #include "Engine/Objects/Physics/RigidObject.h"
 
-gbe::RigidObject* gbe::Collider::GetRigidbody()
+gbe::PhysicsObject* gbe::Collider::GetBody()
 {
-	return this->rigidparent;
+	return this->holder;
 }
 
-void gbe::Collider::AssignToRigidbody(RigidObject* body)
+void gbe::Collider::AssignToBody(PhysicsObject* body)
 {
-	this->rigidparent = body;
+	this->holder = body;
 }
 
-void gbe::Collider::UnAssignRigidbody()
+void gbe::Collider::UnAssignBody()
 {
-	this->rigidparent = nullptr;
+	this->holder = nullptr;
 }
 
 void gbe::Collider::OnLocalTransformationChange(TransformChangeType type)
@@ -25,10 +25,10 @@ void gbe::Collider::OnLocalTransformationChange(TransformChangeType type)
 	if (type & TransformChangeType::SCALE)
 		this->GetColliderData()->UpdateScale(this->World().scale.Get());
 
-	if (this->rigidparent == nullptr)
+	if (this->holder == nullptr)
 		return;
 
-	this->rigidparent->UpdateCollider(this);
+	this->holder->UpdateCollider(this);
 }
 
 void gbe::Collider::OnExternalTransformationChange(TransformChangeType type, Matrix4 newparentmat)
@@ -38,9 +38,9 @@ void gbe::Collider::OnExternalTransformationChange(TransformChangeType type, Mat
 	if (type & TransformChangeType::SCALE) {
 		this->GetColliderData()->UpdateScale(this->World().scale.Get());
 
-		if (this->rigidparent == nullptr)
+		if (this->holder == nullptr)
 			return;
 
-		this->rigidparent->UpdateCollider(this);
+		this->holder->UpdateCollider(this);
 	}
 }

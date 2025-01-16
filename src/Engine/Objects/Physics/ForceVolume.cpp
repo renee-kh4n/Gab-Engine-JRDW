@@ -24,7 +24,7 @@ void gbe::ForceVolume::TryApply(RigidObject* object)
 	auto final_force = final_dir;
 
 	if (this->forceMode == VELOCITY)
-		final_force *= object->body.Get_mass();
+		final_force *= object->GetRigidbody()->Get_mass();
 
-	object->body.AddForce(final_force);
+	object->GetRigidbody()->AddForce(final_force);
 }

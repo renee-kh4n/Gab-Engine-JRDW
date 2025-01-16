@@ -28,12 +28,20 @@ void gbe::physics::PhysicsPipeline::Tick(double delta)
 	dynamicsWorld->stepSimulation(delta, 30);
 }
 
-void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::Rigidbody* body)
+void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::PhysicsBody* body)
 {
-	this->dynamicsWorld->addRigidBody(body->GetRegistrant(this->dynamicsWorld));
+	auto registrant = body->GetRegistrant(this->dynamicsWorld);
+	auto rigidbody_cast = btRigidBody::upcast(registrant);
+
+	if (rigidbody_cast != nullptr)
+		this->dynamicsWorld->addRigidBody(rigidbody_cast);
 }
 
-void gbe::physics::PhysicsPipeline::UnRegisterBody(Rigidbody* body)
+void gbe::physics::PhysicsPipeline::UnRegisterBody(PhysicsBody* body)
 {
-	this->dynamicsWorld->removeRigidBody(body->UnRegister());
+	auto registrant = body->UnRegister();
+	auto rigidbody_cast = btRigidBody::upcast(registrant);
+
+	if (rigidbody_cast != nullptr)
+		this->dynamicsWorld->removeRigidBody(rigidbody_cast);
 }
