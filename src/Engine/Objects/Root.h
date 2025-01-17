@@ -15,12 +15,12 @@ namespace gbe{
 		virtual void OnExitHierarchy(Object* newChild);
 
 		template<typename T>
-		T* GetHandler() {
-			T* toreturn = nullptr;
+		ObjectHandler<T>* GetHandler() {
+			ObjectHandler<T>* toreturn = nullptr;
 
 			for (auto handler : this->handlers)
 			{
-				toreturn = dynamic_cast<T*>(handler);
+				toreturn = dynamic_cast<ObjectHandler<T>*>(handler);
 
 				if (toreturn != nullptr)
 					break;

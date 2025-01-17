@@ -10,10 +10,10 @@
 #include "Objects/Root.h"
 #include "ObjectHandlers/PhysicsHandler.h"
 #include "ObjectHandlers/ObjectHandler.h"
-#include "ObjectHandlers/InputHandler.h"
 #include "ObjectFunctions/EarlyUpdate.h"
 #include "ObjectFunctions/LateUpdate.h"
 #include "ObjectFunctions/Update.h"
+#include "ObjectFunctions/PhysicsUpdate.h"
 #include "Objects/Rendering/Lights/LightObject.h"
 #include "Objects/Rendering/Camera.h"
 
@@ -23,16 +23,6 @@ namespace gbe {
 		//Current Root and its handlers
 		Root* current_root;
 		Root* queued_rootchange;
-
-		PhysicsHandler* mPhysicsHandler;
-		InputHandler* mInputHandler;
-		ObjectHandler<Camera>* mCameraHandler;
-		ObjectHandler<LightObject>* mLightHandler;
-		ObjectHandler<EarlyUpdate>* mEarlyUpdate;
-		ObjectHandler<Update>* mUpdate;
-		ObjectHandler<LateUpdate>* mLateUpdate;
-
-		void UpdateHandlers();
 	public:
 		Engine();
 		bool ChangeRoot(Root* newroot);

@@ -7,6 +7,7 @@
 namespace gbe {
 	class PhysicsObject : public Object {
 	protected:
+		std::function<PhysicsObject* (physics::PhysicsBody*)>* lookup_func;
 		std::list<Collider*> colliders;
 		physics::PhysicsBody* body;
 	public:
@@ -19,5 +20,8 @@ namespace gbe {
 		void OnExternalTransformationChange(TransformChangeType, Matrix4 parentmat) override;
 
 		void UpdateCollider(Collider* what);
+
+		void Set_lookup_func(std::function<PhysicsObject* (physics::PhysicsBody*)>*);
+		physics::PhysicsBody* Get_data();
 	};
 }

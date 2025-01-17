@@ -19,7 +19,7 @@
 #include "ObjectFunctions/EarlyUpdate.h"
 #include "ObjectFunctions/LateUpdate.h"
 #include "ObjectFunctions/Update.h"
-#include "ObjectHandlers/InputHandler.h"
+#include "ObjectFunctions/PhysicsUpdate.h"
 #include "ObjectHandlers/ObjectHandler.h"
 #include "ObjectHandlers/PhysicsHandler.h"
 #include "Objects/Objects.h"

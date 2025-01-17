@@ -24,8 +24,9 @@ namespace gbe {
 			void PassTransformationData(Vector3&, Quaternion&);
 			void PassTransformationMatrix(Matrix4&);
 
-			btCollisionObject* GetRegistrant(btDynamicsWorld* register_to);
-			btCollisionObject* UnRegister();
+			btCollisionObject* Get_wrapped_data();
+			virtual void Register(btDynamicsWorld* register_to);
+			virtual void UnRegister();
 
 			void AddCollider(ColliderData*);
 			void UpdateColliderTransform(ColliderData*);

@@ -22,6 +22,16 @@ void gbe::PhysicsObject::UpdateCollider(Collider* what)
 	this->body->UpdateAABB();
 }
 
+void gbe::PhysicsObject::Set_lookup_func(std::function<PhysicsObject* (physics::PhysicsBody*)>* newfunc)
+{
+	this->lookup_func = newfunc;
+}
+
+gbe::physics::PhysicsBody* gbe::PhysicsObject::Get_data()
+{
+	return this->body;
+}
+
 void gbe::PhysicsObject::OnEnterHierarchy(Object* newChild)
 {
 	Object::OnEnterHierarchy(newChild);

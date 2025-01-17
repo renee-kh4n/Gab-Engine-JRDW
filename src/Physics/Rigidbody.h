@@ -3,6 +3,7 @@
 #include "Math/gbe_math.h"
 
 #include <bullet/btBulletDynamicsCommon.h>
+
 #include "PhysicsDatatypes.h"
 #include <list>
 #include "ColliderData/ColliderData.h"
@@ -14,9 +15,11 @@ namespace gbe {
 		class Rigidbody : public PhysicsBody{
 		private:
 			float mass;
-			btRigidBody* data_derived;
 		public:
 			Rigidbody(bool is_static = false);
+
+			void Register(btDynamicsWorld* register_to) override;
+			void UnRegister() override;
 
 			void SetStatic(bool);
 			void AddForce(PhysicsVector3 force);

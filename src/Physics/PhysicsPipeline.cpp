@@ -1,6 +1,11 @@
 #include "PhysicsPipeline.h"
+#include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
 
 gbe::physics::PhysicsPipeline* gbe::physics::PhysicsPipeline::Instance;
+
+void gbe::physics::PhysicsPipeline::internal_physics_callback(btDynamicsWorld* world, btScalar timeStep)
+{
+}
 
 gbe::physics::PhysicsPipeline* gbe::physics::PhysicsPipeline::Get_Instance() {
 	return gbe::physics::PhysicsPipeline::Instance;
@@ -17,6 +22,12 @@ bool gbe::physics::PhysicsPipeline::Init()
 	this->solver = new btSequentialImpulseConstraintSolver;
 	this->dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 	this->dynamicsWorld->setGravity(btVector3(0, 0, 0));
+	this->dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	
+	auto callback = [](btDynamicsWorld* world, btScalar timeStep) {
+		physics::PhysicsPipeline::Get_Instance()->OnFixedUpdate_callback(timeStep);
+	};
+	this->dynamicsWorld->setInternalTickCallback(callback, this, false);
 
 	this->Instance = this;
 
@@ -30,18 +41,26 @@ void gbe::physics::PhysicsPipeline::Tick(double delta)
 
 void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::PhysicsBody* body)
 {
-	auto registrant = body->GetRegistrant(this->dynamicsWorld);
-	auto rigidbody_cast = btRigidBody::upcast(registrant);
-
-	if (rigidbody_cast != nullptr)
-		this->dynamicsWorld->addRigidBody(rigidbody_cast);
+	data_wrapper_dictionary.insert_or_assign(body->Get_wrapped_data(), body);
+	body->Register(this->dynamicsWorld);
 }
 
 void gbe::physics::PhysicsPipeline::UnRegisterBody(PhysicsBody* body)
 {
-	auto registrant = body->UnRegister();
-	auto rigidbody_cast = btRigidBody::upcast(registrant);
+	data_wrapper_dictionary.erase(body->Get_wrapped_data());
+	body->UnRegister();
+}
 
-	if (rigidbody_cast != nullptr)
-		this->dynamicsWorld->removeRigidBody(rigidbody_cast);
+void gbe::physics::PhysicsPipeline::Set_OnFixedUpdate_callback(std::function<void(float physicsdeltatime)> newfunc)
+{
+	this->OnFixedUpdate_callback = newfunc;
+}
+
+gbe::physics::PhysicsBody* gbe::physics::PhysicsPipeline::GetRelatedBody(btCollisionObject* key) {
+	auto enume = this->data_wrapper_dictionary.find(key);
+
+	if (enume == this->data_wrapper_dictionary.end())
+		return nullptr;
+
+	return enume->second;
 }

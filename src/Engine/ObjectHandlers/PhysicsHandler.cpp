@@ -4,18 +4,34 @@
 
 gbe::PhysicsHandler::PhysicsHandler(physics::PhysicsPipeline* pipeline)
 {
+	auto map_ptr = &this->map;
+	this->lookup_func = [=](physics::PhysicsBody* key) {
+		auto it = map_ptr->find(key);
+		PhysicsObject* toreturn = nullptr;
+
+		if (it != this->map.end())
+			toreturn = it->second;
+
+		return toreturn;
+	};
+
 	this->subhandlers.push_back(&this->forcevolume_handler);
 	this->mPipeline = pipeline;
 }
 
 void gbe::PhysicsHandler::Update()
 {
-	for (auto ro : this->object_list) {
+	for (auto po : this->object_list) {
+
+		auto ro = dynamic_cast<RigidObject*>(po);
+
+		if (ro == nullptr)
+			continue;
 
 		Vector3 newpos;
 		Quaternion newrot;
 
-		ro->GetRigidbody()->PassTransformationData(newpos, newrot);
+		ro->Get_data()->PassTransformationData(newpos, newrot);
 		ro->Local().position.Set(newpos);
 		ro->Local().rotation.Set(newrot);
 
@@ -26,12 +42,16 @@ void gbe::PhysicsHandler::Update()
 	}
 }
 
-void gbe::PhysicsHandler::OnAdd(RigidObject* ro)
+void gbe::PhysicsHandler::OnAdd(PhysicsObject* ro)
 {
-	this->mPipeline->RegisterBody(ro->GetRigidbody());
+	map.insert_or_assign(ro->Get_data(), ro);
+	ro->Set_lookup_func(&this->lookup_func);
+	this->mPipeline->RegisterBody(ro->Get_data());
 }
 
-void gbe::PhysicsHandler::OnRemove(RigidObject* ro)
+void gbe::PhysicsHandler::OnRemove(PhysicsObject* ro)
 {
-	this->mPipeline->UnRegisterBody(ro->GetRigidbody());
+	map.erase(ro->Get_data());
+	ro->Set_lookup_func(nullptr);
+	this->mPipeline->UnRegisterBody(ro->Get_data());
 }

@@ -10,12 +10,24 @@ gbe::physics::Rigidbody::Rigidbody(bool is_static){
 
 	btRigidBody::btRigidBodyConstructionInfo rbInfo(mass, this->motionstate, this->mMainShape, localInertia);
 	auto newdata = new btRigidBody(rbInfo);
-	this->data_derived = newdata;
+
 	this->base_data = newdata;
 }
 
+void gbe::physics::Rigidbody::Register(btDynamicsWorld* register_to)
+{
+	register_to->addRigidBody(btRigidBody::upcast(this->base_data));
+	PhysicsBody::Register(register_to);
+}
+
+void gbe::physics::Rigidbody::UnRegister()
+{
+	this->world->removeRigidBody(btRigidBody::upcast(this->base_data));
+	PhysicsBody::UnRegister();
+}
+
 void gbe::physics::Rigidbody::ForceUpdateTransform() {
-	this->data_derived->getMotionState()->getWorldTransform(this->transform);
+	btRigidBody::upcast(this->base_data)->getMotionState()->getWorldTransform(this->transform);
 }
 
 float gbe::physics::Rigidbody::Get_mass()
@@ -29,7 +41,7 @@ void gbe::physics::Rigidbody::SetStatic(bool value) {
 
 void gbe::physics::Rigidbody::AddForce(PhysicsVector3 force)
 {
-	this->data_derived->applyCentralForce(force);
+	btRigidBody::upcast(this->base_data)->applyCentralForce(force);
 }
 
 void gbe::physics::Rigidbody::AddForceAtPoint(PhysicsVector3 force, PhysicsVector3 relativeWorldPoint)
@@ -39,17 +51,17 @@ void gbe::physics::Rigidbody::AddForceAtPoint(PhysicsVector3 force, PhysicsVecto
 
 void gbe::physics::Rigidbody::Set_velocity(PhysicsVector3 value)
 {
-	this->data_derived->setLinearVelocity(value);
+	btRigidBody::upcast(this->base_data)->setLinearVelocity(value);
 }
 
 gbe::physics::PhysicsVector3 gbe::physics::Rigidbody::Get_velocity()
 {
-	return this->data_derived->getLinearVelocity();
+	return btRigidBody::upcast(this->base_data)->getLinearVelocity();
 }
 
 void gbe::physics::Rigidbody::Set_angularVelocity(PhysicsVector3 value)
 {
-	this->data_derived->setAngularVelocity(value);
+	btRigidBody::upcast(this->base_data)->setAngularVelocity(value);
 }
 
 gbe::physics::PhysicsVector3 gbe::physics::Rigidbody::Get_angularVelocity()

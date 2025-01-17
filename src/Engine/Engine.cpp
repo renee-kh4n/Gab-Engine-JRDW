@@ -4,16 +4,6 @@
 #include "gbe_engine.h"
 
 namespace gbe {
-	void Engine::UpdateHandlers()
-	{
-		mPhysicsHandler = this->current_root->GetHandler<PhysicsHandler>();
-		mInputHandler = this->current_root->GetHandler<InputHandler>();
-		mLightHandler = this->current_root->GetHandler<ObjectHandler<gbe::LightObject>>();
-		mCameraHandler = this->current_root->GetHandler<ObjectHandler<gbe::Camera>>();
-		mEarlyUpdate = this->current_root->GetHandler<ObjectHandler<EarlyUpdate>>();
-		mUpdate = this->current_root->GetHandler<ObjectHandler<Update>>();
-		mLateUpdate = this->current_root->GetHandler<ObjectHandler<LateUpdate>>();
-	}
 	Engine::Engine()
 	{
 		this->current_root = nullptr;
@@ -30,9 +20,10 @@ namespace gbe {
 	{
 		auto root_object = new Root();
 		root_object->RegisterHandler(new PhysicsHandler(physics::PhysicsPipeline::Get_Instance()));
-		root_object->RegisterHandler(new InputHandler());
 		root_object->RegisterHandler(new ObjectHandler<gbe::LightObject>());
 		root_object->RegisterHandler(new ObjectHandler<gbe::Camera>());
+		root_object->RegisterHandler(new ObjectHandler<PhysicsUpdate>());
+		root_object->RegisterHandler(new ObjectHandler<InputPlayer>());
 		root_object->RegisterHandler(new ObjectHandler<EarlyUpdate>());
 		root_object->RegisterHandler(new ObjectHandler<Update>());
 		root_object->RegisterHandler(new ObjectHandler<LateUpdate>());
@@ -53,6 +44,15 @@ namespace gbe {
 #pragma region Physics Pipeline Setup
 		auto mPhysicsPipeline = new physics::PhysicsPipeline();
 		mPhysicsPipeline->Init();
+		mPhysicsPipeline->Set_OnFixedUpdate_callback(
+			[=](float physicsdeltatime) {
+				auto phandler = this->current_root->GetHandler<PhysicsUpdate>();
+				for (auto updatable : phandler->object_list)
+				{
+					updatable->InvokePhysicsUpdate(physicsdeltatime);
+				}
+			}
+		);
 #pragma endregion
 #pragma region Asset Loading
 		//SHADER CACHING
@@ -240,7 +240,7 @@ namespace gbe {
 			//platform
 			RigidObject* platform = new RigidObject(true);
 			platform->SetParent(game_root);
-			platform->Local().position.Set(Vector3(0, -5, 0));
+			platform->Local().position.Set(Vector3(0, -10, 0));
 			platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
 			platform->Local().scale.Set(Vector3(10, 1, 10));
 			BoxCollider* platform_collider = new BoxCollider();
@@ -248,6 +248,20 @@ namespace gbe {
 			platform_collider->Local().position.Set(Vector3(0, 0, 0));
 			RenderObject* platform_renderer = new RenderObject(cube_drawcall);
 			platform_renderer->SetParent(platform_collider);
+
+			//Trigger
+			TriggerRigidObject* trigger = new TriggerRigidObject();
+			trigger->SetParent(game_root);
+			trigger->Local().position.Set(Vector3(0, 2, 0));
+			RenderObject* trigger_renderer = new RenderObject(cube_drawcall);
+			trigger_renderer->SetParent(trigger);
+			BoxCollider* trigger_collider = new BoxCollider();
+			trigger_collider->SetParent(trigger);
+			trigger_collider->Local().position.Set(Vector3(0, 0, 0));
+			trigger_renderer->Local().position.Set(Vector3::zero);
+			trigger->Set_OnEnter([](gbe::PhysicsObject* other) {
+				std::cout << "triggered" << std::endl;
+				});
 
 			//Balls
 			auto spawnball = [get_random_drawcall, game_root](Vector3 pos, float radius) {
@@ -313,7 +327,6 @@ namespace gbe {
 
 		auto initial_root = create_main_menu();
 		this->current_root = initial_root;
-		this->UpdateHandlers();
 
 #pragma region MAIN LOOP
 
@@ -336,8 +349,10 @@ namespace gbe {
 			}
 
 			//Update input system
-			mInputSystem->UpdateStates([this](std::string name, gbe::input::InputAction* action, bool changed) {
-				for (auto input_player : mInputHandler->object_list) {
+			auto inputhandler = this->current_root->GetHandler<InputPlayer>();
+
+			mInputSystem->UpdateStates([=](std::string name, gbe::input::InputAction* action, bool changed) {
+				for (auto input_player : inputhandler->object_list) {
 					if (input_player->get_player_name() != name)
 						continue;
 
@@ -353,13 +368,13 @@ namespace gbe {
 			mGUIPipeline->PassScreenSpaceMousePos(bl_pivoted_mousepos);
 
 			//Early update
-			for (auto updatable : mEarlyUpdate->object_list)
+			for (auto updatable : this->current_root->GetHandler<EarlyUpdate>()->object_list)
 			{
 				updatable->InvokeEarlyUpdate();
 			}
 
 			//Update Render pipeline
-			for (auto light : mLightHandler->object_list)
+			for (auto light : this->current_root->GetHandler<LightObject>()->object_list)
 			{
 				if (mRenderPipeline->TryPushLight(light->GetData(), false) == false) {
 					break;
@@ -372,8 +387,8 @@ namespace gbe {
 			auto nearclip = 0.0f;
 			auto farclip = 0.0f;
 
-			if (this->mCameraHandler->object_list.size() > 0) {
-				auto current_camera = this->mCameraHandler->object_list.front();
+			if (this->current_root->GetHandler<Camera>()->object_list.size() > 0) {
+				auto current_camera = this->current_root->GetHandler<Camera>()->object_list.front();
 				pos = current_camera->World().position.Get();
 				forward = current_camera->World().GetForward();
 				frustrum = current_camera->getproj() * current_camera->GetViewMat();
@@ -388,19 +403,24 @@ namespace gbe {
 			mWindow->SwapBuffers();
 
 			//Update other handlers
+			auto physicshandler_generic = this->current_root->GetHandler<PhysicsObject>();
+			auto physicshandler = static_cast<PhysicsHandler*>(physicshandler_generic);
+			auto updatehandler = this->current_root->GetHandler<Update>();
+			auto lateupdatehandler = this->current_root->GetHandler<LateUpdate>();
+
 			auto onTick = [=](double deltatime) {
 				physics::PhysicsPipeline::Get_Instance()->Tick(deltatime);
-				mPhysicsHandler->Update();
+				physicshandler->Update();
 
 				float delta_f = (float)deltatime;
 
 				//Normal Update
-				for (auto updatable : mUpdate->object_list)
+				for (auto updatable : updatehandler->object_list)
 				{
 					updatable->InvokeUpdate(delta_f);
 				}
 				//Late Update
-				for (auto updatable : mLateUpdate->object_list)
+				for (auto updatable : lateupdatehandler->object_list)
 				{
 					updatable->InvokeLateUpdate(delta_f);
 				}
@@ -438,8 +458,6 @@ namespace gbe {
 				//Object handlers setup
 				this->current_root = this->queued_rootchange;
 				this->queued_rootchange = nullptr;
-
-				this->UpdateHandlers();
 			}
 		}
 #pragma endregion

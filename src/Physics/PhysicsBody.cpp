@@ -32,16 +32,18 @@ void gbe::physics::PhysicsBody::PassTransformationMatrix(Matrix4& mat)
 	this->transform.getOpenGLMatrix((float*)mat.Get_Ptr());
 }
 
-btCollisionObject* gbe::physics::PhysicsBody::GetRegistrant(btDynamicsWorld* register_to)
-{
-	this->world = register_to;
+btCollisionObject* gbe::physics::PhysicsBody::Get_wrapped_data() {
 	return this->base_data;
 }
 
-btCollisionObject* gbe::physics::PhysicsBody::UnRegister()
+void gbe::physics::PhysicsBody::Register(btDynamicsWorld* register_to)
+{
+	this->world = register_to;
+}
+
+void gbe::physics::PhysicsBody::UnRegister()
 {
 	this->world = nullptr;
-	return this->base_data;
 }
 
 void gbe::physics::PhysicsBody::AddCollider(ColliderData* col)

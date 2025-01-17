@@ -34,6 +34,11 @@ target_link_libraries(${PROJECT_NAME}
 find_package(wxWidgets CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
 
+#Dependency Workarounds (temp hopefully)
+find_package(Bullet CONFIG REQUIRED)
+include_directories(${BULLET_INCLUDE_DIRS})
+message("[GABENGINE] INCLUDED: " ${BULLET_INCLUDE_DIRS} " To MAIN")
+
 #COPY ASSETS TO BUILD TARGET COMMAND
 add_custom_target(COPY_ASSETS_COMMAND
     COMMAND ${CMAKE_COMMAND} -E copy_directory "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets" "$<TARGET_FILE_DIR:${PROJECT_NAME}>/DefaultAssets"
