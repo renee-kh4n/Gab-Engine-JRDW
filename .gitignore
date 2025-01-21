@@ -13,9 +13,18 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
-# Add this line
-out/
-*.ipch
-*.db
+[Oo]ut/
+# VS
 /.vs
 /vcpkg_installed
+*.vcxproj
+*.vcxproj.filters
+*.vcxproj.user
+*.sln
+vcpkg-manifest-install.log
+*.ipch
+*.db
+# CMAKE
+*.cmake
+CMakeCache.txt
+**/CMakeFiles
