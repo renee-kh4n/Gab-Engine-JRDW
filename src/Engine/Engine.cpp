@@ -396,9 +396,8 @@ namespace gbe {
 				farclip = current_camera->farClip;
 			}
 			mRenderPipeline->RenderFrame(pos, forward, frustrum, nearclip, farclip);
-
-
 			mGUIPipeline->DrawActiveCanvas();
+
 			//Update the window
 			mWindow->SwapBuffers();
 

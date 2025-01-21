@@ -5,11 +5,14 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"gb_canvas.cpp"
  "gb_rect.cpp" 
  "gbuiPipeline.cpp"
+ 
  "rect_types/gb_root.cpp"
  "rect_types/gb_button.cpp"
+ "rect_types/gb_image.cpp"
+
  "interfaces/gb_onClick.h"
  "interfaces/gb_onExit.h"
- "gbe_gui.h")
+)
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC gbe_math)
 
