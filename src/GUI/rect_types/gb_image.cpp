@@ -10,9 +10,9 @@ void gbe::gui::gb_image::Set_Image(asset::Texture* tex)
 
 void gbe::gui::gb_image::Render()
 {
-	glUseProgram(gbe::gui::gbuiPipeline::Get_current()->Get_gui_shader_id());
-	auto loc = glGetUniformLocation(gbe::gui::gbuiPipeline::Get_current()->Get_gui_shader_id(), "color");
-	glUniform4fv(loc, 1, glm::value_ptr(this->current_color));
+	gbuiPipeline::Get_current()->Get_gui_shader()->SetOverride("color", this->current_color);
+	gbuiPipeline::Get_current()->Get_gui_shader()->SetTextureOverride("sprite", this->sprite);
+
 	gbe::gui::gbuiPipeline::Get_current()->DrawElement(this);
 
 	gbe::gui::gb_rect::Render();

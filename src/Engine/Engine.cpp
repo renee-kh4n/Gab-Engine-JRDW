@@ -130,7 +130,7 @@ namespace gbe {
 		mRenderPipeline->RegisterDrawCall(cube_drawcall);
 #pragma endregion
 #pragma region GUI Pipeline Setup
-		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader->Get_gl_id());
+		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader);
 		mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Input

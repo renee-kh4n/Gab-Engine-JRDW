@@ -5,13 +5,13 @@
 
 gbe::gui::gbuiPipeline* gbe::gui::gbuiPipeline::instance = nullptr;
 
-gbe::gui::gbuiPipeline::gbuiPipeline(unsigned int quad_vao, unsigned int gui_shader_id)
+gbe::gui::gbuiPipeline::gbuiPipeline(unsigned int quad_vao, asset::Shader* new_gui_shader)
 {
 	this->active_canvas = nullptr;
 	this->current_object_on_cursor = nullptr;
 
 	this->quad_vao = quad_vao;
-	this->gui_shader_id = gui_shader_id;
+	this->gui_shader = new_gui_shader;
 
 	this->instance = this;
 }
@@ -59,9 +59,9 @@ void gbe::gui::gbuiPipeline::PassScreenSpaceMousePos(glm::ivec2 mousepos)
 unsigned int gbe::gui::gbuiPipeline::Get_quad_vao() {
 	return this->quad_vao;
 }
-unsigned int gbe::gui::gbuiPipeline::Get_gui_shader_id()
+gbe::asset::Shader* gbe::gui::gbuiPipeline::Get_gui_shader()
 {
-	return this->gui_shader_id;
+	return this->gui_shader;
 }
 void gbe::gui::gbuiPipeline::SetActiveCanvas(gb_canvas* canvas)
 {
@@ -75,9 +75,7 @@ void gbe::gui::gbuiPipeline::DrawActiveCanvas()
 
 void gbe::gui::gbuiPipeline::DrawElement(gbe::gui::gb_rect* element)
 {
-	glUseProgram(this->gui_shader_id);
-	auto loc = glGetUniformLocation(this->gui_shader_id, "transform");
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(element->Get_world_transform()));
+	this->gui_shader->SetOverride("transform", (gbe::Matrix4)element->Get_world_transform());
 
 	glBindVertexArray(this->quad_vao);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

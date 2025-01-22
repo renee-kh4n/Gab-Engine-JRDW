@@ -6,6 +6,7 @@
 #include "interfaces/gb_onClick.h"
 #include "interfaces/gb_onEnter.h"
 #include "interfaces/gb_onExit.h"
+#include "Asset/AssetTypes/Shader.h"
 
 namespace gbe {
 	namespace gui {
@@ -19,13 +20,13 @@ namespace gbe {
 			gb_rect* current_object_on_cursor;
 
 			unsigned int quad_vao;
-			unsigned int gui_shader_id;
+			asset::Shader* gui_shader;
 		public:
-			gbuiPipeline(unsigned int quad_vao, unsigned int gui_shader_id);
+			gbuiPipeline(unsigned int quad_vao, asset::Shader* gui_shader);
 			static gbuiPipeline* Get_current();
 
 			unsigned int Get_quad_vao();
-			unsigned int Get_gui_shader_id();
+			asset::Shader* Get_gui_shader();
 
 			void SetActiveCanvas(gb_canvas* canvas);
 			void DrawActiveCanvas();

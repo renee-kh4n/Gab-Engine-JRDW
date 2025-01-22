@@ -2,6 +2,7 @@
 
 //OPTIONAL
 uniform vec4 color;
+uniform sampler2D sprite;
 
 //OUT
 out vec4 FragColor;

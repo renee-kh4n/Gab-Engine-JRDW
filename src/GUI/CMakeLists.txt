@@ -15,6 +15,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 )
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC gbe_math)
+target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC gbe_asset)
 
 find_package(glad CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glad::glad)

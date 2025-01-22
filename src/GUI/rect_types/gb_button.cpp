@@ -3,9 +3,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 void gbe::gui::gb_button::Render() {
-	glUseProgram(gbe::gui::gbuiPipeline::Get_current()->Get_gui_shader_id());
-	auto loc = glGetUniformLocation(gbe::gui::gbuiPipeline::Get_current()->Get_gui_shader_id(), "color");
-	glUniform4fv(loc, 1, glm::value_ptr(this->current_color));
+	gbe::gui::gbuiPipeline::Get_current()->Get_gui_shader()->SetOverride("color", this->current_color);
 	gbe::gui::gbuiPipeline::Get_current()->DrawElement(this);
 
 	gbe::gui::gb_rect::Render();
@@ -21,7 +19,7 @@ void gbe::gui::gb_button::Update(float delta)
 		target_color = this->hovered_color;
 	}
 
-	this->current_color = glm::mix(this->current_color, target_color, delta * this->transition_speed);
+	this->current_color = glm::mix((glm::vec4)this->current_color, (glm::vec4)target_color, delta * this->transition_speed);
 }
 
 void gbe::gui::gb_button::onEnter() {

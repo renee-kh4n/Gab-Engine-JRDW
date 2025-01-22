@@ -9,5 +9,7 @@ gbe::gui::gb_root::gb_root(gb_canvas* canvas)
 
 void gbe::gui::gb_root::Render()
 {
+
+
 	gbe::gui::gb_rect::Render();
 }
