@@ -7,7 +7,7 @@ namespace gbe {
         this->dimentions = dimentions; 
 
         // Initialize SDL 
-        if (SDL_Init(SDL_INIT_VIDEO) < 0)
+        if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
             throw "Couldn't initialize SDL";
         atexit(SDL_Quit);
         SDL_GL_LoadLibrary(NULL);

@@ -6,6 +6,7 @@
 #include "Math/gbe_math.h"
 #include "Physics/gbe_physics.h"
 #include "Window/gbe_window.h"
+#include "Audio/gbe_audio.h"
 #include "Asset/gbe_asset.h"
 #include "Objects/Root.h"
 #include "ObjectHandlers/PhysicsHandler.h"

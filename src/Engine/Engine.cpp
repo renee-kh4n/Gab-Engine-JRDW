@@ -54,6 +54,10 @@ namespace gbe {
 			}
 		);
 #pragma endregion
+#pragma region Audio Pipeline Setup
+		auto mAudioPipeline = new audio::AudioPipeline();
+		mAudioPipeline->Init();
+#pragma endregion
 #pragma region Asset Loading
 		//SHADER CACHING
 		auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");

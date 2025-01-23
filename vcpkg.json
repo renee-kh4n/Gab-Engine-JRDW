@@ -3,6 +3,8 @@
     "vcpkg-cmake-config",
     "vcpkg-cmake",
     "sdl2",
+    "sdl2-image",
+    "sdl2-mixer",
     "glm",
     "glad",
     "stb",

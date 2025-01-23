@@ -30,6 +30,8 @@ target_link_libraries(${PROJECT_NAME}
     $<TARGET_NAME_IF_EXISTS:SDL2::SDL2main>
     $<IF:$<TARGET_EXISTS:SDL2::SDL2>,SDL2::SDL2,SDL2::SDL2-static>
 )
+find_package(SDL2_mixer CONFIG REQUIRED)
+target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
 
 find_package(wxWidgets CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
@@ -37,7 +39,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
 #Dependency Workarounds (temp hopefully)
 find_package(Bullet CONFIG REQUIRED)
 include_directories(${BULLET_INCLUDE_DIRS})
-message("[GABENGINE] INCLUDED: " ${BULLET_INCLUDE_DIRS} " To MAIN")
+message("[GABENGINE] [WORKAROUND] INCLUDED: " ${BULLET_INCLUDE_DIRS} " To MAIN")
 
 #COPY ASSETS TO BUILD TARGET COMMAND
 add_custom_target(COPY_ASSETS_COMMAND
