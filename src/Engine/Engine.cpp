@@ -70,7 +70,7 @@ namespace gbe {
 
 		mRenderPipeline->SetCameraShader(CamOrthoPPShader);
 		//TEXTURE CACHING
-		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.jpg.gbe");
+		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
 
 		//MESH CACHING
 		auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
