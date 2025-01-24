@@ -145,6 +145,7 @@ namespace gbe {
 		auto mInputSystem = new InputSystem();
 		auto player_name = "MAIN";
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::MOUSE_LEFT>());
+		mInputSystem->RegisterActionListener(player_name, new WasdDeltaImplementation());
 		mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
@@ -219,27 +220,49 @@ namespace gbe {
 			directional_light->SetParent(game_root);
 			directional_light->Set_ShadowmapResolutions(1080);
 
-			//Camera setup
+			//Player and Camera setup
+			auto f_speed = 50.0f;
+
+			auto player = new RigidObject();
+			player->SetParent(game_root);
+			auto player_renderer = new RenderObject(get_random_drawcall());
+			player_renderer->SetParent(player);
+			auto player_collider = new SphereCollider();
+			player_collider->SetParent(player);
+
+			auto camera_parent = new GenericObject([=](GenericObject* self, float delta) {
+				self->SetWorldPosition(player->World().position.Get());
+			});
+			camera_parent->SetParent(game_root);
+			auto player_cam = new PerspectiveCamera(mWindow);
+			player_cam->angles = 55;
+			player_cam->farClip = 40.0f;
+			player_cam->WorldUp = Vector3(0, 1, 0);
+			player_cam->SetParent(camera_parent);
+			player_cam->TranslateWorld(Vector3(0, 3, -10));
+			
+
+			//Player Controller Logic
 			auto player_input = new InputPlayer(player_name);
 			player_input->SetParent(game_root);
-			auto camera_parent = new FlyingCameraControl();
-			camera_parent->SetParent(player_input);
-
-			auto mPerspectiveCam = new PerspectiveCamera(mWindow);
-			mPerspectiveCam->angles = 55;
-			mPerspectiveCam->farClip = 40.0f;
-			mPerspectiveCam->WorldUp = Vector3(0, 1, 0);
-			mPerspectiveCam->SetParent(camera_parent);
-
-			camera_parent->TranslateWorld(Vector3(0, 0, -10));
-
-			//GUI COMMUNICATOR
 			auto gui_communicator = new GenericController();
+			//Left click customer
 			gui_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([=](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
 				if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
 					return;
 
 				mGUIPipeline->Click();
+
+				}));
+			//WASD customer
+			gui_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
+				if (value->state != WasdDelta::WHILE)
+					return;
+
+				if (value->delta.y > 0) player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(player_cam->World().GetForward() * f_speed));
+				if (value->delta.y < 0) player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(player_cam->World().GetForward() * -f_speed));
+				if (value->delta.x > 0) player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(player_cam->World().GetRight() * -f_speed));
+				if (value->delta.x < 0) player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(player_cam->World().GetRight() * f_speed));
 
 				}));
 			gui_communicator->SetParent(player_input);

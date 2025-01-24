@@ -2,6 +2,7 @@
 
 #include "Root.h"
 #include "Object.h"
+#include "GenericObject.h"
 #include "Rendering/Camera.h"
 #include "Rendering/RenderObject.h"
 #include "Rendering/Lights/LightObject.h"

@@ -23,6 +23,7 @@ namespace gbe {
 			PhysicsBody* Get_inside(int index);
 
 			void ForceUpdateTransform() override;
+			void Pre_Tick_function(float deltatime) override;
 		};
 	}
 }

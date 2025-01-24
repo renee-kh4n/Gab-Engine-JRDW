@@ -69,7 +69,6 @@ namespace gbe {
                     this->event_queue.push(window::WindowEventType::RESIZE);
                 }
             }
-
             if (sdlevent.type == SDL_MOUSEBUTTONDOWN) {
                 if (sdlevent.button.button == SDL_BUTTON_LEFT)
                     this->keystates[gbe::Keys::MOUSE_LEFT] = true;
@@ -91,6 +90,20 @@ namespace gbe {
                     this->keystates[gbe::Keys::MOUSE_SCROLL_UP] = true;
                 if(sdlevent.wheel.y < 0)
                     this->keystates[gbe::Keys::MOUSE_SCROLL_DOWN] = true;
+            }
+            if (sdlevent.type == SDL_KEYDOWN) {
+                auto symcode = sdlevent.key.keysym.sym;
+                if (symcode == 'w') this->keystates[gbe::Keys::W] = true;
+                if (symcode == 'a') this->keystates[gbe::Keys::A] = true;
+                if (symcode == 's') this->keystates[gbe::Keys::S] = true;
+                if (symcode == 'd') this->keystates[gbe::Keys::D] = true;
+            }
+            if (sdlevent.type == SDL_KEYUP) {
+                auto symcode = sdlevent.key.keysym.sym;
+                if (symcode == 'w') this->keystates[gbe::Keys::W] = false;
+                if (symcode == 'a') this->keystates[gbe::Keys::A] = false;
+                if (symcode == 's') this->keystates[gbe::Keys::S] = false;
+                if (symcode == 'd') this->keystates[gbe::Keys::D] = false;
             }
         }
 

@@ -13,6 +13,10 @@ gbe::physics::TriggerRigidBody::TriggerRigidBody() {
 	this->base_data = newdata;
 }
 
+void gbe::physics::TriggerRigidBody::Pre_Tick_function(float deltatime)
+{
+}
+
 void gbe::physics::TriggerRigidBody::Register(btDynamicsWorld* register_to)
 {
 	register_to->addCollisionObject(this->base_data);

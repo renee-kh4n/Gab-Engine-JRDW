@@ -38,7 +38,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Physics/PhysicsObject.cpp"
 	"Objects/Physics/TriggerRigidObject.cpp"
 
-)
+ "Objects/GenericObject.cpp")
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)

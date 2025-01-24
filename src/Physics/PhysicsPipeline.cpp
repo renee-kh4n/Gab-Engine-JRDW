@@ -20,9 +20,13 @@ bool gbe::physics::PhysicsPipeline::Init()
 	this->overlappingPairCache = new btDbvtBroadphase();
 	///the default constraint solver. For parallel processing you can use a different solver (see Extras/BulletMultiThreaded)
 	this->solver = new btSequentialImpulseConstraintSolver;
+
 	this->dynamicsWorld = new btDiscreteDynamicsWorld(dispatcher, overlappingPairCache, solver, collisionConfiguration);
 	this->dynamicsWorld->setGravity(btVector3(0, 0, 0));
 	this->dynamicsWorld->getBroadphase()->getOverlappingPairCache()->setInternalGhostPairCallback(new btGhostPairCallback());
+	
+	btContactSolverInfo& info = this->dynamicsWorld->getSolverInfo();
+	info.m_solverMode |= SOLVER_INTERLEAVE_CONTACT_AND_FRICTION_CONSTRAINTS;
 	
 	auto callback = [](btDynamicsWorld* world, btScalar timeStep) {
 		physics::PhysicsPipeline::Get_Instance()->OnFixedUpdate_callback(timeStep);
@@ -36,6 +40,11 @@ bool gbe::physics::PhysicsPipeline::Init()
 
 void gbe::physics::PhysicsPipeline::Tick(double delta)
 {
+	for (auto& val : this->data_wrapper_dictionary)
+	{
+		val.second->Pre_Tick_function(delta);
+	}
+
 	dynamicsWorld->stepSimulation(delta, 30);
 }
 
