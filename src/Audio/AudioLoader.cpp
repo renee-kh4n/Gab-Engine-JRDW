@@ -7,7 +7,9 @@ bool gbe::audio::AudioLoader::LoadAsset_(asset::Audio* asset, const asset::data:
 	if(new_audio_data == nullptr)
 		return false;
 
-	Mix_PlayChannel(-1, new_audio_data, 0);
+	data->play = [new_audio_data](Vector3 pos, float volume, int channel) {
+		Mix_PlayChannel(-1, new_audio_data, 0);
+	};
 
 	return true;
 }
