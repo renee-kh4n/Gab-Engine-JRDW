@@ -1,21 +1,21 @@
 #pragma once
 
+#include "Asset/BaseAsset.h"
+
 namespace gbe {
 	namespace asset {
 		namespace data {
 			struct AudioLoadData {
-				unsigned int gl_id;
-
+				
 			};
 			struct AudioImportData {
-				unsigned int gl_id;
-
+				std::string filename;
 			};
 		}
 
 		class Audio : public BaseAsset<Audio, data::AudioImportData, data::AudioLoadData> {
 		public:
-
+			Audio(std::string path);
 		};
 	}
 }

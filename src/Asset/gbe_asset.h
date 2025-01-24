@@ -4,6 +4,7 @@
 #include "AssetTypes/Texture.h"
 #include "AssetTypes/Mesh.h"
 #include "AssetTypes/Shader.h"
+#include "AssetTypes/Audio.h"
 
 #include "AssetInjection/AssetReference.h"
 #include "AssetInjection/AssetSocket.h"

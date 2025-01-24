@@ -6,6 +6,8 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
+#include "AudioLoader.h"
+
 namespace gbe {
 	namespace audio {
 		class AudioPipeline {
@@ -21,8 +23,12 @@ namespace gbe {
 			Mix_Chunk* gMedium = NULL;
 			Mix_Chunk* gLow = NULL;
 
+			//LOADERS
+			AudioLoader audioloader;
+
 		public:
 			void Init();
+			AudioPipeline();
 			AudioPipeline* Get_Instance();
 		};
 	}

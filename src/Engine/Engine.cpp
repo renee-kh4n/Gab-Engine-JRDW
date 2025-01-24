@@ -59,6 +59,9 @@ namespace gbe {
 		mAudioPipeline->Init();
 #pragma endregion
 #pragma region Asset Loading
+		//AUDIO CACHING
+		auto test_sound = new asset::Audio("DefaultAssets/Audio/music.aud.gbe");
+
 		//SHADER CACHING
 		auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
@@ -69,6 +72,7 @@ namespace gbe {
 		CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
 
 		mRenderPipeline->SetCameraShader(CamOrthoPPShader);
+
 		//TEXTURE CACHING
 		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
 

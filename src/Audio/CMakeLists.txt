@@ -3,7 +3,7 @@ set(CURRENT_CMAKE_LIB gbe_audio)
 #SUBDIRECTORY LOADING
 add_library(${CURRENT_CMAKE_LIB} STATIC
 	"AudioPipeline.cpp"
-)
+ "AudioLoader.cpp")
 
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB}
