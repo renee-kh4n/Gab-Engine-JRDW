@@ -26,5 +26,6 @@ namespace gbe{
 		const float* Get_Ptr();
 
 		static const Vector3 zero;
+		static Vector3 Lerp(Vector3& a, Vector3& b, float t);
 	};
 }

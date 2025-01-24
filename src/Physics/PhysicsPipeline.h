@@ -30,6 +30,8 @@ namespace gbe {
 			void UnRegisterBody(PhysicsBody* body);
 			void Set_OnFixedUpdate_callback(std::function<void(float physicsdeltatime)>);
 
+			btDiscreteDynamicsWorld* Get_world();
+
 			PhysicsBody* GetRelatedBody(btCollisionObject*);
 		};
 	}

@@ -65,6 +65,11 @@ void gbe::physics::PhysicsPipeline::Set_OnFixedUpdate_callback(std::function<voi
 	this->OnFixedUpdate_callback = newfunc;
 }
 
+btDiscreteDynamicsWorld* gbe::physics::PhysicsPipeline::Get_world()
+{
+	return this->dynamicsWorld;
+}
+
 gbe::physics::PhysicsBody* gbe::physics::PhysicsPipeline::GetRelatedBody(btCollisionObject* key) {
 	auto enume = this->data_wrapper_dictionary.find(key);
 

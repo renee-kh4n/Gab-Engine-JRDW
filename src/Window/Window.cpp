@@ -97,6 +97,8 @@ namespace gbe {
                 if (symcode == 'a') this->keystates[gbe::Keys::A] = true;
                 if (symcode == 's') this->keystates[gbe::Keys::S] = true;
                 if (symcode == 'd') this->keystates[gbe::Keys::D] = true;
+
+                if (symcode == SDLK_SPACE) this->keystates[gbe::Keys::SPACE] = true;
             }
             if (sdlevent.type == SDL_KEYUP) {
                 auto symcode = sdlevent.key.keysym.sym;
@@ -104,6 +106,8 @@ namespace gbe {
                 if (symcode == 'a') this->keystates[gbe::Keys::A] = false;
                 if (symcode == 's') this->keystates[gbe::Keys::S] = false;
                 if (symcode == 'd') this->keystates[gbe::Keys::D] = false;
+
+                if (symcode == SDLK_SPACE) this->keystates[gbe::Keys::SPACE] = false;
             }
         }
 

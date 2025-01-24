@@ -119,6 +119,7 @@ namespace gbe {
 		auto line_drawcall = new DrawCall(quad_mesh, unlit_white_mat);
 		mRenderPipeline->RegisterDrawCall(line_drawcall);
 
+
 		auto whiteball_drawcall = new DrawCall(sphere_mesh, lit_white_mat);
 		mRenderPipeline->RegisterDrawCall(whiteball_drawcall);
 		std::vector<DrawCall*> particle_drawcalls;
@@ -149,6 +150,7 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
+		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::SPACE>());
 #pragma endregion
 #pragma region Root Loaders
 		//forward declared load functions
@@ -222,6 +224,7 @@ namespace gbe {
 
 			//Player and Camera setup
 			auto f_speed = 50.0f;
+			auto f_jump = 270.0f;
 
 			auto player = new RigidObject();
 			player->SetParent(game_root);
@@ -245,9 +248,9 @@ namespace gbe {
 			//Player Controller Logic
 			auto player_input = new InputPlayer(player_name);
 			player_input->SetParent(game_root);
-			auto gui_communicator = new GenericController();
+			auto input_communicator = new GenericController();
 			//Left click customer
-			gui_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([=](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
+			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([=](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
 				if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
 					return;
 
@@ -255,7 +258,7 @@ namespace gbe {
 
 				}));
 			//WASD customer
-			gui_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
+			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
 				if (value->state != WasdDelta::WHILE)
 					return;
 
@@ -265,7 +268,22 @@ namespace gbe {
 				if (value->delta.x < 0) player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(player_cam->World().GetRight() * f_speed));
 
 				}));
-			gui_communicator->SetParent(player_input);
+			//Spacebar customer
+			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
+				if (value->state != KeyPress<Keys::SPACE>::START)
+					return;
+
+				auto floorcheck = physics::Raycast(player->World().position.Get(), Vector3(0, -1.1f, 0));
+
+				if (floorcheck.result) { //raycast ground here
+					auto curvel = player->GetRigidbody()->Get_velocity();
+					curvel.y = 0;
+					player->GetRigidbody()->Set_velocity(curvel);
+					player->GetRigidbody()->AddForce((physics::PhysicsVector3)(Vector3(0, 1, 0) * f_jump));
+				}
+
+				}));
+			input_communicator->SetParent(player_input);
 
 			//Actual objects
 			//platform
@@ -280,18 +298,21 @@ namespace gbe {
 			RenderObject* platform_renderer = new RenderObject(cube_drawcall);
 			platform_renderer->SetParent(platform_collider);
 
-			//Trigger
+			//Death Trigger
 			TriggerRigidObject* trigger = new TriggerRigidObject();
 			trigger->SetParent(game_root);
-			trigger->Local().position.Set(Vector3(0, 2, 0));
+			trigger->Local().position.Set(Vector3(0, -20, 0));
+			trigger->Local().scale.Set(Vector3(1000, 1, 1000));
 			RenderObject* trigger_renderer = new RenderObject(cube_drawcall);
 			trigger_renderer->SetParent(trigger);
 			BoxCollider* trigger_collider = new BoxCollider();
 			trigger_collider->SetParent(trigger);
 			trigger_collider->Local().position.Set(Vector3(0, 0, 0));
 			trigger_renderer->Local().position.Set(Vector3::zero);
-			trigger->Set_OnEnter([](gbe::PhysicsObject* other) {
-				std::cout << "triggered" << std::endl;
+			trigger->Set_OnEnter([=](gbe::PhysicsObject* other) {
+				if (other == player) {
+					player->SetWorldPosition(Vector3::zero);
+				}
 				});
 
 			//Balls
