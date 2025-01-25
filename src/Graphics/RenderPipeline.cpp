@@ -29,6 +29,7 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
 
 	//Framebuffers setup
 	mFrameBuffer = new Framebuffer(dimensions);
+	mLayererBuffer = new Framebuffer(dimensions);
 	mDepthFrameBuffer = new Framebuffer(dimensions);
 
 	//Shaders
@@ -73,9 +74,14 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 		TextureLoader::Reset_texture_stack();
 		};
 
-	const auto render_scene_to_active_buffer = [&](Matrix4 tmat_PV, asset::Shader* overrideShader = nullptr) {
+	const auto render_scene_to_active_buffer = [&](Matrix4 tmat_PV, int drawcallbatch, asset::Shader* overrideShader = nullptr, int previous_render_output_id = -1, int scene_depth_output_id = -1) {
+		auto findbatch = drawcalls.find(drawcallbatch);
+
+		if (findbatch == drawcalls.end())
+			throw "unregistered batch";
+
 		//Loop through all objects
-		for (auto& drawcall : drawcalls)
+		for (auto drawcall : drawcalls[drawcallbatch])
 		{
 			auto curshader = drawcall->m_material->m_shader.Get_asset();
 
@@ -111,6 +117,9 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 						break;
 					case VEC3:
 						curshader->SetOverride(iterator.first, iterator.second.value_vec3);
+						break;
+					case VEC4:
+						curshader->SetOverride(iterator.first, iterator.second.value_vec4);
 						break;
 					case MAT4:
 						curshader->SetOverride(iterator.first, iterator.second.value_mat4);
@@ -182,6 +191,8 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 				curshader->SetOverride("cameraPos", from);
 				curshader->SetOverride("near_clip", nearclip);
 				curshader->SetOverride("far_clip", farclip);
+				curshader->SetTextureIdOverride("texoverlaying", previous_render_output_id);
+				curshader->SetTextureIdOverride("scenedepth", scene_depth_output_id);
 
 				//Draw the current object
 				glBindVertexArray(drawcall->m_mesh->VAO);
@@ -282,8 +293,8 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 		if (light->GetType() == Light::DIRECTION) {
 			auto dirlight = static_cast<DirLight*>(light);
 
-			auto backtrack_dist = 20.0f;
-			auto overshoot_dist = 100.0f;
+			auto backtrack_dist = 50.0f;
+			auto overshoot_dist = 200.0f;
 
 			auto prev_split = 0.0f;
 			Matrix4 higherResolution_avoid;
@@ -331,7 +342,7 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 					depth_shader.Get_asset()->SetOverride("avoid_matrix", higherResolution_avoid);
 				}
 
-				render_scene_to_active_buffer(lightProjection * lightView, depth_shader.Get_asset());
+				render_scene_to_active_buffer(lightProjection * lightView, 0, depth_shader.Get_asset());
 
 				depth_shader.Get_asset()->SetOverride("avoid_enabled", false);
 
@@ -347,44 +358,66 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 
 	/*MAIN PASS*/
 
-	//Draw to the main display buffer
-	SelectBuffer(mFrameBuffer);
-	render_scene_to_active_buffer(_frustrum);
-	DeSelectBuffer();
-	
+	auto CommitBuffer = [=](Framebuffer* buffer, int lowerlayer_id = -1) {
+		//Assign camera shader as post-processing
+		auto camShader = camera_shader.Get_asset();
+		glUseProgram(camShader->Get_gl_id());
+		glBindVertexArray(mFrameBuffer->quadVAO);
+		glDisable(GL_DEPTH_TEST); //Temporarily disable depth test
+
+		//Attach the color texture to the post-process shader
+		camShader->SetTextureIdOverride("texoverlaying", lowerlayer_id);
+		camShader->SetTextureIdOverride("colorBufferTexture", buffer->outputId);
+		camShader->SetTextureIdOverride("depthBufferTexture", mDepthFrameBuffer->outputId);
+
+		commit_object([]() {
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			});
+		};
+
 	//Draw to the depth buffer using a depth shader
 	SelectBuffer(mDepthFrameBuffer);
-	render_scene_to_active_buffer(_frustrum, depth_shader.Get_asset());
-
+	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
+		auto drawcallbatch = it->second;
+		render_scene_to_active_buffer(_frustrum, it->first, depth_shader.Get_asset(), mDepthFrameBuffer->id);
+	}
 	DeSelectBuffer();
 
-	//Assign camera shader as post-processing
-	auto camShader = camera_shader.Get_asset();
-	glUseProgram(camShader->Get_gl_id());
-	glBindVertexArray(mFrameBuffer->quadVAO);
-	glDisable(GL_DEPTH_TEST); //Temporarily disable depth test
+	//Draw to the main display buffer
+	SelectBuffer(mFrameBuffer);
+	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
+		if(it == drawcalls.begin())
+			render_scene_to_active_buffer(_frustrum, it->first, nullptr, -1);
+		else
+			render_scene_to_active_buffer(_frustrum, it->first, nullptr, mFrameBuffer->outputId, mDepthFrameBuffer->outputId);
+	}
+	DeSelectBuffer();
+	
+	CommitBuffer(mFrameBuffer);
 
-	//Attach the color texture to the post-process shader
-	camShader->SetTextureIdOverride("colorBufferTexture", mFrameBuffer->outputId);
-	camShader->SetTextureIdOverride("depthBufferTexture", mDepthFrameBuffer->outputId);
-
-	commit_object([]() {
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		});
 	this->lights_this_frame.clear();
 #pragma endregion
 }
 
 void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
 {
-	this->drawcalls.push_back(drawcall);
+	if (this->drawcalls.find(drawcall->order) == this->drawcalls.end()) {
+		this->drawcalls.insert_or_assign(drawcall->order, std::vector<DrawCall*>{ drawcall });
+	}
+	else {
+		this->drawcalls[drawcall->order].push_back(drawcall);
+	}
 }
 
 void gbe::RenderPipeline::CleanUp()
 {
-	for (size_t o_i = 0; o_i < drawcalls.size(); o_i++)
-	{
-		glDeleteVertexArrays(1, &drawcalls[o_i]->m_mesh->VAO);
-		glDeleteBuffers(1, &drawcalls[o_i]->m_mesh->VBO);
+	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
+		auto drawcallbatch = it->second;
+
+		for (size_t o_i = 0; o_i < drawcallbatch.size(); o_i++)
+		{
+			glDeleteVertexArrays(1, &drawcallbatch[o_i]->m_mesh->VAO);
+			glDeleteBuffers(1, &drawcallbatch[o_i]->m_mesh->VBO);
+		}
 	}
 }

@@ -17,6 +17,8 @@
 #include "ObjectFunctions/PhysicsUpdate.h"
 #include "Objects/Rendering/Lights/LightObject.h"
 #include "Objects/Rendering/Camera.h"
+#include "Objects/Controllers/TPCameraController.h"
+#include "Objects/Systems/ParticleSystem.h"
 
 namespace gbe {
 	class Engine {

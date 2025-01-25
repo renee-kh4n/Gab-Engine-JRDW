@@ -38,7 +38,20 @@ gbe::gui::gb_rect* gbe::gui::gb_rect::QueryAtPosition(glm::vec2 normalized_cente
     gbe::gui::gb_rect* possible_query_result = nullptr;
 
     if (inside)
-        possible_query_result = this;
+        switch (this->Get_handleType())
+        {
+        case PointerEventHandleType::BLOCK:
+            possible_query_result = this;
+            break;
+        case PointerEventHandleType::BLOCK_AND_PARENT:
+            possible_query_result = this;
+            break;
+        case PointerEventHandleType::PARENT:
+            possible_query_result = this->parent;
+            break;
+        default:
+            break;
+        }
 
     for (auto child : this->children)
     {

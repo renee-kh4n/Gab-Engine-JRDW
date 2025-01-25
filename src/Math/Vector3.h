@@ -27,5 +27,6 @@ namespace gbe{
 
 		static const Vector3 zero;
 		static Vector3 Lerp(Vector3& a, Vector3& b, float t);
+		static const Vector3 RandomWithin(Vector3& a, Vector3& b);
 	};
 }

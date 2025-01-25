@@ -9,7 +9,6 @@ in vec2 texCoord;
 in vec3 normCoord;
 in vec3 tanCoord;
 in vec3 fragPos;
-in float linear_depth;
 in vec3 light_space_positions[max_light_count];
 
 //CAMERA
@@ -20,11 +19,14 @@ uniform float far_clip;
 //TEXTURES
 uniform bool hasDiffuseTex = false;
 uniform sampler2D texdiffuse;
+uniform sampler2D texoverlaying;
+uniform sampler2D scenedepth;
 uniform bool hasNormalTex = false;
 uniform sampler2D texnormal;
 uniform samplerCube skybox;
-//COLORS
-uniform vec3 color;
+//SHADING
+uniform vec4 color;
+uniform bool transparency;
 
 //LIGHT
 uniform float ambientLightIntensity;
@@ -200,11 +202,19 @@ void main(){
 	
 
 	//Combine all light sources
-	vec3 final_color = (light_total) * color;
+	vec4 final_color = vec4(light_total, 1.0f) * color;
 
 	if(hasDiffuseTex){
-		final_color = final_color * vec3(max(texture(texdiffuse, texCoord), 0.001));
+		final_color = final_color * texture(texdiffuse, texCoord);
 	}
 	
-	FragColor = vec4(final_color, 1.0f);
+	vec4 transparency_layer = texture(texoverlaying, vec2(screenPos));
+
+	if(transparency){
+		float final_depth_here = texture(scenedepth, vec2(screenPos)).r;
+
+		final_color += transparency_layer * step(gl_FragCoord.z, final_depth_here + 0.001f);
+	}
+
+	FragColor = final_color;
 }

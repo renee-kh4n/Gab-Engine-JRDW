@@ -72,3 +72,12 @@ gbe::Vector3 Lerp(gbe::Vector3& a, gbe::Vector3& b, float t) {
 	auto tv = a + d;
 	return tv;
 }
+
+const gbe::Vector3 RandomWithin(gbe::Vector3& a, gbe::Vector3& b) {
+	gbe::Vector3 d = b - a;
+	auto rand_01 = []() {
+		return static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+		};
+
+	return gbe::Vector3(d.x * rand_01(), d.y * rand_01(), d.z * rand_01());
+}

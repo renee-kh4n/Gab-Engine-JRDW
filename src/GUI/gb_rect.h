@@ -21,7 +21,7 @@ namespace gbe {
 		protected:
 			gb_canvas* canvas;
 
-			PointerEventHandleType pointerEventHandleType;
+			PointerEventHandleType pointerEventHandleType = PointerEventHandleType::BLOCK;
 			gb_rect* parent;
 			std::list<gb_rect*> children;
 

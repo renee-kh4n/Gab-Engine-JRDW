@@ -17,6 +17,7 @@ void gbe::physics::PhysicsBody::InjectCurrentTransformMatrix(Matrix4 pos)
 	this->transform.setFromOpenGLMatrix(pos.Get_Ptr());
 	this->base_data->setWorldTransform(this->transform);
 	this->motionstate->setWorldTransform(this->transform);
+
 }
 
 void gbe::physics::PhysicsBody::PassTransformationData(Vector3& pos, Quaternion& rot)

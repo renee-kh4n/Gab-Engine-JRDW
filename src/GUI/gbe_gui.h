@@ -5,6 +5,7 @@
 #include "gb_rect.h"
 #include "rect_types/gb_root.h"
 #include "rect_types/gb_button.h"
+#include "rect_types/gb_image.h"
 #include "interfaces/gb_onClick.h"
 #include "interfaces/gb_onEnter.h"
 #include "interfaces/gb_onExit.h"

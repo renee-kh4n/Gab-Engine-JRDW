@@ -5,7 +5,7 @@
 
 namespace gbe {
 	namespace gui {
-		class gb_image : gb_rect {
+		class gb_image : public gb_rect {
 		private:
 			asset::Texture* sprite;
 			glm::vec4 current_color;

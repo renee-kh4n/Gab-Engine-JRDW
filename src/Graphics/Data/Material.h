@@ -12,6 +12,7 @@ namespace gbe {
 			FLOAT,
 			VEC2,
 			VEC3,
+			VEC4,
 			MAT4
 		};
 
@@ -25,6 +26,7 @@ namespace gbe {
 				float value_float;
 				Vector2 value_vec2;
 				Vector3 value_vec3;
+				Vector4 value_vec4;
 				Matrix4 value_mat4;
 			};
 		};
@@ -73,6 +75,14 @@ namespace gbe {
 				auto materialOverride = MaterialOverride();
 				materialOverride.type = MaterialOverrideType::VEC3;
 				materialOverride.value_vec3 = value;
+
+				overrides.insert_or_assign(id, materialOverride);
+			}
+			template<>
+			void setOverride<Vector4>(const char* id, Vector4 value) {
+				auto materialOverride = MaterialOverride();
+				materialOverride.type = MaterialOverrideType::VEC4;
+				materialOverride.value_vec4 = value;
 
 				overrides.insert_or_assign(id, materialOverride);
 			}

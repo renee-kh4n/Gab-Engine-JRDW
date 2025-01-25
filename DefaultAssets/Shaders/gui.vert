@@ -14,6 +14,9 @@ uniform vec2 tr_pivot;
 uniform vec2 bl_offset;
 uniform vec2 tr_offset;
 
+//PASS TO PIXEL SHADER
+out vec2 texCoord;
+
 void main(){
 	vec2 offset_normalizer = viewport_size * 0.5f;
 
@@ -22,6 +25,6 @@ void main(){
 	float x = mix(final_min.x, final_max.x, smoothstep(aPos.x, -1, 1));
 	float y = mix(final_min.y, final_max.y, smoothstep(aPos.y, -1, 1));
 
-
+	texCoord = aTex;
 	gl_Position = transform * vec4(aPos, 1.0);
 }

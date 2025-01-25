@@ -3,6 +3,7 @@ out vec4 FragColor;
   
 in vec2 TexCoords;
 
+uniform sampler2D texoverlaying;
 uniform sampler2D colorBufferTexture;
 uniform sampler2D depthBufferTexture;
 
@@ -68,7 +69,12 @@ void main()
     hsv.y *= saturation;
     color = vec4(hsv2rgb(hsv), color.w) * tint;
 
+    vec4 texoverlaying_color = texture(texoverlaying, TexCoords);
+
+    //color += texoverlaying_color;
+
     FragColor = color;
+
     //FragColor = vec4(smoothstep(0, 20, depth), smoothstep(20, 40, depth), smoothstep(40, 60, depth), 1.0f);
     //FragColor = vec4(blurAtDepth,0 ,0 , 1.0f);
 }

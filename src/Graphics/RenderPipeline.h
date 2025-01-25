@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <map>
 
 #include <functional>
 
@@ -29,7 +30,7 @@ namespace gbe {
 		Vector2Int resolution;
 		asset::AssetReference<asset::Shader> camera_shader;
 
-		std::vector<DrawCall*> drawcalls;
+		std::map<int, std::vector<DrawCall*>> drawcalls;
 
 		std::list<gfx::Light*> lights_this_frame;
 		const int maxlights = 10;
@@ -44,6 +45,7 @@ namespace gbe {
 
 		//BUFFERS
 		Framebuffer* mFrameBuffer;
+		Framebuffer* mLayererBuffer;
 		Framebuffer* mDepthFrameBuffer;
 	public:
 		static RenderPipeline* Get_Instance();

@@ -9,10 +9,11 @@ namespace gbe {
         public:
             std::unordered_map<void*, Matrix4> calls;
 
+            int order;
             Mesh* m_mesh;
             Material* m_material;
 
-            DrawCall(Mesh* mesh, Material* material);
+            DrawCall(Mesh* mesh, Material* material, int order = 0);
         };
     }
 }
