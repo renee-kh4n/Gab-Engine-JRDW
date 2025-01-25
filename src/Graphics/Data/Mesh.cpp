@@ -93,6 +93,9 @@ Mesh::Mesh(std::string path) {
             fullVertexData[tanindex0 + 1] = tan.y;
             fullVertexData[tanindex0 + 2] = tan.z;
         }
+
+        //Commit data
+        this->triangles.push_back({vertices[0], vertices[1] , vertices[2] });
     }
 
     //OpenGL object loading

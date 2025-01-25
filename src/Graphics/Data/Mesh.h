@@ -12,6 +12,8 @@ namespace gbe {
             std::vector<tinyobj::material_t> material;
             std::string warning, error;
 
+            std::vector<std::vector<glm::vec3>> triangles;
+
             std::vector<GLfloat> fullVertexData;
             Mesh(std::string path);
         };

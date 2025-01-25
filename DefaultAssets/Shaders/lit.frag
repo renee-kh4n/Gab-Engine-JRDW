@@ -154,7 +154,7 @@ void main(){
 
 	//freshnell outline
 	float freshnel = pow(max(1 - dot(viewDir, normal), 0), 2) * 1;
-	freshnel = 1 - step(0.7, freshnel);
+	freshnel = 1 - step(0.8, freshnel);
 	final_color *= freshnel;
 
 	if(hasDiffuseTex){
@@ -165,9 +165,7 @@ void main(){
 
 	if(transparency){
 		float final_depth_here = texture(scenedepth, vec2(screenPos)).r;
-
-		final_color += transparency_layer * step(gl_FragCoord.z, final_depth_here + 0.001f);
-	}
+		}
 
 	FragColor = final_color;
 }

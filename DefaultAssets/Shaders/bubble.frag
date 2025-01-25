@@ -174,49 +174,20 @@ void main(){
 	}
 
 	light_total += group_total;
-
-	//Ambient calculation
-	float Pi = 6.28318530718;
-	vec3 ambientReflectDir = reflect(-viewDir, normal);
-    float ambientReflectionLayersApplied = 0;
-    float ambientBlurDirs = 6;
-    float ambientBlurQual = 2;
-    vec4 ambientOutput = texture(skybox, ambientReflectDir);
-	vec3 ambientReflectRight = cross(ambientReflectDir, normal);
-	vec3 ambientReflectUp = cross(ambientReflectRight, ambientReflectDir);
-
-	mat3 ambientRedirMatrix = mat3(ambientReflectRight, ambientReflectUp , ambientReflectDir);
-
-    for(float d = 0.0; d < Pi; d += Pi/ambientBlurDirs)
-    {
-		for(float i = 1.0/ambientBlurQual; i <= 1.0; i += 1.0/ambientBlurQual)
-        {
-            vec3 from_uv = ambientReflectDir + (ambientRedirMatrix * vec3(cos(d),sin(d), 1) * (1 / specPhong) * i);
-			ambientReflectionLayersApplied += 1;
-			ambientOutput += texture(skybox, from_uv);
-        }
-    }
-    // Output to screen
-    ambientOutput /= ambientReflectionLayersApplied + 1;
-	vec3 ambient = ambientOutput.xyz * ambientLightIntensity;
 	
 	//Combine all light sources
 	vec4 final_color = vec4(light_total, 1.0f) * color;
-
-	if(hasDiffuseTex){
-		final_color = final_color * texture(texdiffuse, texCoord);
-	}
-	
-	float freshnel = pow(max(1 - dot(viewDir, normal), 0), 2) * 1;
-	final_color = max(final_color, freshnel);
-	final_color = max(final_color, 0);
+	float freshnel = pow(max(1 - dot(viewDir, normal), 0), 2) * 2;
+	final_color += freshnel;
 
 	vec4 transparency_layer = texture(texoverlaying, vec2(screenPos));
 
 	if(transparency){
 		float final_depth_here = texture(scenedepth, vec2(screenPos)).r;
 
-		final_color += transparency_layer * step(gl_FragCoord.z, final_depth_here + 0.001f);
+		float mixback_t = final_color.a * step(gl_FragCoord.z, final_depth_here + 0.002f);
+		final_color = transparency_layer + max(final_color, 0);
 	}
-	FragColor = final_color;
+	
+	FragColor = final_color * max(freshnel, 1);
 }

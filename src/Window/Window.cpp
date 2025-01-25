@@ -152,6 +152,9 @@ namespace gbe {
         SDL_GetMouseState(&this->mousePos.x, &this->mousePos.y);
         return this->mousePos;
     }
+    void Window::Set_cursorLock(bool enabled) {
+        SDL_ShowCursor(enabled ? SDL_ENABLE : SDL_DISABLE);
+    }
     void* (*Window::Get_procaddressfunc())(const char*)
     {
         return this->procaddressfunc;

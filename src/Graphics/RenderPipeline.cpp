@@ -207,13 +207,13 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 
 		};
 
-	auto SelectBuffer = [=, &lights_mframe](Framebuffer* buffer) {
+	auto SelectBuffer = [=, &lights_mframe](Framebuffer* buffer, Vector3 clearcolor = Vector3::zero) {
 		glViewport(0, 0, buffer->dimensions.x, buffer->dimensions.y);
 
 		//Initialize the buffer
 		glBindFramebuffer(GL_FRAMEBUFFER, buffer->id);
 		glEnable(GL_DEPTH_TEST); //Enable depthtest again
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClearColor(clearcolor.x, clearcolor.y, clearcolor.z, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		};
 
@@ -384,7 +384,7 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 	DeSelectBuffer();
 
 	//Draw to the main display buffer
-	SelectBuffer(mFrameBuffer);
+	SelectBuffer(mFrameBuffer, Vector3(96.0f / 255.0f, 219.0f / 255.0f, 246.0f / 255.0f));
 	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
 		if(it == drawcalls.begin())
 			render_scene_to_active_buffer(_frustrum, it->first, nullptr, -1);

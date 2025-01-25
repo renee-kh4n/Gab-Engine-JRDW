@@ -15,6 +15,7 @@
 #include "Physics/Collider/Collider.h"
 #include "Physics/Collider/BoxCollider.h"
 #include "Physics/Collider/SphereCollider.h"
+#include "Physics/Collider/MeshCollider.h"
 #include "Input/InputCustomer.h"
 #include "Input/InputPlayer.h"
 #include "Controllers/ControllerBase.h"

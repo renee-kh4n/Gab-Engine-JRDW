@@ -94,6 +94,7 @@ namespace gbe {
 		auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
 		auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
 		auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
+		auto level_mesh = new Mesh("DefaultAssets/3D/level_v3.obj");
 		auto duck_mesh = new Mesh("DefaultAssets/3D/Rubber Ducky.obj");
 
 		//MATERIAL CACHING
@@ -161,6 +162,9 @@ namespace gbe {
 
 		auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
 		mRenderPipeline->RegisterDrawCall(cube_drawcall);
+		
+		auto level_drawcall = new DrawCall(level_mesh, lit_white_mat);
+		mRenderPipeline->RegisterDrawCall(level_drawcall);
 
 		auto duck_drawcall = new DrawCall(duck_mesh, lit_white_mat);
 		mRenderPipeline->RegisterDrawCall(duck_drawcall);
@@ -353,13 +357,24 @@ namespace gbe {
 			directional_light->SetParent(game_root);
 			directional_light->Set_ShadowmapResolutions(2160);
 
+			//level
+			auto level_object = new RigidObject(true);
+			level_object->TranslateWorld(Vector3(10, -6, -27));
+			level_object->SetParent(game_root);
+			auto level_renderer = new RenderObject(level_drawcall);
+			level_renderer->SetParent(level_object);
+			auto level_collider = new MeshCollider(level_mesh);
+			level_collider->SetParent(level_object);
+
 			//Player and Camera setup
-			auto f_speed = 200.0f;
-			auto f_jump = 320.0f;
+			auto f_speed = 60.0f;
+			auto f_jump = 180.0f;
 
 			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
 
 			player->SetParent(game_root);
+			player->Local().scale.Set(Vector3(1, 1, 1) * 0.8f);
+
 			auto player_renderer = new RenderObject(get_random_drawcall());
 			player_renderer->SetParent(player);
 			auto player_collider = new SphereCollider();
@@ -387,14 +402,37 @@ namespace gbe {
 			});
 			camera_parent->SetParent(game_root);
 			player_cam->angles = 80;
+			player_cam->nearClip = 1.0f;
 			player_cam->farClip = 200.0f;
 			player_cam->WorldUp = Vector3(0, 1, 0);
 			player_cam->SetParent(camera_parent);
-			player_cam->TranslateWorld(Vector3(0, 3, -10));
+			auto target_campos = Vector3(0, 2, -5);
+			player_cam->TranslateWorld(target_campos);
+
+			//camera clip check
+			auto cameraclipcheck = [=]() {
+				Vector3 campos_world = Vector3();
+				campos_world.y = 2;
+				campos_world += camera_parent->World().GetForward() * -5.0f;
+
+				auto check = physics::Raycast(camera_parent->World().position.Get(), campos_world);
+				if (check.result) {
+					return (Vector3)(check.intersection - (campos_world * 0.1f));
+				}
+				else {
+					return campos_world;
+				}
+			};
+
+			auto camera_check = new GenericObject([=](GenericObject* self, float delta) {
+				auto campos = cameraclipcheck();
+				player_cam->World().position.Set(campos);
+				});
+			camera_check->SetParent(camera_parent);
 
 			//ground check
 			auto groundcheck = [=]() {
-				auto floorcheck = physics::Raycast(player->World().position.Get(), Vector3(0, -1.1f, 0));
+				auto floorcheck = physics::Raycast(player->World().position.Get(), Vector3(0, -1.5f, 0));
 				return floorcheck.result;
 				};
 			//BALL SHOOTER
@@ -431,7 +469,6 @@ namespace gbe {
 					return;
 
 
-
 				duck_renderer->World().rotation.Set(player_cam->World().rotation.Get());
 
 				Vector3 right_vec = player_cam->World().GetRight() * f_speed;
@@ -465,7 +502,7 @@ namespace gbe {
 
 			//Death Trigger
 			auto death_checker = new GenericObject([=](GenericObject* self, float delta) {
-				if (player->World().position.Get().y < -20) {
+				if (player->World().position.Get().y < -4) {
 					player->SetWorldPosition(Vector3::zero);
 					player->GetRigidbody()->Set_velocity(Vector3::zero);
 				}
@@ -474,16 +511,6 @@ namespace gbe {
 #pragma endregion
 			
 			//Actual objects
-			
-			//platform
-			create_platform(Vector3(0, -10, 0), Vector3(10, 1, 10));
-			create_spray(Vector3(0, -20, 20));
-			create_platform(Vector3(0, -2, 35), Vector3(10, 1, 10));
-			create_platform(Vector3(30, -6, 26), Vector3(10, 1, 3));
-			create_spray(Vector3(40, -20, 0));
-			create_spray(Vector3(40, -15, -10));
-			create_spray(Vector3(40, -10, -20));
-			create_platform(Vector3(40, 5, -35), Vector3(5, 1, 5));
 
 			//Goal
 			TriggerRigidObject* goal_trigger = new TriggerRigidObject();
