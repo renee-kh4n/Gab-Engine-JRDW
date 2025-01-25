@@ -72,6 +72,7 @@ namespace gbe {
 
 		//SHADER CACHING
 		auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");
+		auto bubbleShader = new asset::Shader("DefaultAssets/Shaders/bubble.shader.gbe");
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
 		auto uiShader = new asset::Shader("DefaultAssets/Shaders/gui.shader.gbe");
 
@@ -93,6 +94,7 @@ namespace gbe {
 		auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
 		auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
 		auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
+		auto duck_mesh = new Mesh("DefaultAssets/3D/Rubber Ducky.obj");
 
 		//MATERIAL CACHING
 		auto unlit_white_mat = new Material(unlitShader);
@@ -112,24 +114,25 @@ namespace gbe {
 		mattex.parameterName = "texdiffuse";
 		mattex.textureRef.Assign(ball_tex);
 
-		auto create_lit_colored_mat = [litShader, mattex](Vector3 color) {
-			auto mat = new Material(litShader);
+		auto create_coloredbubble_mat = [=](Vector3 color) {
+			auto mat = new Material(bubbleShader);
 			mat->textureOverrides.push_back(mattex);
-			mat->setOverride("color", Vector4(color.x, color.y, color.z, 1.0f));
-			mat->setOverride("hasDiffuseTex", true);
-			mat->setOverride("specStrength", 0.5f);
-			mat->setOverride("specPhong", 16);
+			mat->setOverride("transparency", true);
+			mat->setOverride("color", Vector4(color.x, color.y, color.z, 0.3f));
+			mat->setOverride("hasDiffuseTex", false);
+			//mat->setOverride("specStrength", 0.2f);
+			//mat->setOverride("specPhong", 1);
 
 			return mat;
 			};
 
 		std::vector<Material*> lit_colored_mats = {
-			create_lit_colored_mat(Vector3(1, 0, 0)),
-			create_lit_colored_mat(Vector3(0, 1, 0)),
-			create_lit_colored_mat(Vector3(0, 0, 1)),
-			create_lit_colored_mat(Vector3(1, 1, 0)),
-			create_lit_colored_mat(Vector3(1, 0, 1)),
-			create_lit_colored_mat(Vector3(0, 1, 1))
+			create_coloredbubble_mat(Vector3(1, 0, 0)),
+			create_coloredbubble_mat(Vector3(0, 1, 0)),
+			create_coloredbubble_mat(Vector3(0, 0, 1)),
+			create_coloredbubble_mat(Vector3(1, 1, 0)),
+			create_coloredbubble_mat(Vector3(1, 0, 1)),
+			create_coloredbubble_mat(Vector3(0, 1, 1))
 		};
 
 		//DRAWCALL CACHING
@@ -146,7 +149,7 @@ namespace gbe {
 
 		for (auto mat : lit_colored_mats)
 		{
-			auto new_drawcall = new DrawCall(sphere_mesh, mat);
+			auto new_drawcall = new DrawCall(sphere_mesh, mat, 1);
 			mRenderPipeline->RegisterDrawCall(new_drawcall);
 			particle_drawcalls.push_back(new_drawcall);
 		}
@@ -157,6 +160,9 @@ namespace gbe {
 
 		auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
 		mRenderPipeline->RegisterDrawCall(cube_drawcall);
+
+		auto duck_drawcall = new DrawCall(duck_mesh, lit_white_mat);
+		mRenderPipeline->RegisterDrawCall(duck_drawcall);
 #pragma endregion
 #pragma region GUI Pipeline Setup
 		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, mRenderPipeline->Get_mainbufferId(), uiShader);
@@ -248,6 +254,77 @@ namespace gbe {
 			auto game_root = this->CreateBlankRoot();
 
 #pragma region one n only objects
+			//Spawn funcs
+
+			//Balls
+			auto spawnball = [get_random_drawcall, game_root](Vector3 pos, float radius, bool collides = true) {
+				RigidObject* ball = new RigidObject();
+				ball->SetParent(game_root);
+
+				if (collides) {
+					auto cradle_collider = new SphereCollider();
+					cradle_collider->SetParent(ball);
+				}
+
+				auto sphere_renderobject = new RenderObject(get_random_drawcall());
+				sphere_renderobject->SetParent(ball);
+
+				ball->Local().position.Set(pos);
+				ball->Local().scale.Set(radius);
+
+				return ball;
+				};
+			//Hairdryer
+			auto create_spray = [=](Vector3 pos) {
+				auto hairspray = new Object();
+				hairspray->Local().position.Set(pos);
+				hairspray->SetParent(game_root);
+				TriggerRigidObject* hairspray_trigger = new TriggerRigidObject();
+				hairspray_trigger->Local().scale.Set(Vector3(3, 20, 3));
+				hairspray_trigger->SetParent(hairspray);
+				//RenderObject* hairspray_trigger_renderer = new RenderObject(cube_drawcall);
+				//hairspray_trigger_renderer->SetParent(hairspray_trigger);
+				//hairspray_trigger_renderer->Local().position.Set(Vector3::zero);
+				BoxCollider* hairspray_trigger_collider = new BoxCollider();
+				hairspray_trigger_collider->SetParent(hairspray_trigger);
+				hairspray_trigger_collider->Local().position.Set(Vector3(0, 0, 0));
+				hairspray_trigger->Set_OnStay([=](gbe::PhysicsObject* other, float delta) {
+					if (other == player) {
+						player->GetRigidbody()->AddForce((physics::PhysicsVector3)(Vector3(0, 4000, 0) * delta));
+					}
+					});
+				hairspray_trigger->Set_OnExit([=](gbe::PhysicsObject* other) {
+					if (other == player) {
+						std::cout << "exitted spray." << std::endl;
+					}
+					});
+				hairspray_trigger->Set_OnEnter([=](gbe::PhysicsObject* other) {
+					if (other == player) {
+						std::cout << "enetered spray." << std::endl;
+					}
+					});
+				auto create_particle = [=](ParticleSystem* creator) {
+					return spawnball(Vector3::zero, 0.4f, false);
+					};
+				auto hairspray_particle_system = new ParticleSystem(create_particle);
+				hairspray_particle_system->SetParent(hairspray);
+				auto bl_corner_bound = Vector3(-2, -1, -2);
+				hairspray_particle_system->SetBounds(bl_corner_bound, -bl_corner_bound);
+				hairspray_particle_system->Set_force(Vector3(0, 600, 0));
+				};
+			auto create_platform = [=](Vector3 pos, Vector3 scale) {
+				RigidObject* platform = new RigidObject(true);
+				platform->SetParent(game_root);
+				platform->Local().position.Set(pos);
+				platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+				platform->Local().scale.Set(scale);
+				BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(platform);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
+				platform_renderer->SetParent(platform_collider);
+				};
+
 			//Global objects
 			//physics force setup
 			auto gravity_volume = new ForceVolume();
@@ -266,12 +343,14 @@ namespace gbe {
 			directional_light->Set_ShadowmapResolutions(2160);
 
 			//Player and Camera setup
-			auto f_speed = 50.0f;
-			auto f_jump = 270.0f;
+			auto f_speed = 100.0f;
+			auto f_jump = 320.0f;
+
+			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
 
 			auto player = new RigidObject();
 			player->SetParent(game_root);
-			auto player_renderer = new RenderObject(transparent);
+			auto player_renderer = new RenderObject(get_random_drawcall());
 			player_renderer->SetParent(player);
 			auto player_collider = new SphereCollider();
 			player_collider->SetParent(player);
@@ -281,15 +360,15 @@ namespace gbe {
 				self->SetWorldPosition(player->World().position.Get());
 				});
 			duck_object->SetParent(game_root);
-			auto duck_renderer = new RenderObject(get_random_drawcall());
-			duck_renderer->Local().scale.Set(Vector3(1) * 0.2f);
+			auto duck_renderer = new RenderObject(duck_drawcall);
+			duck_renderer->Local().position.Set(Vector3(0, -0.7f, 0));
+			duck_renderer->Local().scale.Set(Vector3(1) * 0.6f);
 			duck_renderer->SetParent(duck_object);
 
 			auto camera_parent = new GenericObject([=](GenericObject* self, float delta) {
 				self->SetWorldPosition(player->World().position.Get());
 			});
 			camera_parent->SetParent(game_root);
-			auto player_cam = new PerspectiveCamera(mWindow);
 			player_cam->angles = 80;
 			player_cam->farClip = 200.0f;
 			player_cam->WorldUp = Vector3(0, 1, 0);
@@ -314,6 +393,8 @@ namespace gbe {
 			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
 				if (value->state != WasdDelta::WHILE)
 					return;
+
+				duck_renderer->World().rotation.Set(player_cam->World().rotation.Get());
 
 				auto forward_vec = player_cam->World().GetForward() * f_speed;
 				auto right_vec = player_cam->World().GetRight() * f_speed;
@@ -345,37 +426,13 @@ namespace gbe {
 				}));
 			input_communicator->SetParent(player_input);
 #pragma endregion
-
+			
 			//Actual objects
-			//Balls
-			auto spawnball = [get_random_drawcall, game_root](Vector3 pos, float radius, bool collides = true) {
-				RigidObject* ball = new RigidObject();
-				ball->SetParent(game_root);
-
-				if (collides) {
-					auto cradle_collider = new SphereCollider();
-					cradle_collider->SetParent(ball);
-				}
-
-				auto sphere_renderobject = new RenderObject(get_random_drawcall());
-				sphere_renderobject->SetParent(ball);
-
-				ball->Local().position.Set(pos);
-				ball->Local().scale.Set(radius);
-
-				return ball;
-				};
+			
 			//platform
-			RigidObject* platform = new RigidObject(true);
-			platform->SetParent(game_root);
-			platform->Local().position.Set(Vector3(0, -10, 0));
-			platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
-			platform->Local().scale.Set(Vector3(10, 1, 10));
-			BoxCollider* platform_collider = new BoxCollider();
-			platform_collider->SetParent(platform);
-			platform_collider->Local().position.Set(Vector3(0, 0, 0));
-			RenderObject* platform_renderer = new RenderObject(cube_drawcall);
-			platform_renderer->SetParent(platform_collider);
+			create_platform(Vector3(0, -10, 0), Vector3(10, 1, 10));
+			create_platform(Vector3(0, -2, 35), Vector3(10, 1, 10));
+			create_platform(Vector3(30, -6, 26), Vector3(10, 1, 3));
 
 			//Death Trigger
 			auto death_checker = new GenericObject([=](GenericObject* self, float delta) {
@@ -385,42 +442,7 @@ namespace gbe {
 				});
 			death_checker->SetParent(game_root);
 
-			//Hairdryer
-			auto hairspray = new Object();
-			hairspray->Local().position.Set(Vector3(0, -20, 20));
-			hairspray->SetParent(game_root);
-			TriggerRigidObject* hairspray_trigger = new TriggerRigidObject();
-			hairspray_trigger->Local().scale.Set(Vector3(3, 20, 3));
-			hairspray_trigger->SetParent(hairspray);
-			//RenderObject* hairspray_trigger_renderer = new RenderObject(cube_drawcall);
-			//hairspray_trigger_renderer->SetParent(hairspray_trigger);
-			//hairspray_trigger_renderer->Local().position.Set(Vector3::zero);
-			BoxCollider* hairspray_trigger_collider = new BoxCollider();
-			hairspray_trigger_collider->SetParent(hairspray_trigger);
-			hairspray_trigger_collider->Local().position.Set(Vector3(0, 0, 0));
-			hairspray_trigger->Set_OnStay([=](gbe::PhysicsObject* other, float delta) {
-				if (other == player) {
-					player->GetRigidbody()->AddForce((physics::PhysicsVector3)(Vector3(0, 4000, 0) * delta));
-				}
-				});
-			hairspray_trigger->Set_OnExit([=](gbe::PhysicsObject* other) {
-				if (other == player) {
-					std::cout << "exitted spray." << std::endl;
-				}
-				});
-			hairspray_trigger->Set_OnEnter([=](gbe::PhysicsObject* other) {
-				if (other == player) {
-					std::cout << "enetered spray." << std::endl;
-				}
-				});
-			auto create_particle = [=](ParticleSystem* creator) {
-				return spawnball(Vector3::zero, 0.4f, false);
-				};
-			auto hairspray_particle_system = new ParticleSystem(create_particle);
-			hairspray_particle_system->SetParent(hairspray);
-			auto bl_corner_bound = Vector3(-2, -1, -2);
-			hairspray_particle_system->SetBounds(bl_corner_bound, -bl_corner_bound);
-			hairspray_particle_system->Set_force(Vector3(0, 600, 0));
+			create_spray(Vector3(0, -20, 20));
 
 			//BALL SHOOTER
 			auto shoot_func = [spawnball, camera_parent]() {
