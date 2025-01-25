@@ -103,9 +103,8 @@ namespace gbe {
 		auto unlit_white_mat = new Material(unlitShader);
 		unlit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
 
-		auto lit_mat_trans = new Material(litShader);
-		lit_mat_trans->setOverride("color", Vector4(0, 1, 1, 0.5f));
-		lit_mat_trans->setOverride("transparency", true);
+		auto lit_water_mat = new Material(litShader);
+		lit_water_mat->setOverride("color", Vector4(0.6, 0.8, 1, 1));
 
 		auto tile_mattex = MaterialTexture();
 		tile_mattex.parameterName = "texdiffuse";
@@ -150,8 +149,8 @@ namespace gbe {
 		auto whiteball_drawcall = new DrawCall(sphere_mesh, lit_white_mat);
 		mRenderPipeline->RegisterDrawCall(whiteball_drawcall);
 
-		auto transparent = new DrawCall(sphere_mesh, lit_mat_trans, 1);
-		mRenderPipeline->RegisterDrawCall(transparent);
+		auto water_quad = new DrawCall(quad_mesh, lit_water_mat);
+		mRenderPipeline->RegisterDrawCall(water_quad);
 
 		std::vector<DrawCall*> particle_drawcalls;
 
@@ -336,6 +335,7 @@ namespace gbe {
 				hairspray_trigger->Set_OnEnter([=](gbe::PhysicsObject* other) {
 					if (other == player) {
 						std::cout << "enetered spray." << std::endl;
+						audio_hairdryer->Play();
 					}
 					});
 				auto hairspray_particle_system = new ParticleSystem(create_particle);
@@ -376,18 +376,7 @@ namespace gbe {
 			directional_light->SetParent(game_root);
 			directional_light->Set_ShadowmapResolutions(2160);
 
-			//level
-			auto level_object = new RigidObject(true);
-			level_object->TranslateWorld(Vector3(10, -6, -27));
-			level_object->SetParent(game_root);
-			auto level_renderer = new RenderObject(level_drawcall);
-			level_renderer->SetParent(level_object);
-			auto level_collider = new MeshCollider(level_mesh);
-			level_collider->SetParent(level_object);
-
-			create_spray(Vector3(25, -3, -3));
-			create_spray(Vector3(25, 0, -12));
-			create_spray(Vector3(-1, 0, -30));
+			
 
 			//Player and Camera setup
 			auto f_speed = 60.0f;
@@ -461,12 +450,13 @@ namespace gbe {
 				return floorcheck.result;
 				};
 			//BALL SHOOTER
-			auto shoot_func = [spawnball, camera_parent]() {
+			auto shoot_func = [=]() {
 				auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().GetUp() * 0.3f);
 
 				auto ball = spawnball(spawnpos, 0.2f);
 				ball->GetRigidbody()->AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
-				};
+				audio_shoot->Play();
+			};
 
 			//Player Controller Logic
 			auto player_input = new InputPlayer(player_name);
@@ -481,6 +471,7 @@ namespace gbe {
 					return;
 
 				mGUIPipeline->Click();
+				shoot_func();
 
 				}));
 			//WASD customer
@@ -547,23 +538,39 @@ namespace gbe {
 #pragma endregion
 			
 			//Actual objects
+			auto level_object = new RigidObject(true);
+			level_object->TranslateWorld(Vector3(10, -6, -27));
+			level_object->SetParent(game_root);
+			auto level_renderer = new RenderObject(level_drawcall);
+			level_renderer->SetParent(level_object);
+			auto level_collider = new MeshCollider(level_mesh);
+			level_collider->SetParent(level_object);
+
+			create_spray(Vector3(25, -3, -3));
+			create_spray(Vector3(25, 0, -12));
+			create_spray(Vector3(-1, 0, -30));
+			create_spray(Vector3(8, 0, -46));
+			create_spray(Vector3(11.6, 4.6, -51.7));
+			
+			//water
+			auto water_renderer = new RenderObject(water_quad);
+			water_renderer->SetParent(game_root);
+			water_renderer->Local().scale.Set(Vector3(100, 100, 100));
+			water_renderer->Local().rotation.Set(Quaternion::Euler(Vector3(-90, 0, 0)));
+			water_renderer->TranslateWorld(Vector3(0, -5, 0));
 
 			//Goal
-			TriggerRigidObject* goal_trigger = new TriggerRigidObject();
-			goal_trigger->TranslateWorld(Vector3(Vector3(40, 8, -35)));
-			goal_trigger->Local().scale.Set(Vector3(3, 3, 3));
-			goal_trigger->SetParent(game_root);
-			RenderObject* goal_trigger_renderer = new RenderObject(duck_drawcall);
-			goal_trigger_renderer->SetParent(goal_trigger);
-			goal_trigger_renderer->Local().position.Set(Vector3::zero);
-			BoxCollider* goal_trigger_collider = new BoxCollider();
-			goal_trigger_collider->SetParent(goal_trigger);
-			goal_trigger_collider->Local().position.Set(Vector3(0, 0, 0));
-			goal_trigger->Set_OnStay([=](gbe::PhysicsObject* other, float delta) {
-				if (other == player) {
-					this->ChangeRoot(create_main_menu());
+			auto goal_trigger = new GenericObject([=](GenericObject* self, float delta) {
+				Vector3 player_delta = self->World().position.Get() - player->World().position.Get();
+				auto sd_player = player_delta.SqrMagnitude();
+
+				if (sd_player * sd_player < 7 * 7) {
+					ChangeRoot(create_main_menu());
 				}
-			});
+
+				});
+			goal_trigger->TranslateWorld(Vector3(25, -3, -38));
+			goal_trigger->SetParent(game_root);
 
 			return game_root;
 			};
