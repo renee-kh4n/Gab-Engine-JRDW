@@ -1,4 +1,6 @@
 #include "ParticleSystem.h"
+#include "ParticleSystem.h"
+#include "ParticleSystem.h"
 
 gbe::ParticleSystem::ParticleSystem(std::function<RigidObject* (ParticleSystem*)> nparticle)
 {
@@ -7,7 +9,9 @@ gbe::ParticleSystem::ParticleSystem(std::function<RigidObject* (ParticleSystem*)
 
 void gbe::ParticleSystem::InvokeUpdate(float deltatime)
 {
-	this->time_lastspawned += deltatime;
+	if (this->enabled) {
+		this->time_lastspawned += deltatime;
+	}
 
 	if (time_lastspawned > this->time_perspawn) {
 		this->time_lastspawned = 0.0f;
@@ -59,4 +63,14 @@ void gbe::ParticleSystem::SetBounds(Vector3 from, Vector3 to)
 void gbe::ParticleSystem::Set_force(Vector3 newforce)
 {
 	this->continuous_force = newforce;
+}
+
+void gbe::ParticleSystem::Set_rate(float rate)
+{
+	this->time_perspawn = 1.0f / rate;
+}
+
+void gbe::ParticleSystem::Set_enabled(bool to)
+{
+	this->enabled = to;
 }

@@ -254,6 +254,9 @@ namespace gbe {
 			auto game_root = this->CreateBlankRoot();
 
 #pragma region one n only objects
+			//forward declaration
+			auto player = new RigidObject();
+
 			//Spawn funcs
 
 			//Balls
@@ -274,6 +277,14 @@ namespace gbe {
 
 				return ball;
 				};
+			//Generic Particle system
+			auto create_particle = [=](ParticleSystem* creator) {
+				float randf = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+				float randsize = 0.1f + (0.6f * randf);
+
+				return spawnball(Vector3::zero, randsize, false);
+				};
+
 			//Hairdryer
 			auto create_spray = [=](Vector3 pos) {
 				auto hairspray = new Object();
@@ -303,9 +314,6 @@ namespace gbe {
 						std::cout << "enetered spray." << std::endl;
 					}
 					});
-				auto create_particle = [=](ParticleSystem* creator) {
-					return spawnball(Vector3::zero, 0.4f, false);
-					};
 				auto hairspray_particle_system = new ParticleSystem(create_particle);
 				hairspray_particle_system->SetParent(hairspray);
 				auto bl_corner_bound = Vector3(-2, -1, -2);
@@ -348,12 +356,18 @@ namespace gbe {
 
 			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
 
-			auto player = new RigidObject();
 			player->SetParent(game_root);
 			auto player_renderer = new RenderObject(get_random_drawcall());
 			player_renderer->SetParent(player);
 			auto player_collider = new SphereCollider();
 			player_collider->SetParent(player);
+			auto player_particle_system = new ParticleSystem(create_particle);
+			player_particle_system->SetParent(player);
+			auto bl_corner_bound = Vector3(-0.5, -0.5, -0.5);
+			player_particle_system->SetBounds(bl_corner_bound, -bl_corner_bound);
+			player_particle_system->Set_force(Vector3(0, 200, 0));
+			player_particle_system->Set_rate(20);
+			player_particle_system->Set_enabled(false);
 
 			//duck inside
 			auto duck_object = new GenericObject([=](GenericObject* self, float delta) {
@@ -391,9 +405,12 @@ namespace gbe {
 				}));
 			//WASD customer
 			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
+				if(value->state == WasdDelta::END)
+					player_particle_system->Set_enabled(false);
 				if (value->state != WasdDelta::WHILE)
 					return;
 
+				player_particle_system->Set_enabled(true);
 				duck_renderer->World().rotation.Set(player_cam->World().rotation.Get());
 
 				auto forward_vec = player_cam->World().GetForward() * f_speed;

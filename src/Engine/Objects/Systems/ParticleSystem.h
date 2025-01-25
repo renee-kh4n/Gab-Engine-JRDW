@@ -19,10 +19,15 @@ namespace gbe {
 		float time_lastspawned = 0.0f;
 		float time_perspawn = 0.2f;
 		float life_time = 5.0f;
+
+		bool enabled = true;
 	public:
 		ParticleSystem(std::function<RigidObject* (ParticleSystem*)>);
 		void InvokeUpdate(float deltatime) override;
 		void SetBounds(Vector3 from, Vector3 to);
 		void Set_force(Vector3 newforce);
+		void Set_rate(float rate);
+
+		void Set_enabled(bool);
 	};
 }
