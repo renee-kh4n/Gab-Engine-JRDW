@@ -1,6 +1,7 @@
 #include "ParticleSystem.h"
 #include "ParticleSystem.h"
 #include "ParticleSystem.h"
+#include "ParticleSystem.h"
 
 gbe::ParticleSystem::ParticleSystem(std::function<RigidObject* (ParticleSystem*)> nparticle)
 {
@@ -68,6 +69,11 @@ void gbe::ParticleSystem::Set_force(Vector3 newforce)
 void gbe::ParticleSystem::Set_rate(float rate)
 {
 	this->time_perspawn = 1.0f / rate;
+}
+
+void gbe::ParticleSystem::Set_lifetime(float len)
+{
+	this->life_time = len;
 }
 
 void gbe::ParticleSystem::Set_enabled(bool to)

@@ -27,6 +27,7 @@ namespace gbe {
 		void SetBounds(Vector3 from, Vector3 to);
 		void Set_force(Vector3 newforce);
 		void Set_rate(float rate);
+		void Set_lifetime(float len);
 
 		void Set_enabled(bool);
 	};

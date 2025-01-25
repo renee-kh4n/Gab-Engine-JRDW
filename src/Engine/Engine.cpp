@@ -89,6 +89,7 @@ namespace gbe {
 		auto mainmenu_tex = new asset::Texture("DefaultAssets/Tex/UI/mainmenu.img.gbe");
 		//MODEL
 		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
+		auto tiles_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/tile.img.gbe");
 
 		//MESH CACHING
 		auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
@@ -105,17 +106,21 @@ namespace gbe {
 		lit_mat_trans->setOverride("color", Vector4(0, 1, 1, 0.5f));
 		lit_mat_trans->setOverride("transparency", true);
 
+		auto tile_mattex = MaterialTexture();
+		tile_mattex.parameterName = "texdiffuse";
+		tile_mattex.textureRef.Assign(tiles_tex);
 		auto lit_white_mat = new Material(litShader);
-		lit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
+		lit_white_mat->setOverride("color", Vector4(1, 1, 0.7, 1));
 		lit_white_mat->setOverride("ambientLightTint", Vector3(1, 1, 1) * 0.2f);
-		lit_white_mat->setOverride<bool>("hasDiffuseTex", false);
+		lit_white_mat->setOverride<bool>("hasDiffuseTex", true);
 		lit_white_mat->setOverride<float>("specStrength", 0.5f);
 		lit_white_mat->setOverride<float>("specPhong", 16);
+		lit_white_mat->textureOverrides.push_back(tile_mattex);
+		
 
 		auto mattex = MaterialTexture();
 		mattex.parameterName = "texdiffuse";
 		mattex.textureRef.Assign(ball_tex);
-
 		auto create_coloredbubble_mat = [=](Vector3 color) {
 			auto mat = new Material(bubbleShader);
 			mat->textureOverrides.push_back(mattex);
@@ -179,8 +184,7 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::MOUSE_LEFT>());
 		mInputSystem->RegisterActionListener(player_name, new WasdDeltaImplementation());
 		mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
-		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
-		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
+		mInputSystem->RegisterActionListener(player_name, new MouseDeltaImplementation());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::SPACE>());
 #pragma endregion
 #pragma region Util functions
@@ -198,12 +202,15 @@ namespace gbe {
 			button->bl_offset = -half_extents;
 			button->tr_pivot = button->bl_pivot;
 			button->tr_offset = -button->bl_offset;
-			button->normal_color = Vector4(1, 1, 1, 0);
+			button->normal_color = Vector4(0, 0, 0, 0);
 			button->hovered_color = Vector4(1, 1, 1, 1);
 			main_canvas->AddRootChild(button);
 			button->Set_onClickAction([=]() {
 				onpress();
 				audio_ui_click->Play();
+				});
+			button->Set_onHoverAction([=]() {
+				audio_ui_hover->Play();
 				});
 			};
 #pragma endregion
@@ -247,10 +254,16 @@ namespace gbe {
 			main_canvas->AddRootChild(main_image);
 
 			create_image_button(startbubble_tex, main_canvas, 
-				Vector2(-0.6, -0.6),
-				Vector2(70, 50),
+				Vector2(-0.53, -0.55),
+				Vector2(120, 80),
 				[=]() {
 				this->ChangeRoot(create_main_game());
+				});
+			create_image_button(exitbubble_tex, main_canvas,
+				Vector2(-0.13, -0.59),
+				Vector2(120, 80),
+				[=]() {
+					mWindow->Terminate();
 				});
 
 			return game_root;
@@ -297,7 +310,7 @@ namespace gbe {
 				hairspray->Local().position.Set(pos);
 				hairspray->SetParent(game_root);
 				TriggerRigidObject* hairspray_trigger = new TriggerRigidObject();
-				hairspray_trigger->Local().scale.Set(Vector3(4, 20, 4));
+				hairspray_trigger->Local().scale.Set(Vector3(1, 3, 1));
 				hairspray_trigger->SetParent(hairspray);
 				//RenderObject* hairspray_trigger_renderer = new RenderObject(cube_drawcall);
 				//hairspray_trigger_renderer->SetParent(hairspray_trigger);
@@ -322,10 +335,11 @@ namespace gbe {
 					});
 				auto hairspray_particle_system = new ParticleSystem(create_particle);
 				hairspray_particle_system->SetParent(hairspray);
-				auto bl_corner_bound = Vector3(-2, -1, -2);
+				auto bl_corner_bound = Vector3(-1, -1, -1);
 				hairspray_particle_system->SetBounds(bl_corner_bound, -bl_corner_bound);
-				hairspray_particle_system->Set_force(Vector3(0, 600, 0));
+				hairspray_particle_system->Set_force(Vector3(0, 800, 0));
 				hairspray_particle_system->Set_rate(10);
+				hairspray_particle_system->Set_lifetime(1);
 				};
 			auto create_platform = [=](Vector3 pos, Vector3 scale) {
 				RigidObject* platform = new RigidObject(true);
@@ -366,6 +380,10 @@ namespace gbe {
 			auto level_collider = new MeshCollider(level_mesh);
 			level_collider->SetParent(level_object);
 
+			create_spray(Vector3(25, -3, -3));
+			create_spray(Vector3(25, 0, -12));
+			create_spray(Vector3(-1, 0, -30));
+
 			//Player and Camera setup
 			auto f_speed = 60.0f;
 			auto f_jump = 180.0f;
@@ -398,7 +416,9 @@ namespace gbe {
 			duck_renderer->SetParent(duck_object);
 
 			auto camera_parent = new GenericObject([=](GenericObject* self, float delta) {
-				self->SetWorldPosition(player->World().position.Get());
+				auto ppos = player->World().position.Get();
+				self->SetWorldPosition(ppos);
+				std::cout << ppos.x << "," << ppos.y << "," << ppos.z << std::endl;
 			});
 			camera_parent->SetParent(game_root);
 			player_cam->angles = 80;
@@ -468,7 +488,6 @@ namespace gbe {
 				if (value->state != WasdDelta::WHILE)
 					return;
 
-
 				duck_renderer->World().rotation.Set(player_cam->World().rotation.Get());
 
 				Vector3 right_vec = player_cam->World().GetRight() * f_speed;
@@ -494,6 +513,8 @@ namespace gbe {
 					curvel.y = 0;
 					player->GetRigidbody()->Set_velocity(curvel);
 					player->GetRigidbody()->AddForce((physics::PhysicsVector3)(Vector3(0, 1, 0) * f_jump));
+
+					audio_jump->Play();
 				}
 
 				}));
@@ -505,6 +526,8 @@ namespace gbe {
 				if (player->World().position.Get().y < -4) {
 					player->SetWorldPosition(Vector3::zero);
 					player->GetRigidbody()->Set_velocity(Vector3::zero);
+
+					audio_jump->Play();
 				}
 				});
 			death_checker->SetParent(game_root);

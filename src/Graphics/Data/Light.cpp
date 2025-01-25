@@ -14,7 +14,7 @@ Light::Type gbe::gfx::DirLight::GetType()
 
 gbe::gfx::DirLight::DirLight()
 {
-    this->cascade_splits = { 0.15, 0.4f };
+    this->cascade_splits = { 0.15, 0.45f };
     int map_count = this->cascade_splits.size() + 1;
     this->shadowmaps = std::vector<Framebuffer*>(map_count);
     this->cascade_projections = std::vector<Matrix4>(map_count);

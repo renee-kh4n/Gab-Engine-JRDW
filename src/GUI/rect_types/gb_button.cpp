@@ -26,6 +26,9 @@ void gbe::gui::gb_button::Update(float delta)
 
 void gbe::gui::gb_button::onEnter() {
 	this->hovered = true;
+
+	if (this->onHoverAction)
+		this->onHoverAction();
 }
 void gbe::gui::gb_button::onExit() {
 	this->hovered = false;
@@ -41,4 +44,8 @@ void gbe::gui::gb_button::onClick() {
 
 void gbe::gui::gb_button::Set_onClickAction(std::function<void()> new_action) {
 	this->onClickAction = new_action;
+}
+
+void gbe::gui::gb_button::Set_onHoverAction(std::function<void()> new_action) {
+	this->onHoverAction = new_action;
 }

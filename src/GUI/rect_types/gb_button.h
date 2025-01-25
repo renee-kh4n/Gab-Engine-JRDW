@@ -15,6 +15,7 @@ namespace gbe {
 			gb_image* target_graphic;
 			bool hovered;
 			Vector4 current_color;
+			std::function<void()> onHoverAction;
 			std::function<void()> onClickAction;
 		public:
 			gb_button(gb_image* target_graphic);
@@ -32,6 +33,7 @@ namespace gbe {
 			void onClick() override;
 
 			void Set_onClickAction(std::function<void()> new_action);
+			void Set_onHoverAction(std::function<void()> new_action);
 		};
 	}
 }

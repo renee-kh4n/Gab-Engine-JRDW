@@ -285,9 +285,6 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 		};
 	auto frustrum_center = get_frustrum_center(frustrum_corners);
 
-	//DEBUG
-	DirLight* mainlight;
-
 	for (auto light : lights_this_frame)
 	{
 		if (light->GetType() == Light::DIRECTION) {
@@ -349,9 +346,6 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 				DeSelectBuffer();
 
 				higherResolution_avoid = lightProjection * lightView;
-
-				//DEBUG
-				mainlight = dirlight;
 			}
 		}
 	}

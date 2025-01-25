@@ -14,6 +14,7 @@
 #include "Input/Action/WasdDelta.h"
 #include "Input/Implementations/KeyPressImplementation.h"
 #include "Input/Implementations/MouseDragImplementation.h"
+#include "Input/Implementations/MouseDeltaImplementation.h"
 #include "Input/Implementations/MouseScrollImplementation.h"
 #include "Input/Implementations/WasdDeltaImplementation.h"
 #include "ObjectFunctions/EarlyUpdate.h"

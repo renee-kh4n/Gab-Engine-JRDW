@@ -148,7 +148,8 @@ void main(){
 	}
 
 	light_total += group_total;
-	
+	light_total = round(light_total * 6.0f) / 6.0f;
+
 	//Combine all light sources
 	vec4 final_color = vec4(max(light_total, 0.1f) + ambientLightTint, 1.0f) * color;
 
