@@ -33,6 +33,7 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
 	mDepthFrameBuffer = new Framebuffer(dimensions);
 
 	//Shaders
+	this->default_buffer_shader.Assign(new asset::Shader("DefaultAssets/Shaders/frame.shader.gbe"));
 	this->depth_shader.Assign(new asset::Shader("DefaultAssets/Shaders/depth.shader.gbe"));
 }
 
@@ -352,22 +353,6 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 
 	/*MAIN PASS*/
 
-	auto CommitBuffer = [=](Framebuffer* buffer, int lowerlayer_id = -1) {
-		//Assign camera shader as post-processing
-		auto camShader = camera_shader.Get_asset();
-		glUseProgram(camShader->Get_gl_id());
-		glBindVertexArray(mFrameBuffer->quadVAO);
-		glDisable(GL_DEPTH_TEST); //Temporarily disable depth test
-
-		//Attach the color texture to the post-process shader
-		camShader->SetTextureIdOverride("texoverlaying", lowerlayer_id);
-		camShader->SetTextureIdOverride("colorBufferTexture", buffer->outputId);
-		camShader->SetTextureIdOverride("depthBufferTexture", mDepthFrameBuffer->outputId);
-
-		commit_object([]() {
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-			});
-		};
 
 	//Draw to the depth buffer using a depth shader
 	SelectBuffer(mDepthFrameBuffer);
@@ -387,7 +372,19 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 	}
 	DeSelectBuffer();
 	
-	CommitBuffer(mFrameBuffer);
+	//Assign camera shader as post-processing
+	auto camShader = camera_shader.Get_asset();
+	glUseProgram(camShader->Get_gl_id());
+	glBindVertexArray(mFrameBuffer->quadVAO);
+	glDisable(GL_DEPTH_TEST); //Temporarily disable depth test
+
+	//Attach the color texture to the post-process shader
+	camShader->SetTextureIdOverride("colorBufferTexture", mFrameBuffer->outputId);
+	camShader->SetTextureIdOverride("depthBufferTexture", mDepthFrameBuffer->outputId);
+
+	commit_object([]() {
+		glDrawArrays(GL_TRIANGLES, 0, 6);
+		});
 
 	this->lights_this_frame.clear();
 #pragma endregion

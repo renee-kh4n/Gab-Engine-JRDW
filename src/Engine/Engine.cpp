@@ -71,6 +71,7 @@ namespace gbe {
 		auto audio_15secrem = new asset::Audio("DefaultAssets/Audio/15secrem.aud.gbe");
 
 		//SHADER CACHING
+		auto depthoffield_shader = new asset::Shader("DefaultAssets/Shaders/depthoffield.shader.gbe");
 		auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");
 		auto bubbleShader = new asset::Shader("DefaultAssets/Shaders/bubble.shader.gbe");
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
@@ -186,6 +187,7 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
 		mInputSystem->RegisterActionListener(player_name, new MouseDeltaImplementation());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::SPACE>());
+		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::ESCAPE>());
 #pragma endregion
 #pragma region Util functions
 		auto create_image_button = [=](asset::Texture* tex, gbe::gui::gb_canvas* main_canvas, Vector2 percent_pos, Vector2 half_extents, std::function<void()> onpress) {
@@ -222,6 +224,32 @@ namespace gbe {
 
 		create_main_menu = [&]() {
 			auto game_root = this->CreateBlankRoot();
+			mWindow->Set_cursorLock(false);
+			//GUI canvases
+			gbe::gui::gb_canvas* mainmenu_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
+			mGUIPipeline->SetActiveCanvas(mainmenu_canvas);
+
+			gbe::gui::gb_image* main_image = new gbe::gui::gb_image();
+			main_image->Set_Image(mainmenu_tex);
+			main_image->bl_pivot = Vector2(-1, -1);
+			main_image->tr_pivot = Vector2(1, 1);
+			main_image->bl_offset = Vector2(0, 0);
+			main_image->tr_offset = Vector2(0, 0);
+			main_image->Set_handleType(gui::gb_rect::PointerEventHandleType::PASS);
+			mainmenu_canvas->AddRootChild(main_image);
+
+			create_image_button(startbubble_tex, mainmenu_canvas,
+				Vector2(-0.53, -0.55),
+				Vector2(120, 80),
+				[=]() {
+					this->ChangeRoot(create_main_game());
+				});
+			create_image_button(exitbubble_tex, mainmenu_canvas,
+				Vector2(-0.13, -0.59),
+				Vector2(120, 80),
+				[=]() {
+					mWindow->Terminate();
+				});
 
 			//Camera setup
 			auto player_input = new InputPlayer(player_name);
@@ -240,38 +268,15 @@ namespace gbe {
 				}));
 			gui_communicator->SetParent(player_input);
 
-			//SCENE GUI
-			gbe::gui::gb_canvas* main_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
-			mGUIPipeline->SetActiveCanvas(main_canvas);
-
-			gbe::gui::gb_image* main_image = new gbe::gui::gb_image();
-			main_image->Set_Image(mainmenu_tex);
-			main_image->bl_pivot = Vector2(-1, -1);
-			main_image->tr_pivot = Vector2(1, 1);
-			main_image->bl_offset = Vector2(0, 0);
-			main_image->tr_offset = Vector2(0, 0);
-			main_image->Set_handleType(gui::gb_rect::PointerEventHandleType::PASS);
-			main_canvas->AddRootChild(main_image);
-
-			create_image_button(startbubble_tex, main_canvas, 
-				Vector2(-0.53, -0.55),
-				Vector2(120, 80),
-				[=]() {
-				this->ChangeRoot(create_main_game());
-				});
-			create_image_button(exitbubble_tex, main_canvas,
-				Vector2(-0.13, -0.59),
-				Vector2(120, 80),
-				[=]() {
-					mWindow->Terminate();
-				});
-
 			return game_root;
 			};
 
 		create_main_game = [&]() {
 			auto game_root = this->CreateBlankRoot();
-
+			mWindow->Set_cursorLock(true);
+			//SCENE GUI
+			gbe::gui::gb_canvas* maingame_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
+			mGUIPipeline->SetActiveCanvas(maingame_canvas);
 #pragma region one n only objects
 			//forward declaration
 			auto player = new RigidObject();
@@ -518,6 +523,14 @@ namespace gbe {
 				}
 
 				}));
+			//ESCAPE Customer
+			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
+				if (value->state != KeyPress<Keys::ESCAPE>::START)
+					return;
+
+				ChangeRoot(create_main_menu());
+
+				}));
 			input_communicator->SetParent(player_input);
 
 
@@ -551,18 +564,6 @@ namespace gbe {
 					this->ChangeRoot(create_main_menu());
 				}
 			});
-
-
-			//SCENE GUI
-			gbe::gui::gb_canvas* main_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
-			mGUIPipeline->SetActiveCanvas(main_canvas);
-
-			create_image_button(exitbubble_tex, main_canvas,
-				Vector2(-0.6, -0.6),
-				Vector2(70, 50),
-				[=]() {
-					this->ChangeRoot(create_main_menu());
-				});
 
 			return game_root;
 			};

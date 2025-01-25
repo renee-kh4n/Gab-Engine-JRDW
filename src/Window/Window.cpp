@@ -99,6 +99,7 @@ namespace gbe {
                 if (symcode == 'd') this->keystates[gbe::Keys::D] = true;
 
                 if (symcode == SDLK_SPACE) this->keystates[gbe::Keys::SPACE] = true;
+                if (symcode == SDLK_ESCAPE) this->keystates[gbe::Keys::ESCAPE] = true;
             }
             if (sdlevent.type == SDL_KEYUP) {
                 auto symcode = sdlevent.key.keysym.sym;
@@ -108,6 +109,7 @@ namespace gbe {
                 if (symcode == 'd') this->keystates[gbe::Keys::D] = false;
 
                 if (symcode == SDLK_SPACE) this->keystates[gbe::Keys::SPACE] = false;
+                if (symcode == SDLK_ESCAPE) this->keystates[gbe::Keys::ESCAPE] = false;
             }
         }
 
@@ -152,8 +154,8 @@ namespace gbe {
         SDL_GetMouseState(&this->mousePos.x, &this->mousePos.y);
         return this->mousePos;
     }
-    void Window::Set_cursorLock(bool enabled) {
-        SDL_ShowCursor(enabled ? SDL_ENABLE : SDL_DISABLE);
+    void Window::Set_cursorLock(bool locked) {
+        SDL_ShowCursor(locked ? SDL_DISABLE : SDL_ENABLE);
     }
     void* (*Window::Get_procaddressfunc())(const char*)
     {

@@ -28,7 +28,6 @@ namespace gbe {
 		static RenderPipeline* Instance;
 
 		Vector2Int resolution;
-		asset::AssetReference<asset::Shader> camera_shader;
 
 		std::map<int, std::vector<DrawCall*>> drawcalls;
 
@@ -41,6 +40,8 @@ namespace gbe {
 		TextureLoader textureloader;
 		
 		//SHADERS
+		asset::AssetReference<asset::Shader> camera_shader;
+		asset::AssetReference<asset::Shader> default_buffer_shader;
 		asset::AssetReference<asset::Shader> depth_shader;
 
 		//BUFFERS
