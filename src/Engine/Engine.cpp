@@ -106,6 +106,7 @@ namespace gbe {
 
 		auto lit_white_mat = new Material(litShader);
 		lit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
+		lit_white_mat->setOverride("ambientLightTint", Vector3(1, 1, 1) * 0.2f);
 		lit_white_mat->setOverride<bool>("hasDiffuseTex", false);
 		lit_white_mat->setOverride<float>("specStrength", 0.5f);
 		lit_white_mat->setOverride<float>("specPhong", 16);
@@ -206,6 +207,7 @@ namespace gbe {
 		//forward declared load functions
 		std::function<Root* ()> create_main_game;
 		std::function<Root* ()> create_main_menu;
+		std::function<Root* ()> create_success_screen;
 
 		create_main_menu = [&]() {
 			auto game_root = this->CreateBlankRoot();
@@ -291,7 +293,7 @@ namespace gbe {
 				hairspray->Local().position.Set(pos);
 				hairspray->SetParent(game_root);
 				TriggerRigidObject* hairspray_trigger = new TriggerRigidObject();
-				hairspray_trigger->Local().scale.Set(Vector3(3, 20, 3));
+				hairspray_trigger->Local().scale.Set(Vector3(4, 20, 4));
 				hairspray_trigger->SetParent(hairspray);
 				//RenderObject* hairspray_trigger_renderer = new RenderObject(cube_drawcall);
 				//hairspray_trigger_renderer->SetParent(hairspray_trigger);
@@ -319,6 +321,7 @@ namespace gbe {
 				auto bl_corner_bound = Vector3(-2, -1, -2);
 				hairspray_particle_system->SetBounds(bl_corner_bound, -bl_corner_bound);
 				hairspray_particle_system->Set_force(Vector3(0, 600, 0));
+				hairspray_particle_system->Set_rate(10);
 				};
 			auto create_platform = [=](Vector3 pos, Vector3 scale) {
 				RigidObject* platform = new RigidObject(true);
@@ -338,7 +341,7 @@ namespace gbe {
 			auto gravity_volume = new ForceVolume();
 			gravity_volume->shape = ForceVolume::GLOBAL;
 			gravity_volume->mode = ForceVolume::DIRECTIONAL;
-			gravity_volume->vector = Vector3(0.f, -15, 0.f);
+			gravity_volume->vector = Vector3(0.f, -12, 0.f);
 			gravity_volume->forceMode = ForceVolume::VELOCITY;
 			gravity_volume->SetParent(game_root);
 
@@ -351,7 +354,7 @@ namespace gbe {
 			directional_light->Set_ShadowmapResolutions(2160);
 
 			//Player and Camera setup
-			auto f_speed = 100.0f;
+			auto f_speed = 200.0f;
 			auto f_jump = 320.0f;
 
 			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
@@ -388,6 +391,20 @@ namespace gbe {
 			player_cam->WorldUp = Vector3(0, 1, 0);
 			player_cam->SetParent(camera_parent);
 			player_cam->TranslateWorld(Vector3(0, 3, -10));
+
+			//ground check
+			auto groundcheck = [=]() {
+				auto floorcheck = physics::Raycast(player->World().position.Get(), Vector3(0, -1.1f, 0));
+				return floorcheck.result;
+				};
+			//BALL SHOOTER
+			auto shoot_func = [spawnball, camera_parent]() {
+				auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().GetUp() * 0.3f);
+
+				auto ball = spawnball(spawnpos, 0.2f);
+				ball->GetRigidbody()->AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
+				};
+
 			//Player Controller Logic
 			auto player_input = new InputPlayer(player_name);
 			player_input->SetParent(game_root);
@@ -405,16 +422,20 @@ namespace gbe {
 				}));
 			//WASD customer
 			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
-				if(value->state == WasdDelta::END)
+				if (value->state == WasdDelta::END || !groundcheck())
 					player_particle_system->Set_enabled(false);
+				if(value->state == WasdDelta::WHILE && groundcheck())
+					player_particle_system->Set_enabled(true);
+
 				if (value->state != WasdDelta::WHILE)
 					return;
 
-				player_particle_system->Set_enabled(true);
+
+
 				duck_renderer->World().rotation.Set(player_cam->World().rotation.Get());
 
-				auto forward_vec = player_cam->World().GetForward() * f_speed;
-				auto right_vec = player_cam->World().GetRight() * f_speed;
+				Vector3 right_vec = player_cam->World().GetRight() * f_speed;
+				auto forward_vec = right_vec.Cross(Vector3(0, 1, 0)).Normalize() * f_speed;
 
 				if (value->delta.y > 0)
 					player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(forward_vec));
@@ -431,9 +452,7 @@ namespace gbe {
 				if (value->state != KeyPress<Keys::SPACE>::START)
 					return;
 
-				auto floorcheck = physics::Raycast(player->World().position.Get(), Vector3(0, -1.1f, 0));
-
-				if (floorcheck.result) { //raycast ground here
+				if (groundcheck()) { //raycast ground here
 					auto curvel = player->GetRigidbody()->Get_velocity();
 					curvel.y = 0;
 					player->GetRigidbody()->Set_velocity(curvel);
@@ -442,32 +461,47 @@ namespace gbe {
 
 				}));
 			input_communicator->SetParent(player_input);
+
+
+			//Death Trigger
+			auto death_checker = new GenericObject([=](GenericObject* self, float delta) {
+				if (player->World().position.Get().y < -20) {
+					player->SetWorldPosition(Vector3::zero);
+					player->GetRigidbody()->Set_velocity(Vector3::zero);
+				}
+				});
+			death_checker->SetParent(game_root);
 #pragma endregion
 			
 			//Actual objects
 			
 			//platform
 			create_platform(Vector3(0, -10, 0), Vector3(10, 1, 10));
+			create_spray(Vector3(0, -20, 20));
 			create_platform(Vector3(0, -2, 35), Vector3(10, 1, 10));
 			create_platform(Vector3(30, -6, 26), Vector3(10, 1, 3));
+			create_spray(Vector3(40, -20, 0));
+			create_spray(Vector3(40, -15, -10));
+			create_spray(Vector3(40, -10, -20));
+			create_platform(Vector3(40, 5, -35), Vector3(5, 1, 5));
 
-			//Death Trigger
-			auto death_checker = new GenericObject([=](GenericObject* self, float delta) {
-				if (player->World().position.Get().y < -20) {
-					player->SetWorldPosition(Vector3::zero);
+			//Goal
+			TriggerRigidObject* goal_trigger = new TriggerRigidObject();
+			goal_trigger->TranslateWorld(Vector3(Vector3(40, 8, -35)));
+			goal_trigger->Local().scale.Set(Vector3(3, 3, 3));
+			goal_trigger->SetParent(game_root);
+			RenderObject* goal_trigger_renderer = new RenderObject(duck_drawcall);
+			goal_trigger_renderer->SetParent(goal_trigger);
+			goal_trigger_renderer->Local().position.Set(Vector3::zero);
+			BoxCollider* goal_trigger_collider = new BoxCollider();
+			goal_trigger_collider->SetParent(goal_trigger);
+			goal_trigger_collider->Local().position.Set(Vector3(0, 0, 0));
+			goal_trigger->Set_OnStay([=](gbe::PhysicsObject* other, float delta) {
+				if (other == player) {
+					this->ChangeRoot(create_main_menu());
 				}
-				});
-			death_checker->SetParent(game_root);
+			});
 
-			create_spray(Vector3(0, -20, 20));
-
-			//BALL SHOOTER
-			auto shoot_func = [spawnball, camera_parent]() {
-				auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().GetUp() * 0.3f);
-
-				auto ball = spawnball(spawnpos, 0.2f);
-				ball->GetRigidbody()->AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
-				};
 
 			//SCENE GUI
 			gbe::gui::gb_canvas* main_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
@@ -481,6 +515,10 @@ namespace gbe {
 				});
 
 			return game_root;
+			};
+
+		create_success_screen = [&]() {
+			return nullptr;
 			};
 #pragma endregion
 

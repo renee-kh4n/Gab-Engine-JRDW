@@ -137,6 +137,32 @@ void main(){
 
 			group_total *= totalshadow;
 		}
+		/*
+		else if(curlight.type == POINT_LIGHT){
+			vec3 offset = curlight.pos - fragPos;
+			vec3 dir = normalize(offset);
+			float intensity = 1 / (1 + length(offset) + (pow(offset.x, 2) + pow(offset.y, 2)));
+			vec3 finalcolor = curlight.color * intensity;
+			vec3 diffuse = max(dot(normal, dir) * finalcolor, 0.0f);
+			light_total += diffuse;
+		}
+		else if(curlight.type == CONE_LIGHT){
+			vec3 cLightOffset = curlight.pos - fragPos;
+			vec3 cLightDir = normalize(cLightOffset);
+			float cLightIntensity = 1 / (1 + length(cLightOffset) + (pow(cLightOffset.x, 2) + pow(cLightOffset.y, 2)));
+			vec3 cLightFinalColor = curlight.color * cLightIntensity;
+			float cTheta     = acos(dot(cLightDir, normalize(-curlight.dir)));
+			float cEpsilon   = curlight.inner_angle - curlight.outer_angle;
+			float cIntensity = smoothstep(0.0, 1.0, (cTheta - curlight.outer_angle) / cEpsilon);
+			vec3 cDiffuse = max(dot(normal, cLightDir) * cLightFinalColor * cIntensity, 0.0f);
+
+			//Spec lighting calculation
+			vec3 cReflectDir = reflect(-cLightDir, normal);
+			float cSpec = pow(max(dot(cReflectDir, viewDir), 0.01), specPhong);
+			vec3 cSpecColor = cSpec * specStrength * cDiffuse;
+			light_total += cDiffuse + cSpecColor;
+		}
+		*/
 
 		if(current_group != curlight.group_id){
 			light_total += group_total / float(group_increment);
@@ -148,14 +174,35 @@ void main(){
 	}
 
 	light_total += group_total;
-	
-	//Combine all light sources
-	vec4 final_color = vec4(max(light_total, 0.1f) + ambientLightTint, 1.0f) * color;
 
-	//freshnell outline
-	float freshnel = pow(max(1 - dot(viewDir, normal), 0), 2) * 1;
-	freshnel = 1 - step(0.7, freshnel);
-	final_color *= freshnel;
+	//Ambient calculation
+	float Pi = 6.28318530718;
+	vec3 ambientReflectDir = reflect(-viewDir, normal);
+    float ambientReflectionLayersApplied = 0;
+    float ambientBlurDirs = 6;
+    float ambientBlurQual = 2;
+    vec4 ambientOutput = texture(skybox, ambientReflectDir);
+	vec3 ambientReflectRight = cross(ambientReflectDir, normal);
+	vec3 ambientReflectUp = cross(ambientReflectRight, ambientReflectDir);
+
+	mat3 ambientRedirMatrix = mat3(ambientReflectRight, ambientReflectUp , ambientReflectDir);
+
+    for(float d = 0.0; d < Pi; d += Pi/ambientBlurDirs)
+    {
+		for(float i = 1.0/ambientBlurQual; i <= 1.0; i += 1.0/ambientBlurQual)
+        {
+            vec3 from_uv = ambientReflectDir + (ambientRedirMatrix * vec3(cos(d),sin(d), 1) * (1 / specPhong) * i);
+			ambientReflectionLayersApplied += 1;
+			ambientOutput += texture(skybox, from_uv);
+        }
+    }
+    // Output to screen
+    ambientOutput /= ambientReflectionLayersApplied + 1;
+	vec3 ambient = ambientOutput.xyz * ambientLightTint;
+	
+
+	//Combine all light sources
+	vec4 final_color = vec4(light_total + ambientLightTint, 1.0f) * color;
 
 	if(hasDiffuseTex){
 		final_color = final_color * texture(texdiffuse, texCoord);
