@@ -58,6 +58,7 @@ namespace gbe {
 
 		void SetResolution(Vector2Int newresolution);
 		void RenderFrame(Vector3& from, const Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);
+		unsigned int Get_mainbufferId();
 
 		void CleanUp();
 		void Init();

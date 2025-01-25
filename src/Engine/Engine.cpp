@@ -60,7 +60,15 @@ namespace gbe {
 #pragma endregion
 #pragma region Asset Loading
 		//AUDIO CACHING
-		auto test_sound = new asset::Audio("DefaultAssets/Audio/music.aud.gbe");
+		auto audio_ui_hover = new asset::Audio("DefaultAssets/Audio/bubble hover.aud.gbe");
+		auto audio_ui_click = new asset::Audio("DefaultAssets/Audio/uiclick.aud.gbe");
+		auto audio_move = new asset::Audio("DefaultAssets/Audio/bubble movement.aud.gbe");
+		auto audio_shoot = new asset::Audio("DefaultAssets/Audio/bubble shoot.aud.gbe");
+		auto audio_hairdryer = new asset::Audio("DefaultAssets/Audio/hair dryer.aud.gbe");
+		auto audio_soap = new asset::Audio("DefaultAssets/Audio/soap.aud.gbe");
+		auto audio_jump = new asset::Audio("DefaultAssets/Audio/quack jump.aud.gbe");
+		auto audio_toothpaste = new asset::Audio("DefaultAssets/Audio/toothpaste.aud.gbe");
+		auto audio_15secrem = new asset::Audio("DefaultAssets/Audio/15secrem.aud.gbe");
 
 		//SHADER CACHING
 		auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");
@@ -74,7 +82,11 @@ namespace gbe {
 		mRenderPipeline->SetCameraShader(CamOrthoPPShader);
 
 		//TEXTURE CACHING
+		//UI
+		auto startbubble_tex = new asset::Texture("DefaultAssets/Tex/UI/startbubble.img.gbe");
+		auto exitbubble_tex = new asset::Texture("DefaultAssets/Tex/UI/exitbubble.img.gbe");
 		auto mainmenu_tex = new asset::Texture("DefaultAssets/Tex/UI/mainmenu.img.gbe");
+		//MODEL
 		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
 
 		//MESH CACHING
@@ -147,7 +159,7 @@ namespace gbe {
 		mRenderPipeline->RegisterDrawCall(cube_drawcall);
 #pragma endregion
 #pragma region GUI Pipeline Setup
-		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, uiShader);
+		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, mRenderPipeline->Get_mainbufferId(), uiShader);
 		mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Input
@@ -159,6 +171,30 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::SPACE>());
+#pragma endregion
+#pragma region Util functions
+		auto create_image_button = [=](asset::Texture* tex, gbe::gui::gb_canvas* main_canvas, Vector2 percent_pos, Vector2 half_extents, std::function<void()> onpress) {
+			gbe::gui::gb_image* start_image = new gbe::gui::gb_image();
+			start_image->Set_Image(tex);
+			start_image->bl_pivot = percent_pos;
+			start_image->bl_offset = -half_extents;
+			start_image->tr_pivot = start_image->bl_pivot;
+			start_image->tr_offset = -start_image->bl_offset;
+			main_canvas->AddRootChild(start_image);
+
+			gbe::gui::gb_button* button = new gbe::gui::gb_button(start_image);
+			button->bl_pivot = percent_pos;
+			button->bl_offset = -half_extents;
+			button->tr_pivot = button->bl_pivot;
+			button->tr_offset = -button->bl_offset;
+			button->normal_color = Vector4(1, 1, 1, 0);
+			button->hovered_color = Vector4(1, 1, 1, 1);
+			main_canvas->AddRootChild(button);
+			button->Set_onClickAction([=]() {
+				onpress();
+				audio_ui_click->Play();
+				});
+			};
 #pragma endregion
 #pragma region Root Loaders
 		//forward declared load functions
@@ -198,17 +234,12 @@ namespace gbe {
 			main_image->Set_handleType(gui::gb_rect::PointerEventHandleType::PASS);
 			main_canvas->AddRootChild(main_image);
 
-			gbe::gui::gb_button* button = new gbe::gui::gb_button();
-			button->bl_pivot = Vector2(-1, -1);
-			button->tr_pivot = button->bl_pivot;
-			button->bl_offset = Vector2(150, 50);
-			button->tr_offset = button->bl_offset + Vector2(300, 100);
-			button->normal_color = Vector4(0, 0, 1, 1);
-			button->hovered_color = Vector4(1, 0, 0, 1);
-			main_canvas->AddRootChild(button);
-			button->Set_onClickAction([=]() {
+			create_image_button(startbubble_tex, main_canvas, 
+				Vector2(-0.6, -0.6),
+				Vector2(70, 50),
+				[=]() {
 				this->ChangeRoot(create_main_game());
-			});
+				});
 
 			return game_root;
 			};
@@ -317,12 +348,14 @@ namespace gbe {
 
 			//Actual objects
 			//Balls
-			auto spawnball = [get_random_drawcall, game_root](Vector3 pos, float radius) {
+			auto spawnball = [get_random_drawcall, game_root](Vector3 pos, float radius, bool collides = true) {
 				RigidObject* ball = new RigidObject();
 				ball->SetParent(game_root);
 
-				auto cradle_collider = new SphereCollider();
-				cradle_collider->SetParent(ball);
+				if (collides) {
+					auto cradle_collider = new SphereCollider();
+					cradle_collider->SetParent(ball);
+				}
 
 				auto sphere_renderobject = new RenderObject(get_random_drawcall());
 				sphere_renderobject->SetParent(ball);
@@ -381,7 +414,7 @@ namespace gbe {
 				}
 				});
 			auto create_particle = [=](ParticleSystem* creator) {
-				return spawnball(Vector3::zero, 0.2f);
+				return spawnball(Vector3::zero, 0.4f, false);
 				};
 			auto hairspray_particle_system = new ParticleSystem(create_particle);
 			hairspray_particle_system->SetParent(hairspray);
@@ -401,24 +434,12 @@ namespace gbe {
 			gbe::gui::gb_canvas* main_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
 			mGUIPipeline->SetActiveCanvas(main_canvas);
 
-			gbe::gui::gb_button* button = new gbe::gui::gb_button();
-			button->bl_pivot = Vector2(-1, -1);
-			button->tr_pivot = button->bl_pivot;
-			button->bl_offset = Vector2(150, 50);
-			button->tr_offset = button->bl_offset + Vector2(300, 100);
-			button->normal_color = Vector4(0, 0, 1, 1);
-			button->hovered_color = Vector4(1, 0, 0, 1);
-			button->Set_onClickAction([=]() {this->ChangeRoot(create_main_menu()); });
-			main_canvas->AddRootChild(button);
-			gbe::gui::gb_button* side_button = new gbe::gui::gb_button();
-			side_button->normal_color = Vector4(0, 1, 0, 1);
-			side_button->hovered_color = Vector4(1, 0, 0, 1);
-			side_button->bl_pivot = Vector2(-1, -1);
-			side_button->tr_pivot = Vector2(-1, 1);
-			side_button->tr_offset = Vector2(-10, 0);
-			side_button->bl_offset = Vector2(-110, 0);
-			side_button->Set_onClickAction(shoot_func);
-			side_button->SetParent(button);
+			create_image_button(exitbubble_tex, main_canvas,
+				Vector2(-0.6, -0.6),
+				Vector2(70, 50),
+				[=]() {
+					this->ChangeRoot(create_main_menu());
+				});
 
 			return game_root;
 			};

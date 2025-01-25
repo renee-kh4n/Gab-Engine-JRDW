@@ -21,3 +21,8 @@ void gbe::gui::gb_image::Render()
 
 	gbe::gui::gb_rect::Render();
 }
+
+void gbe::gui::gb_image::Set_tint(glm::vec4 color)
+{
+	this->current_color = color;
+}

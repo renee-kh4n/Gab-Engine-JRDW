@@ -2,11 +2,12 @@
 #include "../gbuiPipeline.h"
 #include <glm/gtc/type_ptr.hpp>
 
-void gbe::gui::gb_button::Render() {
-	gbe::gui::gbuiPipeline::Get_current()->Get_gui_shader()->SetOverride("color", this->current_color);
-	gbe::gui::gbuiPipeline::Get_current()->DrawElement(this);
+gbe::gui::gb_button::gb_button(gb_image* ntarget_graphic) {
+	this->target_graphic = ntarget_graphic;
+	this->Set_handleType(PointerEventHandleType::BLOCK);
+}
 
-	gbe::gui::gb_rect::Render();
+void gbe::gui::gb_button::Render() {
 }
 
 void gbe::gui::gb_button::Update(float delta)
@@ -20,6 +21,7 @@ void gbe::gui::gb_button::Update(float delta)
 	}
 
 	this->current_color = glm::mix((glm::vec4)this->current_color, (glm::vec4)target_color, delta * this->transition_speed);
+	this->target_graphic->Set_tint(this->current_color);
 }
 
 void gbe::gui::gb_button::onEnter() {

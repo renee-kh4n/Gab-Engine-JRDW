@@ -5,13 +5,16 @@
 
 gbe::gui::gbuiPipeline* gbe::gui::gbuiPipeline::instance = nullptr;
 
-gbe::gui::gbuiPipeline::gbuiPipeline(unsigned int quad_vao, asset::Shader* new_gui_shader)
+gbe::gui::gbuiPipeline::gbuiPipeline(unsigned int quad_vao, unsigned int main_fb, asset::Shader* new_gui_shader)
 {
 	this->active_canvas = nullptr;
 	this->current_object_on_cursor = nullptr;
 
 	this->quad_vao = quad_vao;
+	this->main_framebuffer = main_fb;
 	this->gui_shader = new_gui_shader;
+
+	this->gui_shader->SetTextureIdOverride("mainbackground", main_fb);
 
 	this->instance = this;
 }
@@ -54,6 +57,11 @@ void gbe::gui::gbuiPipeline::PassScreenSpaceMousePos(glm::ivec2 mousepos)
 
 		this->current_object_on_cursor = on_pointer;
 	}
+}
+
+unsigned int gbe::gui::gbuiPipeline::Get_main_framebuffer()
+{
+	return this->main_framebuffer;
 }
 
 unsigned int gbe::gui::gbuiPipeline::Get_quad_vao() {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../gb_rect.h"
+#include "gb_image.h"
 #include "../interfaces/gb_onEnter.h"
 #include "../interfaces/gb_onExit.h"
 #include "../interfaces/gb_onClick.h"
@@ -11,10 +12,13 @@ namespace gbe {
 	namespace gui {
 		class gb_button : public gb_rect, public gb_onEnter, public gb_onExit, public gb_onClick{
 		private:
+			gb_image* target_graphic;
 			bool hovered;
 			Vector4 current_color;
 			std::function<void()> onClickAction;
 		public:
+			gb_button(gb_image* target_graphic);
+
 			Vector4 normal_color;
 			Vector4 hovered_color;
 			Vector4 pressed_color;

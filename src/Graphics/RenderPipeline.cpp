@@ -399,6 +399,11 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 #pragma endregion
 }
 
+unsigned int gbe::RenderPipeline::Get_mainbufferId()
+{
+	return this->mFrameBuffer->outputId;
+}
+
 void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
 {
 	if (this->drawcalls.find(drawcall->order) == this->drawcalls.end()) {

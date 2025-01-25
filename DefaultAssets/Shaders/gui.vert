@@ -16,14 +16,11 @@ uniform vec2 tr_offset;
 
 //PASS TO PIXEL SHADER
 out vec2 texCoord;
+out vec2 screenpos;
 
 void main(){
+	screenpos = (transform * vec4(aPos, 1.0)).xy * .5f - 0.5f;
 	vec2 offset_normalizer = viewport_size * 0.5f;
-
-	vec2 final_min = bl_pivot + (bl_offset / offset_normalizer);
-	vec2 final_max = tr_pivot + (tr_offset / offset_normalizer);
-	float x = mix(final_min.x, final_max.x, smoothstep(aPos.x, -1, 1));
-	float y = mix(final_min.y, final_max.y, smoothstep(aPos.y, -1, 1));
 
 	texCoord = aTex;
 	gl_Position = transform * vec4(aPos, 1.0);

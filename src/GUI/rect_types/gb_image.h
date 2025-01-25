@@ -12,6 +12,7 @@ namespace gbe {
 		public:
 			void Set_Image(asset::Texture* tex);
 			void Render() override;
+			void Set_tint(glm::vec4 color);
 		};
 	}
 }

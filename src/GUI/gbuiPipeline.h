@@ -20,11 +20,13 @@ namespace gbe {
 			gb_rect* current_object_on_cursor;
 
 			unsigned int quad_vao;
+			unsigned int main_framebuffer;
 			asset::Shader* gui_shader;
 		public:
-			gbuiPipeline(unsigned int quad_vao, asset::Shader* gui_shader);
+			gbuiPipeline(unsigned int quad_vao, unsigned int main_framebuffer, asset::Shader* gui_shader);
 			static gbuiPipeline* Get_current();
 
+			unsigned int Get_main_framebuffer();
 			unsigned int Get_quad_vao();
 			asset::Shader* Get_gui_shader();
 
