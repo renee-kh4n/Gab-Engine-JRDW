@@ -15,7 +15,7 @@ Current backend used: SDL2
 
 #include "Engine/Input/KeyDefines.h"
 
-#include "../Math/Vector2Int.h"
+#include "../Math/gbe_math.h"
 #include "Window/WindowEvents.h"
 
 namespace gbe {
@@ -34,6 +34,8 @@ namespace gbe {
         bool shouldclose = false;
 
         std::queue<gbe::window::WindowEventType> event_queue;
+
+        bool centered_cursor = false;;
     public:
         Window(Vector2Int dimentions);
 

@@ -50,6 +50,7 @@ namespace gbe {
 
     void gbe::Window::UpdateState()
     {
+        
         //States to reset
         this->keystates[gbe::Keys::MOUSE_SCROLL_UP] = false;
         this->keystates[gbe::Keys::MOUSE_SCROLL_DOWN] = false;
@@ -115,6 +116,7 @@ namespace gbe {
 
         auto sdl_keyboardstates = SDL_GetKeyboardState(nullptr);
         auto sdl_mousestates = SDL_GetMouseState(nullptr, nullptr);
+
     }
     void Window::SwapBuffers()
     {
@@ -156,6 +158,9 @@ namespace gbe {
     }
     void Window::Set_cursorLock(bool locked) {
         SDL_ShowCursor(locked ? SDL_DISABLE : SDL_ENABLE);
+        SDL_SetRelativeMouseMode(locked ? SDL_TRUE : SDL_FALSE);
+        
+        centered_cursor = locked;
     }
     void* (*Window::Get_procaddressfunc())(const char*)
     {

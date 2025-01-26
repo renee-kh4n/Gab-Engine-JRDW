@@ -71,11 +71,14 @@ namespace gbe {
 		auto audio_15secrem = new asset::Audio("DefaultAssets/Audio/15secrem.aud.gbe");
 
 		//SHADER CACHING
+		auto water_shader = new asset::Shader("DefaultAssets/Shaders/water.shader.gbe");
 		auto depthoffield_shader = new asset::Shader("DefaultAssets/Shaders/depthoffield.shader.gbe");
 		auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");
 		auto bubbleShader = new asset::Shader("DefaultAssets/Shaders/bubble.shader.gbe");
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
 		auto uiShader = new asset::Shader("DefaultAssets/Shaders/gui.shader.gbe");
+		auto flipShader = new asset::Shader("DefaultAssets/Shaders/lit.shader_flip.gbe");
+		auto flip2Shader = new asset::Shader("DefaultAssets/Shaders/lit.shader_flip2.gbe");
 
 		auto CamOrthoPPShader = new asset::Shader("DefaultAssets/Shaders/frame.shader.gbe");
 		CamOrthoPPShader->SetOverride("saturation", 1.0f);
@@ -90,32 +93,48 @@ namespace gbe {
 		auto mainmenu_tex = new asset::Texture("DefaultAssets/Tex/UI/mainmenu.img.gbe");
 		//MODEL
 		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
-		auto tiles_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/tile.img.gbe");
+		
+		auto door_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/door.png.gbe");
+		auto duck_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/duck.png.gbe");
+		auto hair_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/hair.png.gbe");
+		auto hat_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/hat.png.gbe");
+		auto pipes_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/pipes.png.gbe");
+		auto sink_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/sink.png.gbe");
+		auto slowdown_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/slowdown.png.gbe");
+		auto slowdown_alpha_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/slowdown_alpha.png.gbe");
+		auto soap_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/soap.png.gbe");
+		auto tile_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/tile.png.gbe");
+		auto tissue_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/tissue.png.gbe");
+		auto toiletroll_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toilet roll.png.gbe");
+		auto toilet_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toilet.png.gbe");
+		auto toothbrush_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toothbrush.png.gbe");
+		auto toothpaste_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toothpaste.png.gbe");
+		auto tub_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/tub.png.gbe");
 
 		//MESH CACHING
 		auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
 		auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
 		auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
-		auto level_mesh = new Mesh("DefaultAssets/3D/level_v3.obj");
-		auto duck_mesh = new Mesh("DefaultAssets/3D/Rubber Ducky.obj");
+		auto level_mesh = new Mesh("DefaultAssets/3D/level_v7.obj");
+		auto player_mesh = new Mesh("DefaultAssets/3D/Rubber Ducky.obj");
+		auto hatplayer_mesh = new Mesh("DefaultAssets/3D/FinalLevel/playerhat.obj");
+
+		//BY MATERIAL
+		
 
 		//MATERIAL CACHING
 		auto unlit_white_mat = new Material(unlitShader);
 		unlit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
 
-		auto lit_water_mat = new Material(litShader);
+		auto lit_water_mat = new Material(water_shader);
 		lit_water_mat->setOverride("color", Vector4(0.6, 0.8, 1, 1));
 
-		auto tile_mattex = MaterialTexture();
-		tile_mattex.parameterName = "texdiffuse";
-		tile_mattex.textureRef.Assign(tiles_tex);
 		auto lit_white_mat = new Material(litShader);
-		lit_white_mat->setOverride("color", Vector4(1, 1, 0.7, 1));
-		lit_white_mat->setOverride("ambientLightTint", Vector3(1, 1, 1) * 0.2f);
+		lit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
+		lit_white_mat->setOverride("ambientLightTint", Vector3(1, 1, 1) * 0.4f);
 		lit_white_mat->setOverride<bool>("hasDiffuseTex", true);
 		lit_white_mat->setOverride<float>("specStrength", 0.5f);
 		lit_white_mat->setOverride<float>("specPhong", 16);
-		lit_white_mat->textureOverrides.push_back(tile_mattex);
 		
 
 		auto mattex = MaterialTexture();
@@ -141,6 +160,216 @@ namespace gbe {
 			create_coloredbubble_mat(Vector3(1, 0, 1)),
 			create_coloredbubble_mat(Vector3(0, 1, 1))
 		};
+
+		//LEVELS
+
+		
+
+		Mesh* blue_mesh = new Mesh("DefaultAssets/3D/FinalLevel/blue.obj");
+		Mesh* door_mesh = new Mesh("DefaultAssets/3D/FinalLevel/door.obj");
+		Mesh* duck_mesh = new Mesh("DefaultAssets/3D/FinalLevel/duck.obj");
+		Mesh* hairdryer_mesh = new Mesh("DefaultAssets/3D/FinalLevel/hair dryer.obj");
+		Mesh* hat_mesh = new Mesh("DefaultAssets/3D/FinalLevel/hat.obj");
+		Mesh* marble_mesh = new Mesh("DefaultAssets/3D/FinalLevel/marble.obj");
+		Mesh* pipes_mesh = new Mesh("DefaultAssets/3D/FinalLevel/pipes.obj");
+		Mesh* sink_mesh = new Mesh("DefaultAssets/3D/FinalLevel/sink.obj");
+		Mesh* slide_mesh = new Mesh("DefaultAssets/3D/FinalLevel/slide.obj");
+		Mesh* slowdown_mesh = new Mesh("DefaultAssets/3D/FinalLevel/slow down.obj");
+		Mesh* soap_mesh = new Mesh("DefaultAssets/3D/FinalLevel/soap.obj");
+		Mesh* speedboost_mesh = new Mesh("DefaultAssets/3D/FinalLevel/speed boost.obj");
+		Mesh* tiles_mesh = new Mesh("DefaultAssets/3D/FinalLevel/tiles.obj");
+		Mesh* tissue_mesh = new Mesh("DefaultAssets/3D/FinalLevel/tissue.obj");
+		Mesh* toiletroll_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toilet roll.obj");
+		Mesh* toilet_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toilet.obj");
+		Mesh* toothbrush_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toothbrush.obj");
+		Mesh* toothpaste_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toothpaste.obj");
+		Mesh* tub_mesh = new Mesh("DefaultAssets/3D/FinalLevel/tub.obj");
+		Mesh* water_mesh = new Mesh("DefaultAssets/3D/FinalLevel/water.obj");
+		Mesh* whit_mesh = new Mesh("DefaultAssets/3D/FinalLevel/white.obj");
+
+		Material* m_blue = new Material(flipShader);
+		
+		Material* m_door = new Material(flipShader);
+		auto m_doortex = MaterialTexture();
+		m_doortex.parameterName = "texdiffuse";
+		m_doortex.textureRef.Assign(door_tex);
+		m_door->textureOverrides.push_back(m_doortex);
+		m_door->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_duck = new Material(flipShader);
+		auto m_ducktex = MaterialTexture();
+		m_ducktex.parameterName = "texdiffuse";
+		m_ducktex.textureRef.Assign(duck_tex);
+		m_duck->textureOverrides.push_back(m_ducktex);
+		m_duck->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_hairdryer = new Material(flipShader);
+		auto m_hairdryertex = MaterialTexture();
+		m_hairdryertex.parameterName = "texdiffuse";
+		m_hairdryertex.textureRef.Assign(hair_tex);
+		m_hairdryer->textureOverrides.push_back(m_hairdryertex);
+		m_hairdryer->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_hat = new Material(flipShader);
+		auto m_hattex = MaterialTexture();
+		m_hattex.parameterName = "texdiffuse";
+		m_hattex.textureRef.Assign(hat_tex);
+		m_hat->textureOverrides.push_back(m_hattex);
+		m_hat->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_marble = new Material(flipShader);
+		m_marble->setOverride<bool>("hasDiffuseTex", false);
+
+		Material* m_pipes = new Material(flipShader);
+		auto m_pipestex = MaterialTexture();
+		m_pipestex.parameterName = "texdiffuse";
+		m_pipestex.textureRef.Assign(pipes_tex);
+		m_pipes->textureOverrides.push_back(m_pipestex);
+		m_pipes->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_sink = new Material(flipShader);
+		auto m_sinktex = MaterialTexture();
+		m_sinktex.parameterName = "texdiffuse";
+		m_sinktex.textureRef.Assign(sink_tex);
+		m_sink->textureOverrides.push_back(m_sinktex);
+		m_sink->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_slide = new Material(litShader);
+		Material* m_slowdown = new Material(flipShader);
+		Material* m_soap = new Material(litShader);
+		auto m_soaptex = MaterialTexture();
+		m_soaptex.parameterName = "texdiffuse";
+		m_soaptex.textureRef.Assign(soap_tex);
+		m_soap->textureOverrides.push_back(m_soaptex);
+		m_soap->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_speedboost = new Material(flipShader);
+		Material* m_tiles = new Material(flipShader);
+		auto m_tilestex = MaterialTexture();
+		m_tilestex.parameterName = "texdiffuse";
+		m_tilestex.textureRef.Assign(tile_tex);
+		m_tiles->textureOverrides.push_back(m_tilestex);
+		m_tiles->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_tissue = new Material(flipShader);
+		auto m_tissuetex = MaterialTexture();
+		m_tissuetex.parameterName = "texdiffuse";
+		m_tissuetex.textureRef.Assign(tissue_tex);
+		m_tissue->textureOverrides.push_back(m_tissuetex);
+		m_tissue->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_toiletroll = new Material(flipShader);
+		auto m_toiletrolltex = MaterialTexture();
+		m_toiletrolltex.parameterName = "texdiffuse";
+		m_toiletrolltex.textureRef.Assign(toiletroll_tex);
+		m_toiletroll->textureOverrides.push_back(m_toiletrolltex);
+		m_toiletroll->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_toilet = new Material(flipShader);
+		auto m_toilettex = MaterialTexture();
+		m_toilettex.parameterName = "texdiffuse";
+		m_toilettex.textureRef.Assign(toilet_tex);
+		m_toilet->textureOverrides.push_back(m_toilettex);
+		m_toilet->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_toothbrush = new Material(flipShader);
+		auto m_toothbrushtex = MaterialTexture();
+		m_toothbrushtex.parameterName = "texdiffuse";
+		m_toothbrushtex.textureRef.Assign(toothbrush_tex);
+		m_toothbrush->textureOverrides.push_back(m_toothbrushtex);
+		m_toothbrush->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_toothpaste = new Material(flipShader);
+		auto m_toothpastetex = MaterialTexture();
+		m_toothpastetex.parameterName = "texdiffuse";
+		m_toothpastetex.textureRef.Assign(toothpaste_tex);
+		m_toothpaste->textureOverrides.push_back(m_toothpastetex);
+		m_toothpaste->setOverride<bool>("hasDiffuseTex", true);
+
+		Material* m_tub = new Material(flipShader);
+		auto m_tubtex = MaterialTexture();
+		m_tubtex.parameterName = "texdiffuse";
+		m_tubtex.textureRef.Assign(tub_tex);
+		m_tub->textureOverrides.push_back(m_tubtex);
+		m_tub->setOverride<bool>("hasDiffuseTex", true);
+		
+		Material* m_water = new Material(flipShader);
+		m_water->setOverride<bool>("hasDiffuseTex", false);
+
+		Material* m_whit = new Material(flip2Shader);
+
+		m_blue->setOverride("color", Vector4(0.4, 0.4, 1, 1));
+		m_door->setOverride("color", Vector4(1, 1, 1, 1));
+		m_duck->setOverride("color", Vector4(1,1,1,1));
+		m_hairdryer->setOverride("color", Vector4(1,1,1,1));
+		m_hat->setOverride("color", Vector4(1,1,1,1));
+		m_marble->setOverride("color", Vector4(1,0.7,0.7,1));
+		m_pipes->setOverride("color", Vector4(1,1,1,1));
+		m_sink->setOverride("color", Vector4(1,1,1,1));
+		m_slide->setOverride("color", Vector4(1,1,0,1));
+		m_slowdown->setOverride("color", Vector4(1,1,1,1));
+		m_soap->setOverride("color", Vector4(1,1,1,1));
+		m_speedboost->setOverride("color", Vector4(1,1,1,1));
+		m_tiles->setOverride("color", Vector4(1,1,1,1));
+		m_tissue->setOverride("color", Vector4(1,1,1,1));
+		m_toiletroll->setOverride("color", Vector4(1,1,1,1));
+		m_toilet->setOverride("color", Vector4(1,1,1,1));
+		m_toothbrush->setOverride("color", Vector4(1,1,1,1));
+		m_toothpaste->setOverride("color", Vector4(1,1,1,1));
+		m_tub->setOverride("color", Vector4(1,1,1,1));
+		m_water->setOverride("color", Vector4(0.6,0.6,1,1));
+		m_whit->setOverride("color", Vector4(1, 1, 1, 1));
+
+		DrawCall* m_blue_dc = new DrawCall(blue_mesh, m_blue);
+		DrawCall* m_door_dc = new DrawCall(door_mesh, m_door);
+		DrawCall* m_duck_dc = new DrawCall(duck_mesh, m_duck);
+		DrawCall* m_hairdryer_dc = new DrawCall(hairdryer_mesh, m_hairdryer);
+		DrawCall* m_hat_dc = new DrawCall(hat_mesh, m_hat);
+		DrawCall* m_marble_dc = new DrawCall(marble_mesh, m_marble);
+		DrawCall* m_pipes_dc = new DrawCall(pipes_mesh, m_pipes);
+		DrawCall* m_sink_dc = new DrawCall(sink_mesh, m_sink);
+		DrawCall* m_slide_dc = new DrawCall(slide_mesh, m_slide);
+		DrawCall* m_slowdown_dc = new DrawCall(slowdown_mesh, m_slowdown);
+		DrawCall* m_soap_dc = new DrawCall(soap_mesh, m_soap);
+		DrawCall* m_speedboost_dc = new DrawCall(speedboost_mesh, m_speedboost);
+		DrawCall* m_tiles_dc = new DrawCall(tiles_mesh, m_tiles);
+		DrawCall* m_tissue_dc = new DrawCall(tissue_mesh, m_tissue);
+		DrawCall* m_toiletroll_dc = new DrawCall(toiletroll_mesh, m_toiletroll);
+		DrawCall* m_toilet_dc = new DrawCall(toilet_mesh, m_toilet);
+		DrawCall* m_toothbrush_dc = new DrawCall(toothbrush_mesh, m_toothbrush);
+		DrawCall* m_toothpaste_dc = new DrawCall(toothpaste_mesh, m_toothpaste);
+		DrawCall* m_tub_dc = new DrawCall(tub_mesh, m_tub);
+		DrawCall* m_water_dc = new DrawCall(water_mesh, m_water);
+		DrawCall* m_whit_dc = new DrawCall(whit_mesh, m_whit);
+
+		std::vector<DrawCall*> level_drawcalls = {
+			m_blue_dc,
+			m_door_dc,
+			m_duck_dc,
+			m_hairdryer_dc,
+			m_hat_dc,
+			m_marble_dc,
+			m_pipes_dc,
+			m_sink_dc,
+			m_slide_dc,
+			m_slowdown_dc,
+			m_soap_dc,
+			m_speedboost_dc,
+			m_tiles_dc,
+			m_tissue_dc,
+			m_toiletroll_dc,
+			m_toilet_dc,
+			m_toothbrush_dc,
+			m_toothpaste_dc,
+			m_tub_dc,
+			m_water_dc,
+			m_whit_dc
+		};
+
+		for (auto dc : level_drawcalls)
+		{
+			mRenderPipeline->RegisterDrawCall(dc);
+		}
 
 		//DRAWCALL CACHING
 		auto line_drawcall = new DrawCall(quad_mesh, unlit_white_mat);
@@ -171,8 +400,9 @@ namespace gbe {
 		auto level_drawcall = new DrawCall(level_mesh, lit_white_mat);
 		mRenderPipeline->RegisterDrawCall(level_drawcall);
 
-		auto duck_drawcall = new DrawCall(duck_mesh, lit_white_mat);
+		auto duck_drawcall = new DrawCall(player_mesh, m_duck);
 		mRenderPipeline->RegisterDrawCall(duck_drawcall);
+		auto duckhat_drawcall = new DrawCall(hatplayer_mesh, m_hat);
 #pragma endregion
 #pragma region GUI Pipeline Setup
 		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, mRenderPipeline->Get_mainbufferId(), uiShader);
@@ -358,7 +588,9 @@ namespace gbe {
 				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
 				platform_renderer->SetParent(platform_collider);
 				};
+			auto create_paste = [=](Vector3 pos) {
 
+				};
 			//Global objects
 			//physics force setup
 			auto gravity_volume = new ForceVolume();
@@ -369,17 +601,15 @@ namespace gbe {
 			gravity_volume->SetParent(game_root);
 
 			//light
-			auto directional_light = new DirectionalLight();
-			directional_light->Set_Color(Vector3(1, 1, 1));
-			directional_light->Set_Intensity(1);
-			directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(70, 0, 0)));
-			directional_light->SetParent(game_root);
-			directional_light->Set_ShadowmapResolutions(2160);
-
-			
+			//auto directional_light = new DirectionalLight();
+			//directional_light->Set_Color(Vector3(1, 1, 1));
+			//directional_light->Set_Intensity(1);
+			//directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(80, 90, 0)));
+			//directional_light->SetParent(game_root);
+			//directional_light->Set_ShadowmapResolutions(2160);
 
 			//Player and Camera setup
-			auto f_speed = 60.0f;
+			auto f_speed = 100.0f;
 			auto f_jump = 180.0f;
 
 			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
@@ -389,6 +619,8 @@ namespace gbe {
 
 			auto player_renderer = new RenderObject(get_random_drawcall());
 			player_renderer->SetParent(player);
+			
+
 			auto player_collider = new SphereCollider();
 			player_collider->SetParent(player);
 			auto player_particle_system = new ParticleSystem(create_particle);
@@ -412,8 +644,7 @@ namespace gbe {
 			auto camera_parent = new GenericObject([=](GenericObject* self, float delta) {
 				auto ppos = player->World().position.Get();
 				self->SetWorldPosition(ppos);
-				std::cout << ppos.x << "," << ppos.y << "," << ppos.z << std::endl;
-			});
+				});
 			camera_parent->SetParent(game_root);
 			player_cam->angles = 80;
 			player_cam->nearClip = 1.0f;
@@ -541,23 +772,23 @@ namespace gbe {
 			auto level_object = new RigidObject(true);
 			level_object->TranslateWorld(Vector3(10, -6, -27));
 			level_object->SetParent(game_root);
-			auto level_renderer = new RenderObject(level_drawcall);
-			level_renderer->SetParent(level_object);
+			
+			
+			for (auto dc : level_drawcalls)
+			{
+				auto level_dc_renderer = new RenderObject(dc);
+				level_dc_renderer->SetParent(level_object);
+			}
+
 			auto level_collider = new MeshCollider(level_mesh);
 			level_collider->SetParent(level_object);
 
-			create_spray(Vector3(25, -3, -3));
-			create_spray(Vector3(25, 0, -12));
+			create_spray(Vector3(24, -3, -3));
+			create_spray(Vector3(24, 0, -12));
 			create_spray(Vector3(-1, 0, -30));
 			create_spray(Vector3(8, 0, -46));
 			create_spray(Vector3(11.6, 4.6, -51.7));
-			
-			//water
-			auto water_renderer = new RenderObject(water_quad);
-			water_renderer->SetParent(game_root);
-			water_renderer->Local().scale.Set(Vector3(100, 100, 100));
-			water_renderer->Local().rotation.Set(Quaternion::Euler(Vector3(-90, 0, 0)));
-			water_renderer->TranslateWorld(Vector3(0, -5, 0));
+		
 
 			//Goal
 			auto goal_trigger = new GenericObject([=](GenericObject* self, float delta) {
