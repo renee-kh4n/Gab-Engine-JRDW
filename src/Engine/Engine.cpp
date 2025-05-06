@@ -62,13 +62,6 @@ namespace gbe {
 		//AUDIO CACHING
 		auto audio_ui_hover = new asset::Audio("DefaultAssets/Audio/bubble hover.aud.gbe");
 		auto audio_ui_click = new asset::Audio("DefaultAssets/Audio/uiclick.aud.gbe");
-		auto audio_move = new asset::Audio("DefaultAssets/Audio/bubble movement.aud.gbe");
-		auto audio_shoot = new asset::Audio("DefaultAssets/Audio/bubble shoot.aud.gbe");
-		auto audio_hairdryer = new asset::Audio("DefaultAssets/Audio/hair dryer.aud.gbe");
-		auto audio_soap = new asset::Audio("DefaultAssets/Audio/soap.aud.gbe");
-		auto audio_jump = new asset::Audio("DefaultAssets/Audio/quack jump.aud.gbe");
-		auto audio_toothpaste = new asset::Audio("DefaultAssets/Audio/toothpaste.aud.gbe");
-		auto audio_15secrem = new asset::Audio("DefaultAssets/Audio/15secrem.aud.gbe");
 
 		//SHADER CACHING
 		auto water_shader = new asset::Shader("DefaultAssets/Shaders/water.shader.gbe");
@@ -88,37 +81,13 @@ namespace gbe {
 
 		//TEXTURE CACHING
 		//UI
-		auto startbubble_tex = new asset::Texture("DefaultAssets/Tex/UI/startbubble.img.gbe");
-		auto exitbubble_tex = new asset::Texture("DefaultAssets/Tex/UI/exitbubble.img.gbe");
-		auto mainmenu_tex = new asset::Texture("DefaultAssets/Tex/UI/mainmenu.img.gbe");
 		//MODEL
 		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
-		
-		auto door_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/door.png.gbe");
-		auto duck_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/duck.png.gbe");
-		auto hair_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/hair.png.gbe");
-		auto hat_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/hat.png.gbe");
-		auto pipes_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/pipes.png.gbe");
-		auto sink_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/sink.png.gbe");
-		auto slowdown_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/slowdown.png.gbe");
-		auto slowdown_alpha_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/slowdown_alpha.png.gbe");
-		auto soap_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/soap.png.gbe");
-		auto tile_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/tile.png.gbe");
-		auto tissue_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/tissue.png.gbe");
-		auto toiletroll_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toilet roll.png.gbe");
-		auto toilet_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toilet.png.gbe");
-		auto toothbrush_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toothbrush.png.gbe");
-		auto toothpaste_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/toothpaste.png.gbe");
-		auto tub_tex = new asset::Texture("DefaultAssets/Tex/Maps/Final/tub.png.gbe");
 
 		//MESH CACHING
 		auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
 		auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
 		auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
-		auto level_mesh = new Mesh("DefaultAssets/3D/level_v7.obj");
-		auto player_mesh = new Mesh("DefaultAssets/3D/Rubber Ducky.obj");
-		auto hatplayer_mesh = new Mesh("DefaultAssets/3D/FinalLevel/playerhat.obj");
-
 		//BY MATERIAL
 		
 
@@ -132,7 +101,7 @@ namespace gbe {
 		auto lit_white_mat = new Material(litShader);
 		lit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
 		lit_white_mat->setOverride("ambientLightTint", Vector3(1, 1, 1) * 0.4f);
-		lit_white_mat->setOverride<bool>("hasDiffuseTex", true);
+		lit_white_mat->setOverride<bool>("hasDiffuseTex", false);
 		lit_white_mat->setOverride<float>("specStrength", 0.5f);
 		lit_white_mat->setOverride<float>("specPhong", 16);
 		
@@ -163,214 +132,6 @@ namespace gbe {
 
 		//LEVELS
 
-		
-
-		Mesh* blue_mesh = new Mesh("DefaultAssets/3D/FinalLevel/blue.obj");
-		Mesh* door_mesh = new Mesh("DefaultAssets/3D/FinalLevel/door.obj");
-		Mesh* duck_mesh = new Mesh("DefaultAssets/3D/FinalLevel/duck.obj");
-		Mesh* hairdryer_mesh = new Mesh("DefaultAssets/3D/FinalLevel/hair dryer.obj");
-		Mesh* hat_mesh = new Mesh("DefaultAssets/3D/FinalLevel/hat.obj");
-		Mesh* marble_mesh = new Mesh("DefaultAssets/3D/FinalLevel/marble.obj");
-		Mesh* pipes_mesh = new Mesh("DefaultAssets/3D/FinalLevel/pipes.obj");
-		Mesh* sink_mesh = new Mesh("DefaultAssets/3D/FinalLevel/sink.obj");
-		Mesh* slide_mesh = new Mesh("DefaultAssets/3D/FinalLevel/slide.obj");
-		Mesh* slowdown_mesh = new Mesh("DefaultAssets/3D/FinalLevel/slow down.obj");
-		Mesh* soap_mesh = new Mesh("DefaultAssets/3D/FinalLevel/soap.obj");
-		Mesh* speedboost_mesh = new Mesh("DefaultAssets/3D/FinalLevel/speed boost.obj");
-		Mesh* tiles_mesh = new Mesh("DefaultAssets/3D/FinalLevel/tiles.obj");
-		Mesh* tissue_mesh = new Mesh("DefaultAssets/3D/FinalLevel/tissue.obj");
-		Mesh* toiletroll_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toilet roll.obj");
-		Mesh* toilet_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toilet.obj");
-		Mesh* toothbrush_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toothbrush.obj");
-		Mesh* toothpaste_mesh = new Mesh("DefaultAssets/3D/FinalLevel/toothpaste.obj");
-		Mesh* tub_mesh = new Mesh("DefaultAssets/3D/FinalLevel/tub.obj");
-		Mesh* water_mesh = new Mesh("DefaultAssets/3D/FinalLevel/water.obj");
-		Mesh* whit_mesh = new Mesh("DefaultAssets/3D/FinalLevel/white.obj");
-
-		Material* m_blue = new Material(flipShader);
-		
-		Material* m_door = new Material(flipShader);
-		auto m_doortex = MaterialTexture();
-		m_doortex.parameterName = "texdiffuse";
-		m_doortex.textureRef.Assign(door_tex);
-		m_door->textureOverrides.push_back(m_doortex);
-		m_door->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_duck = new Material(flipShader);
-		auto m_ducktex = MaterialTexture();
-		m_ducktex.parameterName = "texdiffuse";
-		m_ducktex.textureRef.Assign(duck_tex);
-		m_duck->textureOverrides.push_back(m_ducktex);
-		m_duck->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_hairdryer = new Material(flipShader);
-		auto m_hairdryertex = MaterialTexture();
-		m_hairdryertex.parameterName = "texdiffuse";
-		m_hairdryertex.textureRef.Assign(hair_tex);
-		m_hairdryer->textureOverrides.push_back(m_hairdryertex);
-		m_hairdryer->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_hat = new Material(flipShader);
-		auto m_hattex = MaterialTexture();
-		m_hattex.parameterName = "texdiffuse";
-		m_hattex.textureRef.Assign(hat_tex);
-		m_hat->textureOverrides.push_back(m_hattex);
-		m_hat->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_marble = new Material(flipShader);
-		m_marble->setOverride<bool>("hasDiffuseTex", false);
-
-		Material* m_pipes = new Material(flipShader);
-		auto m_pipestex = MaterialTexture();
-		m_pipestex.parameterName = "texdiffuse";
-		m_pipestex.textureRef.Assign(pipes_tex);
-		m_pipes->textureOverrides.push_back(m_pipestex);
-		m_pipes->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_sink = new Material(flipShader);
-		auto m_sinktex = MaterialTexture();
-		m_sinktex.parameterName = "texdiffuse";
-		m_sinktex.textureRef.Assign(sink_tex);
-		m_sink->textureOverrides.push_back(m_sinktex);
-		m_sink->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_slide = new Material(litShader);
-		Material* m_slowdown = new Material(flipShader);
-		Material* m_soap = new Material(litShader);
-		auto m_soaptex = MaterialTexture();
-		m_soaptex.parameterName = "texdiffuse";
-		m_soaptex.textureRef.Assign(soap_tex);
-		m_soap->textureOverrides.push_back(m_soaptex);
-		m_soap->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_speedboost = new Material(flipShader);
-		Material* m_tiles = new Material(flipShader);
-		auto m_tilestex = MaterialTexture();
-		m_tilestex.parameterName = "texdiffuse";
-		m_tilestex.textureRef.Assign(tile_tex);
-		m_tiles->textureOverrides.push_back(m_tilestex);
-		m_tiles->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_tissue = new Material(flipShader);
-		auto m_tissuetex = MaterialTexture();
-		m_tissuetex.parameterName = "texdiffuse";
-		m_tissuetex.textureRef.Assign(tissue_tex);
-		m_tissue->textureOverrides.push_back(m_tissuetex);
-		m_tissue->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_toiletroll = new Material(flipShader);
-		auto m_toiletrolltex = MaterialTexture();
-		m_toiletrolltex.parameterName = "texdiffuse";
-		m_toiletrolltex.textureRef.Assign(toiletroll_tex);
-		m_toiletroll->textureOverrides.push_back(m_toiletrolltex);
-		m_toiletroll->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_toilet = new Material(flipShader);
-		auto m_toilettex = MaterialTexture();
-		m_toilettex.parameterName = "texdiffuse";
-		m_toilettex.textureRef.Assign(toilet_tex);
-		m_toilet->textureOverrides.push_back(m_toilettex);
-		m_toilet->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_toothbrush = new Material(flipShader);
-		auto m_toothbrushtex = MaterialTexture();
-		m_toothbrushtex.parameterName = "texdiffuse";
-		m_toothbrushtex.textureRef.Assign(toothbrush_tex);
-		m_toothbrush->textureOverrides.push_back(m_toothbrushtex);
-		m_toothbrush->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_toothpaste = new Material(flipShader);
-		auto m_toothpastetex = MaterialTexture();
-		m_toothpastetex.parameterName = "texdiffuse";
-		m_toothpastetex.textureRef.Assign(toothpaste_tex);
-		m_toothpaste->textureOverrides.push_back(m_toothpastetex);
-		m_toothpaste->setOverride<bool>("hasDiffuseTex", true);
-
-		Material* m_tub = new Material(flipShader);
-		auto m_tubtex = MaterialTexture();
-		m_tubtex.parameterName = "texdiffuse";
-		m_tubtex.textureRef.Assign(tub_tex);
-		m_tub->textureOverrides.push_back(m_tubtex);
-		m_tub->setOverride<bool>("hasDiffuseTex", true);
-		
-		Material* m_water = new Material(flipShader);
-		m_water->setOverride<bool>("hasDiffuseTex", false);
-
-		Material* m_whit = new Material(flip2Shader);
-
-		m_blue->setOverride("color", Vector4(0.4, 0.4, 1, 1));
-		m_door->setOverride("color", Vector4(1, 1, 1, 1));
-		m_duck->setOverride("color", Vector4(1,1,1,1));
-		m_hairdryer->setOverride("color", Vector4(1,1,1,1));
-		m_hat->setOverride("color", Vector4(1,1,1,1));
-		m_marble->setOverride("color", Vector4(1,0.7,0.7,1));
-		m_pipes->setOverride("color", Vector4(1,1,1,1));
-		m_sink->setOverride("color", Vector4(1,1,1,1));
-		m_slide->setOverride("color", Vector4(1,1,0,1));
-		m_slowdown->setOverride("color", Vector4(1,1,1,1));
-		m_soap->setOverride("color", Vector4(1,1,1,1));
-		m_speedboost->setOverride("color", Vector4(1,1,1,1));
-		m_tiles->setOverride("color", Vector4(1,1,1,1));
-		m_tissue->setOverride("color", Vector4(1,1,1,1));
-		m_toiletroll->setOverride("color", Vector4(1,1,1,1));
-		m_toilet->setOverride("color", Vector4(1,1,1,1));
-		m_toothbrush->setOverride("color", Vector4(1,1,1,1));
-		m_toothpaste->setOverride("color", Vector4(1,1,1,1));
-		m_tub->setOverride("color", Vector4(1,1,1,1));
-		m_water->setOverride("color", Vector4(0.6,0.6,1,1));
-		m_whit->setOverride("color", Vector4(1, 1, 1, 1));
-
-		DrawCall* m_blue_dc = new DrawCall(blue_mesh, m_blue);
-		DrawCall* m_door_dc = new DrawCall(door_mesh, m_door);
-		DrawCall* m_duck_dc = new DrawCall(duck_mesh, m_duck);
-		DrawCall* m_hairdryer_dc = new DrawCall(hairdryer_mesh, m_hairdryer);
-		DrawCall* m_hat_dc = new DrawCall(hat_mesh, m_hat);
-		DrawCall* m_marble_dc = new DrawCall(marble_mesh, m_marble);
-		DrawCall* m_pipes_dc = new DrawCall(pipes_mesh, m_pipes);
-		DrawCall* m_sink_dc = new DrawCall(sink_mesh, m_sink);
-		DrawCall* m_slide_dc = new DrawCall(slide_mesh, m_slide);
-		DrawCall* m_slowdown_dc = new DrawCall(slowdown_mesh, m_slowdown);
-		DrawCall* m_soap_dc = new DrawCall(soap_mesh, m_soap);
-		DrawCall* m_speedboost_dc = new DrawCall(speedboost_mesh, m_speedboost);
-		DrawCall* m_tiles_dc = new DrawCall(tiles_mesh, m_tiles);
-		DrawCall* m_tissue_dc = new DrawCall(tissue_mesh, m_tissue);
-		DrawCall* m_toiletroll_dc = new DrawCall(toiletroll_mesh, m_toiletroll);
-		DrawCall* m_toilet_dc = new DrawCall(toilet_mesh, m_toilet);
-		DrawCall* m_toothbrush_dc = new DrawCall(toothbrush_mesh, m_toothbrush);
-		DrawCall* m_toothpaste_dc = new DrawCall(toothpaste_mesh, m_toothpaste);
-		DrawCall* m_tub_dc = new DrawCall(tub_mesh, m_tub);
-		DrawCall* m_water_dc = new DrawCall(water_mesh, m_water);
-		DrawCall* m_whit_dc = new DrawCall(whit_mesh, m_whit);
-
-		std::vector<DrawCall*> level_drawcalls = {
-			m_blue_dc,
-			m_door_dc,
-			m_duck_dc,
-			m_hairdryer_dc,
-			m_hat_dc,
-			m_marble_dc,
-			m_pipes_dc,
-			m_sink_dc,
-			m_slide_dc,
-			m_slowdown_dc,
-			m_soap_dc,
-			m_speedboost_dc,
-			m_tiles_dc,
-			m_tissue_dc,
-			m_toiletroll_dc,
-			m_toilet_dc,
-			m_toothbrush_dc,
-			m_toothpaste_dc,
-			m_tub_dc,
-			m_water_dc,
-			m_whit_dc
-		};
-
-		for (auto dc : level_drawcalls)
-		{
-			mRenderPipeline->RegisterDrawCall(dc);
-		}
-
 		//DRAWCALL CACHING
 		auto line_drawcall = new DrawCall(quad_mesh, unlit_white_mat);
 		mRenderPipeline->RegisterDrawCall(line_drawcall);
@@ -378,8 +139,8 @@ namespace gbe {
 		auto whiteball_drawcall = new DrawCall(sphere_mesh, lit_white_mat);
 		mRenderPipeline->RegisterDrawCall(whiteball_drawcall);
 
-		auto water_quad = new DrawCall(quad_mesh, lit_water_mat);
-		mRenderPipeline->RegisterDrawCall(water_quad);
+		auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
+		mRenderPipeline->RegisterDrawCall(cube_drawcall);
 
 		std::vector<DrawCall*> particle_drawcalls;
 
@@ -394,15 +155,6 @@ namespace gbe {
 			return particle_drawcalls[rand() % particle_drawcalls.size()];
 			};
 
-		auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
-		mRenderPipeline->RegisterDrawCall(cube_drawcall);
-		
-		auto level_drawcall = new DrawCall(level_mesh, lit_white_mat);
-		mRenderPipeline->RegisterDrawCall(level_drawcall);
-
-		auto duck_drawcall = new DrawCall(player_mesh, m_duck);
-		mRenderPipeline->RegisterDrawCall(duck_drawcall);
-		auto duckhat_drawcall = new DrawCall(hatplayer_mesh, m_hat);
 #pragma endregion
 #pragma region GUI Pipeline Setup
 		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, mRenderPipeline->Get_mainbufferId(), uiShader);
@@ -417,6 +169,8 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseDeltaImplementation());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::SPACE>());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::ESCAPE>());
+		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
+		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
 #pragma endregion
 #pragma region Util functions
 		auto create_image_button = [=](asset::Texture* tex, gbe::gui::gb_canvas* main_canvas, Vector2 percent_pos, Vector2 half_extents, std::function<void()> onpress) {
@@ -448,65 +202,14 @@ namespace gbe {
 #pragma region Root Loaders
 		//forward declared load functions
 		std::function<Root* ()> create_main_game;
-		std::function<Root* ()> create_main_menu;
-		std::function<Root* ()> create_success_screen;
-
-		create_main_menu = [&]() {
-			auto game_root = this->CreateBlankRoot();
-			mWindow->Set_cursorLock(false);
-			//GUI canvases
-			gbe::gui::gb_canvas* mainmenu_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
-			mGUIPipeline->SetActiveCanvas(mainmenu_canvas);
-
-			gbe::gui::gb_image* main_image = new gbe::gui::gb_image();
-			main_image->Set_Image(mainmenu_tex);
-			main_image->bl_pivot = Vector2(-1, -1);
-			main_image->tr_pivot = Vector2(1, 1);
-			main_image->bl_offset = Vector2(0, 0);
-			main_image->tr_offset = Vector2(0, 0);
-			main_image->Set_handleType(gui::gb_rect::PointerEventHandleType::PASS);
-			mainmenu_canvas->AddRootChild(main_image);
-
-			create_image_button(startbubble_tex, mainmenu_canvas,
-				Vector2(-0.53, -0.55),
-				Vector2(120, 80),
-				[=]() {
-					this->ChangeRoot(create_main_game());
-				});
-			create_image_button(exitbubble_tex, mainmenu_canvas,
-				Vector2(-0.13, -0.59),
-				Vector2(120, 80),
-				[=]() {
-					mWindow->Terminate();
-				});
-
-			//Camera setup
-			auto player_input = new InputPlayer(player_name);
-			player_input->SetParent(game_root);
-			auto camera_parent = new FlyingCameraControl();
-			camera_parent->SetParent(player_input);
-
-			//GUI COMMUNICATOR
-			auto gui_communicator = new GenericController();
-			gui_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([=](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
-				if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
-					return;
-
-				mGUIPipeline->Click();
-
-				}));
-			gui_communicator->SetParent(player_input);
-
-			return game_root;
-			};
 
 		create_main_game = [&]() {
 			auto game_root = this->CreateBlankRoot();
-			mWindow->Set_cursorLock(true);
 			//SCENE GUI
 			gbe::gui::gb_canvas* maingame_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
 			mGUIPipeline->SetActiveCanvas(maingame_canvas);
-#pragma region one n only objects
+
+#pragma region scene singletons
 			//forward declaration
 			auto player = new RigidObject();
 
@@ -538,44 +241,6 @@ namespace gbe {
 				return spawnball(Vector3::zero, randsize, false);
 				};
 
-			//Hairdryer
-			auto create_spray = [=](Vector3 pos) {
-				auto hairspray = new Object();
-				hairspray->Local().position.Set(pos);
-				hairspray->SetParent(game_root);
-				TriggerRigidObject* hairspray_trigger = new TriggerRigidObject();
-				hairspray_trigger->Local().scale.Set(Vector3(1, 3, 1));
-				hairspray_trigger->SetParent(hairspray);
-				//RenderObject* hairspray_trigger_renderer = new RenderObject(cube_drawcall);
-				//hairspray_trigger_renderer->SetParent(hairspray_trigger);
-				//hairspray_trigger_renderer->Local().position.Set(Vector3::zero);
-				BoxCollider* hairspray_trigger_collider = new BoxCollider();
-				hairspray_trigger_collider->SetParent(hairspray_trigger);
-				hairspray_trigger_collider->Local().position.Set(Vector3(0, 0, 0));
-				hairspray_trigger->Set_OnStay([=](gbe::PhysicsObject* other, float delta) {
-					if (other == player) {
-						player->GetRigidbody()->AddForce((physics::PhysicsVector3)(Vector3(0, 4000, 0) * delta));
-					}
-					});
-				hairspray_trigger->Set_OnExit([=](gbe::PhysicsObject* other) {
-					if (other == player) {
-						std::cout << "exitted spray." << std::endl;
-					}
-					});
-				hairspray_trigger->Set_OnEnter([=](gbe::PhysicsObject* other) {
-					if (other == player) {
-						std::cout << "enetered spray." << std::endl;
-						audio_hairdryer->Play();
-					}
-					});
-				auto hairspray_particle_system = new ParticleSystem(create_particle);
-				hairspray_particle_system->SetParent(hairspray);
-				auto bl_corner_bound = Vector3(-1, -1, -1);
-				hairspray_particle_system->SetBounds(bl_corner_bound, -bl_corner_bound);
-				hairspray_particle_system->Set_force(Vector3(0, 800, 0));
-				hairspray_particle_system->Set_rate(10);
-				hairspray_particle_system->Set_lifetime(1);
-				};
 			auto create_platform = [=](Vector3 pos, Vector3 scale) {
 				RigidObject* platform = new RigidObject(true);
 				platform->SetParent(game_root);
@@ -588,9 +253,7 @@ namespace gbe {
 				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
 				platform_renderer->SetParent(platform_collider);
 				};
-			auto create_paste = [=](Vector3 pos) {
 
-				};
 			//Global objects
 			//physics force setup
 			auto gravity_volume = new ForceVolume();
@@ -601,221 +264,75 @@ namespace gbe {
 			gravity_volume->SetParent(game_root);
 
 			//light
-			//auto directional_light = new DirectionalLight();
-			//directional_light->Set_Color(Vector3(1, 1, 1));
-			//directional_light->Set_Intensity(1);
-			//directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(80, 90, 0)));
-			//directional_light->SetParent(game_root);
-			//directional_light->Set_ShadowmapResolutions(2160);
+			auto directional_light = new DirectionalLight();
+			directional_light->Set_Color(Vector3(1, 1, 1));
+			directional_light->Set_Intensity(1);
+			directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(80, 90, 0)));
+			directional_light->SetParent(game_root);
+			directional_light->Set_ShadowmapResolutions(2160);
 
 			//Player and Camera setup
 			auto f_speed = 100.0f;
 			auto f_jump = 180.0f;
 
+			auto player_input = new InputPlayer(player_name);
+			player_input->SetParent(game_root);
+			auto camera_controller = new FlyingCameraControl();
+			camera_controller->SetParent(player_input);
+
 			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
+			player_cam->SetParent(camera_controller);
 
 			player->SetParent(game_root);
 			player->Local().scale.Set(Vector3(1, 1, 1) * 0.8f);
 
-			auto player_renderer = new RenderObject(get_random_drawcall());
-			player_renderer->SetParent(player);
-			
-
 			auto player_collider = new SphereCollider();
 			player_collider->SetParent(player);
-			auto player_particle_system = new ParticleSystem(create_particle);
-			player_particle_system->SetParent(player);
-			auto bl_corner_bound = Vector3(-0.5, -0.5, -0.5);
-			player_particle_system->SetBounds(bl_corner_bound, -bl_corner_bound);
-			player_particle_system->Set_force(Vector3(0, 200, 0));
-			player_particle_system->Set_rate(20);
-			player_particle_system->Set_enabled(false);
-
-			//duck inside
-			auto duck_object = new GenericObject([=](GenericObject* self, float delta) {
-				self->SetWorldPosition(player->World().position.Get());
-				});
-			duck_object->SetParent(game_root);
-			auto duck_renderer = new RenderObject(duck_drawcall);
-			duck_renderer->Local().position.Set(Vector3(0, -0.7f, 0));
-			duck_renderer->Local().scale.Set(Vector3(1) * 0.6f);
-			duck_renderer->SetParent(duck_object);
-
-			auto camera_parent = new GenericObject([=](GenericObject* self, float delta) {
-				auto ppos = player->World().position.Get();
-				self->SetWorldPosition(ppos);
-				});
-			camera_parent->SetParent(game_root);
-			player_cam->angles = 80;
-			player_cam->nearClip = 1.0f;
-			player_cam->farClip = 200.0f;
-			player_cam->WorldUp = Vector3(0, 1, 0);
-			player_cam->SetParent(camera_parent);
-			auto target_campos = Vector3(0, 2, -5);
-			player_cam->TranslateWorld(target_campos);
-
-			//camera clip check
-			auto cameraclipcheck = [=]() {
-				Vector3 campos_world = Vector3();
-				campos_world.y = 2;
-				campos_world += camera_parent->World().GetForward() * -5.0f;
-
-				auto check = physics::Raycast(camera_parent->World().position.Get(), campos_world);
-				if (check.result) {
-					return (Vector3)(check.intersection - (campos_world * 0.1f));
-				}
-				else {
-					return campos_world;
-				}
-			};
-
-			auto camera_check = new GenericObject([=](GenericObject* self, float delta) {
-				auto campos = cameraclipcheck();
-				player_cam->World().position.Set(campos);
-				});
-			camera_check->SetParent(camera_parent);
 
 			//ground check
 			auto groundcheck = [=]() {
 				auto floorcheck = physics::Raycast(player->World().position.Get(), Vector3(0, -1.5f, 0));
 				return floorcheck.result;
 				};
-			//BALL SHOOTER
-			auto shoot_func = [=]() {
-				auto spawnpos = camera_parent->World().position.Get() - (camera_parent->World().GetUp() * 0.3f);
-
-				auto ball = spawnball(spawnpos, 0.2f);
-				ball->GetRigidbody()->AddForce((physics::PhysicsVector3)(camera_parent->World().GetForward() * 1000.0f));
-				audio_shoot->Play();
-			};
 
 			//Player Controller Logic
-			auto player_input = new InputPlayer(player_name);
-			player_input->SetParent(game_root);
-			auto camera_controller = new TPCameraController();
-			camera_controller->Set_pivot(camera_parent);
-			camera_controller->SetParent(player_input);
 			auto input_communicator = new GenericController();
+			input_communicator->SetParent(player_input);
 			//Left click customer
 			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([=](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
 				if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
 					return;
 
 				mGUIPipeline->Click();
-				shoot_func();
-
 				}));
 			//WASD customer
 			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
-				if (value->state == WasdDelta::END || !groundcheck())
-					player_particle_system->Set_enabled(false);
-				if(value->state == WasdDelta::WHILE && groundcheck())
-					player_particle_system->Set_enabled(true);
-
-				if (value->state != WasdDelta::WHILE)
-					return;
-
-				duck_renderer->World().rotation.Set(player_cam->World().rotation.Get());
-
-				Vector3 right_vec = player_cam->World().GetRight() * f_speed;
-				auto forward_vec = right_vec.Cross(Vector3(0, 1, 0)).Normalize() * f_speed;
-
-				if (value->delta.y > 0)
-					player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(forward_vec));
-				if (value->delta.y < 0)
-					player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(-forward_vec));
-				if (value->delta.x > 0)
-					player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(-right_vec));
-				if (value->delta.x < 0)
-					player->GetRigidbody()->AddContinuousForce((physics::PhysicsVector3)(right_vec));
 
 				}));
 			//Spacebar customer
 			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
 				if (value->state != KeyPress<Keys::SPACE>::START)
 					return;
-
-				if (groundcheck()) { //raycast ground here
-					auto curvel = player->GetRigidbody()->Get_velocity();
-					curvel.y = 0;
-					player->GetRigidbody()->Set_velocity(curvel);
-					player->GetRigidbody()->AddForce((physics::PhysicsVector3)(Vector3(0, 1, 0) * f_jump));
-
-					audio_jump->Play();
-				}
-
 				}));
 			//ESCAPE Customer
 			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
 				if (value->state != KeyPress<Keys::ESCAPE>::START)
 					return;
 
-				ChangeRoot(create_main_menu());
-
 				}));
-			input_communicator->SetParent(player_input);
-
-
-			//Death Trigger
-			auto death_checker = new GenericObject([=](GenericObject* self, float delta) {
-				if (player->World().position.Get().y < -4) {
-					player->SetWorldPosition(Vector3::zero);
-					player->GetRigidbody()->Set_velocity(Vector3::zero);
-
-					audio_jump->Play();
-				}
-				});
-			death_checker->SetParent(game_root);
 #pragma endregion
-			
-			//Actual objects
-			auto level_object = new RigidObject(true);
-			level_object->TranslateWorld(Vector3(10, -6, -27));
-			level_object->SetParent(game_root);
-			
-			
-			for (auto dc : level_drawcalls)
-			{
-				auto level_dc_renderer = new RenderObject(dc);
-				level_dc_renderer->SetParent(level_object);
-			}
 
-			auto level_collider = new MeshCollider(level_mesh);
-			level_collider->SetParent(level_object);
-
-			create_spray(Vector3(24, -3, -3));
-			create_spray(Vector3(24, 0, -12));
-			create_spray(Vector3(-1, 0, -30));
-			create_spray(Vector3(8, 0, -46));
-			create_spray(Vector3(11.6, 4.6, -51.7));
-		
-
-			//Goal
-			auto goal_trigger = new GenericObject([=](GenericObject* self, float delta) {
-				Vector3 player_delta = self->World().position.Get() - player->World().position.Get();
-				auto sd_player = player_delta.SqrMagnitude();
-
-				if (sd_player * sd_player < 7 * 7) {
-					ChangeRoot(create_main_menu());
-				}
-
-				});
-			goal_trigger->TranslateWorld(Vector3(25, -3, -38));
-			goal_trigger->SetParent(game_root);
+#pragma region scene objects
+			create_platform(Vector3(0, -1, 0), Vector3(10, 1, 10));
+#pragma endregion
 
 			return game_root;
 			};
 
-		create_success_screen = [&]() {
-			return nullptr;
-			};
 #pragma endregion
-
-		auto initial_root = create_main_menu();
+		auto initial_root = create_main_game();
 		this->current_root = initial_root;
-
 #pragma region MAIN LOOP
-
 		//GLOBAL RUNTIME COMPONENTS
 		auto mTime = new Time();
 

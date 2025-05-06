@@ -19,7 +19,6 @@ gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vecto
 {
 	this->resolution = dimensions;
 
-	auto thing = procaddressfunc("glGetString");
 	if (gladLoadGLLoader(procaddressfunc) == 0)
 		throw "ERROR: glad failed to initialize.";
 
