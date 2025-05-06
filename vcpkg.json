@@ -11,6 +11,7 @@
     "wxwidgets",
     "bullet3",
     "openal-soft",
-    "glaze"
+    "glaze",
+    "vulkan"
   ]
 }
