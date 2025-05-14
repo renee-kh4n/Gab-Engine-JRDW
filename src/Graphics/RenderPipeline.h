@@ -4,6 +4,8 @@
 #include <glad/glad.h>
 #include <glm/gtx/matrix_decompose.hpp>
 
+#include <vulkan/vulkan.h>
+
 #include <vector>
 #include <algorithm>
 #include <map>
@@ -19,6 +21,7 @@
 #include "Data/Framebuffer.h"
 #include "AssetLoaders/TextureLoader.h"
 #include "AssetLoaders/ShaderLoader.h"
+#include "Window/gbe_window.h"
 
 namespace gbe {
 	using namespace gfx;
@@ -38,20 +41,29 @@ namespace gbe {
 		//Loaders
 		ShaderLoader shaderloader;
 		TextureLoader textureloader;
-		
-		//SHADERS
-		asset::AssetReference<asset::Shader> camera_shader;
-		asset::AssetReference<asset::Shader> default_buffer_shader;
-		asset::AssetReference<asset::Shader> depth_shader;
 
-		//BUFFERS
-		Framebuffer* mFrameBuffer;
-		Framebuffer* mLayererBuffer;
-		Framebuffer* mDepthFrameBuffer;
+		//VK Init
+		VkInstance vkInst;
+		VkSurfaceKHR surface;
+		VkDevice vkdevice;
+		VkQueue graphicsQueue;
+		VkQueue presentQueue;
+
+		//SWAPCHAINS
+		VkSwapchainKHR swapChain;
+		std::vector<VkImage> swapChainImages;
+		VkSurfaceFormatKHR chosenSurfaceFormat;
+		VkExtent2D swapchainExtent;
+		std::vector<VkImageView> swapChainImageViews;
+		//SWAPCHAIN FRAMEBUFFERS
+		std::vector<VkFramebuffer> swapChainFramebuffers;
+
+		//Renderpass
+		VkRenderPass renderPass;
 	public:
 		static RenderPipeline* Get_Instance();
 
-		RenderPipeline(void*(*procaddressfunc)(const char*), Vector2Int);
+		RenderPipeline(gbe::Window*, Vector2Int);
 		void RegisterDrawCall(DrawCall*);
 
 		void SetCameraShader(asset::Shader* postprocess);

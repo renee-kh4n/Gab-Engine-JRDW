@@ -7,118 +7,254 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	auto vertpath = asset->Get_asset_directory() + importdata.vert;
 	auto fragpath = asset->Get_asset_directory() + importdata.frag;
 	
-	auto vertShader = TryCompileShader(vertpath, GL_VERTEX_SHADER);
-	auto fragShader = TryCompileShader(fragpath, GL_FRAGMENT_SHADER);
+	auto readfile = [](std::string path) {
+		std::ifstream file(path, std::ios::ate | std::ios::binary);
+		if (!file.is_open()) {
+			throw std::runtime_error("failed to open file!");
+		}
 
-	unsigned int shaderID = glCreateProgram();
-	glAttachShader(shaderID, vertShader);
-	glAttachShader(shaderID, fragShader);
-	std::cout << "Compiling: " + vertpath + " | " + fragpath << " INTO -> " << std::to_string(shaderID) << std::endl;
+		size_t fileSize = (size_t)file.tellg();
+		std::vector<char> buffer(fileSize);
 
-	GLsizei count = 0;
-	GLuint shaders[] = { 0, 0, 0, 0 };
-	glGetAttachedShaders(shaderID, 4, &count, shaders);
-	printf("\tnumber of shaders: %d\n", count);
-	for (int i = 0; i < count; i++) printf("\tshader_id: %d\n", shaders[i]);
+		file.seekg(0);
+		file.read(buffer.data(), fileSize);
 
-	glLinkProgram(shaderID);
+		file.close();
 
-	data->overridefunctions.SetOverride_bool = [shaderID](const char* id, bool value) {
-		glUseProgram(shaderID);
-		auto loc = glGetUniformLocation(shaderID, id);
-		glUniform1i(loc, value);
-		};
-	data->overridefunctions.SetOverride_int = [shaderID](const char* id, int value) {
-		glUseProgram(shaderID);
-		auto loc = glGetUniformLocation(shaderID, id);
-		glUniform1i(loc, value);
-		};
-	data->overridefunctions.SetOverride_float = [shaderID](const char* id, float value) {
-		glUseProgram(shaderID);
-		auto loc = glGetUniformLocation(shaderID, id);
-		glUniform1f(loc, value);
-		};
-	data->overridefunctions.SetOverride_Vector2 = [shaderID](const char* id, Vector2 value) {
-		glUseProgram(shaderID);
-		glUniform2fv(glGetUniformLocation(shaderID, id), 1, value.Get_Ptr());
-		};
-	data->overridefunctions.SetOverride_Vector3 = [shaderID](const char* id, Vector3 value) {
-		glUseProgram(shaderID);
-		auto loc = glGetUniformLocation(shaderID, id);
-		glUniform3f(loc, value.x, value.y, value.z);
-		};
-	data->overridefunctions.SetOverride_Vector4 = [shaderID](const char* id, Vector4 value) {
-		glUseProgram(shaderID);
-		glUniform4fv(glGetUniformLocation(shaderID, id), 1, value.Get_Ptr());
-		};
-	data->overridefunctions.SetOverride_Matrix4 = [shaderID](const char* id, Matrix4 value) {
-		glUseProgram(shaderID);
-		auto loc = glGetUniformLocation(shaderID, id);
-		glUniformMatrix4fv(loc, 1, GL_FALSE, value.Get_Ptr());
-		};
-	data->overridefunctions.SetOverride_Texture = [shaderID](const char* id, asset::Texture* value) {
-		glUseProgram(shaderID);
-		GLuint loc = glGetUniformLocation(shaderID, id);
-
-		auto tex_slot = TextureLoader::PushGet_texture_stackId(value);
-
-		glUniform1i(loc, tex_slot);
-		};
-	data->overridefunctions.SetOverride_TextureId = [shaderID](const char* id, int texid) {
-		glUseProgram(shaderID);
-		GLuint loc = glGetUniformLocation(shaderID, id);
-
-		auto gpu_slot = TextureLoader::PushGet_bufferId_stackId(texid);
-		glUniform1i(loc, gpu_slot);
+		return buffer;
 		};
 
-	data->gl_id = shaderID;
+	auto vertShaderCode = readfile(vertpath);
+	auto fragShaderCode = readfile(fragpath);
 
+	auto vertShader = TryCompileShader(vertShaderCode);
+	auto fragShader = TryCompileShader(fragShaderCode);
+
+	VkPipelineShaderStageCreateInfo vertShaderStageInfo{};
+	vertShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	vertShaderStageInfo.stage = VK_SHADER_STAGE_VERTEX_BIT;
+
+	vertShaderStageInfo.module = vertShader;
+	vertShaderStageInfo.pName = "main";
+
+	VkPipelineShaderStageCreateInfo fragShaderStageInfo{};
+	fragShaderStageInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
+	fragShaderStageInfo.stage = VK_SHADER_STAGE_FRAGMENT_BIT;
+	fragShaderStageInfo.module = fragShader;
+	fragShaderStageInfo.pName = "main";
+
+	VkPipelineShaderStageCreateInfo shaderStages[] = { vertShaderStageInfo, fragShaderStageInfo };
+
+	//Dynamic state
+	std::vector<VkDynamicState> dynamicStates = {
+	VK_DYNAMIC_STATE_VIEWPORT,
+	VK_DYNAMIC_STATE_SCISSOR
+	};
+
+	VkPipelineDynamicStateCreateInfo dynamicState{};
+	dynamicState.sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO;
+	dynamicState.dynamicStateCount = static_cast<uint32_t>(dynamicStates.size());
+	dynamicState.pDynamicStates = dynamicStates.data();
+
+	//Vertex input
+	VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
+	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
+	vertexInputInfo.vertexBindingDescriptionCount = 0;
+	vertexInputInfo.pVertexBindingDescriptions = nullptr; // Optional
+	vertexInputInfo.vertexAttributeDescriptionCount = 0;
+	vertexInputInfo.pVertexAttributeDescriptions = nullptr; // Optional
+
+	//Input assembly
+	VkPipelineInputAssemblyStateCreateInfo inputAssembly{};
+	inputAssembly.sType = VK_STRUCTURE_TYPE_PIPELINE_INPUT_ASSEMBLY_STATE_CREATE_INFO;
+	inputAssembly.topology = VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST;
+	inputAssembly.primitiveRestartEnable = VK_FALSE;
+
+	//Viewports and scissors
+	VkViewport viewport{};
+	viewport.x = 0.0f;
+	viewport.y = 0.0f;
+	viewport.width = (float)(*this->vkextent).width;
+	viewport.height = (float)(*this->vkextent).height;
+	viewport.minDepth = 0.0f;
+	viewport.maxDepth = 1.0f;
+
+	VkRect2D scissor{};
+	scissor.offset = { 0, 0 };
+	scissor.extent = (*this->vkextent);
+
+	VkPipelineViewportStateCreateInfo viewportState{};
+	viewportState.sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO;
+	viewportState.viewportCount = 1;
+	viewportState.pViewports = &viewport;
+	viewportState.scissorCount = 1;
+	viewportState.pScissors = &scissor;
+
+	//Rasterizer
+	VkPipelineRasterizationStateCreateInfo rasterizer{};
+	rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
+	rasterizer.depthClampEnable = VK_FALSE;
+	rasterizer.rasterizerDiscardEnable = VK_FALSE;
+	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+	rasterizer.lineWidth = 1.0f;
+	rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
+	rasterizer.frontFace = VK_FRONT_FACE_CLOCKWISE;
+	rasterizer.depthBiasEnable = VK_FALSE;
+	rasterizer.depthBiasConstantFactor = 0.0f; // Optional
+	rasterizer.depthBiasClamp = 0.0f; // Optional
+	rasterizer.depthBiasSlopeFactor = 0.0f; // Optional
+
+	//Multisampling
+	VkPipelineMultisampleStateCreateInfo multisampling{};
+	multisampling.sType = VK_STRUCTURE_TYPE_PIPELINE_MULTISAMPLE_STATE_CREATE_INFO;
+	multisampling.sampleShadingEnable = VK_FALSE;
+	multisampling.rasterizationSamples = VK_SAMPLE_COUNT_1_BIT;
+	multisampling.minSampleShading = 1.0f; // Optional
+	multisampling.pSampleMask = nullptr; // Optional
+	multisampling.alphaToCoverageEnable = VK_FALSE; // Optional
+	multisampling.alphaToOneEnable = VK_FALSE; // Optional
+
+	//Color blending
+	VkPipelineColorBlendAttachmentState colorBlendAttachment{};
+	colorBlendAttachment.colorWriteMask = VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT;
+	colorBlendAttachment.blendEnable = VK_TRUE;
+	colorBlendAttachment.srcColorBlendFactor = VK_BLEND_FACTOR_SRC_ALPHA;
+	colorBlendAttachment.dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA;
+	colorBlendAttachment.colorBlendOp = VK_BLEND_OP_ADD;
+	colorBlendAttachment.srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE;
+	colorBlendAttachment.dstAlphaBlendFactor = VK_BLEND_FACTOR_ZERO;
+	colorBlendAttachment.alphaBlendOp = VK_BLEND_OP_ADD;
+
+	VkPipelineColorBlendStateCreateInfo colorBlending{};
+	colorBlending.sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO;
+	colorBlending.logicOpEnable = VK_FALSE;
+	colorBlending.logicOp = VK_LOGIC_OP_COPY; // Optional
+	colorBlending.attachmentCount = 1;
+	colorBlending.pAttachments = &colorBlendAttachment;
+	colorBlending.blendConstants[0] = 0.0f; // Optional
+	colorBlending.blendConstants[1] = 0.0f; // Optional
+	colorBlending.blendConstants[2] = 0.0f; // Optional
+	colorBlending.blendConstants[3] = 0.0f; // Optional
+
+	//Pipeline layout
+	VkPipelineLayout newpipelineLayout;
+
+	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
+	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
+	pipelineLayoutInfo.setLayoutCount = 0; // Optional
+	pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
+	pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
+	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
+
+	if (vkCreatePipelineLayout((*this->vkdevice), &pipelineLayoutInfo, nullptr, &newpipelineLayout) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create pipeline layout!");
+	}
+
+	//Pipeline creation
+	VkGraphicsPipelineCreateInfo pipelineInfo{};
+	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	pipelineInfo.stageCount = 2;
+	pipelineInfo.pStages = shaderStages;
+
+	pipelineInfo.pVertexInputState = &vertexInputInfo;
+	pipelineInfo.pInputAssemblyState = &inputAssembly;
+	pipelineInfo.pViewportState = &viewportState;
+	pipelineInfo.pRasterizationState = &rasterizer;
+	pipelineInfo.pMultisampleState = &multisampling;
+	pipelineInfo.pDepthStencilState = nullptr; // Optional
+	pipelineInfo.pColorBlendState = &colorBlending;
+	pipelineInfo.pDynamicState = &dynamicState;
+
+	pipelineInfo.layout = newpipelineLayout;
+
+	pipelineInfo.renderPass = (*this->vkrenderpass);
+	pipelineInfo.subpass = 0;
+
+	pipelineInfo.basePipelineHandle = VK_NULL_HANDLE; // Optional
+	pipelineInfo.basePipelineIndex = -1; // Optional
+
+	VkPipeline newgraphicsPipeline;
+	VkResult newgraphicsPipeline_result = vkCreateGraphicsPipelines((*this->vkdevice), VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &newgraphicsPipeline);
+	if (newgraphicsPipeline_result != VK_SUCCESS) {
+		throw std::runtime_error("failed to create graphics pipeline!");
+	}
+
+	this->loaded_shaders.insert_or_assign(loaded_shaders_count, ShaderData{
+		newpipelineLayout,
+		newgraphicsPipeline
+		});
+
+	//OVERRIDE FUNCTIONS
+	data->overridefunctions.SetOverride_bool = [=](const char* id, bool value) {
+
+		};
+	data->overridefunctions.SetOverride_int = [=](const char* id, int value) {
+
+		};
+	data->overridefunctions.SetOverride_float = [=](const char* id, float value) {
+
+		};
+	data->overridefunctions.SetOverride_Vector2 = [=](const char* id, Vector2 value) {
+
+		};
+	data->overridefunctions.SetOverride_Vector3 = [=](const char* id, Vector3 value) {
+
+		};
+	data->overridefunctions.SetOverride_Vector4 = [=](const char* id, Vector4 value) {
+
+		};
+	data->overridefunctions.SetOverride_Matrix4 = [=](const char* id, Matrix4 value) {
+
+		};
+	data->overridefunctions.SetOverride_Texture = [=](const char* id, asset::Texture* value) {
+
+		};
+	data->overridefunctions.SetOverride_TextureId = [=](const char* id, int texid) {
+		
+		};
+
+
+	//Cleanup
+	vkDestroyShaderModule((*this->vkdevice), vertShader, nullptr);
+	vkDestroyShaderModule((*this->vkdevice), fragShader, nullptr);
+
+	//Increment
+	loaded_shaders_count++;
 	return true;
 }
 
-void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
-
+gbe::gfx::ShaderData& gbe::gfx::ShaderLoader::Get_shader(unsigned int id) {
+	auto it = this->loaded_shaders.find(id);
+	if (it != this->loaded_shaders.end()) {
+		return it->second;
+	}
+	else {
+		throw std::runtime_error("Shader not found");
+	}
 }
 
-unsigned int gbe::gfx::ShaderLoader::TryCompileShader(std::string path, int compile_type) {
-	//Load the text file
-	auto shaderStr = [](std::string path) {
-		std::fstream fsrc(path);
-		std::stringstream fbuff;
-		fbuff << fsrc.rdbuf();
+void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
+	vkDestroyPipelineLayout((*this->vkdevice), this->Get_shader(data->gl_id).pipelineLayout, nullptr);
+	vkDestroyPipeline((*this->vkdevice), this->Get_shader(data->gl_id).pipeline, nullptr);
+	this->loaded_shaders.erase(data->gl_id);
+}
 
-		return fbuff.str();
-		}(path);
+void gbe::gfx::ShaderLoader::PassDependencies(VkDevice* vkdevice, VkExtent2D* vkextent, VkRenderPass* vkrenderpass) {
+	this->vkdevice = vkdevice;
+	this->vkextent = vkextent;
+	this->vkrenderpass = vkrenderpass;
+}
 
-	if (shaderStr.length() <= 1)
-		throw "empty shader!";
+VkShaderModule gbe::gfx::ShaderLoader::TryCompileShader(const std::vector<char>& code) {
+	VkShaderModuleCreateInfo shaderModuleInfo{};
+	shaderModuleInfo.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+	shaderModuleInfo.codeSize = code.size();
+	shaderModuleInfo.pCode = reinterpret_cast<const uint32_t*>(code.data());
 
-	const char* shaderptr = shaderStr.c_str();
-
-	//Compile the shader through OpenGL
-	GLuint shaderint = glCreateShader(compile_type);
-	glShaderSource(shaderint, 1, &shaderptr, NULL);
-	glCompileShader(shaderint);
-
-	//Handle errors if there is any
-	GLint isCompiled = 0;
-	glGetShaderiv(shaderint, GL_COMPILE_STATUS, &isCompiled);
-
-	if (isCompiled == GL_FALSE) {
-		GLint maxLength = 0;
-		glGetShaderiv(shaderint, GL_INFO_LOG_LENGTH, &maxLength);
-
-		std::vector<GLchar> errorLog(maxLength);
-		glGetShaderInfoLog(shaderint, maxLength, &maxLength, &errorLog[0]);
-
-		for (size_t e_i = 0; e_i < errorLog.size(); e_i++)
-		{
-			std::cout << errorLog[e_i];
-		}
-
-		glDeleteShader(shaderint);
+	VkShaderModule shaderModule;
+	if (vkCreateShaderModule((*this->vkdevice), &shaderModuleInfo, nullptr, &shaderModule) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create shader module!");
 	}
 
-	return shaderint;
+	return shaderModule;
 }

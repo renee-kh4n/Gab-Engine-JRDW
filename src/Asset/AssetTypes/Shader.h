@@ -34,6 +34,7 @@ namespace gbe {
 		public:
 			Shader(std::string path);
 
+
 			unsigned int Get_gl_id();
 
 			//OVERRIDE FUNCTIONS
@@ -71,7 +72,6 @@ namespace gbe {
 			}
 			void SetTextureOverride(const char* id, asset::Texture* value);
 			void SetTextureIdOverride(const char* id, unsigned int value);
-
 		};
 	}
 }

@@ -1,4 +1,7 @@
-﻿# CMakeList.txt : Top-level CMake project file, do global configuration
+﻿#PER MACHINE SYSTEM VARIABLES
+set(VCPKG_TOOLCHAIN_DIR "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake")
+
+# CMakeList.txt : Top-level CMake project file, do global configuration
 # and include sub-projects here.
 #
 cmake_minimum_required (VERSION 3.22)
@@ -11,7 +14,7 @@ if (POLICY CMP0141)
   set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "$<IF:$<AND:$<C_COMPILER_ID:MSVC>,$<CXX_COMPILER_ID:MSVC>>,$<$<CONFIG:Debug,RelWithDebInfo>:EditAndContinue>,$<$<CONFIG:Debug,RelWithDebInfo>:ProgramDatabase>>")
 endif()
 
-set(CMAKE_TOOLCHAIN_FILE "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(CMAKE_TOOLCHAIN_FILE ${VCPKG_TOOLCHAIN_DIR})
 message("INCLUDING VCPKG AT: " "${CMAKE_TOOLCHAIN_FILE}")
 
 project ("gab-engine" LANGUAGES CXX)
@@ -24,6 +27,7 @@ add_executable(${PROJECT_NAME} "src/gab-engine.h" "src/gab-engine.cpp")
 target_link_libraries(${PROJECT_NAME} PRIVATE gbe_engine_src)
 
 #Dependency Loading
+#WINDOW CORE LIBRARY
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME}
     PRIVATE
@@ -33,13 +37,30 @@ target_link_libraries(${PROJECT_NAME}
 find_package(SDL2_mixer CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
 
-find_package(wxWidgets CONFIG REQUIRED)
-target_link_libraries(${PROJECT_NAME} PRIVATE wx::core wx::base)
+#SHADER COMPILATION
+set(SHADER_OUTPUT "")
+function(add_shader SRCPATH DSTPATH)
+  add_custom_command(
+    OUTPUT "${DSTPATH}"
+    MAIN_DEPENDENCY "${SRCPATH}"
+    COMMAND "${PACKAGE_PREFIX_DIR}/tools/shaderc/glslc.exe" "${SRCPATH}" -o "${DSTPATH}")
+  list(APPEND SHADER_OUTPUT "${DSTPATH}")
+  set(SHADER_OUTPUT "${SHADER_OUTPUT}" PARENT_SCOPE)
+endfunction()
 
-#Dependency Workarounds (temp hopefully)
-find_package(Bullet CONFIG REQUIRED)
-include_directories(${BULLET_INCLUDE_DIRS})
-message("[GABENGINE] [WORKAROUND] INCLUDED: " ${BULLET_INCLUDE_DIRS} " To MAIN")
+file(GLOB verts "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets/shaders/*.vert")
+foreach(shader ${verts})
+  add_shader(${shader} "${shader}.spv")
+endforeach()
+file(GLOB frags "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets/shaders/*.frag")
+foreach(shader ${frags})
+  add_shader(${shader} "${shader}.spv")
+endforeach()
+
+add_custom_target(shader_bytecode DEPENDS ${SHADER_OUTPUT})
+add_dependencies(${PROJECT_NAME} shader_bytecode)
+
+message("[GABENGINE] COMPILED SHADERS: ${SHADER_OUTPUT}")
 
 #COPY ASSETS TO BUILD TARGET COMMAND
 add_custom_target(COPY_ASSETS_COMMAND

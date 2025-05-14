@@ -1,6 +1,0 @@
-{
-  "asset_type": "texture",
-  "asset_id": "texture_sphere",
-  "vert": "lit_flip2.vert",
-  "frag": "lit.frag"
-}

@@ -3,6 +3,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "RenderPipeline.h"
 
+#ifdef NDEBUG
+const bool enableValidationLayers = false;
+#else
+const bool enableValidationLayers = true;
+#endif
+
 using namespace gbe;
 
 gbe::RenderPipeline* gbe::RenderPipeline::Instance;
@@ -15,29 +21,334 @@ void gbe::RenderPipeline::Init() {
 	this->Instance = this;
 }
 
-gbe::RenderPipeline::RenderPipeline(void* (*procaddressfunc)(const char*), Vector2Int dimensions)
+gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 {
 	this->resolution = dimensions;
 
-	if (gladLoadGLLoader(procaddressfunc) == 0)
-		throw "ERROR: glad failed to initialize.";
+#pragma region SDL x VULKAN init
+    auto implemented_window = static_cast<SDL_Window*>(window->Get_implemented_window());
+
+    //EXTENSIONS
+    uint32_t extensionCount;
+    const char** extensionNames = 0;
+    SDL_Vulkan_GetInstanceExtensions(implemented_window, &extensionCount, nullptr);
+    extensionNames = new const char* [extensionCount];
+    SDL_Vulkan_GetInstanceExtensions(implemented_window, &extensionCount, extensionNames);
+    
+    //APP INFO
+    VkApplicationInfo appInfo{};
+    appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
+    appInfo.pApplicationName = "Hello Triangle";
+    appInfo.applicationVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.pEngineName = "No Engine";
+    appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
+    appInfo.apiVersion = VK_API_VERSION_1_0;
+    
+    //VALIDATION LAYERS
+    bool validationlayerssupported = true;
+
+    const std::vector<const char*> validationLayers = {
+    "VK_LAYER_KHRONOS_validation"
+    };
+    uint32_t layerCount;
+    vkEnumerateInstanceLayerProperties(&layerCount, nullptr);
+
+    std::vector<VkLayerProperties> availableLayers(layerCount);
+    vkEnumerateInstanceLayerProperties(&layerCount, availableLayers.data());
+    for (const char* layerName : validationLayers) {
+        bool layerFound = false;
+
+        for (const auto& layerProperties : availableLayers) {
+            if (strcmp(layerName, layerProperties.layerName) == 0) {
+                layerFound = true;
+                break;
+            }
+        }
+
+        if (!layerFound) {
+            validationlayerssupported = false;
+        }
+    }
+
+    if (enableValidationLayers && !validationlayerssupported) {
+        throw std::runtime_error("validation layers requested, but not available!");
+    }
+    
+	//INSTANCE INFO
+    VkInstanceCreateInfo instInfo{};
+    instInfo.sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO;
+    instInfo.pApplicationInfo = &appInfo;
+    instInfo.pNext = nullptr;
+    instInfo.flags = 0;
+    instInfo.ppEnabledLayerNames = nullptr;
+    instInfo.enabledExtensionCount = extensionCount;
+    instInfo.ppEnabledExtensionNames = extensionNames;
+
+    if (enableValidationLayers) {
+        instInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+        instInfo.ppEnabledLayerNames = validationLayers.data();
+    }
+    else {
+        instInfo.enabledLayerCount = 0;
+    }
+    
+    //INSTANCE
+    if (vkCreateInstance(&instInfo, nullptr, &vkInst) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create instance!");
+    }
+
+    uint32_t physicalDeviceCount;
+    vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, nullptr);
+    std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
+    vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, physicalDevices.data());
+    VkPhysicalDevice physicalDevice = physicalDevices[0];
+
+    uint32_t queueFamilyCount;
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
+
+    //SURFACE
+    SDL_Vulkan_CreateSurface(implemented_window, vkInst, &surface);
+
+    uint32_t graphicsQueueIndex = UINT32_MAX;
+    uint32_t presentQueueIndex = UINT32_MAX;
+    VkBool32 support;
+    uint32_t i = 0;
+    for (VkQueueFamilyProperties queueFamily : queueFamilies) {
+        if (graphicsQueueIndex == UINT32_MAX && queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
+            graphicsQueueIndex = i;
+        if (presentQueueIndex == UINT32_MAX) {
+            vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, surface, &support);
+            if (support)
+                presentQueueIndex = i;
+        }
+        ++i;
+    }
+
+    float queuePriority = 1.0f;
+    VkDeviceQueueCreateInfo queueInfo = {
+        VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO, // sType
+        nullptr,                                    // pNext
+        0,                                          // flags
+        graphicsQueueIndex,                         // graphicsQueueIndex
+        1,                                          // queueCount
+        &queuePriority,                             // pQueuePriorities
+    };
+
+    VkPhysicalDeviceFeatures deviceFeatures = {};
+    const std::vector<const char*> deviceExtensionNames = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+    VkDeviceCreateInfo deviceInfo = {
+        VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,               // sType
+        nullptr,                                            // pNext
+        0,                                                  // flags
+        1,                                                  // queueCreateInfoCount
+        &queueInfo,                                         // pQueueCreateInfos
+        0,                                                  // enabledLayerCount
+        nullptr,                                            // ppEnabledLayerNames
+        static_cast<uint32_t>(deviceExtensionNames.size()), // enabledExtensionCount
+        deviceExtensionNames.data(),                        // ppEnabledExtensionNames
+        &deviceFeatures,                                    // pEnabledFeatures
+    };
+    //DEVICE
+    vkCreateDevice(physicalDevice, &deviceInfo, nullptr, &vkdevice);
+
+    vkGetDeviceQueue(vkdevice, graphicsQueueIndex, 0, &graphicsQueue);
+
+    vkGetDeviceQueue(vkdevice, presentQueueIndex, 0, &presentQueue);
+
+    SDL_Log("Initialized with errors: %s", SDL_GetError());
+#pragma endregion
+
+#pragma region swapchain init
+    VkSurfaceCapabilitiesKHR capabilities = {};
+    std::vector<VkSurfaceFormatKHR> formats;
+    std::vector<VkPresentModeKHR> presentModes;
+
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &capabilities);
+
+    uint32_t formatCount;
+    vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, nullptr);
+
+    if (formatCount != 0) {
+        formats.resize(formatCount);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, formats.data());
+    }
+
+    uint32_t presentModeCount;
+    vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, nullptr);
+
+    if (presentModeCount != 0) {
+        presentModes.resize(presentModeCount);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, presentModes.data());
+    }
+
+    //format selection
+    for (const auto& availableFormat : formats) {
+        if (availableFormat.format == VK_FORMAT_B8G8R8A8_SRGB && availableFormat.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR) {
+            this->chosenSurfaceFormat = availableFormat;
+            break;
+        }
+    }
+
+    this->chosenSurfaceFormat = formats[0];
+
+    //presentation mode selection
+	VkPresentModeKHR chosenPresentMode = VK_PRESENT_MODE_FIFO_KHR;
+
+    for (const auto& availablePresentMode : presentModes) {
+        if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
+            chosenPresentMode = availablePresentMode;
+        }
+    }
+
+	//swapchain extent selection
+    if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
+        this->swapchainExtent = capabilities.currentExtent;
+    }
+    else {
+        VkExtent2D actualExtent = {
+            static_cast<uint32_t>(dimensions.x),
+            static_cast<uint32_t>(dimensions.y)
+        };
+
+        actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+        actualExtent.height = std::clamp(actualExtent.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
+
+        this->swapchainExtent = actualExtent;
+    }
+
+    uint32_t imageCount = capabilities.minImageCount + 1;
+    if (capabilities.maxImageCount > 0 && imageCount > capabilities.maxImageCount) {
+        imageCount = capabilities.maxImageCount;
+    }
+
+    VkSwapchainCreateInfoKHR swapchainInfo{};
+    swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
+    swapchainInfo.surface = surface;
+
+    swapchainInfo.minImageCount = imageCount;
+    swapchainInfo.imageFormat = this->chosenSurfaceFormat.format;
+    swapchainInfo.imageColorSpace = this->chosenSurfaceFormat.colorSpace;
+    swapchainInfo.imageExtent = this->swapchainExtent;
+    swapchainInfo.imageArrayLayers = 1;
+    swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+
+    uint32_t queueFamilyIndices[] = { graphicsQueueIndex, presentQueueIndex };
+
+    if (graphicsQueueIndex != presentQueueIndex) {
+        swapchainInfo.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
+        swapchainInfo.queueFamilyIndexCount = 2;
+        swapchainInfo.pQueueFamilyIndices = queueFamilyIndices;
+    }
+    else {
+        swapchainInfo.imageSharingMode = VK_SHARING_MODE_EXCLUSIVE;
+        swapchainInfo.queueFamilyIndexCount = 0; // Optional
+        swapchainInfo.pQueueFamilyIndices = nullptr; // Optional
+    }
+
+    swapchainInfo.preTransform = capabilities.currentTransform;
+    swapchainInfo.compositeAlpha = VK_COMPOSITE_ALPHA_OPAQUE_BIT_KHR;
+    swapchainInfo.presentMode = chosenPresentMode;
+    swapchainInfo.clipped = VK_TRUE;
+    swapchainInfo.oldSwapchain = VK_NULL_HANDLE;
+
+    if (vkCreateSwapchainKHR(vkdevice, &swapchainInfo, nullptr, &swapChain) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create swap chain!");
+    }
+
+    //Retrieving the swap chain images
+    vkGetSwapchainImagesKHR(vkdevice, this->swapChain, &imageCount, nullptr);
+    this->swapChainImages.resize(imageCount);
+    vkGetSwapchainImagesKHR(vkdevice, this->swapChain, &imageCount, swapChainImages.data());
+
+    //Image views
+    this->swapChainImageViews.resize(swapChainImages.size());
+    for (size_t i = 0; i < swapChainImages.size(); i++) {
+        VkImageViewCreateInfo imageViewInfo{};
+        imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        imageViewInfo.image = swapChainImages[i];
+
+        imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        imageViewInfo.format = this->chosenSurfaceFormat.format;
+
+        imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        imageViewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+
+        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        imageViewInfo.subresourceRange.baseMipLevel = 0;
+        imageViewInfo.subresourceRange.levelCount = 1;
+        imageViewInfo.subresourceRange.baseArrayLayer = 0;
+        imageViewInfo.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(vkdevice, &imageViewInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create image views!");
+        }
+    }
+#pragma endregion
+
+#pragma region Render pass
+    VkAttachmentDescription colorAttachment{};
+    colorAttachment.format = this->chosenSurfaceFormat.format;
+    colorAttachment.samples = VK_SAMPLE_COUNT_1_BIT;
+    colorAttachment.loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR;
+    colorAttachment.storeOp = VK_ATTACHMENT_STORE_OP_STORE;
+    colorAttachment.stencilLoadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
+    colorAttachment.stencilStoreOp = VK_ATTACHMENT_STORE_OP_DONT_CARE;
+    colorAttachment.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    colorAttachment.finalLayout = VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
+    VkAttachmentReference colorAttachmentRef{};
+    colorAttachmentRef.attachment = 0;
+    colorAttachmentRef.layout = VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL;
+    VkSubpassDescription subpass{};
+    subpass.pipelineBindPoint = VK_PIPELINE_BIND_POINT_GRAPHICS;
+    subpass.colorAttachmentCount = 1;
+    subpass.pColorAttachments = &colorAttachmentRef;
+
+    VkRenderPassCreateInfo renderPassInfo{};
+    renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
+    renderPassInfo.attachmentCount = 1;
+    renderPassInfo.pAttachments = &colorAttachment;
+    renderPassInfo.subpassCount = 1;
+    renderPassInfo.pSubpasses = &subpass;
+
+    if (vkCreateRenderPass(this->vkdevice, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create render pass!");
+    }
+#pragma endregion
+
+#pragma region Framebuffer
+	this->swapChainFramebuffers.resize(this->swapChainImageViews.size());
+    for (size_t i = 0; i < swapChainImageViews.size(); i++) {
+        VkImageView attachments[] = {
+            swapChainImageViews[i]
+        };
+
+        VkFramebufferCreateInfo framebufferInfo{};
+        framebufferInfo.sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO;
+        framebufferInfo.renderPass = renderPass;
+        framebufferInfo.attachmentCount = 1;
+        framebufferInfo.pAttachments = attachments;
+        framebufferInfo.width = this->swapchainExtent.width;
+        framebufferInfo.height = this->swapchainExtent.height;
+        framebufferInfo.layers = 1;
+
+        if (vkCreateFramebuffer(this->vkdevice, &framebufferInfo, nullptr, &swapChainFramebuffers[i]) != VK_SUCCESS) {
+            throw std::runtime_error("failed to create framebuffer!");
+        }
+    }
+#pragma endregion
 
 	//Asset Loaders
 	this->textureloader.AssignSelfAsLoader();
+    this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
 	this->shaderloader.AssignSelfAsLoader();
-
-	//Framebuffers setup
-	mFrameBuffer = new Framebuffer(dimensions);
-	mLayererBuffer = new Framebuffer(dimensions);
-	mDepthFrameBuffer = new Framebuffer(dimensions);
-
-	//Shaders
-	this->default_buffer_shader.Assign(new asset::Shader("DefaultAssets/Shaders/frame.shader.gbe"));
-	this->depth_shader.Assign(new asset::Shader("DefaultAssets/Shaders/depth.shader.gbe"));
 }
 
 void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
-	this->camera_shader.Assign(camshader);
+	
 }
 bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
 
@@ -56,342 +367,18 @@ bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
 void gbe::RenderPipeline::SetResolution(Vector2Int newresolution) {
 	this->resolution = newresolution;
 
-	mFrameBuffer = new Framebuffer(newresolution);
-	mDepthFrameBuffer = new Framebuffer(newresolution);
+    throw new std::runtime_error("Not implemented yet");
 }
 
 void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
 {
-#pragma region Rendering
-	//PRIVATE MEMBERS NEEDED BY LOCAL FUNCTION
-	auto& lights_mframe = this->lights_this_frame;
-	auto& tex_loader = this->textureloader;
-	auto& shader_loader = this->shaderloader;
 
-	/* =============== Render here =============== */
-	const auto commit_object = [](std::function<void()> draw_func) {
-		draw_func();
-		TextureLoader::Reset_texture_stack();
-		};
-
-	const auto render_scene_to_active_buffer = [&](Matrix4 tmat_PV, int drawcallbatch, asset::Shader* overrideShader = nullptr, int previous_render_output_id = -1, int scene_depth_output_id = -1) {
-		auto findbatch = drawcalls.find(drawcallbatch);
-
-		if (findbatch == drawcalls.end())
-			throw "unregistered batch";
-
-		//Loop through all objects
-		for (auto drawcall : drawcalls[drawcallbatch])
-		{
-			auto curshader = drawcall->m_material->m_shader.Get_asset();
-
-			//Enable chosen shader program
-			if (overrideShader != nullptr)
-				curshader = overrideShader;
-
-			glUseProgram(curshader->Get_gl_id());
-
-			//PASS MATERIAL OVERRIDES
-			if (overrideShader == nullptr) {
-				//LOAD ALL TEXTURES INTO RENDER STACK
-				for (int i = 0; i < drawcall->m_material->textureOverrides.size(); i++)
-				{
-					auto& textureOverride = drawcall->m_material->textureOverrides[i];
-
-					curshader->SetTextureOverride(textureOverride.parameterName, textureOverride.textureRef.Get_asset());
-				}
-				//LOCK RENDER STACK AT THIS INDEX FOR REUSING
-				TextureLoader::Lock_stack();
-
-				for (auto& iterator : drawcall->m_material->overrides) {
-					switch (iterator.second.type)
-					{
-					case BOOL:
-						curshader->SetOverride(iterator.first, iterator.second.value_bool);
-						break;
-					case FLOAT:
-						curshader->SetOverride(iterator.first, iterator.second.value_float);
-						break;
-					case VEC2:
-						curshader->SetOverride(iterator.first, iterator.second.value_vec2);
-						break;
-					case VEC3:
-						curshader->SetOverride(iterator.first, iterator.second.value_vec3);
-						break;
-					case VEC4:
-						curshader->SetOverride(iterator.first, iterator.second.value_vec4);
-						break;
-					case MAT4:
-						curshader->SetOverride(iterator.first, iterator.second.value_mat4);
-						break;
-					default:
-						break;
-					}
-				}
-			}
-
-			//Pass the necessary CPU-computed data to the object shader
-			for (auto& call : drawcall->calls) {
-
-				//check if shader has light array
-				auto checkloc = glGetUniformLocation(curshader->Get_gl_id(), "lights[0].enabled");
-
-				if (checkloc >= 0) {
-					size_t index = 0;
-					int group_index = 0;
-					for (auto lightdata : lights_mframe)
-					{
-						if (lightdata->changed == false)
-							continue;
-
-						auto index_fix = [&index]() {return "[" + std::to_string(index) + "]"; };
-
-						if (lightdata->GetType() == Light::DIRECTION) {
-							auto dirlight = (DirLight*)lightdata;
-
-							auto prev_split = 0.0f;
-
-							for (size_t i = 0; i < dirlight->shadowmaps.size(); i++)
-							{
-								auto next_split = 1.0f;
-
-								if (i < dirlight->cascade_splits.size())
-									next_split = dirlight->cascade_splits[i];
-
-								prev_split = next_split;
-
-								curshader->SetOverride(("lights" + index_fix() + ".enabled").c_str(), true);
-								curshader->SetOverride(("lights" + index_fix() + ".group_id").c_str(), group_index);
-								curshader->SetOverride(("lights" + index_fix() + ".type").c_str(), (int)Light::DIRECTION);
-								curshader->SetOverride(("lights" + index_fix() + ".color").c_str(), (Vector3)(dirlight->color * dirlight->intensity));
-								curshader->SetOverride(("lights" + index_fix() + ".dir").c_str(), dirlight->dir);
-
-
-								curshader->SetOverride(("light_view_matrixes" + index_fix()).c_str(), dirlight->cascade_projections[i]);
-
-								curshader->SetTextureIdOverride(("lightviews" + index_fix()).c_str(), dirlight->shadowmaps[i]->outputId);
-
-								index++;
-							}
-						}
-
-						group_index++;
-					}
-					for (size_t cont = index; cont < 10; cont++)
-					{
-						std::string index_fix = "[" + std::to_string(cont) + "]";
-						curshader->SetOverride(("lights" + index_fix + ".enabled").c_str(), false);
-					}
-				}
-
-				//Transform data
-				Matrix4 tmat = call.second;
-				curshader->SetOverride("transform_model", tmat);
-				curshader->SetOverride("transform_projection", tmat_PV);
-				curshader->SetOverride("cameraPos", from);
-				curshader->SetOverride("near_clip", nearclip);
-				curshader->SetOverride("far_clip", farclip);
-				curshader->SetTextureIdOverride("texoverlaying", previous_render_output_id);
-				curshader->SetTextureIdOverride("scenedepth", scene_depth_output_id);
-
-				//Draw the current object
-				glBindVertexArray(drawcall->m_mesh->VAO);
-				commit_object([drawcall]() {
-					glDrawArrays(GL_TRIANGLES, 0, (GLsizei)drawcall->m_mesh->fullVertexData.size() / 8);
-					});
-			}
-		}
-
-		//UNLOCK RENDER STACK AT THIS INDEX FOR NEXT BATCH OF OVERRIDES
-		TextureLoader::UnLock_stack();
-
-		};
-
-	auto SelectBuffer = [=, &lights_mframe](Framebuffer* buffer, Vector3 clearcolor = Vector3::zero) {
-		glViewport(0, 0, buffer->dimensions.x, buffer->dimensions.y);
-
-		//Initialize the buffer
-		glBindFramebuffer(GL_FRAMEBUFFER, buffer->id);
-		glEnable(GL_DEPTH_TEST); //Enable depthtest again
-		glClearColor(clearcolor.x, clearcolor.y, clearcolor.z, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		};
-
-	auto DeSelectBuffer = []() {
-		//De-initialize the current frame buffer
-		glBindFramebuffer(GL_FRAMEBUFFER, 0); // back to default render target
-		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		};
-
-	/*SHADOW PASS*/
-
-	const auto get_frustrum_corners = [_frustrum]() {
-		const auto inv = glm::inverse(_frustrum);
-
-		std::vector<Vector4> frustumCorners;
-		for (unsigned int z = 0; z < 2; ++z)
-			for (unsigned int y = 0; y < 2; ++y)
-				for (unsigned int x = 0; x < 2; ++x)
-				{
-					const glm::vec4 pt =
-						inv * glm::vec4(
-							2.0f * x - 1.0f,
-							2.0f * y - 1.0f,
-							2.0f * z - 1.0f,
-							1.0f);
-					frustumCorners.push_back(pt / pt.w);
-				}
-		return frustumCorners;
-		};
-
-	const auto get_frustrum_center = [](std::vector<Vector4> corners) {
-		glm::vec3 center = glm::vec3(0, 0, 0);
-		for (const auto& v : corners)
-		{
-			center += glm::vec3(v);
-		}
-		center /= corners.size();
-
-		return center;
-		};
-
-	std::vector<Vector4> frustrum_corners = get_frustrum_corners();
-	auto frustrum_basis = std::vector<Vector3>();
-
-	for (size_t i = 0; i < 4; i++)
-	{
-		frustrum_basis.push_back(-(Vector3)(frustrum_corners[i] - frustrum_corners[i + 4]));
-	}
-
-	auto get_subfrustrum_corners = [frustrum_basis, frustrum_corners](float from, float to) {
-		auto subfrustrum_corners = std::vector<Vector4>();
-
-		for (size_t i = 0; i < 4; i++)
-		{
-			Vector3 delta = frustrum_basis[i] * from;
-			Vector3 final = (Vector3)frustrum_corners[i] + delta;
-			subfrustrum_corners.push_back(Vector4(final.x, final.y, final.z, 1.0f));
-		}
-
-		for (size_t i = 0; i < 4; i++)
-		{
-			Vector3 delta = frustrum_basis[i] * to;
-			Vector3 final = (Vector3)frustrum_corners[i] + delta;
-			subfrustrum_corners.push_back(Vector4(final.x, final.y, final.z, 1.0f));
-		}
-
-		return subfrustrum_corners;
-		};
-	auto frustrum_center = get_frustrum_center(frustrum_corners);
-
-	for (auto light : lights_this_frame)
-	{
-		if (light->GetType() == Light::DIRECTION) {
-			auto dirlight = static_cast<DirLight*>(light);
-
-			auto backtrack_dist = 50.0f;
-			auto overshoot_dist = 200.0f;
-
-			auto prev_split = 0.0f;
-			Matrix4 higherResolution_avoid;
-
-			for (size_t i = 0; i < dirlight->shadowmaps.size(); i++)
-			{
-				auto next_split = 1.0f;
-
-				if (i < dirlight->cascade_splits.size())
-					next_split = dirlight->cascade_splits[i];
-
-				auto subfrustrum_corners = get_subfrustrum_corners(prev_split, next_split);
-
-				if (i < dirlight->cascade_splits.size())
-					prev_split = dirlight->cascade_splits[i];
-
-				Matrix4 lightView = glm::lookAt(
-					frustrum_center - (dirlight->dir * backtrack_dist),
-					frustrum_center,
-					forward
-				);
-
-				float minX = std::numeric_limits<float>::max();
-				float maxX = std::numeric_limits<float>::lowest();
-				float minY = std::numeric_limits<float>::max();
-				float maxY = std::numeric_limits<float>::lowest();
-				float maxZ = std::numeric_limits<float>::lowest();
-				for (const auto& v : subfrustrum_corners)
-				{
-					const auto trf = lightView * v;
-					minX = std::min(minX, trf.x);
-					maxX = std::max(maxX, trf.x);
-					minY = std::min(minY, trf.y);
-					maxY = std::max(maxY, trf.y);
-					maxZ = std::max(maxZ, trf.z);
-				}
-
-				const glm::mat4 lightProjection = glm::ortho(minX, maxX, minY, maxY, 0.0f, maxZ + overshoot_dist);
-
-				dirlight->cascade_projections[i] = lightProjection * lightView;
-
-				SelectBuffer(dirlight->shadowmaps[i]);
-				if (i > 0) {
-					depth_shader.Get_asset()->SetOverride("avoid_enabled", true);
-					depth_shader.Get_asset()->SetOverride("avoid_matrix", higherResolution_avoid);
-				}
-
-				render_scene_to_active_buffer(lightProjection * lightView, 0, depth_shader.Get_asset());
-
-				depth_shader.Get_asset()->SetOverride("avoid_enabled", false);
-
-				DeSelectBuffer();
-
-				higherResolution_avoid = lightProjection * lightView;
-			}
-		}
-	}
-
-	/*MAIN PASS*/
-
-
-	//Draw to the depth buffer using a depth shader
-	SelectBuffer(mDepthFrameBuffer);
-	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
-		auto drawcallbatch = it->second;
-		render_scene_to_active_buffer(_frustrum, it->first, depth_shader.Get_asset(), mDepthFrameBuffer->id);
-	}
-	DeSelectBuffer();
-
-	//Draw to the main display buffer
-	SelectBuffer(mFrameBuffer, Vector3(96.0f / 255.0f, 219.0f / 255.0f, 246.0f / 255.0f));
-	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
-		if(it == drawcalls.begin())
-			render_scene_to_active_buffer(_frustrum, it->first, nullptr, -1);
-		else
-			render_scene_to_active_buffer(_frustrum, it->first, nullptr, mFrameBuffer->outputId, mDepthFrameBuffer->outputId);
-	}
-	DeSelectBuffer();
-	
-	//Assign camera shader as post-processing
-	auto camShader = camera_shader.Get_asset();
-	glUseProgram(camShader->Get_gl_id());
-	glBindVertexArray(mFrameBuffer->quadVAO);
-	glDisable(GL_DEPTH_TEST); //Temporarily disable depth test
-
-	//Attach the color texture to the post-process shader
-	camShader->SetTextureIdOverride("colorBufferTexture", mFrameBuffer->outputId);
-	camShader->SetTextureIdOverride("depthBufferTexture", mDepthFrameBuffer->outputId);
-
-	commit_object([]() {
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		});
-
-	this->lights_this_frame.clear();
-#pragma endregion
 }
 
 unsigned int gbe::RenderPipeline::Get_mainbufferId()
 {
-	return this->mFrameBuffer->outputId;
+	throw new std::runtime_error("Not implemented yet");
+	return 0;
 }
 
 void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
@@ -406,6 +393,21 @@ void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
 
 void gbe::RenderPipeline::CleanUp()
 {
+    for (auto framebuffer : swapChainFramebuffers) {
+        vkDestroyFramebuffer(this->vkdevice, framebuffer, nullptr);
+    }
+
+    vkDestroyRenderPass(vkdevice, renderPass, nullptr);
+
+    vkDestroySurfaceKHR(vkInst, surface, nullptr);
+    vkDestroyInstance(vkInst, nullptr);
+
+    vkDestroySwapchainKHR(vkdevice, swapChain, nullptr);
+
+    for (auto imageView : swapChainImageViews) {
+        vkDestroyImageView(vkdevice, imageView, nullptr);
+    }
+
 	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
 		auto drawcallbatch = it->second;
 

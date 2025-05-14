@@ -99,32 +99,5 @@ Mesh::Mesh(std::string path) {
     }
 
     //OpenGL object loading
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * fullVertexData.size(), fullVertexData.data(), GL_DYNAMIC_DRAW);
-
-    //Enable all vertex data inputs
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, totalVertexDataLength * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(0);
-
-    GLintptr normalPtr = 3 * sizeof(float);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, totalVertexDataLength * sizeof(float), (void*)normalPtr);
-    glEnableVertexAttribArray(1);
-
-    GLintptr uvPtr = 6 * sizeof(float);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, totalVertexDataLength * sizeof(float), (void*)uvPtr);
-    glEnableVertexAttribArray(2);
-
-    GLintptr tanPtr = 8 * sizeof(float);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, totalVertexDataLength * sizeof(float), (void*)tanPtr);
-    glEnableVertexAttribArray(3);
-
-    //Finalize object load
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+    
 }

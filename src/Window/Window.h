@@ -12,6 +12,7 @@ Current backend used: SDL2
 #include <queue>
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_vulkan.h>
 
 #include "Engine/Input/KeyDefines.h"
 
@@ -38,6 +39,7 @@ namespace gbe {
         bool centered_cursor = false;;
     public:
         Window(Vector2Int dimentions);
+        void* Get_implemented_window();
 
         bool PollEvents(gbe::window::WindowEventType& event_type);
 

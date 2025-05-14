@@ -2,6 +2,10 @@
 
 namespace gbe {
     
+    void* Window::Get_implemented_window() {
+        return this->implemented_window;
+    }
+
     gbe::Window::Window(Vector2Int dimentions)
     {
         this->dimentions = dimentions; 
@@ -10,28 +14,9 @@ namespace gbe {
         if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
             throw "Couldn't initialize SDL";
         atexit(SDL_Quit);
-        SDL_GL_LoadLibrary(NULL);
+        SDL_Vulkan_LoadLibrary(NULL);
 
-        // Request an OpenGL 4.5 context (should be core)
-        SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
-        // Also request a depth buffer
-        SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-
-        implemented_window = SDL_CreateWindow("GabEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, dimentions.x, dimentions.y, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
-
-        this->context = SDL_GL_CreateContext(implemented_window);
-        if (this->context == nullptr)
-            throw "Failed to create OpenGL context";
-
-        this->procaddressfunc = SDL_GL_GetProcAddress;
-
-        auto thing = this->procaddressfunc("glGetString");
-
-        // Use v-sync
-        SDL_GL_SetSwapInterval(0);
+        implemented_window = SDL_CreateWindow("GabEngine", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, dimentions.x, dimentions.y, SDL_WINDOW_SHOWN | SDL_WINDOW_VULKAN | SDL_WINDOW_RESIZABLE);
 
         for (size_t i = 0; i < gbe::Keys::_TOTALKEYS; i++)
         {
@@ -120,7 +105,7 @@ namespace gbe {
     }
     void Window::SwapBuffers()
     {
-        SDL_GL_SwapWindow(this->implemented_window);
+        //SDL_GL_SwapWindow(this->implemented_window);
     }
     void Window::Terminate()
     {

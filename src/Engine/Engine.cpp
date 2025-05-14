@@ -38,7 +38,7 @@ namespace gbe {
 
 #pragma region Rendering Pipeline Setup
 		//RenderPipeline setup
-		auto mRenderPipeline = new RenderPipeline(mWindow->Get_procaddressfunc(), mWindow->Get_dimentions());
+		auto mRenderPipeline = new RenderPipeline(mWindow, mWindow->Get_dimentions());
 		mRenderPipeline->Init();
 #pragma endregion
 #pragma region Physics Pipeline Setup
@@ -64,20 +64,7 @@ namespace gbe {
 		auto audio_ui_click = new asset::Audio("DefaultAssets/Audio/uiclick.aud.gbe");
 
 		//SHADER CACHING
-		auto water_shader = new asset::Shader("DefaultAssets/Shaders/water.shader.gbe");
-		auto depthoffield_shader = new asset::Shader("DefaultAssets/Shaders/depthoffield.shader.gbe");
-		auto litShader = new asset::Shader("DefaultAssets/Shaders/lit.shader.gbe");
-		auto bubbleShader = new asset::Shader("DefaultAssets/Shaders/bubble.shader.gbe");
-		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
-		auto uiShader = new asset::Shader("DefaultAssets/Shaders/gui.shader.gbe");
-		auto flipShader = new asset::Shader("DefaultAssets/Shaders/lit.shader_flip.gbe");
-		auto flip2Shader = new asset::Shader("DefaultAssets/Shaders/lit.shader_flip2.gbe");
-
-		auto CamOrthoPPShader = new asset::Shader("DefaultAssets/Shaders/frame.shader.gbe");
-		CamOrthoPPShader->SetOverride("saturation", 1.0f);
-		CamOrthoPPShader->SetOverride("tint", Vector4(1, 1, 1, 1));
-
-		mRenderPipeline->SetCameraShader(CamOrthoPPShader);
+		auto testShader = new asset::Shader("DefaultAssets/Shaders/test.shader.gbe");
 
 		//TEXTURE CACHING
 		//UI
@@ -92,73 +79,17 @@ namespace gbe {
 		
 
 		//MATERIAL CACHING
-		auto unlit_white_mat = new Material(unlitShader);
-		unlit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
-
-		auto lit_water_mat = new Material(water_shader);
-		lit_water_mat->setOverride("color", Vector4(0.6, 0.8, 1, 1));
-
-		auto lit_white_mat = new Material(litShader);
-		lit_white_mat->setOverride("color", Vector4(1, 1, 1, 1));
-		lit_white_mat->setOverride("ambientLightTint", Vector3(1, 1, 1) * 0.4f);
-		lit_white_mat->setOverride<bool>("hasDiffuseTex", false);
-		lit_white_mat->setOverride<float>("specStrength", 0.5f);
-		lit_white_mat->setOverride<float>("specPhong", 16);
+		auto test_mat = new Material(testShader);
+		test_mat->setOverride("color", Vector4(1, 1, 1, 1));
 		
-
-		auto mattex = MaterialTexture();
-		mattex.parameterName = "texdiffuse";
-		mattex.textureRef.Assign(ball_tex);
-		auto create_coloredbubble_mat = [=](Vector3 color) {
-			auto mat = new Material(bubbleShader);
-			mat->textureOverrides.push_back(mattex);
-			mat->setOverride("transparency", true);
-			mat->setOverride("color", Vector4(color.x, color.y, color.z, 0.3f));
-			mat->setOverride("hasDiffuseTex", false);
-			//mat->setOverride("specStrength", 0.2f);
-			//mat->setOverride("specPhong", 1);
-
-			return mat;
-			};
-
-		std::vector<Material*> lit_colored_mats = {
-			create_coloredbubble_mat(Vector3(1, 0, 0)),
-			create_coloredbubble_mat(Vector3(0, 1, 0)),
-			create_coloredbubble_mat(Vector3(0, 0, 1)),
-			create_coloredbubble_mat(Vector3(1, 1, 0)),
-			create_coloredbubble_mat(Vector3(1, 0, 1)),
-			create_coloredbubble_mat(Vector3(0, 1, 1))
-		};
-
-		//LEVELS
-
 		//DRAWCALL CACHING
-		auto line_drawcall = new DrawCall(quad_mesh, unlit_white_mat);
-		mRenderPipeline->RegisterDrawCall(line_drawcall);
-
-		auto whiteball_drawcall = new DrawCall(sphere_mesh, lit_white_mat);
-		mRenderPipeline->RegisterDrawCall(whiteball_drawcall);
-
-		auto cube_drawcall = new DrawCall(cube_mesh, lit_white_mat);
-		mRenderPipeline->RegisterDrawCall(cube_drawcall);
-
-		std::vector<DrawCall*> particle_drawcalls;
-
-		for (auto mat : lit_colored_mats)
-		{
-			auto new_drawcall = new DrawCall(sphere_mesh, mat, 1);
-			mRenderPipeline->RegisterDrawCall(new_drawcall);
-			particle_drawcalls.push_back(new_drawcall);
-		}
-
-		const auto get_random_drawcall = [particle_drawcalls]() {
-			return particle_drawcalls[rand() % particle_drawcalls.size()];
-			};
+		auto test_drawcall = new DrawCall(cube_mesh, test_mat);
+		mRenderPipeline->RegisterDrawCall(test_drawcall);
 
 #pragma endregion
 #pragma region GUI Pipeline Setup
-		auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, mRenderPipeline->Get_mainbufferId(), uiShader);
-		mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
+		//auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, mRenderPipeline->Get_mainbufferId(), uiShader);
+		//mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Input
 		auto mInputSystem = new InputSystem();
@@ -207,39 +138,13 @@ namespace gbe {
 			auto game_root = this->CreateBlankRoot();
 			//SCENE GUI
 			gbe::gui::gb_canvas* maingame_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
-			mGUIPipeline->SetActiveCanvas(maingame_canvas);
+			//mGUIPipeline->SetActiveCanvas(maingame_canvas);
 
 #pragma region scene singletons
 			//forward declaration
 			auto player = new RigidObject();
 
 			//Spawn funcs
-
-			//Balls
-			auto spawnball = [get_random_drawcall, game_root](Vector3 pos, float radius, bool collides = true) {
-				RigidObject* ball = new RigidObject();
-				ball->SetParent(game_root);
-
-				if (collides) {
-					auto cradle_collider = new SphereCollider();
-					cradle_collider->SetParent(ball);
-				}
-
-				auto sphere_renderobject = new RenderObject(get_random_drawcall());
-				sphere_renderobject->SetParent(ball);
-
-				ball->Local().position.Set(pos);
-				ball->Local().scale.Set(radius);
-
-				return ball;
-				};
-			//Generic Particle system
-			auto create_particle = [=](ParticleSystem* creator) {
-				float randf = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
-				float randsize = 0.1f + (0.6f * randf);
-
-				return spawnball(Vector3::zero, randsize, false);
-				};
 
 			auto create_platform = [=](Vector3 pos, Vector3 scale) {
 				RigidObject* platform = new RigidObject(true);
@@ -250,7 +155,7 @@ namespace gbe {
 				BoxCollider* platform_collider = new BoxCollider();
 				platform_collider->SetParent(platform);
 				platform_collider->Local().position.Set(Vector3(0, 0, 0));
-				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
+				RenderObject* platform_renderer = new RenderObject(test_drawcall);
 				platform_renderer->SetParent(platform_collider);
 				};
 
@@ -303,7 +208,7 @@ namespace gbe {
 				if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
 					return;
 
-				mGUIPipeline->Click();
+				//mGUIPipeline->Click();
 				}));
 			//WASD customer
 			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
@@ -346,7 +251,7 @@ namespace gbe {
 			{
 				if (windoweventtype == gbe::window::WindowEventType::RESIZE) {
 					auto newdimensions = mWindow->Get_dimentions();
-					mGUIPipeline->Set_target_resolution(newdimensions);
+					//mGUIPipeline->Set_target_resolution(newdimensions);
 					mRenderPipeline->SetResolution(newdimensions);
 				}
 			}
@@ -368,7 +273,7 @@ namespace gbe {
 			//Update GUI system
 			auto bl_pivoted_mousepos = mWindow->GetMousePos();
 			bl_pivoted_mousepos.y = mWindow->Get_dimentions().y - bl_pivoted_mousepos.y;
-			mGUIPipeline->PassScreenSpaceMousePos(bl_pivoted_mousepos);
+			//mGUIPipeline->PassScreenSpaceMousePos(bl_pivoted_mousepos);
 
 			//Early update
 			for (auto updatable : this->current_root->GetHandler<EarlyUpdate>()->object_list)
@@ -399,7 +304,7 @@ namespace gbe {
 				farclip = current_camera->farClip;
 			}
 			mRenderPipeline->RenderFrame(pos, forward, frustrum, nearclip, farclip);
-			mGUIPipeline->DrawActiveCanvas();
+			//mGUIPipeline->DrawActiveCanvas();
 
 			//Update the window
 			mWindow->SwapBuffers();
@@ -428,7 +333,7 @@ namespace gbe {
 				}
 
 				//GUI
-				mGUIPipeline->Update(deltatime);
+				//mGUIPipeline->Update(deltatime);
 				};
 			mTime->TickFixed(onTick);
 

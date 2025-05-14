@@ -12,6 +12,12 @@
     "bullet3",
     "openal-soft",
     "glaze",
-    "vulkan"
+    "vulkan-sdk-components",
+    "vulkan-validationlayers",
+    "vk-bootstrap",
+    {
+      "name": "sdl2",
+      "features": [ "vulkan" ]
+    }
   ]
 }
