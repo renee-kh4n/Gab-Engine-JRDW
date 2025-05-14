@@ -58,6 +58,11 @@ namespace gbe {
 		//SWAPCHAIN FRAMEBUFFERS
 		std::vector<VkFramebuffer> swapChainFramebuffers;
 
+		//COMMANDPOOL
+		VkCommandPool commandPool;
+		VkCommandBuffer commandBuffer;
+		void recordCommandBuffer(VkCommandBuffer commandBuffer, unsigned int imageIndex);
+
 		//Renderpass
 		VkRenderPass renderPass;
 	public:
@@ -70,6 +75,7 @@ namespace gbe {
 		bool TryPushLight(gfx::Light* data, bool priority = false);
 
 		void SetResolution(Vector2Int newresolution);
+		
 		void RenderFrame(Vector3& from, const Vector3& forward, Matrix4& frustrum, float& nearclip, float& farclip);
 		unsigned int Get_mainbufferId();
 
