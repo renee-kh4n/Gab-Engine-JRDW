@@ -23,6 +23,7 @@ void gbe::RenderPipeline::Init() {
 
 gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 {
+	this->window = window;
 	this->resolution = dimensions;
 
 #pragma region SDL x VULKAN init
@@ -101,25 +102,23 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, nullptr);
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, physicalDevices.data());
-    VkPhysicalDevice physicalDevice = physicalDevices[0];
+    this->vkphysicalDevice = physicalDevices[0];
 
     uint32_t queueFamilyCount;
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, nullptr);
+    vkGetPhysicalDeviceQueueFamilyProperties(this->vkphysicalDevice, &queueFamilyCount, nullptr);
     std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
-    vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
+    vkGetPhysicalDeviceQueueFamilyProperties(this->vkphysicalDevice, &queueFamilyCount, queueFamilies.data());
 
     //SURFACE
     SDL_Vulkan_CreateSurface(implemented_window, vkInst, &surface);
 
-    uint32_t graphicsQueueIndex = UINT32_MAX;
-    uint32_t presentQueueIndex = UINT32_MAX;
     VkBool32 support;
     uint32_t i = 0;
-    for (VkQueueFamilyProperties queueFamily : queueFamilies) {
+    for (const VkQueueFamilyProperties& queueFamily : queueFamilies) {
         if (graphicsQueueIndex == UINT32_MAX && queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
             graphicsQueueIndex = i;
         if (presentQueueIndex == UINT32_MAX) {
-            vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, surface, &support);
+            vkGetPhysicalDeviceSurfaceSupportKHR(this->vkphysicalDevice, i, surface, &support);
             if (support)
                 presentQueueIndex = i;
         }
@@ -151,7 +150,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
         &deviceFeatures,                                    // pEnabledFeatures
     };
     //DEVICE
-    vkCreateDevice(physicalDevice, &deviceInfo, nullptr, &vkdevice);
+    vkCreateDevice(this->vkphysicalDevice, &deviceInfo, nullptr, &vkdevice);
 
     vkGetDeviceQueue(vkdevice, graphicsQueueIndex, 0, &graphicsQueue);
 
@@ -160,27 +159,82 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     SDL_Log("Initialized with errors: %s", SDL_GetError());
 #pragma endregion
 
+    this->InitializePipelineObjects();
+
+#pragma region command pool
+    VkCommandPoolCreateInfo poolInfo{};
+    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
+    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
+    poolInfo.queueFamilyIndex = graphicsQueueIndex;
+
+    if (vkCreateCommandPool(this->vkdevice, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create command pool!");
+    }
+
+    commandBuffers.resize(this->MAX_FRAMES_IN_FLIGHT);
+
+    VkCommandBufferAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.commandPool = commandPool;
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandBufferCount = (uint32_t)commandBuffers.size();
+
+    if (vkAllocateCommandBuffers(this->vkdevice, &allocInfo, commandBuffers.data()) != VK_SUCCESS) {
+        throw std::runtime_error("failed to allocate command buffers!");
+    }
+#pragma endregion
+
+#pragma region synchronization
+    this->imageAvailableSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    this->renderFinishedSemaphores.resize(MAX_FRAMES_IN_FLIGHT);
+    this->inFlightFences.resize(MAX_FRAMES_IN_FLIGHT);
+    
+    VkSemaphoreCreateInfo semaphoreInfo{};
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+    VkFenceCreateInfo fenceInfo{};
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        if (vkCreateSemaphore(this->vkdevice, &semaphoreInfo, nullptr, &imageAvailableSemaphores[i]) != VK_SUCCESS ||
+            vkCreateSemaphore(this->vkdevice, &semaphoreInfo, nullptr, &renderFinishedSemaphores[i]) != VK_SUCCESS ||
+            vkCreateFence(this->vkdevice, &fenceInfo, nullptr, &inFlightFences[i]) != VK_SUCCESS) {
+
+            throw std::runtime_error("failed to create synchronization objects for a frame!");
+        }
+    }
+#pragma endregion
+
+	//Asset Loaders
+	this->textureloader.AssignSelfAsLoader();
+    this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
+	this->shaderloader.AssignSelfAsLoader();
+}
+
+void gbe::RenderPipeline::InitializePipelineObjects() {
+
 #pragma region swapchain init
     VkSurfaceCapabilitiesKHR capabilities = {};
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> presentModes;
 
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(physicalDevice, surface, &capabilities);
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(this->vkphysicalDevice, surface, &capabilities);
 
     uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, nullptr);
+    vkGetPhysicalDeviceSurfaceFormatsKHR(this->vkphysicalDevice, surface, &formatCount, nullptr);
 
     if (formatCount != 0) {
         formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(physicalDevice, surface, &formatCount, formats.data());
+        vkGetPhysicalDeviceSurfaceFormatsKHR(this->vkphysicalDevice, surface, &formatCount, formats.data());
     }
 
     uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, nullptr);
+    vkGetPhysicalDeviceSurfacePresentModesKHR(this->vkphysicalDevice, surface, &presentModeCount, nullptr);
 
     if (presentModeCount != 0) {
         presentModes.resize(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(physicalDevice, surface, &presentModeCount, presentModes.data());
+        vkGetPhysicalDeviceSurfacePresentModesKHR(this->vkphysicalDevice, surface, &presentModeCount, presentModes.data());
     }
 
     //format selection
@@ -194,7 +248,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     this->chosenSurfaceFormat = formats[0];
 
     //presentation mode selection
-	VkPresentModeKHR chosenPresentMode = VK_PRESENT_MODE_FIFO_KHR;
+    VkPresentModeKHR chosenPresentMode = VK_PRESENT_MODE_FIFO_KHR;
 
     for (const auto& availablePresentMode : presentModes) {
         if (availablePresentMode == VK_PRESENT_MODE_MAILBOX_KHR) {
@@ -202,14 +256,14 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
         }
     }
 
-	//swapchain extent selection
+    //swapchain extent selection
     if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) {
         this->swapchainExtent = capabilities.currentExtent;
     }
     else {
         VkExtent2D actualExtent = {
-            static_cast<uint32_t>(dimensions.x),
-            static_cast<uint32_t>(dimensions.y)
+            static_cast<uint32_t>(this->resolution.x),
+            static_cast<uint32_t>(this->resolution.y)
         };
 
         actualExtent.width = std::clamp(actualExtent.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
@@ -334,7 +388,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 #pragma endregion
 
 #pragma region Framebuffer
-	this->swapChainFramebuffers.resize(this->swapChainImageViews.size());
+    this->swapChainFramebuffers.resize(this->swapChainImageViews.size());
     for (size_t i = 0; i < swapChainImageViews.size(); i++) {
         VkImageView attachments[] = {
             swapChainImageViews[i]
@@ -354,47 +408,6 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
         }
     }
 #pragma endregion
-
-#pragma region command pool
-    VkCommandPoolCreateInfo poolInfo{};
-    poolInfo.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
-    poolInfo.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
-    poolInfo.queueFamilyIndex = graphicsQueueIndex;
-
-    if (vkCreateCommandPool(this->vkdevice, &poolInfo, nullptr, &commandPool) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create command pool!");
-    }
-
-    VkCommandBufferAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.commandPool = commandPool;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandBufferCount = 1;
-
-    if (vkAllocateCommandBuffers(this->vkdevice, &allocInfo, &commandBuffer) != VK_SUCCESS) {
-        throw std::runtime_error("failed to allocate command buffers!");
-    }
-#pragma endregion
-
-#pragma region synchronization
-    VkSemaphoreCreateInfo semaphoreInfo{};
-    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
-
-    VkFenceCreateInfo fenceInfo{};
-    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
-    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
-
-    if (vkCreateSemaphore(this->vkdevice, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
-        vkCreateSemaphore(this->vkdevice, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
-        vkCreateFence(this->vkdevice, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS) {
-        throw std::runtime_error("failed to create semaphores!");
-    }
-#pragma endregion
-
-	//Asset Loaders
-	this->textureloader.AssignSelfAsLoader();
-    this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
-	this->shaderloader.AssignSelfAsLoader();
 }
 
 void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
@@ -416,21 +429,28 @@ bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
 
 void gbe::RenderPipeline::SetResolution(Vector2Int newresolution) {
 	this->resolution = newresolution;
-
-    throw new std::runtime_error("Not implemented yet");
 }
 
 void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
 {
 	//Syncronization
-    vkWaitForFences(this->vkdevice, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
-    vkResetFences(this->vkdevice, 1, &inFlightFence);
+    vkWaitForFences(this->vkdevice, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
 
-    //Acquiring an image from the swap chain
     uint32_t imageIndex;
-    vkAcquireNextImageKHR(this->vkdevice, this->swapChain, UINT64_MAX, this->imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+    VkResult aquireResult = vkAcquireNextImageKHR(this->vkdevice, swapChain, UINT64_MAX, imageAvailableSemaphores[currentFrame], VK_NULL_HANDLE, &imageIndex);
 
-    vkResetCommandBuffer(this->commandBuffer, 0);
+    if (aquireResult == VK_ERROR_OUT_OF_DATE_KHR) {
+        this->RefreshPipelineObjects();
+        return;
+    }
+    else if (aquireResult != VK_SUCCESS && aquireResult != VK_SUBOPTIMAL_KHR) {
+        throw std::runtime_error("failed to acquire swap chain image!");
+    }
+
+    vkResetFences(this->vkdevice, 1, &inFlightFences[currentFrame]);
+
+	auto currentCommandBuffer = commandBuffers[currentFrame];
+    vkResetCommandBuffer(currentCommandBuffer, 0);
 
 #pragma region command buffer recording
     VkCommandBufferBeginInfo beginInfo{};
@@ -438,7 +458,7 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
     beginInfo.flags = 0; // Optional
     beginInfo.pInheritanceInfo = nullptr; // Optional
 
-    if (vkBeginCommandBuffer(this->commandBuffer, &beginInfo) != VK_SUCCESS) {
+    if (vkBeginCommandBuffer(currentCommandBuffer, &beginInfo) != VK_SUCCESS) {
         throw std::runtime_error("failed to begin recording command buffer!");
     }
 
@@ -455,10 +475,10 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
     renderPassBeginInfo.clearValueCount = 1;
     renderPassBeginInfo.pClearValues = &clearColor;
 
-    vkCmdBeginRenderPass(commandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
+    vkCmdBeginRenderPass(currentCommandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
     //Render an object
-    vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderloader.Get_shader(0).pipeline);
+    vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderloader.Get_shader(0).pipeline);
 
     VkViewport viewport{};
     viewport.x = 0.0f;
@@ -467,18 +487,18 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
     viewport.height = static_cast<float>(this->swapchainExtent.height);
     viewport.minDepth = 0.0f;
     viewport.maxDepth = 1.0f;
-    vkCmdSetViewport(commandBuffer, 0, 1, &viewport);
+    vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
 
     VkRect2D scissor{};
     scissor.offset = { 0, 0 };
     scissor.extent = this->swapchainExtent;
-    vkCmdSetScissor(commandBuffer, 0, 1, &scissor);
+    vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
 
-    vkCmdDraw(commandBuffer, 3, 1, 0, 0);
+    vkCmdDraw(currentCommandBuffer, 3, 1, 0, 0);
 
-    vkCmdEndRenderPass(commandBuffer);
+    vkCmdEndRenderPass(currentCommandBuffer);
 
-    if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
+    if (vkEndCommandBuffer(currentCommandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
     }
 #pragma endregion
@@ -486,20 +506,20 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
     VkSubmitInfo submitInfo{};
     submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-    VkSemaphore waitSemaphores[] = { this->imageAvailableSemaphore };
+    VkSemaphore waitSemaphores[] = { imageAvailableSemaphores[currentFrame] };
     VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
     submitInfo.waitSemaphoreCount = 1;
     submitInfo.pWaitSemaphores = waitSemaphores;
     submitInfo.pWaitDstStageMask = waitStages;
 
     submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffer;
+    submitInfo.pCommandBuffers = &commandBuffers[currentFrame];
 
-    VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
+    VkSemaphore signalSemaphores[] = { renderFinishedSemaphores[currentFrame] };
     submitInfo.signalSemaphoreCount = 1;
     submitInfo.pSignalSemaphores = signalSemaphores;
 
-    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFence) != VK_SUCCESS) {
+    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFences[currentFrame]) != VK_SUCCESS) {
         throw std::runtime_error("failed to submit draw command buffer!");
     }
 
@@ -516,7 +536,16 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 
     presentInfo.pResults = nullptr; // Optional
 
-    vkQueuePresentKHR(presentQueue, &presentInfo);
+    VkResult presentResult = vkQueuePresentKHR(presentQueue, &presentInfo);
+
+    if (presentResult == VK_ERROR_OUT_OF_DATE_KHR || presentResult == VK_SUBOPTIMAL_KHR) {
+        this->RefreshPipelineObjects();
+    }
+    else if (presentResult != VK_SUCCESS) {
+        throw std::runtime_error("failed to present swap chain image!");
+    }
+
+    this->currentFrame = (this->currentFrame + 1) % this->MAX_FRAMES_IN_FLIGHT;
 }
 
 unsigned int gbe::RenderPipeline::Get_mainbufferId()
@@ -535,38 +564,57 @@ void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
 	}
 }
 
-void gbe::RenderPipeline::CleanUp()
-{
+void gbe::RenderPipeline::RefreshPipelineObjects() {
+	if (this->window->isMinimized())
+		return;
+
+    this->CleanPipelineObjects();
+	this->InitializePipelineObjects();
+}
+
+void gbe::RenderPipeline::CleanPipelineObjects() {
     vkDeviceWaitIdle(this->vkdevice);
-
-    vkDestroySemaphore(this->vkdevice, imageAvailableSemaphore, nullptr);
-    vkDestroySemaphore(this->vkdevice, renderFinishedSemaphore, nullptr);
-    vkDestroyFence(this->vkdevice, inFlightFence, nullptr);
-
-    vkDestroyCommandPool(this->vkdevice, commandPool, nullptr);
 
     for (auto framebuffer : swapChainFramebuffers) {
         vkDestroyFramebuffer(this->vkdevice, framebuffer, nullptr);
     }
 
+    for (auto imageView : swapChainImageViews) {
+        vkDestroyImageView(vkdevice, imageView, nullptr);
+    }
+
+    vkDestroySwapchainKHR(vkdevice, swapChain, nullptr);
+}
+
+void gbe::RenderPipeline::CleanUp()
+{
+    vkDeviceWaitIdle(this->vkdevice);
+
+    this->CleanPipelineObjects();
+
+    //Insert Shader Program disposal here
+    
     vkDestroyRenderPass(vkdevice, renderPass, nullptr);
+   
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroySemaphore(this->vkdevice, renderFinishedSemaphores[i], nullptr);
+        vkDestroySemaphore(this->vkdevice, imageAvailableSemaphores[i], nullptr);
+        vkDestroyFence(this->vkdevice, inFlightFences[i], nullptr);
+    }
+    vkDestroyCommandPool(this->vkdevice, commandPool, nullptr);
+    
+    vkDestroyDevice(this->vkdevice, nullptr);
 
     vkDestroySurfaceKHR(vkInst, surface, nullptr);
     vkDestroyInstance(vkInst, nullptr);
 
-    vkDestroySwapchainKHR(vkdevice, swapChain, nullptr);
-
-    for (auto imageView : swapChainImageViews) {
-        vkDestroyImageView(vkdevice, imageView, nullptr);
-    }
 
 	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
 		auto drawcallbatch = it->second;
 
 		for (size_t o_i = 0; o_i < drawcallbatch.size(); o_i++)
 		{
-			glDeleteVertexArrays(1, &drawcallbatch[o_i]->m_mesh->VAO);
-			glDeleteBuffers(1, &drawcallbatch[o_i]->m_mesh->VBO);
+            //Delete Drawcalls
 		}
 	}
 }

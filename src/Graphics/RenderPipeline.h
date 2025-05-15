@@ -43,9 +43,13 @@ namespace gbe {
 		TextureLoader textureloader;
 
 		//VK Init
+		Window* window;
 		VkInstance vkInst;
 		VkSurfaceKHR surface;
 		VkDevice vkdevice;
+		VkPhysicalDevice vkphysicalDevice;
+		uint32_t graphicsQueueIndex = UINT32_MAX;
+		uint32_t presentQueueIndex = UINT32_MAX;
 		VkQueue graphicsQueue;
 		VkQueue presentQueue;
 
@@ -58,17 +62,23 @@ namespace gbe {
 		//SWAPCHAIN FRAMEBUFFERS
 		std::vector<VkFramebuffer> swapChainFramebuffers;
 
-		//COMMANDPOOL
-		VkCommandPool commandPool;
-		VkCommandBuffer commandBuffer;
-
 		//Renderpass
 		VkRenderPass renderPass;
-
+		
+		void InitializePipelineObjects();
+		void RefreshPipelineObjects();
+		void CleanPipelineObjects();
+		
+		//COMMANDPOOL
+		const int MAX_FRAMES_IN_FLIGHT = 2;
+		uint32_t currentFrame = 0;
+		VkCommandPool commandPool;
+		std::vector<VkCommandBuffer> commandBuffers;
 		//Synchronization
-		VkSemaphore imageAvailableSemaphore;
-		VkSemaphore renderFinishedSemaphore;
-		VkFence inFlightFence;
+		std::vector<VkSemaphore> imageAvailableSemaphores;
+		std::vector<VkSemaphore> renderFinishedSemaphores;
+		std::vector<VkFence> inFlightFences;
+		
 	public:
 		static RenderPipeline* Get_Instance();
 

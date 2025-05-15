@@ -115,6 +115,10 @@ namespace gbe {
     {
         return this->shouldclose;
     }
+	bool Window::isMinimized()
+	{
+        return SDL_GetWindowFlags(this->implemented_window) & SDL_WINDOW_MINIMIZED;
+    }
     Vector2Int Window::Get_dimentions()
     {
         return this->dimentions;

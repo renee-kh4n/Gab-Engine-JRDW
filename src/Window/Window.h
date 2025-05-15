@@ -48,6 +48,7 @@ namespace gbe {
         void Terminate();
 
         bool ShouldClose();
+        bool isMinimized();
 
         Vector2Int Get_dimentions();
 

@@ -2,6 +2,10 @@
 #include "Graphics/tiny_obj_loader.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
+#include <array>
+#include <vulkan/vulkan.h>
+
+#include "Vertex.h"
 
 namespace gbe {
     namespace gfx {
