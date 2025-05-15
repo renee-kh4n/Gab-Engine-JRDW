@@ -61,10 +61,14 @@ namespace gbe {
 		//COMMANDPOOL
 		VkCommandPool commandPool;
 		VkCommandBuffer commandBuffer;
-		void recordCommandBuffer(VkCommandBuffer commandBuffer, unsigned int imageIndex);
 
 		//Renderpass
 		VkRenderPass renderPass;
+
+		//Synchronization
+		VkSemaphore imageAvailableSemaphore;
+		VkSemaphore renderFinishedSemaphore;
+		VkFence inFlightFence;
 	public:
 		static RenderPipeline* Get_Instance();
 

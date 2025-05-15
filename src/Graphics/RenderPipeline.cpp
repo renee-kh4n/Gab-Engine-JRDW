@@ -307,12 +307,26 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     subpass.colorAttachmentCount = 1;
     subpass.pColorAttachments = &colorAttachmentRef;
 
+    //Subpass dependencies
+    VkSubpassDependency dependency{};
+    dependency.srcSubpass = VK_SUBPASS_EXTERNAL;
+    dependency.dstSubpass = 0;
+
+    dependency.srcStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.srcAccessMask = 0;
+
+    dependency.dstStageMask = VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT;
+    dependency.dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT;
+
+    //Renderpass
     VkRenderPassCreateInfo renderPassInfo{};
     renderPassInfo.sType = VK_STRUCTURE_TYPE_RENDER_PASS_CREATE_INFO;
     renderPassInfo.attachmentCount = 1;
     renderPassInfo.pAttachments = &colorAttachment;
     renderPassInfo.subpassCount = 1;
     renderPassInfo.pSubpasses = &subpass;
+    renderPassInfo.dependencyCount = 1;
+    renderPassInfo.pDependencies = &dependency;
 
     if (vkCreateRenderPass(this->vkdevice, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS) {
         throw std::runtime_error("failed to create render pass!");
@@ -362,13 +376,63 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     }
 #pragma endregion
 
+#pragma region synchronization
+    VkSemaphoreCreateInfo semaphoreInfo{};
+    semaphoreInfo.sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO;
+
+    VkFenceCreateInfo fenceInfo{};
+    fenceInfo.sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO;
+    fenceInfo.flags = VK_FENCE_CREATE_SIGNALED_BIT;
+
+    if (vkCreateSemaphore(this->vkdevice, &semaphoreInfo, nullptr, &imageAvailableSemaphore) != VK_SUCCESS ||
+        vkCreateSemaphore(this->vkdevice, &semaphoreInfo, nullptr, &renderFinishedSemaphore) != VK_SUCCESS ||
+        vkCreateFence(this->vkdevice, &fenceInfo, nullptr, &inFlightFence) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create semaphores!");
+    }
+#pragma endregion
+
 	//Asset Loaders
 	this->textureloader.AssignSelfAsLoader();
     this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
 	this->shaderloader.AssignSelfAsLoader();
 }
 
-void RenderPipeline::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t imageIndex) {
+void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
+	
+}
+bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
+
+	if (this->lights_this_frame.size() == this->maxlights)
+		return false;
+
+	if (priority) {
+		this->lights_this_frame.push_front(data);
+		return true;
+	}
+
+	this->lights_this_frame.push_back(data);
+	return true;
+}
+
+void gbe::RenderPipeline::SetResolution(Vector2Int newresolution) {
+	this->resolution = newresolution;
+
+    throw new std::runtime_error("Not implemented yet");
+}
+
+void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
+{
+	//Syncronization
+    vkWaitForFences(this->vkdevice, 1, &inFlightFence, VK_TRUE, UINT64_MAX);
+    vkResetFences(this->vkdevice, 1, &inFlightFence);
+
+    //Acquiring an image from the swap chain
+    uint32_t imageIndex;
+    vkAcquireNextImageKHR(this->vkdevice, this->swapChain, UINT64_MAX, this->imageAvailableSemaphore, VK_NULL_HANDLE, &imageIndex);
+
+    vkResetCommandBuffer(this->commandBuffer, 0);
+
+#pragma region command buffer recording
     VkCommandBufferBeginInfo beginInfo{};
     beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
     beginInfo.flags = 0; // Optional
@@ -417,34 +481,42 @@ void RenderPipeline::recordCommandBuffer(VkCommandBuffer commandBuffer, uint32_t
     if (vkEndCommandBuffer(commandBuffer) != VK_SUCCESS) {
         throw std::runtime_error("failed to record command buffer!");
     }
-}
+#pragma endregion
 
-void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
-	
-}
-bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
 
-	if (this->lights_this_frame.size() == this->maxlights)
-		return false;
+    VkSemaphore waitSemaphores[] = { this->imageAvailableSemaphore };
+    VkPipelineStageFlags waitStages[] = { VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT };
+    submitInfo.waitSemaphoreCount = 1;
+    submitInfo.pWaitSemaphores = waitSemaphores;
+    submitInfo.pWaitDstStageMask = waitStages;
 
-	if (priority) {
-		this->lights_this_frame.push_front(data);
-		return true;
-	}
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffer;
 
-	this->lights_this_frame.push_back(data);
-	return true;
-}
+    VkSemaphore signalSemaphores[] = { renderFinishedSemaphore };
+    submitInfo.signalSemaphoreCount = 1;
+    submitInfo.pSignalSemaphores = signalSemaphores;
 
-void gbe::RenderPipeline::SetResolution(Vector2Int newresolution) {
-	this->resolution = newresolution;
+    if (vkQueueSubmit(graphicsQueue, 1, &submitInfo, inFlightFence) != VK_SUCCESS) {
+        throw std::runtime_error("failed to submit draw command buffer!");
+    }
 
-    throw new std::runtime_error("Not implemented yet");
-}
+    VkPresentInfoKHR presentInfo{};
+    presentInfo.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
 
-void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
-{
+    presentInfo.waitSemaphoreCount = 1;
+    presentInfo.pWaitSemaphores = signalSemaphores;
 
+    VkSwapchainKHR swapChains[] = { swapChain };
+    presentInfo.swapchainCount = 1;
+    presentInfo.pSwapchains = swapChains;
+    presentInfo.pImageIndices = &imageIndex;
+
+    presentInfo.pResults = nullptr; // Optional
+
+    vkQueuePresentKHR(presentQueue, &presentInfo);
 }
 
 unsigned int gbe::RenderPipeline::Get_mainbufferId()
@@ -465,6 +537,12 @@ void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
 
 void gbe::RenderPipeline::CleanUp()
 {
+    vkDeviceWaitIdle(this->vkdevice);
+
+    vkDestroySemaphore(this->vkdevice, imageAvailableSemaphore, nullptr);
+    vkDestroySemaphore(this->vkdevice, renderFinishedSemaphore, nullptr);
+    vkDestroyFence(this->vkdevice, inFlightFence, nullptr);
+
     vkDestroyCommandPool(this->vkdevice, commandPool, nullptr);
 
     for (auto framebuffer : swapChainFramebuffers) {
