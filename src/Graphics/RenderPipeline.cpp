@@ -29,6 +29,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 #pragma region SDL x VULKAN init
     auto implemented_window = static_cast<SDL_Window*>(window->Get_implemented_window());
 
+
     //EXTENSIONS
     uint32_t extensionCount;
     const char** extensionNames = 0;
@@ -46,6 +47,12 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     appInfo.apiVersion = VK_API_VERSION_1_0;
     
     //VALIDATION LAYERS
+    //VULKAN LAYER FINDING
+    auto path = std::filesystem::current_path() / "vcpkg_installed" /
+        "x64-windows" / "bin";
+    std::string set = "VK_ADD_LAYER_PATH=" + path.string();
+    _putenv(set.c_str());
+
     bool validationlayerssupported = true;
 
     const std::vector<const char*> validationLayers = {
