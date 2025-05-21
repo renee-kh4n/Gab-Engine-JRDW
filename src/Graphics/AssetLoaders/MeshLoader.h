@@ -13,6 +13,7 @@ namespace gbe {
 	namespace gfx {
 		struct MeshData {
 			std::vector<Vertex> vertices;
+			std::vector<uint16_t> indices;
 			VkBuffer vertexBuffer;
 			VkDeviceMemory vertexBufferMemory;
 			VkBuffer indexBuffer;

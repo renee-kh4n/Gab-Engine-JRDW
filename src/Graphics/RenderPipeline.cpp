@@ -44,6 +44,43 @@ void gbe::RenderPipeline::createBuffer(VkDeviceSize size, VkBufferUsageFlags usa
     vkBindBufferMemory(Instance->vkdevice, buffer, bufferMemory, 0);
 }
 
+void gbe::RenderPipeline::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
+{
+    VkCommandBufferAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandPool = Instance->commandPool;
+    allocInfo.commandBufferCount = 1;
+
+    VkCommandBuffer commandBuffer;
+    vkAllocateCommandBuffers(Instance->vkdevice, &allocInfo, &commandBuffer);
+
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    vkBeginCommandBuffer(commandBuffer, &beginInfo);
+
+    VkBufferCopy copyRegion{};
+    copyRegion.srcOffset = 0; // Optional
+    copyRegion.dstOffset = 0; // Optional
+    copyRegion.size = size;
+    vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
+
+    vkEndCommandBuffer(commandBuffer);
+
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffer;
+
+    vkQueueSubmit(Instance->graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueWaitIdle(Instance->graphicsQueue);
+
+    vkFreeCommandBuffers(Instance->vkdevice, Instance->commandPool, 1, &commandBuffer);
+}
+
+
 uint32_t gbe::RenderPipeline::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer)
 {
     VkPhysicalDeviceMemoryProperties memProperties;
@@ -544,15 +581,16 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
     scissor.extent = this->swapchainExtent;
     vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
 
-    //Binding the vertex buffer from mesh
+    //RENDER MESH
     auto curmesh = this->meshloader.Get_mesh(0);
 
     VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
     VkDeviceSize offsets[] = { 0 };
     vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
-    vkCmdDraw(currentCommandBuffer, static_cast<uint32_t>(curmesh.vertices.size()), 1, 0, 0);
+    vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
+    vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
 
     vkCmdEndRenderPass(currentCommandBuffer);
 

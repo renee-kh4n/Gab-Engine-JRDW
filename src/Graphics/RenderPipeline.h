@@ -84,6 +84,7 @@ namespace gbe {
 	public:
 		static RenderPipeline* Get_Instance();
 		static void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+		static void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
 		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer);
 
 		RenderPipeline(gbe::Window*, Vector2Int);
