@@ -72,9 +72,7 @@ namespace gbe {
 		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
 
 		//MESH CACHING
-		auto quad_mesh = new Mesh("DefaultAssets/3D/plane.obj");
-		auto sphere_mesh = new Mesh("DefaultAssets/3D/sphere.obj");
-		auto cube_mesh = new Mesh("DefaultAssets/3D/cube.obj");
+		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
 		//BY MATERIAL
 		
 

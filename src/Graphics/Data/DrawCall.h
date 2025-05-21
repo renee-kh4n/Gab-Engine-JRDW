@@ -1,7 +1,6 @@
 #pragma once
 #include "Material.h"
-#include "Mesh.h"
-
+#include "Asset/gbe_asset.h"
 
 namespace gbe {
     namespace gfx {
@@ -10,10 +9,10 @@ namespace gbe {
             std::unordered_map<void*, Matrix4> calls;
 
             int order;
-            Mesh* m_mesh;
+            asset::Mesh* m_mesh;
             Material* m_material;
 
-            DrawCall(Mesh* mesh, Material* material, int order = 0);
+            DrawCall(asset::Mesh* mesh, Material* material, int order = 0);
         };
     }
 }

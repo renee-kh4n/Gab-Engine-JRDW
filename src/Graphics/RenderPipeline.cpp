@@ -17,6 +17,47 @@ gbe::RenderPipeline* gbe::RenderPipeline::Get_Instance() {
 	return gbe::RenderPipeline::Instance;
 }
 
+void gbe::RenderPipeline::createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory)
+{
+    VkBufferCreateInfo bufferInfo{};
+    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
+    bufferInfo.size = size;
+    bufferInfo.usage = usage;
+    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+    if (vkCreateBuffer(Instance->vkdevice, &bufferInfo, nullptr, &buffer) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create buffer!");
+    }
+
+    VkMemoryRequirements memRequirements;
+    vkGetBufferMemoryRequirements(Instance->vkdevice, buffer, &memRequirements);
+
+    VkMemoryAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memRequirements.size;
+    allocInfo.memoryTypeIndex = Instance->findMemoryType(memRequirements.memoryTypeBits, properties, buffer);
+
+    if (vkAllocateMemory(Instance->vkdevice, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
+        throw std::runtime_error("failed to allocate buffer memory!");
+    }
+
+    vkBindBufferMemory(Instance->vkdevice, buffer, bufferMemory, 0);
+}
+
+uint32_t gbe::RenderPipeline::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer)
+{
+    VkPhysicalDeviceMemoryProperties memProperties;
+    vkGetPhysicalDeviceMemoryProperties(Instance->vkphysicalDevice, &memProperties);
+
+    for (uint32_t i = 0; i < memProperties.memoryTypeCount; i++) {
+        if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) {
+            return i;
+        }
+    }
+
+    throw std::runtime_error("failed to find suitable memory type!");
+}
+
 void gbe::RenderPipeline::Init() {
 	this->Instance = this;
 }
@@ -217,6 +258,8 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 	this->textureloader.AssignSelfAsLoader();
     this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
 	this->shaderloader.AssignSelfAsLoader();
+	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
+	this->meshloader.AssignSelfAsLoader();
 }
 
 void gbe::RenderPipeline::InitializePipelineObjects() {
@@ -501,7 +544,15 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
     scissor.extent = this->swapchainExtent;
     vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
 
-    vkCmdDraw(currentCommandBuffer, 3, 1, 0, 0);
+    //Binding the vertex buffer from mesh
+    auto curmesh = this->meshloader.Get_mesh(0);
+
+    VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
+    VkDeviceSize offsets[] = { 0 };
+    vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
+
+    vkCmdDraw(currentCommandBuffer, static_cast<uint32_t>(curmesh.vertices.size()), 1, 0, 0);
+
 
     vkCmdEndRenderPass(currentCommandBuffer);
 

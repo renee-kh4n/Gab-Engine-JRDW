@@ -6,11 +6,10 @@ namespace gbe {
 	namespace asset {
 
 		namespace data {
-			struct MeshLoadData {
-				unsigned int gl_id;
-
-			};
 			struct MeshImportData {
+				std::string path;
+			};
+			struct MeshLoadData {
 				unsigned int gl_id;
 
 			};
@@ -18,7 +17,7 @@ namespace gbe {
 
 		class Mesh : public BaseAsset<Mesh, data::MeshImportData, data::MeshLoadData> {
 		public:
-
+			Mesh(std::string path);
 		};
 	}
 }

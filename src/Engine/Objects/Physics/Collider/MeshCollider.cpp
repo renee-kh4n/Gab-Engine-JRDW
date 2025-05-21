@@ -1,8 +1,10 @@
 #include "MeshCollider.h"
 
-gbe::MeshCollider::MeshCollider(gfx::Mesh* mesh)
+gbe::MeshCollider::MeshCollider(asset::Mesh* mesh)
 {
-	auto tris = mesh->triangles;
+	std::vector<std::vector<Vector3>> tris;
+
+	throw new std::exception("Not implemented yet.");
 
 	auto newtris = std::vector<std::vector<Vector3>>();
 

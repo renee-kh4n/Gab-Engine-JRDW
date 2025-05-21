@@ -21,6 +21,7 @@
 #include "Data/Framebuffer.h"
 #include "AssetLoaders/TextureLoader.h"
 #include "AssetLoaders/ShaderLoader.h"
+#include "AssetLoaders/MeshLoader.h"
 #include "Window/gbe_window.h"
 
 namespace gbe {
@@ -40,6 +41,7 @@ namespace gbe {
 		//--------CACHE--------//
 		//Loaders
 		ShaderLoader shaderloader;
+		MeshLoader meshloader;
 		TextureLoader textureloader;
 
 		//VK Init
@@ -81,6 +83,8 @@ namespace gbe {
 		
 	public:
 		static RenderPipeline* Get_Instance();
+		static void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
+		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer);
 
 		RenderPipeline(gbe::Window*, Vector2Int);
 		void RegisterDrawCall(DrawCall*);

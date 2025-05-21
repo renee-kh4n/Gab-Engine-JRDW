@@ -6,10 +6,13 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Data/Light.cpp"
 	"Data/DrawCall.cpp"
 	"Data/Material.cpp"
-	"Data/Mesh.cpp"
+	
 	"Data/Skybox.cpp"
 	
-	"AssetLoaders/TextureLoader.cpp" "AssetLoaders/ShaderLoader.h" "AssetLoaders/ShaderLoader.cpp" "Data/Vertex.cpp")
+	"AssetLoaders/TextureLoader.cpp" "AssetLoaders/ShaderLoader.h"
+	"AssetLoaders/ShaderLoader.cpp"
+	"AssetLoaders/MeshLoader.cpp"
+	"Data/Vertex.cpp")
 
 find_package(Stb REQUIRED)
 target_include_directories(${CURRENT_CMAKE_LIB} PRIVATE ${Stb_INCLUDE_DIR})
