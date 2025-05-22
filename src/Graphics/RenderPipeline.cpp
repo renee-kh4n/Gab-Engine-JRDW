@@ -125,10 +125,9 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     
     //VALIDATION LAYERS
     //VULKAN LAYER FINDING
-    auto path = std::filesystem::current_path() / "vcpkg_installed" /
-        "x64-windows" / "bin";
+    auto path = std::filesystem::current_path() / "vcpkg_installed" / "x64-windows" / "bin";
     std::string set = "VK_ADD_LAYER_PATH=" + path.string();
-    _putenv(set.c_str());
+    int putenvresult = _putenv(set.c_str());
 
     bool validationlayerssupported = true;
 

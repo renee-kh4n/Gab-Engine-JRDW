@@ -20,7 +20,7 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	layoutInfo.bindingCount = 1;
 	layoutInfo.pBindings = &uboLayoutBinding;
 
-	if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+	if (vkCreateDescriptorSetLayout(*this->vkdevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
 		throw std::runtime_error("failed to create descriptor set layout!");
 	}
 
@@ -207,6 +207,7 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	}
 
 	this->loaded_shaders.insert_or_assign(importdata.name, ShaderData{
+		descriptorSetLayout,
 		newpipelineLayout,
 		newgraphicsPipeline,
 		asset
