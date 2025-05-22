@@ -22,6 +22,7 @@
 #include "AssetLoaders/TextureLoader.h"
 #include "AssetLoaders/ShaderLoader.h"
 #include "AssetLoaders/MeshLoader.h"
+#include "AssetLoaders/MaterialLoader.h"
 #include "Window/gbe_window.h"
 
 namespace gbe {
@@ -43,6 +44,7 @@ namespace gbe {
 		ShaderLoader shaderloader;
 		MeshLoader meshloader;
 		TextureLoader textureloader;
+		MaterialLoader materialloader;
 
 		//VK Init
 		Window* window;

@@ -183,9 +183,10 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
 
-	this->loaded_shaders.insert_or_assign(loaded_shaders_count, ShaderData{
+	this->loaded_shaders.insert_or_assign(importdata.name, ShaderData{
 		newpipelineLayout,
-		newgraphicsPipeline
+		newgraphicsPipeline,
+		asset
 		});
 
 	//OVERRIDE FUNCTIONS
@@ -222,13 +223,11 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	vkDestroyShaderModule((*this->vkdevice), vertShader, nullptr);
 	vkDestroyShaderModule((*this->vkdevice), fragShader, nullptr);
 
-	//Increment
-	loaded_shaders_count++;
 	return true;
 }
 
-gbe::gfx::ShaderData& gbe::gfx::ShaderLoader::Get_shader(unsigned int id) {
-	auto it = this->loaded_shaders.find(id);
+gbe::gfx::ShaderData& gbe::gfx::ShaderLoader::Get_shader(std::string name) {
+	auto it = this->loaded_shaders.find(name);
 	if (it != this->loaded_shaders.end()) {
 		return it->second;
 	}
@@ -238,9 +237,9 @@ gbe::gfx::ShaderData& gbe::gfx::ShaderLoader::Get_shader(unsigned int id) {
 }
 
 void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
-	vkDestroyPipelineLayout((*this->vkdevice), this->Get_shader(data->gl_id).pipelineLayout, nullptr);
-	vkDestroyPipeline((*this->vkdevice), this->Get_shader(data->gl_id).pipeline, nullptr);
-	this->loaded_shaders.erase(data->gl_id);
+	vkDestroyPipelineLayout((*this->vkdevice), this->Get_shader(importdata.name).pipelineLayout, nullptr);
+	vkDestroyPipeline((*this->vkdevice), this->Get_shader(importdata.name).pipeline, nullptr);
+	this->loaded_shaders.erase(importdata.name);
 }
 
 void gbe::gfx::ShaderLoader::PassDependencies(VkDevice* vkdevice, VkExtent2D* vkextent, VkRenderPass* vkrenderpass) {

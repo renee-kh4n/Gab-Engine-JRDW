@@ -7,8 +7,8 @@ gbe::asset::Shader::Shader(std::string path) : BaseAsset(path)
 {
 }
 
-unsigned int gbe::asset::Shader::Get_gl_id() {
-	return this->load_data.gl_id;
+std::string gbe::asset::Shader::Get_name() {
+	return this->import_data.name;
 }
 
 void gbe::asset::Shader::SetTextureOverride(const char* id, asset::Texture* value) {

@@ -75,9 +75,8 @@ namespace gbe {
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
 		//BY MATERIAL
 		
-
 		//MATERIAL CACHING
-		auto test_mat = new Material(testShader);
+		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
 		test_mat->setOverride("color", Vector4(1, 1, 1, 1));
 		
 		//DRAWCALL CACHING

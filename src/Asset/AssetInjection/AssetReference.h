@@ -24,7 +24,7 @@ namespace gbe {
 
 			void Assign(AssetT* valueptr) {
 				this->asset_ptr = valueptr;
-				this->asset_id = valueptr->Get_assetId();
+				//this->asset_id = valueptr->Get_assetId();
 			}
 		};
 	}

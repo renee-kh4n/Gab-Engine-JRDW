@@ -14,21 +14,21 @@ namespace gbe {
 		struct ShaderData {
 			VkPipelineLayout pipelineLayout;
 			VkPipeline pipeline;
+			asset::Shader* asset;
 		};
 
 		class ShaderLoader : public asset::AssetLoader<asset::Shader, asset::data::ShaderImportData, asset::data::ShaderLoadData> {
 		private:
-			std::unordered_map<unsigned int, ShaderData> loaded_shaders;
+			std::unordered_map<std::string, ShaderData> loaded_shaders;
 			VkDevice* vkdevice;
 			VkExtent2D* vkextent;
 			VkRenderPass* vkrenderpass;
 			VkShaderModule TryCompileShader(const std::vector<char>& code);
-			unsigned int loaded_shaders_count = 0;
 		protected:
 			bool LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) override;
 			void UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) override;
 		public:
-			ShaderData& Get_shader(unsigned int id);
+			ShaderData& Get_shader(std::string name);
 			void PassDependencies(VkDevice* vkdevice, VkExtent2D* vkextent, VkRenderPass* vkrenderpass);
 		};
 	}

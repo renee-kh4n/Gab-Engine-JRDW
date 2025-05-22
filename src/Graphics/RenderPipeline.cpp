@@ -80,7 +80,6 @@ void gbe::RenderPipeline::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkD
     vkFreeCommandBuffers(Instance->vkdevice, Instance->commandPool, 1, &commandBuffer);
 }
 
-
 uint32_t gbe::RenderPipeline::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer)
 {
     VkPhysicalDeviceMemoryProperties memProperties;
@@ -297,6 +296,9 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 	this->shaderloader.AssignSelfAsLoader();
 	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
 	this->meshloader.AssignSelfAsLoader();
+
+	this->materialloader.AssignSelfAsLoader();
+    this->materialloader.PassDependencies(&this->shaderloader);
 }
 
 void gbe::RenderPipeline::InitializePipelineObjects() {
@@ -500,23 +502,32 @@ void gbe::RenderPipeline::InitializePipelineObjects() {
 void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
 	
 }
-bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
-
-	if (this->lights_this_frame.size() == this->maxlights)
-		return false;
-
-	if (priority) {
-		this->lights_this_frame.push_front(data);
-		return true;
-	}
-
-	this->lights_this_frame.push_back(data);
-	return true;
-}
 
 void gbe::RenderPipeline::SetResolution(Vector2Int newresolution) {
 	this->resolution = newresolution;
 }
+
+
+//========== RUNTIME THINGS ==========//
+bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
+
+    if (this->lights_this_frame.size() == this->maxlights)
+        return false;
+
+    if (priority) {
+        this->lights_this_frame.push_front(data);
+        return true;
+    }
+
+    this->lights_this_frame.push_back(data);
+    return true;
+}
+
+struct UniformBufferObject {
+    glm::mat4 model;
+    glm::mat4 view;
+    glm::mat4 proj;
+};
 
 void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
 {
@@ -565,33 +576,43 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
     vkCmdBeginRenderPass(currentCommandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
     //Render an object
-    vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderloader.Get_shader(0).pipeline);
+    for (const auto &pair : this->drawcalls)
+    {
+		const auto& draworder = pair.first;
+		const auto& drawcallbatch = pair.second;
 
-    VkViewport viewport{};
-    viewport.x = 0.0f;
-    viewport.y = 0.0f;
-    viewport.width = static_cast<float>(this->swapchainExtent.width);
-    viewport.height = static_cast<float>(this->swapchainExtent.height);
-    viewport.minDepth = 0.0f;
-    viewport.maxDepth = 1.0f;
-    vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
+        for (const auto& drawcall : drawcallbatch)
+        {
+            //USE SHADER
+            auto shadername = drawcall->m_material->getShader()->Get_name();
+            vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderloader.Get_shader(shadername).pipeline);
 
-    VkRect2D scissor{};
-    scissor.offset = { 0, 0 };
-    scissor.extent = this->swapchainExtent;
-    vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
+            VkViewport viewport{};
+            viewport.x = 0.0f;
+            viewport.y = 0.0f;
+            viewport.width = static_cast<float>(this->swapchainExtent.width);
+            viewport.height = static_cast<float>(this->swapchainExtent.height);
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
 
-    //RENDER MESH
-    auto curmesh = this->meshloader.Get_mesh(0);
+            VkRect2D scissor{};
+            scissor.offset = { 0, 0 };
+            scissor.extent = this->swapchainExtent;
+            vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
 
-    VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
-    VkDeviceSize offsets[] = { 0 };
-    vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
+            //RENDER MESH
+            auto curmesh = this->meshloader.Get_mesh(0);
 
-    vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+            VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
+            VkDeviceSize offsets[] = { 0 };
+            vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
-    vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
+            vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
+            vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
+        }
+    }
     vkCmdEndRenderPass(currentCommandBuffer);
 
     if (vkEndCommandBuffer(currentCommandBuffer) != VK_SUCCESS) {

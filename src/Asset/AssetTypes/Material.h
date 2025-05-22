@@ -2,11 +2,23 @@
 
 #include <unordered_map>
 #include <string>
-#include "Asset/gbe_asset.h"
+#include "../AssetInjection/AssetReference.h"
+#include "Texture.h"
+#include "Shader.h"
 #include "Math/gbe_math.h"
 
 namespace gbe {
-	namespace gfx {
+	namespace asset {
+		namespace data {
+			struct MaterialImportData {
+				std::string shader;
+			};
+			struct MaterialLoadData {
+				unsigned int gl_id;
+
+			};
+		}
+
 		enum MaterialOverrideType {
 			BOOL,
 			FLOAT,
@@ -36,12 +48,15 @@ namespace gbe {
 			const char* parameterName;
 		};
 
-		struct Material {
+		class Material : public BaseAsset<asset::Material, data::MaterialImportData, data::MaterialLoadData> {
 			std::unordered_map<const char*, MaterialOverride> overrides;
 			std::vector<MaterialTexture> textureOverrides;
 			asset::AssetReference<asset::Shader> m_shader;
+		public:
+			Material(std::string path);
 
-			Material(asset::Shader*);
+			void setShader(asset::Shader* shader);
+			asset::Shader* getShader();
 
 			template <typename TValue>
 			void setOverride(const char* id, TValue value) {}

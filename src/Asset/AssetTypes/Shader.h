@@ -10,12 +10,12 @@ namespace gbe {
 
 		namespace data {
 			struct ShaderImportData {
+				std::string name;
 				std::string vert;
 				std::string frag;
 			};
 			struct ShaderLoadData {
-				unsigned int gl_id = 0;
-
+				
 				struct ShaderOverrideFunctions {
 					std::function<void(const char*, bool)> SetOverride_bool;
 					std::function<void(const char*, int)> SetOverride_int;
@@ -34,8 +34,7 @@ namespace gbe {
 		public:
 			Shader(std::string path);
 
-
-			unsigned int Get_gl_id();
+			std::string Get_name();
 
 			//OVERRIDE FUNCTIONS
 			template <typename TValue>

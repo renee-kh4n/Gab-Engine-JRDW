@@ -1,5 +1,4 @@
 #pragma once
-#include "Material.h"
 #include "Asset/gbe_asset.h"
 
 namespace gbe {
@@ -10,9 +9,9 @@ namespace gbe {
 
             int order;
             asset::Mesh* m_mesh;
-            Material* m_material;
+            asset::Material* m_material;
 
-            DrawCall(asset::Mesh* mesh, Material* material, int order = 0);
+            DrawCall(asset::Mesh* mesh, asset::Material* material, int order = 0);
         };
     }
 }
