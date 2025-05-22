@@ -12,6 +12,7 @@
 namespace gbe {
 	namespace gfx {
 		struct ShaderData {
+			VkDescriptorSetLayout descriptorSetLayout;
 			VkPipelineLayout pipelineLayout;
 			VkPipeline pipeline;
 			asset::Shader* asset;

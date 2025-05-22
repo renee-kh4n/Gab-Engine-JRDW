@@ -294,7 +294,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 	this->textureloader.AssignSelfAsLoader();
     this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
 	this->shaderloader.AssignSelfAsLoader();
-	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
+	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice, this->MAX_FRAMES_IN_FLIGHT);
 	this->meshloader.AssignSelfAsLoader();
 
 	this->materialloader.AssignSelfAsLoader();
@@ -522,12 +522,6 @@ bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
     this->lights_this_frame.push_back(data);
     return true;
 }
-
-struct UniformBufferObject {
-    glm::mat4 model;
-    glm::mat4 view;
-    glm::mat4 proj;
-};
 
 void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
 {

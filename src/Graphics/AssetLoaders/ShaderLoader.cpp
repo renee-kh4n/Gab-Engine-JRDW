@@ -4,6 +4,27 @@
 #include <sstream>
 
 bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
+	//============DESCRIPTOR LAYOUT SETUP============//
+	VkDescriptorSetLayout descriptorSetLayout;
+
+	//UNIFORM BUFFER
+	VkDescriptorSetLayoutBinding uboLayoutBinding{};
+	uboLayoutBinding.binding = 0;
+	uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	uboLayoutBinding.descriptorCount = 1;
+	uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
+
+	VkDescriptorSetLayoutCreateInfo layoutInfo{};
+	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	layoutInfo.bindingCount = 1;
+	layoutInfo.pBindings = &uboLayoutBinding;
+
+	if (vkCreateDescriptorSetLayout(device, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create descriptor set layout!");
+	}
+
+	//============SHADER LOADING============//
 	auto vertpath = asset->Get_asset_directory() + importdata.vert;
 	auto fragpath = asset->Get_asset_directory() + importdata.frag;
 	
@@ -157,6 +178,8 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	//Pipeline creation
 	VkGraphicsPipelineCreateInfo pipelineInfo{};
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
+	pipelineLayoutInfo.setLayoutCount = 1;
+	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 	pipelineInfo.stageCount = 2;
 	pipelineInfo.pStages = shaderStages;
 
@@ -237,8 +260,10 @@ gbe::gfx::ShaderData& gbe::gfx::ShaderLoader::Get_shader(std::string name) {
 }
 
 void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
-	vkDestroyPipelineLayout((*this->vkdevice), this->Get_shader(importdata.name).pipelineLayout, nullptr);
-	vkDestroyPipeline((*this->vkdevice), this->Get_shader(importdata.name).pipeline, nullptr);
+	auto shaderdata = this->Get_shader(importdata.name);
+	vkDestroyDescriptorSetLayout(*this->vkdevice, shaderdata.descriptorSetLayout, nullptr);
+	vkDestroyPipelineLayout((*this->vkdevice), shaderdata.pipelineLayout, nullptr);
+	vkDestroyPipeline((*this->vkdevice), shaderdata.pipeline, nullptr);
 	this->loaded_shaders.erase(importdata.name);
 }
 

@@ -61,6 +61,25 @@ bool gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh* asset, const asset::data::Mes
     vkDestroyBuffer(*this->vkdevice, istagingBuffer, nullptr);
     vkFreeMemory(*this->vkdevice, istagingBufferMemory, nullptr);
 
+    //UNIFORM BUFFER
+    std::vector<VkBuffer> uniformBuffers;
+    std::vector<VkDeviceMemory> uniformBuffersMemory;
+    std::vector<void*> uniformBuffersMapped;
+
+    VkDeviceSize bufferSize = sizeof(UniformBufferObject);
+
+    uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
+    uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        RenderPipeline::createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, uniformBuffers[i], uniformBuffersMemory[i]);
+
+        vkMapMemory(*this->vkdevice, uniformBuffersMemory[i], 0, bufferSize, 0, &uniformBuffersMapped[i]);
+    }
+
+    //COMMITTING
+
     this->loaded_meshes.insert_or_assign(loaded_meshes_count, MeshData{
         vertices,
         indices,
@@ -78,6 +97,11 @@ bool gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh* asset, const asset::data::Mes
 
 void gbe::gfx::MeshLoader::UnLoadAsset_(asset::Mesh* asset, const asset::data::MeshImportData& importdata, asset::data::MeshLoadData* data)
 {
+    for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        vkDestroyBuffer(*this->vkdevice, this->Get_mesh(data->gl_id).uniformBuffers[i], nullptr);
+        vkFreeMemory(*this->vkdevice, this->Get_mesh(data->gl_id).uniformBuffersMemory[i], nullptr);
+    }
+
 	vkDestroyBuffer((*this->vkdevice), this->Get_mesh(data->gl_id).vertexBuffer, nullptr);
 	vkFreeMemory((*this->vkdevice), this->Get_mesh(data->gl_id).vertexBufferMemory, nullptr);
     vkDestroyBuffer((*this->vkdevice), this->Get_mesh(data->gl_id).indexBuffer, nullptr);
@@ -98,8 +122,9 @@ gbe::gfx::MeshData& gbe::gfx::MeshLoader::Get_mesh(unsigned int id)
 	}
 }
 
-void gbe::gfx::MeshLoader::PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice)
+void gbe::gfx::MeshLoader::PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice, int MAX_FRAMES_IN_FLIGHT)
 {
 	this->vkdevice = vkdevice;
     this->vkphysicaldevice = vkphysicaldevice;
+    this->MAX_FRAMES_IN_FLIGHT = MAX_FRAMES_IN_FLIGHT;
 }
