@@ -18,6 +18,7 @@ namespace gbe {
 		class Mesh : public BaseAsset<Mesh, data::MeshImportData, data::MeshLoadData> {
 		public:
 			Mesh(std::string path);
+			unsigned int Get_meshid();
 		};
 	}
 }

@@ -289,6 +289,8 @@ namespace gbe {
 			auto pos = Vector3::zero;
 			auto forward = Vector3::zero;
 			auto frustrum = Matrix4();
+			auto viewm = Matrix4();
+			auto projm = Matrix4();
 			auto nearclip = 0.0f;
 			auto farclip = 0.0f;
 
@@ -297,10 +299,12 @@ namespace gbe {
 				pos = current_camera->World().position.Get();
 				forward = current_camera->World().GetForward();
 				frustrum = current_camera->getproj() * current_camera->GetViewMat();
+				viewm = current_camera->GetViewMat();
+				projm = current_camera->getproj();
 				nearclip = current_camera->nearClip;
 				farclip = current_camera->farClip;
 			}
-			mRenderPipeline->RenderFrame(pos, forward, frustrum, nearclip, farclip);
+			mRenderPipeline->RenderFrame(viewm, projm, nearclip, farclip);
 			//mGUIPipeline->DrawActiveCanvas();
 
 			//Update the window

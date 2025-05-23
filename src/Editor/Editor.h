@@ -1,7 +1,5 @@
 #pragma once
 
-#include "App/EditorApp.h"
-
 namespace gbe {
 	class Editor {
 	private:

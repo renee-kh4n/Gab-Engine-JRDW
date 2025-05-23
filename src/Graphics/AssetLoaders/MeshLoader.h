@@ -12,9 +12,9 @@
 namespace gbe {
 	namespace gfx {
 		struct UniformBufferObject {
-			glm::mat4 model;
-			glm::mat4 view;
-			glm::mat4 proj;
+			gbe::Matrix4 model;
+			gbe::Matrix4 view;
+			gbe::Matrix4 proj;
 		};
 
 		struct MeshData {
@@ -42,6 +42,7 @@ namespace gbe {
 			void UnLoadAsset_(asset::Mesh* asset, const asset::data::MeshImportData& importdata, asset::data::MeshLoadData* data) override;
 		public:
 			MeshData& Get_mesh(unsigned int id);
+			void SetBufferMemory(const MeshData& data, unsigned int index, UniformBufferObject& ubo);
 			void PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice, int MAX_FRAMES_IN_FLIGHT);
 		};
 	}

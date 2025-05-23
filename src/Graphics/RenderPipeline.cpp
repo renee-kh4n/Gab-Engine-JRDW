@@ -292,11 +292,11 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 
 	//Asset Loaders
 	this->textureloader.AssignSelfAsLoader();
-    this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
-	this->shaderloader.AssignSelfAsLoader();
-	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice, this->MAX_FRAMES_IN_FLIGHT);
-	this->meshloader.AssignSelfAsLoader();
 
+	this->shaderloader.AssignSelfAsLoader();
+    this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
+	this->meshloader.AssignSelfAsLoader();
+	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice, this->MAX_FRAMES_IN_FLIGHT);
 	this->materialloader.AssignSelfAsLoader();
     this->materialloader.PassDependencies(&this->shaderloader);
 }
@@ -523,7 +523,7 @@ bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
     return true;
 }
 
-void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Matrix4& _frustrum, float& nearclip, float& farclip)
+void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float& nearclip, float& farclip)
 {
 	//Syncronization
     vkWaitForFences(this->vkdevice, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
@@ -577,34 +577,45 @@ void gbe::RenderPipeline::RenderFrame(Vector3& from, const Vector3& forward, Mat
 
         for (const auto& drawcall : drawcallbatch)
         {
-            //USE SHADER
-            auto shadername = drawcall->m_material->getShader()->Get_name();
-            vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderloader.Get_shader(shadername).pipeline);
+            for (const auto& instance : drawcall->calls) {
+                auto const& transform = instance.second;
 
-            VkViewport viewport{};
-            viewport.x = 0.0f;
-            viewport.y = 0.0f;
-            viewport.width = static_cast<float>(this->swapchainExtent.width);
-            viewport.height = static_cast<float>(this->swapchainExtent.height);
-            viewport.minDepth = 0.0f;
-            viewport.maxDepth = 1.0f;
-            vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
+                //USE SHADER
+                auto shadername = drawcall->m_material->getShader()->Get_name();
+                vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderloader.Get_shader(shadername).pipeline);
 
-            VkRect2D scissor{};
-            scissor.offset = { 0, 0 };
-            scissor.extent = this->swapchainExtent;
-            vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
+                VkViewport viewport{};
+                viewport.x = 0.0f;
+                viewport.y = 0.0f;
+                viewport.width = static_cast<float>(this->swapchainExtent.width);
+                viewport.height = static_cast<float>(this->swapchainExtent.height);
+                viewport.minDepth = 0.0f;
+                viewport.maxDepth = 1.0f;
+                vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
 
-            //RENDER MESH
-            auto curmesh = this->meshloader.Get_mesh(0);
+                VkRect2D scissor{};
+                scissor.offset = { 0, 0 };
+                scissor.extent = this->swapchainExtent;
+                vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
 
-            VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
-            VkDeviceSize offsets[] = { 0 };
-            vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
+                //RENDER MESH
+                const auto& curmesh = this->meshloader.Get_mesh(drawcall->m_mesh->Get_meshid());
 
-            vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+                UniformBufferObject ubo{};
+				ubo.model = transform;
+                ubo.proj = projmat;
+                ubo.view = viewmat;
+                ubo.proj[1][1] *= -1;
+                this->meshloader.SetBufferMemory(curmesh, this->currentFrame, ubo);
 
-            vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
+                VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
+                VkDeviceSize offsets[] = { 0 };
+                vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
+
+                vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
+
+                vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
+            }
         }
     }
     vkCmdEndRenderPass(currentCommandBuffer);

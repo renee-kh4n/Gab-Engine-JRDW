@@ -86,9 +86,12 @@ bool gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh* asset, const asset::data::Mes
         vertexBuffer,
         vertexBufferMemory,
         indexBuffer,
-        indexBufferMemory
-
+        indexBufferMemory,
+		uniformBuffers,
+        uniformBuffersMemory,
+        uniformBuffersMapped
         });
+    loaddata->gl_id = loaded_meshes_count;
 
     //Increment
     loaded_meshes_count++;
@@ -120,6 +123,23 @@ gbe::gfx::MeshData& gbe::gfx::MeshLoader::Get_mesh(unsigned int id)
 	else {
 		throw std::runtime_error("Mesh not found");
 	}
+}
+
+void gbe::gfx::MeshLoader::SetBufferMemory(const MeshData& data, unsigned int index, UniformBufferObject& ubo)
+{
+    struct UniformBufferObject_INTERNAL {
+        glm::mat4 model;
+        glm::mat4 view;
+        glm::mat4 proj;
+    };
+
+    UniformBufferObject_INTERNAL ubo_translated = {
+        ubo.model,
+        ubo.view,
+        ubo.proj,
+    };
+
+    memcpy(data.uniformBuffersMapped[index], &ubo_translated, sizeof(ubo_translated));
 }
 
 void gbe::gfx::MeshLoader::PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice, int MAX_FRAMES_IN_FLIGHT)

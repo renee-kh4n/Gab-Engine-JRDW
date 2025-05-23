@@ -6,5 +6,4 @@ gbe::Editor::Editor()
 
 void gbe::Editor::Run(int& argc, char* argv[])
 {
-    auto editor_app = new gbe::editor::EditorApp();
 }
