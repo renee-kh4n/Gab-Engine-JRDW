@@ -1,6 +1,5 @@
 #pragma once
 
-#include <wx/wx.h>
 #include "App/EditorApp.h"
 
 namespace gbe {

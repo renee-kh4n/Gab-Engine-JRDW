@@ -8,7 +8,6 @@
     "glm",
     "glad",
     "stb",
-    "wxwidgets",
     "bullet3",
     "openal-soft",
     "glaze",

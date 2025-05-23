@@ -125,9 +125,9 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     
     //VALIDATION LAYERS
     //VULKAN LAYER FINDING
-    auto path = std::filesystem::current_path() / "vcpkg_installed" / "x64-windows" / "bin";
-    std::string set = "VK_ADD_LAYER_PATH=" + path.string();
-    int putenvresult = _putenv(set.c_str());
+    auto validationlayerspath = std::filesystem::current_path() / "vcpkg_installed" / "x64-windows" / "bin";
+    std::string vkvalidationenvpath = "VK_ADD_LAYER_PATH=" + validationlayerspath.string();
+    int putenvresult = _putenv(vkvalidationenvpath.c_str());
 
     bool validationlayerssupported = true;
 
@@ -177,7 +177,8 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     }
     
     //INSTANCE
-    if (vkCreateInstance(&instInfo, nullptr, &vkInst) != VK_SUCCESS) {
+    auto instresult = vkCreateInstance(&instInfo, nullptr, &vkInst);
+    if (instresult != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
     }
 
