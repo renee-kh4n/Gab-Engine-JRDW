@@ -9,12 +9,14 @@
 
 namespace gbe {
 	namespace audio {
-		class AudioLoader : public asset::AssetLoader<asset::Audio, asset::data::AudioImportData, asset::data::AudioLoadData> {
+		struct AudioData {
+			Mix_Chunk* audio_chunk;
+		};
+
+		class AudioLoader : public asset::AssetLoader<asset::Audio, asset::data::AudioImportData, asset::data::AudioLoadData, AudioData> {
 		private:
-			std::unordered_map<std::string, asset::Audio*> audio_dictionary;
-			std::unordered_map<asset::Audio*, Mix_Chunk*> audio_data_dictionary;
 		protected:
-			bool LoadAsset_(asset::Audio* asset, const asset::data::AudioImportData& importdata, asset::data::AudioLoadData* data) override;
+			AudioData LoadAsset_(asset::Audio* asset, const asset::data::AudioImportData& importdata, asset::data::AudioLoadData* data) override;
 			void UnLoadAsset_(asset::Audio* asset, const asset::data::AudioImportData& importdata, asset::data::AudioLoadData* data) override;
 		};
 	}

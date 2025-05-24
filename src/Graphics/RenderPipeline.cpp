@@ -98,6 +98,23 @@ void gbe::RenderPipeline::Init() {
 	this->Instance = this;
 }
 
+static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
+    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+    VkDebugUtilsMessageTypeFlagsEXT messageType,
+    const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+    void* pUserData) {
+
+    if (messageSeverity > VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT) {
+        std::cerr << "validation ERROR: " << pCallbackData->pMessage << std::endl;
+		throw std::runtime_error("Vulkan validation layer error encountered: " + std::string(pCallbackData->pMessage));
+    }
+    else {
+        std::cerr << "validation log: " << pCallbackData->pMessage << std::endl;
+    }
+
+    return VK_FALSE;
+}
+
 gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 {
 	this->window = window;
@@ -108,12 +125,16 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 
 
     //EXTENSIONS
-    uint32_t extensionCount;
-    const char** extensionNames = 0;
-    SDL_Vulkan_GetInstanceExtensions(implemented_window, &extensionCount, nullptr);
-    extensionNames = new const char* [extensionCount];
-    SDL_Vulkan_GetInstanceExtensions(implemented_window, &extensionCount, extensionNames);
-    
+    uint32_t SDLextensionCount;
+    const char** SDLextensionNames = 0;
+    SDL_Vulkan_GetInstanceExtensions(implemented_window, &SDLextensionCount, nullptr);
+    SDLextensionNames = new const char* [SDLextensionCount];
+    SDL_Vulkan_GetInstanceExtensions(implemented_window, &SDLextensionCount, SDLextensionNames);
+    std::vector<const char*> allextensions(SDLextensionNames, SDLextensionNames + SDLextensionCount);
+    if (enableValidationLayers) {
+        allextensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
+    }
+
     //APP INFO
     VkApplicationInfo appInfo{};
     appInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
@@ -165,21 +186,44 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     instInfo.pNext = nullptr;
     instInfo.flags = 0;
     instInfo.ppEnabledLayerNames = nullptr;
-    instInfo.enabledExtensionCount = extensionCount;
-    instInfo.ppEnabledExtensionNames = extensionNames;
+    instInfo.enabledExtensionCount = static_cast<uint32_t>(allextensions.size());;
+    instInfo.ppEnabledExtensionNames = allextensions.data();
 
+    //DEBUG
+    VkDebugUtilsMessengerCreateInfoEXT debug_messenger_create_info{};
     if (enableValidationLayers) {
         instInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
         instInfo.ppEnabledLayerNames = validationLayers.data();
+
+        debug_messenger_create_info.sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
+        debug_messenger_create_info.messageSeverity = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT;
+        debug_messenger_create_info.messageType = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT;
+        debug_messenger_create_info.pfnUserCallback = debugCallback;
+        debug_messenger_create_info.pUserData = nullptr; // Optional
+
+        instInfo.pNext = (VkDebugUtilsMessengerCreateInfoEXT*)&debug_messenger_create_info;
     }
     else {
         instInfo.enabledLayerCount = 0;
+
+		instInfo.pNext = nullptr;
     }
     
     //INSTANCE
     auto instresult = vkCreateInstance(&instInfo, nullptr, &vkInst);
     if (instresult != VK_SUCCESS) {
         throw std::runtime_error("failed to create instance!");
+    }
+
+    //DEBUG
+    if (enableValidationLayers) {
+        auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(vkInst, "vkCreateDebugUtilsMessengerEXT");
+        if (func != nullptr) {
+            func(vkInst, &debug_messenger_create_info, nullptr, &this->debugMessenger);
+        }
+        else {
+            throw std::runtime_error("failed to set up debug messenger!");
+        }
     }
 
     uint32_t physicalDeviceCount;
@@ -292,11 +336,11 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 
 	//Asset Loaders
 	this->textureloader.AssignSelfAsLoader();
-
+	this->textureloader.PassDependencies(&this->vkdevice);
 	this->shaderloader.AssignSelfAsLoader();
     this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
 	this->meshloader.AssignSelfAsLoader();
-	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice, this->MAX_FRAMES_IN_FLIGHT);
+	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
 	this->materialloader.AssignSelfAsLoader();
     this->materialloader.PassDependencies(&this->shaderloader);
 }
@@ -582,7 +626,8 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
 
                 //USE SHADER
                 auto shadername = drawcall->m_material->getShader()->Get_name();
-                vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, shaderloader.Get_shader(shadername).pipeline);
+                const auto& currentshaderdata = shaderloader.Get_shader(shadername);
+                vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipeline);
 
                 VkViewport viewport{};
                 viewport.x = 0.0f;
@@ -606,12 +651,13 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
                 ubo.proj = projmat;
                 ubo.view = viewmat;
                 ubo.proj[1][1] *= -1;
-                this->meshloader.SetBufferMemory(curmesh, this->currentFrame, ubo);
+                drawcall->SetBufferMemory(this->currentFrame, ubo);
 
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
+                vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, 1, &drawcall->descriptorSets[currentFrame], 0, nullptr);
                 vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
 
                 vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
@@ -676,14 +722,18 @@ unsigned int gbe::RenderPipeline::Get_mainbufferId()
 	return 0;
 }
 
-void gbe::RenderPipeline::RegisterDrawCall(DrawCall* drawcall)
+gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, asset::Material* material)
 {
-	if (this->drawcalls.find(drawcall->order) == this->drawcalls.end()) {
-		this->drawcalls.insert_or_assign(drawcall->order, std::vector<DrawCall*>{ drawcall });
+	auto newdrawcall = new DrawCall(mesh, material, &this->shaderloader.Get_shader(material->getShader()->Get_name()), this->MAX_FRAMES_IN_FLIGHT, &this->vkdevice, 0);
+
+	if (this->drawcalls.find(newdrawcall->order) == this->drawcalls.end()) {
+		this->drawcalls.insert_or_assign(newdrawcall->order, std::vector<DrawCall*>{ newdrawcall });
 	}
 	else {
-		this->drawcalls[drawcall->order].push_back(drawcall);
+		this->drawcalls[newdrawcall->order].push_back(newdrawcall);
 	}
+
+    return newdrawcall;
 }
 
 void gbe::RenderPipeline::RefreshPipelineObjects() {
@@ -710,6 +760,13 @@ void gbe::RenderPipeline::CleanPipelineObjects() {
 
 void gbe::RenderPipeline::CleanUp()
 {
+    if (enableValidationLayers) {
+        auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(this->vkInst, "vkDestroyDebugUtilsMessengerEXT");
+        if (func != nullptr) {
+            func(this->vkInst, this->debugMessenger, nullptr);
+        }
+    }
+
     vkDeviceWaitIdle(this->vkdevice);
 
     this->CleanPipelineObjects();

@@ -3,7 +3,7 @@
 #include <fstream>
 #include <sstream>
 
-bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
+gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
 	//============DESCRIPTOR LAYOUT SETUP============//
 	VkDescriptorSetLayout descriptorSetLayout;
 
@@ -166,8 +166,8 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 0; // Optional
-	pipelineLayoutInfo.pSetLayouts = nullptr; // Optional
+	pipelineLayoutInfo.setLayoutCount = 1;
+	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 	pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
 	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
@@ -178,8 +178,6 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	//Pipeline creation
 	VkGraphicsPipelineCreateInfo pipelineInfo{};
 	pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 1;
-	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
 	pipelineInfo.stageCount = 2;
 	pipelineInfo.pStages = shaderStages;
 
@@ -205,13 +203,6 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	if (newgraphicsPipeline_result != VK_SUCCESS) {
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
-
-	this->loaded_shaders.insert_or_assign(importdata.name, ShaderData{
-		descriptorSetLayout,
-		newpipelineLayout,
-		newgraphicsPipeline,
-		asset
-		});
 
 	//OVERRIDE FUNCTIONS
 	data->overridefunctions.SetOverride_bool = [=](const char* id, bool value) {
@@ -247,25 +238,19 @@ bool gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data:
 	vkDestroyShaderModule((*this->vkdevice), vertShader, nullptr);
 	vkDestroyShaderModule((*this->vkdevice), fragShader, nullptr);
 
-	return true;
-}
-
-gbe::gfx::ShaderData& gbe::gfx::ShaderLoader::Get_shader(std::string name) {
-	auto it = this->loaded_shaders.find(name);
-	if (it != this->loaded_shaders.end()) {
-		return it->second;
-	}
-	else {
-		throw std::runtime_error("Shader not found");
-	}
+	return ShaderData{
+		descriptorSetLayout,
+		newpipelineLayout,
+		newgraphicsPipeline,
+		asset
+	};
 }
 
 void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
-	auto shaderdata = this->Get_shader(importdata.name);
+	auto shaderdata = this->GetAssetData(asset);
 	vkDestroyDescriptorSetLayout(*this->vkdevice, shaderdata.descriptorSetLayout, nullptr);
 	vkDestroyPipelineLayout((*this->vkdevice), shaderdata.pipelineLayout, nullptr);
 	vkDestroyPipeline((*this->vkdevice), shaderdata.pipeline, nullptr);
-	this->loaded_shaders.erase(importdata.name);
 }
 
 void gbe::gfx::ShaderLoader::PassDependencies(VkDevice* vkdevice, VkExtent2D* vkextent, VkRenderPass* vkrenderpass) {

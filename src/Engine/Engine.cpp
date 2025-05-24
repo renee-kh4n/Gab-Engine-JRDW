@@ -80,8 +80,7 @@ namespace gbe {
 		test_mat->setOverride("color", Vector4(1, 1, 1, 1));
 		
 		//DRAWCALL CACHING
-		auto test_drawcall = new DrawCall(cube_mesh, test_mat);
-		mRenderPipeline->RegisterDrawCall(test_drawcall);
+		auto test_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, test_mat);
 
 #pragma endregion
 #pragma region GUI Pipeline Setup

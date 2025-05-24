@@ -10,7 +10,6 @@ namespace gbe {
 
 		namespace data {
 			struct ShaderImportData {
-				std::string name;
 				std::string vert;
 				std::string frag;
 			};

@@ -1,5 +1,5 @@
 {
-  "name": "test",
+  "asset_id": "test",
   "vert": "test.vert.spv",
   "frag": "test.frag.spv"
 }

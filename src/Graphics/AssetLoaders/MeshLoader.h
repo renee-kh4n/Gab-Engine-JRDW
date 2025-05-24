@@ -24,26 +24,17 @@ namespace gbe {
 			VkDeviceMemory vertexBufferMemory;
 			VkBuffer indexBuffer;
 			VkDeviceMemory indexBufferMemory;
-
-			std::vector<VkBuffer> uniformBuffers;
-			std::vector<VkDeviceMemory> uniformBuffersMemory;
-			std::vector<void*> uniformBuffersMapped;
 		};
 
-		class MeshLoader : public asset::AssetLoader<asset::Mesh, asset::data::MeshImportData, asset::data::MeshLoadData> {
+		class MeshLoader : public asset::AssetLoader<asset::Mesh, asset::data::MeshImportData, asset::data::MeshLoadData, MeshData> {
 		private:
-			std::unordered_map<unsigned int, MeshData> loaded_meshes;
 			VkDevice* vkdevice;
 			VkPhysicalDevice* vkphysicaldevice;
-			unsigned int loaded_meshes_count = 0;
-			unsigned int MAX_FRAMES_IN_FLIGHT = 0;
 		protected:
-			bool LoadAsset_(asset::Mesh* asset, const asset::data::MeshImportData& importdata, asset::data::MeshLoadData* data) override;
+			MeshData LoadAsset_(asset::Mesh* asset, const asset::data::MeshImportData& importdata, asset::data::MeshLoadData* data) override;
 			void UnLoadAsset_(asset::Mesh* asset, const asset::data::MeshImportData& importdata, asset::data::MeshLoadData* data) override;
 		public:
-			MeshData& Get_mesh(unsigned int id);
-			void SetBufferMemory(const MeshData& data, unsigned int index, UniformBufferObject& ubo);
-			void PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice, int MAX_FRAMES_IN_FLIGHT);
+			void PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice);
 		};
 	}
 }

@@ -18,7 +18,7 @@ namespace gbe {
 			asset::Shader* asset;
 		};
 
-		class ShaderLoader : public asset::AssetLoader<asset::Shader, asset::data::ShaderImportData, asset::data::ShaderLoadData> {
+		class ShaderLoader : public asset::AssetLoader<asset::Shader, asset::data::ShaderImportData, asset::data::ShaderLoadData, ShaderData> {
 		private:
 			std::unordered_map<std::string, ShaderData> loaded_shaders;
 			VkDevice* vkdevice;
@@ -26,10 +26,9 @@ namespace gbe {
 			VkRenderPass* vkrenderpass;
 			VkShaderModule TryCompileShader(const std::vector<char>& code);
 		protected:
-			bool LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) override;
+			ShaderData LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) override;
 			void UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) override;
 		public:
-			ShaderData& Get_shader(std::string name);
 			void PassDependencies(VkDevice* vkdevice, VkExtent2D* vkextent, VkRenderPass* vkrenderpass);
 		};
 	}

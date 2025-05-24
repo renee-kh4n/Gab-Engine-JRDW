@@ -49,6 +49,7 @@ namespace gbe {
 		//VK Init
 		Window* window;
 		VkInstance vkInst;
+		VkDebugUtilsMessengerEXT debugMessenger;
 		VkSurfaceKHR surface;
 		VkDevice vkdevice;
 		VkPhysicalDevice vkphysicalDevice;
@@ -90,7 +91,7 @@ namespace gbe {
 		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer);
 
 		RenderPipeline(gbe::Window*, Vector2Int);
-		void RegisterDrawCall(DrawCall*);
+		DrawCall* RegisterDrawCall(asset::Mesh* mesh, asset::Material* material);
 
 		void SetCameraShader(asset::Shader* postprocess);
 		bool TryPushLight(gfx::Light* data, bool priority = false);
