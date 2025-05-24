@@ -625,8 +625,8 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
                 auto const& transform = instance.second;
 
                 //USE SHADER
-                auto shadername = drawcall->m_material->getShader()->Get_name();
-                const auto& currentshaderdata = shaderloader.Get_shader(shadername);
+                auto shaderasset = drawcall->m_material->getShader();
+                const auto& currentshaderdata = shaderloader.GetAssetData(shaderasset);
                 vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipeline);
 
                 VkViewport viewport{};
@@ -644,7 +644,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
                 vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
 
                 //RENDER MESH
-                const auto& curmesh = this->meshloader.Get_mesh(drawcall->m_mesh->Get_meshid());
+                const auto& curmesh = this->meshloader.GetAssetData(drawcall->m_mesh);
 
                 UniformBufferObject ubo{};
 				ubo.model = transform;
@@ -724,7 +724,7 @@ unsigned int gbe::RenderPipeline::Get_mainbufferId()
 
 gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, asset::Material* material)
 {
-	auto newdrawcall = new DrawCall(mesh, material, &this->shaderloader.Get_shader(material->getShader()->Get_name()), this->MAX_FRAMES_IN_FLIGHT, &this->vkdevice, 0);
+	auto newdrawcall = new DrawCall(mesh, material, &shaderloader.GetAssetData(material->getShader()), this->MAX_FRAMES_IN_FLIGHT, &this->vkdevice, 0);
 
 	if (this->drawcalls.find(newdrawcall->order) == this->drawcalls.end()) {
 		this->drawcalls.insert_or_assign(newdrawcall->order, std::vector<DrawCall*>{ newdrawcall });

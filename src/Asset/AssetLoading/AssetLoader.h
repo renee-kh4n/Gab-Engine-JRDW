@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <string>
 
 namespace gbe {
 	namespace asset {
@@ -25,6 +26,9 @@ namespace gbe {
 				return active_base_instance->unload_func(asset, import_data, load_data);
 			}
 		};
+
+		template<class TAsset, class TAssetImportData, class TAssetLoadData>
+		AssetLoader_base<TAsset, TAssetImportData, TAssetLoadData>* AssetLoader_base<TAsset, TAssetImportData, TAssetLoadData>::active_base_instance = nullptr;
 
 		template<class TAsset, class TAssetImportData, class TAssetLoadData, class TAssetRuntimeData>
 		class AssetLoader : AssetLoader_base<TAsset, TAssetImportData, TAssetLoadData> {

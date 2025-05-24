@@ -33,8 +33,6 @@ namespace gbe {
 		public:
 			Shader(std::string path);
 
-			std::string Get_name();
-
 			//OVERRIDE FUNCTIONS
 			template <typename TValue>
 			void SetOverride(const char* id, TValue value) {
