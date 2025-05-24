@@ -12,16 +12,19 @@ namespace gbe {
 		struct TextureData {
 			VkImage textureImage;
 			VkDeviceMemory textureImageMemory;
+			VkImageView textureImageView;
+			VkSampler textureSampler;
 		};
 
 		class TextureLoader : public asset::AssetLoader<asset::Texture, asset::data::TextureImportData, asset::data::TextureLoadData, TextureData> {
 		private:
 			VkDevice* vkdevice;
+			VkPhysicalDevice* vkphysicaldevice;
 		protected:
 			TextureData LoadAsset_(asset::Texture* asset, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* data) override;
 			void UnLoadAsset_(asset::Texture* asset, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* data) override;
 		public:
-			void PassDependencies(VkDevice* vkdevice);
+			void PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice);
 		};
 	}
 }

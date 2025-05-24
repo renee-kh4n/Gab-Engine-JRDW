@@ -4,30 +4,10 @@
 #include <sstream>
 
 gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
-	//============DESCRIPTOR LAYOUT SETUP============//
-	VkDescriptorSetLayout descriptorSetLayout;
-
-	//UNIFORM BUFFER
-	VkDescriptorSetLayoutBinding uboLayoutBinding{};
-	uboLayoutBinding.binding = 0;
-	uboLayoutBinding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	uboLayoutBinding.descriptorCount = 1;
-	uboLayoutBinding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-	uboLayoutBinding.pImmutableSamplers = nullptr; // Optional
-
-	VkDescriptorSetLayoutCreateInfo layoutInfo{};
-	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layoutInfo.bindingCount = 1;
-	layoutInfo.pBindings = &uboLayoutBinding;
-
-	if (vkCreateDescriptorSetLayout(*this->vkdevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create descriptor set layout!");
-	}
-
-	//============SHADER LOADING============//
+	//============READING============//
 	auto vertpath = asset->Get_asset_directory() + importdata.vert;
 	auto fragpath = asset->Get_asset_directory() + importdata.frag;
-	
+
 	auto readfile = [](std::string path) {
 		std::ifstream file(path, std::ios::ate | std::ios::binary);
 		if (!file.is_open()) {
@@ -48,6 +28,42 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	auto vertShaderCode = readfile(vertpath);
 	auto fragShaderCode = readfile(fragpath);
 
+
+	
+	//============DESCRIPTOR LAYOUT SETUP============//
+	VkDescriptorSetLayout descriptorSetLayout;
+
+	//BINDINGS
+
+	//Transform ubo binding
+	VkDescriptorSetLayoutBinding transform_ubo_Binding{};
+	transform_ubo_Binding.binding = 0;
+	transform_ubo_Binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+	transform_ubo_Binding.descriptorCount = 1;
+	transform_ubo_Binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
+	transform_ubo_Binding.pImmutableSamplers = nullptr; // Optional
+
+	//Color texture sampler binding
+	VkDescriptorSetLayoutBinding color_sampler_Binding{};
+	color_sampler_Binding.binding = 1;
+	color_sampler_Binding.descriptorCount = 1;
+	color_sampler_Binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+	color_sampler_Binding.pImmutableSamplers = nullptr;
+	color_sampler_Binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
+
+	//COMPILE BINDINGS
+	std::array<VkDescriptorSetLayoutBinding, 2> bindings = { transform_ubo_Binding, color_sampler_Binding };
+	
+	VkDescriptorSetLayoutCreateInfo layoutInfo{};
+	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+	layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
+	layoutInfo.pBindings = bindings.data();
+
+	if (vkCreateDescriptorSetLayout(*this->vkdevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
+		throw std::runtime_error("failed to create descriptor set layout!");
+	}
+
+	//============SHADER COMPILING============//
 	auto vertShader = TryCompileShader(vertShaderCode);
 	auto fragShader = TryCompileShader(fragShaderCode);
 

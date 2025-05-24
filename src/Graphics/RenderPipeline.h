@@ -9,6 +9,8 @@
 #include <vector>
 #include <algorithm>
 #include <map>
+#include <set>
+#include <string>
 
 #include <functional>
 
@@ -50,7 +52,7 @@ namespace gbe {
 		Window* window;
 		VkInstance vkInst;
 		VkDebugUtilsMessengerEXT debugMessenger;
-		VkSurfaceKHR surface;
+		VkSurfaceKHR vksurface;
 		VkDevice vkdevice;
 		VkPhysicalDevice vkphysicalDevice;
 		uint32_t graphicsQueueIndex = UINT32_MAX;
@@ -73,7 +75,8 @@ namespace gbe {
 		void InitializePipelineObjects();
 		void RefreshPipelineObjects();
 		void CleanPipelineObjects();
-		
+		void querySwapChainSupport(VkPhysicalDevice pvkdevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR& capabilities, std::vector<VkSurfaceFormatKHR>& formats, std::vector<VkPresentModeKHR>& presentModes);
+
 		//COMMANDPOOL
 		const int MAX_FRAMES_IN_FLIGHT = 2;
 		uint32_t currentFrame = 0;
@@ -86,9 +89,15 @@ namespace gbe {
 		
 	public:
 		static RenderPipeline* Get_Instance();
+		static void beginSingleTimeCommands(VkCommandBuffer& buffer);
+		static void endSingleTimeCommands(VkCommandBuffer& commandBuffer);
 		static void createBuffer(VkDeviceSize size, VkBufferUsageFlags usage, VkMemoryPropertyFlags properties, VkBuffer& buffer, VkDeviceMemory& bufferMemory);
 		static void copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size);
-		uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer);
+		static uint32_t findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties);
+		static void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
+		static void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
+		static void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
+		static void createImageView(VkImageView& imageview, VkImage image, VkFormat format);
 
 		RenderPipeline(gbe::Window*, Vector2Int);
 		DrawCall* RegisterDrawCall(asset::Mesh* mesh, asset::Material* material);
@@ -99,9 +108,7 @@ namespace gbe {
 		void SetResolution(Vector2Int newresolution);
 		
 		void RenderFrame(Matrix4& viewmat, Matrix4& projmat, float& nearclip, float& farclip);
-		unsigned int Get_mainbufferId();
 
 		void CleanUp();
-		void Init();
 	};
 }

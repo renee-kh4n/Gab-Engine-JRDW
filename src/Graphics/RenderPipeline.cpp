@@ -35,7 +35,7 @@ void gbe::RenderPipeline::createBuffer(VkDeviceSize size, VkBufferUsageFlags usa
     VkMemoryAllocateInfo allocInfo{};
     allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
     allocInfo.allocationSize = memRequirements.size;
-    allocInfo.memoryTypeIndex = Instance->findMemoryType(memRequirements.memoryTypeBits, properties, buffer);
+    allocInfo.memoryTypeIndex = Instance->findMemoryType(memRequirements.memoryTypeBits, properties);
 
     if (vkAllocateMemory(Instance->vkdevice, &allocInfo, nullptr, &bufferMemory) != VK_SUCCESS) {
         throw std::runtime_error("failed to allocate buffer memory!");
@@ -46,20 +46,8 @@ void gbe::RenderPipeline::createBuffer(VkDeviceSize size, VkBufferUsageFlags usa
 
 void gbe::RenderPipeline::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkDeviceSize size)
 {
-    VkCommandBufferAllocateInfo allocInfo{};
-    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
-    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
-    allocInfo.commandPool = Instance->commandPool;
-    allocInfo.commandBufferCount = 1;
-
     VkCommandBuffer commandBuffer;
-    vkAllocateCommandBuffers(Instance->vkdevice, &allocInfo, &commandBuffer);
-
-    VkCommandBufferBeginInfo beginInfo{};
-    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
-    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
-
-    vkBeginCommandBuffer(commandBuffer, &beginInfo);
+	beginSingleTimeCommands(commandBuffer);
 
     VkBufferCopy copyRegion{};
     copyRegion.srcOffset = 0; // Optional
@@ -67,20 +55,10 @@ void gbe::RenderPipeline::copyBuffer(VkBuffer srcBuffer, VkBuffer dstBuffer, VkD
     copyRegion.size = size;
     vkCmdCopyBuffer(commandBuffer, srcBuffer, dstBuffer, 1, &copyRegion);
 
-    vkEndCommandBuffer(commandBuffer);
-
-    VkSubmitInfo submitInfo{};
-    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
-    submitInfo.commandBufferCount = 1;
-    submitInfo.pCommandBuffers = &commandBuffer;
-
-    vkQueueSubmit(Instance->graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
-    vkQueueWaitIdle(Instance->graphicsQueue);
-
-    vkFreeCommandBuffers(Instance->vkdevice, Instance->commandPool, 1, &commandBuffer);
+    endSingleTimeCommands(commandBuffer);
 }
 
-uint32_t gbe::RenderPipeline::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties, VkBuffer vertexBuffer)
+uint32_t gbe::RenderPipeline::findMemoryType(uint32_t typeFilter, VkMemoryPropertyFlags properties)
 {
     VkPhysicalDeviceMemoryProperties memProperties;
     vkGetPhysicalDeviceMemoryProperties(Instance->vkphysicalDevice, &memProperties);
@@ -94,8 +72,179 @@ uint32_t gbe::RenderPipeline::findMemoryType(uint32_t typeFilter, VkMemoryProper
     throw std::runtime_error("failed to find suitable memory type!");
 }
 
-void gbe::RenderPipeline::Init() {
-	this->Instance = this;
+void gbe::RenderPipeline::createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory)
+{
+    VkImageCreateInfo imageInfo{};
+    imageInfo.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageInfo.imageType = VK_IMAGE_TYPE_2D;
+    imageInfo.extent.width = width;
+    imageInfo.extent.height = height;
+    imageInfo.extent.depth = 1;
+    imageInfo.mipLevels = 1;
+    imageInfo.arrayLayers = 1;
+    imageInfo.format = format;
+    imageInfo.tiling = tiling;
+    imageInfo.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    imageInfo.usage = usage;
+    imageInfo.samples = VK_SAMPLE_COUNT_1_BIT;
+    imageInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
+
+    if (vkCreateImage(Instance->vkdevice, &imageInfo, nullptr, &image) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create image!");
+    }
+
+    VkMemoryRequirements memRequirements;
+    vkGetImageMemoryRequirements(Instance->vkdevice, image, &memRequirements);
+
+    VkMemoryAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    allocInfo.allocationSize = memRequirements.size;
+    allocInfo.memoryTypeIndex = findMemoryType(memRequirements.memoryTypeBits, properties);
+
+    if (vkAllocateMemory(Instance->vkdevice, &allocInfo, nullptr, &imageMemory) != VK_SUCCESS) {
+        throw std::runtime_error("failed to allocate image memory!");
+    }
+
+    vkBindImageMemory(Instance->vkdevice, image, imageMemory, 0);
+}
+
+void gbe::RenderPipeline::transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout)
+{
+    VkCommandBuffer commandBuffer;
+    beginSingleTimeCommands(commandBuffer);
+
+    VkImageMemoryBarrier barrier{};
+    barrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+    barrier.oldLayout = oldLayout;
+    barrier.newLayout = newLayout;
+
+    barrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    barrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+
+    barrier.image = image;
+    barrier.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    barrier.subresourceRange.baseMipLevel = 0;
+    barrier.subresourceRange.levelCount = 1;
+    barrier.subresourceRange.baseArrayLayer = 0;
+    barrier.subresourceRange.layerCount = 1;
+
+    VkPipelineStageFlags sourceStage;
+    VkPipelineStageFlags destinationStage;
+
+    if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL) {
+        barrier.srcAccessMask = 0;
+        barrier.dstAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+
+        sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+        destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    }
+    else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL) {
+        barrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
+        barrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
+
+        sourceStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+        destinationStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
+    }
+    else {
+        throw std::invalid_argument("unsupported layout transition!");
+    }
+
+    vkCmdPipelineBarrier(
+        commandBuffer,
+        sourceStage, destinationStage,
+        0,
+        0, nullptr,
+        0, nullptr,
+        1, &barrier
+    );
+
+
+
+    endSingleTimeCommands(commandBuffer);
+}
+
+void gbe::RenderPipeline::copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height)
+{
+    VkCommandBuffer commandBuffer;
+    beginSingleTimeCommands(commandBuffer);
+
+    VkBufferImageCopy region{};
+    region.bufferOffset = 0;
+    region.bufferRowLength = 0;
+    region.bufferImageHeight = 0;
+
+    region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.imageSubresource.mipLevel = 0;
+    region.imageSubresource.baseArrayLayer = 0;
+    region.imageSubresource.layerCount = 1;
+
+    region.imageOffset = { 0, 0, 0 };
+    region.imageExtent = {
+        width,
+        height,
+        1
+    };
+
+    vkCmdCopyBufferToImage(
+        commandBuffer,
+        buffer,
+        image,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        1,
+        &region
+    );
+
+    endSingleTimeCommands(commandBuffer);
+}
+
+void gbe::RenderPipeline::createImageView(VkImageView& imageview, VkImage image, VkFormat format)
+{
+    VkImageViewCreateInfo viewInfo{};
+    viewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+    viewInfo.image = image;
+    viewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
+    viewInfo.format = format;
+    viewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    viewInfo.subresourceRange.baseMipLevel = 0;
+    viewInfo.subresourceRange.levelCount = 1;
+    viewInfo.subresourceRange.baseArrayLayer = 0;
+    viewInfo.subresourceRange.layerCount = 1;
+
+    if (vkCreateImageView(Instance->vkdevice, &viewInfo, nullptr, &imageview) != VK_SUCCESS) {
+        throw std::runtime_error("failed to create texture image view!");
+    }
+}
+
+void gbe::RenderPipeline::beginSingleTimeCommands(VkCommandBuffer& _commandBuffer)
+{
+    VkCommandBufferAllocateInfo allocInfo{};
+    allocInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO;
+    allocInfo.level = VK_COMMAND_BUFFER_LEVEL_PRIMARY;
+    allocInfo.commandPool = Instance->commandPool;
+    allocInfo.commandBufferCount = 1;
+
+    vkAllocateCommandBuffers(Instance->vkdevice, &allocInfo, &_commandBuffer);
+
+    VkCommandBufferBeginInfo beginInfo{};
+    beginInfo.sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO;
+    beginInfo.flags = VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT;
+
+    vkBeginCommandBuffer(_commandBuffer, &beginInfo);
+}
+
+void gbe::RenderPipeline::endSingleTimeCommands(VkCommandBuffer& commandBuffer)
+{
+    vkEndCommandBuffer(commandBuffer);
+
+    VkSubmitInfo submitInfo{};
+    submitInfo.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+    submitInfo.commandBufferCount = 1;
+    submitInfo.pCommandBuffers = &commandBuffer;
+
+    vkQueueSubmit(Instance->graphicsQueue, 1, &submitInfo, VK_NULL_HANDLE);
+    vkQueueWaitIdle(Instance->graphicsQueue);
+
+    vkFreeCommandBuffers(Instance->vkdevice, Instance->commandPool, 1, &commandBuffer);
 }
 
 static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
@@ -117,6 +266,11 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
 
 gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 {
+    if(this->Instance != nullptr)
+		throw std::runtime_error("RenderPipeline instance already exists!");
+
+    this->Instance = this;
+
 	this->window = window;
 	this->resolution = dimensions;
 
@@ -215,6 +369,9 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
         throw std::runtime_error("failed to create instance!");
     }
 
+    //SDL SURFACE
+    SDL_Vulkan_CreateSurface(implemented_window, vkInst, &vksurface);
+
     //DEBUG
     if (enableValidationLayers) {
         auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(vkInst, "vkCreateDebugUtilsMessengerEXT");
@@ -226,19 +383,59 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
         }
     }
 
+    //===================DEVICE SET UP===================//
+    const std::vector<const char*> deviceExtensionNames = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+
     uint32_t physicalDeviceCount;
     vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, nullptr);
+    if (physicalDeviceCount == 0) {
+        throw std::runtime_error("failed to find GPUs with Vulkan support!");
+    }
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, physicalDevices.data());
-    this->vkphysicalDevice = physicalDevices[0];
+    const auto isDeviceSuitable = [=](VkPhysicalDevice vkpdevice) {
+        uint32_t extensionCount;
+        vkEnumerateDeviceExtensionProperties(vkpdevice, nullptr, &extensionCount, nullptr);
+
+        std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+        vkEnumerateDeviceExtensionProperties(vkpdevice, nullptr, &extensionCount, availableExtensions.data());
+
+        std::set<std::string> requiredExtensions(deviceExtensionNames.begin(), deviceExtensionNames.end());
+
+        for (const auto& extension : availableExtensions) {
+            requiredExtensions.erase(extension.extensionName);
+        }
+		bool extensionsSupported = requiredExtensions.empty();
+
+        bool swapChainAdequate = false;
+        if (extensionsSupported) {
+            VkSurfaceCapabilitiesKHR capabilities = {};
+            std::vector<VkSurfaceFormatKHR> formats;
+            std::vector<VkPresentModeKHR> presentModes;
+            querySwapChainSupport(vkpdevice, this->vksurface, capabilities, formats, presentModes);
+            swapChainAdequate = !formats.empty() && !presentModes.empty();
+        }
+
+        VkPhysicalDeviceFeatures supportedFeatures;
+        vkGetPhysicalDeviceFeatures(vkpdevice, &supportedFeatures);
+
+        return extensionsSupported && swapChainAdequate && supportedFeatures.samplerAnisotropy;
+        };
+    for (const auto& vkpdevice : physicalDevices) {
+        if (isDeviceSuitable(vkpdevice)) {
+            this->vkphysicalDevice = vkpdevice;
+            break;
+        }
+    }
+
+    if (this->vkphysicalDevice == VK_NULL_HANDLE) {
+        throw std::runtime_error("failed to find a suitable GPU!");
+    }
 
     uint32_t queueFamilyCount;
     vkGetPhysicalDeviceQueueFamilyProperties(this->vkphysicalDevice, &queueFamilyCount, nullptr);
     std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
     vkGetPhysicalDeviceQueueFamilyProperties(this->vkphysicalDevice, &queueFamilyCount, queueFamilies.data());
-
-    //SURFACE
-    SDL_Vulkan_CreateSurface(implemented_window, vkInst, &surface);
 
     VkBool32 support;
     uint32_t i = 0;
@@ -246,7 +443,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
         if (graphicsQueueIndex == UINT32_MAX && queueFamily.queueCount > 0 && queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT)
             graphicsQueueIndex = i;
         if (presentQueueIndex == UINT32_MAX) {
-            vkGetPhysicalDeviceSurfaceSupportKHR(this->vkphysicalDevice, i, surface, &support);
+            vkGetPhysicalDeviceSurfaceSupportKHR(this->vkphysicalDevice, i, vksurface, &support);
             if (support)
                 presentQueueIndex = i;
         }
@@ -264,7 +461,8 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     };
 
     VkPhysicalDeviceFeatures deviceFeatures = {};
-    const std::vector<const char*> deviceExtensionNames = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+    deviceFeatures.samplerAnisotropy = VK_TRUE;
+
     VkDeviceCreateInfo deviceInfo = {
         VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,               // sType
         nullptr,                                            // pNext
@@ -281,10 +479,11 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     vkCreateDevice(this->vkphysicalDevice, &deviceInfo, nullptr, &vkdevice);
 
     vkGetDeviceQueue(vkdevice, graphicsQueueIndex, 0, &graphicsQueue);
-
     vkGetDeviceQueue(vkdevice, presentQueueIndex, 0, &presentQueue);
 
-    SDL_Log("Initialized with errors: %s", SDL_GetError());
+    if (graphicsQueueIndex == UINT32_MAX || presentQueueIndex == UINT32_MAX) {
+		throw std::runtime_error("failed to find a suitable queue family!");
+    }
 #pragma endregion
 
     this->InitializePipelineObjects();
@@ -336,13 +535,33 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 
 	//Asset Loaders
 	this->textureloader.AssignSelfAsLoader();
-	this->textureloader.PassDependencies(&this->vkdevice);
+	this->textureloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
 	this->shaderloader.AssignSelfAsLoader();
     this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
 	this->meshloader.AssignSelfAsLoader();
 	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
 	this->materialloader.AssignSelfAsLoader();
     this->materialloader.PassDependencies(&this->shaderloader);
+}
+
+void gbe::RenderPipeline::querySwapChainSupport(VkPhysicalDevice pvkdevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR& capabilities, std::vector<VkSurfaceFormatKHR>& formats, std::vector<VkPresentModeKHR>& presentModes) {
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(pvkdevice, surface, &capabilities);
+
+    uint32_t formatCount;
+    vkGetPhysicalDeviceSurfaceFormatsKHR(pvkdevice, surface, &formatCount, nullptr);
+
+    if (formatCount != 0) {
+        formats.resize(formatCount);
+        vkGetPhysicalDeviceSurfaceFormatsKHR(pvkdevice, surface, &formatCount, formats.data());
+    }
+
+    uint32_t presentModeCount;
+    vkGetPhysicalDeviceSurfacePresentModesKHR(pvkdevice, surface, &presentModeCount, nullptr);
+
+    if (presentModeCount != 0) {
+        presentModes.resize(presentModeCount);
+        vkGetPhysicalDeviceSurfacePresentModesKHR(pvkdevice, surface, &presentModeCount, presentModes.data());
+    }
 }
 
 void gbe::RenderPipeline::InitializePipelineObjects() {
@@ -352,23 +571,7 @@ void gbe::RenderPipeline::InitializePipelineObjects() {
     std::vector<VkSurfaceFormatKHR> formats;
     std::vector<VkPresentModeKHR> presentModes;
 
-    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(this->vkphysicalDevice, surface, &capabilities);
-
-    uint32_t formatCount;
-    vkGetPhysicalDeviceSurfaceFormatsKHR(this->vkphysicalDevice, surface, &formatCount, nullptr);
-
-    if (formatCount != 0) {
-        formats.resize(formatCount);
-        vkGetPhysicalDeviceSurfaceFormatsKHR(this->vkphysicalDevice, surface, &formatCount, formats.data());
-    }
-
-    uint32_t presentModeCount;
-    vkGetPhysicalDeviceSurfacePresentModesKHR(this->vkphysicalDevice, surface, &presentModeCount, nullptr);
-
-    if (presentModeCount != 0) {
-        presentModes.resize(presentModeCount);
-        vkGetPhysicalDeviceSurfacePresentModesKHR(this->vkphysicalDevice, surface, &presentModeCount, presentModes.data());
-    }
+	querySwapChainSupport(this->vkphysicalDevice, vksurface, capabilities, formats, presentModes);
 
     //format selection
     for (const auto& availableFormat : formats) {
@@ -412,7 +615,7 @@ void gbe::RenderPipeline::InitializePipelineObjects() {
 
     VkSwapchainCreateInfoKHR swapchainInfo{};
     swapchainInfo.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
-    swapchainInfo.surface = surface;
+    swapchainInfo.surface = vksurface;
 
     swapchainInfo.minImageCount = imageCount;
     swapchainInfo.imageFormat = this->chosenSurfaceFormat.format;
@@ -450,29 +653,10 @@ void gbe::RenderPipeline::InitializePipelineObjects() {
     vkGetSwapchainImagesKHR(vkdevice, this->swapChain, &imageCount, swapChainImages.data());
 
     //Image views
-    this->swapChainImageViews.resize(swapChainImages.size());
-    for (size_t i = 0; i < swapChainImages.size(); i++) {
-        VkImageViewCreateInfo imageViewInfo{};
-        imageViewInfo.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
-        imageViewInfo.image = swapChainImages[i];
+    swapChainImageViews.resize(swapChainImages.size());
 
-        imageViewInfo.viewType = VK_IMAGE_VIEW_TYPE_2D;
-        imageViewInfo.format = this->chosenSurfaceFormat.format;
-
-        imageViewInfo.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
-        imageViewInfo.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
-
-        imageViewInfo.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-        imageViewInfo.subresourceRange.baseMipLevel = 0;
-        imageViewInfo.subresourceRange.levelCount = 1;
-        imageViewInfo.subresourceRange.baseArrayLayer = 0;
-        imageViewInfo.subresourceRange.layerCount = 1;
-
-        if (vkCreateImageView(vkdevice, &imageViewInfo, nullptr, &swapChainImageViews[i]) != VK_SUCCESS) {
-            throw std::runtime_error("failed to create image views!");
-        }
+    for (uint32_t i = 0; i < swapChainImages.size(); i++) {
+        createImageView(swapChainImageViews[i], swapChainImages[i], chosenSurfaceFormat.format);
     }
 #pragma endregion
 
@@ -716,12 +900,6 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
     this->currentFrame = (this->currentFrame + 1) % this->MAX_FRAMES_IN_FLIGHT;
 }
 
-unsigned int gbe::RenderPipeline::Get_mainbufferId()
-{
-	throw new std::runtime_error("Not implemented yet");
-	return 0;
-}
-
 gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, asset::Material* material)
 {
 	auto newdrawcall = new DrawCall(mesh, material, &shaderloader.GetAssetData(material->getShader()), this->MAX_FRAMES_IN_FLIGHT, &this->vkdevice, 0);
@@ -784,7 +962,7 @@ void gbe::RenderPipeline::CleanUp()
     
     vkDestroyDevice(this->vkdevice, nullptr);
 
-    vkDestroySurfaceKHR(vkInst, surface, nullptr);
+    vkDestroySurfaceKHR(vkInst, vksurface, nullptr);
     vkDestroyInstance(vkInst, nullptr);
 
 

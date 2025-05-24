@@ -39,7 +39,6 @@ namespace gbe {
 #pragma region Rendering Pipeline Setup
 		//RenderPipeline setup
 		auto mRenderPipeline = new RenderPipeline(mWindow, mWindow->Get_dimentions());
-		mRenderPipeline->Init();
 #pragma endregion
 #pragma region Physics Pipeline Setup
 		auto mPhysicsPipeline = new physics::PhysicsPipeline();

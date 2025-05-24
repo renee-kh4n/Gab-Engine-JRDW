@@ -17,6 +17,7 @@
     {
       "name": "sdl2",
       "features": [ "vulkan" ]
-    }
+    },
+    "spirv-cross"
   ]
 }

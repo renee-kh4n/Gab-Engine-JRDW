@@ -1,5 +1,7 @@
 {
   "asset_id": "test",
   "vert": "test.vert.spv",
-  "frag": "test.frag.spv"
+  "vert_meta": "test.vert.json",
+  "frag": "test.frag.spv",
+  "frag_meta": "test.frag.json"
 }
