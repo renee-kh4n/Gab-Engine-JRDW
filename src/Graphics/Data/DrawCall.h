@@ -7,11 +7,6 @@
 namespace gbe {
     namespace gfx {
         class DrawCall {
-            struct GlobalUniforms {
-                gbe::Matrix4 proj;
-                gbe::Matrix4 view;
-            };
-
             struct CallInstance {
                 Matrix4 model;
 
@@ -36,6 +31,11 @@ namespace gbe {
 			ShaderData* shaderdata;
             unsigned int MAX_FRAMES_IN_FLIGHT = 2;
         public:
+            struct GlobalUniforms {
+                gbe::Matrix4 proj;
+                gbe::Matrix4 view;
+            };
+
             DrawCall(asset::Mesh* mesh, asset::Material* material, ShaderData* shaderdata, unsigned int MAX_FRAMES_IN_FLIGHT, VkDevice* vkdevice, int order);
             ~DrawCall();
 

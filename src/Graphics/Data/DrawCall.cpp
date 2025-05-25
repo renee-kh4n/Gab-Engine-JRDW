@@ -21,8 +21,7 @@ namespace gbe {
 			const auto& callinst = pair.second;
 
             vkDestroyDescriptorPool(*this->vkdevice, callinst.descriptorPool, nullptr);
-            vkDestroyDescriptorSetLayout(*this->vkdevice, shaderdata->descriptorSetLayout, nullptr);
-
+            
             for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
                 vkDestroyBuffer(*this->vkdevice, callinst.uniformBuffers[i], nullptr);
                 vkFreeMemory(*this->vkdevice, callinst.uniformBuffersMemory[i], nullptr);
@@ -188,19 +187,20 @@ namespace gbe {
             glm::mat4 proj;
         };
 
-        auto it_call = this->calls.begin();
-
-        for (int iters = 0; iters < objindex; iters++)
+        for (const auto& pair : this->calls)
         {
-            it_call++;
+            const auto& data = pair.second;
+
+            TransformUBO_INTERNAL ubo_translated = {
+                data.model,
+                ubo.view,
+                ubo.proj,
+            };
+
+            for (size_t frameindex = 0; frameindex < MAX_FRAMES_IN_FLIGHT; frameindex++)
+            {
+                memcpy(data.uniformBuffersMapped[frameindex], &ubo_translated, sizeof(ubo_translated));
+            }
         }
-
-        TransformUBO_INTERNAL ubo_translated = {
-            it_call->second.model,
-            ubo.view,
-            ubo.proj,
-        };
-
-        memcpy(it_call->second.uniformBuffersMapped[index], &ubo_translated, sizeof(ubo_translated));
     }
 }

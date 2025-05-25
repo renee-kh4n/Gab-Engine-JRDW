@@ -831,14 +831,14 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
             //RENDER MESH
             const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
 
-            for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
-                
-                TransformUBO ubo{};
-				ubo.proj = projmat;
-                ubo.view = viewmat;
-                ubo.proj[1][1] *= -1;
-                drawcall->UpdateTransformBufferMemory(this->currentFrame, dc_i, ubo);
+            //UPDATE GLOBAL UBO
+            DrawCall::GlobalUniforms ubo{};
+            ubo.proj = projmat;
+            ubo.view = viewmat;
+            ubo.proj[1][1] *= -1;
+            drawcall->UpdateGlobalUniforms(ubo);
 
+            for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
@@ -963,18 +963,19 @@ void gbe::RenderPipeline::CleanUp()
     }
     vkDestroyCommandPool(this->vkdevice, commandPool, nullptr);
     
-    vkDestroyDevice(this->vkdevice, nullptr);
 
-    vkDestroySurfaceKHR(vkInst, vksurface, nullptr);
-    vkDestroyInstance(vkInst, nullptr);
 
 
 	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
-		auto drawcallbatch = it->second;
+		const auto& drawcallbatch = it->second;
 
-		for (size_t o_i = 0; o_i < drawcallbatch.size(); o_i++)
+		for (const auto& drawcall : drawcallbatch)
 		{
-            //Delete Drawcalls
+            delete drawcall;
 		}
 	}
+
+    vkDestroySurfaceKHR(vkInst, vksurface, nullptr);
+    vkDestroyDevice(this->vkdevice, nullptr);
+    vkDestroyInstance(vkInst, nullptr);
 }

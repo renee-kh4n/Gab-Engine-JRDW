@@ -16,7 +16,7 @@
 namespace gbe {
 	namespace gfx {
 		struct ShaderData {
-			VkDescriptorSetLayout descriptorSetLayout;
+			std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
 			VkPipelineLayout pipelineLayout;
 			VkPipeline pipeline;
 			asset::Shader* asset;

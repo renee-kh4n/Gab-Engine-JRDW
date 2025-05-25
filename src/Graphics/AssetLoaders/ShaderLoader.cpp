@@ -1,6 +1,6 @@
 #include "ShaderLoader.h"
 
-struct ShaderMeta {
+struct ShaderStageMeta {
 	struct TextureMeta {
 		std::string name;
 		std::string type;
@@ -26,7 +26,6 @@ struct ShaderMeta {
 	std::unordered_map<std::string, UboType> types;
 	std::vector<TextureMeta> textures;
 	std::vector<UboMeta> ubos;
-
 };
 
 gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
@@ -56,47 +55,84 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	auto vertShaderCode = readfile(vertpath);
 	auto fragShaderCode = readfile(fragpath);
 	
-	ShaderMeta vertMeta;
-	ShaderMeta fragMeta;
+	ShaderStageMeta vertMeta;
+	ShaderStageMeta fragMeta;
 	
 	gbe::asset::serialization::gbeParser::PopulateClass(vertMeta, vertmetapath);
 	gbe::asset::serialization::gbeParser::PopulateClass(fragMeta, fragmetapath);
 
-
-
 	//============DESCRIPTOR LAYOUT SETUP============//
-	VkDescriptorSetLayout descriptorSetLayout;
+	std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
 
 	//BINDINGS
+	std::unordered_map<unsigned int, std::vector<VkDescriptorSetLayoutBinding>> binding_sets;
 
-	//Transform ubo binding
-	VkDescriptorSetLayoutBinding transform_ubo_Binding{};
-	transform_ubo_Binding.binding = 0;
-	transform_ubo_Binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-	transform_ubo_Binding.descriptorCount = 1;
-	transform_ubo_Binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
-	transform_ubo_Binding.pImmutableSamplers = nullptr; // Optional
+	const auto AddUboBinding = [&](const ShaderStageMeta::UboMeta& ubo, VkShaderStageFlags flags) {
+		VkDescriptorSetLayoutBinding ubo_Binding{};
+		ubo_Binding.binding = ubo.binding;
+		ubo_Binding.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+		ubo_Binding.descriptorCount = 1;
+		ubo_Binding.stageFlags = flags;
+		ubo_Binding.pImmutableSamplers = nullptr; // Optional
 
-	/*
-	//Color texture sampler binding
-	VkDescriptorSetLayoutBinding color_sampler_Binding{};
-	color_sampler_Binding.binding = 1;
-	color_sampler_Binding.descriptorCount = 1;
-	color_sampler_Binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-	color_sampler_Binding.pImmutableSamplers = nullptr;
-	color_sampler_Binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-	*/
+		if (binding_sets.find(ubo.set) == binding_sets.end())
+			binding_sets.insert(ubo.set, {});
+
+		binding_sets[ubo.set].push_back(ubo_Binding);
+	};
+
+	const auto AddTextureBinding = [&](const ShaderStageMeta::TextureMeta& meta, VkShaderStageFlags flags) {
+		VkDescriptorSetLayoutBinding color_sampler_Binding{};
+		color_sampler_Binding.binding = meta.binding;
+		color_sampler_Binding.descriptorCount = 1;
+		color_sampler_Binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+		color_sampler_Binding.pImmutableSamplers = nullptr;
+		color_sampler_Binding.stageFlags = flags;
+
+		if (binding_sets.find(meta.set) == binding_sets.end())
+			binding_sets.insert(meta.set, {});
+
+		binding_sets[meta.set].push_back(color_sampler_Binding);
+	};
+
+	//LOOP THROUGH UBO BINDINGS
+	for (const auto& ubo : vertMeta.ubos)
+		AddUboBinding(ubo, VK_SHADER_STAGE_VERTEX_BIT);
+	for (const auto& ubo : fragMeta.ubos)
+		AddUboBinding(ubo, VK_SHADER_STAGE_FRAGMENT_BIT);
+
+	//LOOP THROUGH TEXTURE BINDINGS
+	for (const auto& meta : vertMeta.textures)
+		AddTextureBinding(meta, VK_SHADER_STAGE_VERTEX_BIT);
+	for (const auto& meta : fragMeta.textures)
+		AddTextureBinding(meta, VK_SHADER_STAGE_FRAGMENT_BIT);
+
 	//COMPILE BINDINGS
-	std::array<VkDescriptorSetLayoutBinding, 1> bindings = { transform_ubo_Binding };
-	
-	VkDescriptorSetLayoutCreateInfo layoutInfo{};
-	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-	layoutInfo.bindingCount = static_cast<uint32_t>(bindings.size());
-	layoutInfo.pBindings = bindings.data();
+	for (const auto& pair : binding_sets)
+	{
+		auto setindex = pair.first;
+		auto setlist = pair.second;
 
-	if (vkCreateDescriptorSetLayout(*this->vkdevice, &layoutInfo, nullptr, &descriptorSetLayout) != VK_SUCCESS) {
-		throw std::runtime_error("failed to create descriptor set layout!");
+		VkDescriptorSetLayoutCreateInfo layoutInfo{};
+		layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
+		layoutInfo.bindingCount = static_cast<uint32_t>(setlist.size());
+		layoutInfo.pBindings = setlist.data();
+
+		VkDescriptorSetLayout newsetlayout;
+
+		if (vkCreateDescriptorSetLayout(*this->vkdevice, &layoutInfo, nullptr, &newsetlayout) != VK_SUCCESS) {
+			throw std::runtime_error("failed to create descriptor set layout!");
+		}
+
+		for (size_t i = descriptorSetLayouts.size(); i <= setindex; i++)
+		{
+			descriptorSetLayouts.push_back({});
+		}
+
+		descriptorSetLayouts[setindex] = newsetlayout;
 	}
+
+	
 
 	//============SHADER COMPILING============//
 	auto vertShader = TryCompileShader(vertShaderCode);
@@ -217,8 +253,8 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 
 	VkPipelineLayoutCreateInfo pipelineLayoutInfo{};
 	pipelineLayoutInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO;
-	pipelineLayoutInfo.setLayoutCount = 1;
-	pipelineLayoutInfo.pSetLayouts = &descriptorSetLayout;
+	pipelineLayoutInfo.setLayoutCount = static_cast<uint32_t>(descriptorSetLayouts.size());
+	pipelineLayoutInfo.pSetLayouts = descriptorSetLayouts.data();
 	pipelineLayoutInfo.pushConstantRangeCount = 0; // Optional
 	pipelineLayoutInfo.pPushConstantRanges = nullptr; // Optional
 
@@ -290,7 +326,7 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	vkDestroyShaderModule((*this->vkdevice), fragShader, nullptr);
 
 	return ShaderData{
-		descriptorSetLayout,
+		descriptorSetLayouts,
 		newpipelineLayout,
 		newgraphicsPipeline,
 		asset
@@ -299,7 +335,10 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 
 void gbe::gfx::ShaderLoader::UnLoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
 	auto shaderdata = this->GetAssetData(asset);
-	vkDestroyDescriptorSetLayout(*this->vkdevice, shaderdata.descriptorSetLayout, nullptr);
+	for (const auto& setlayout : shaderdata.descriptorSetLayouts)
+	{
+		vkDestroyDescriptorSetLayout(*this->vkdevice, setlayout, nullptr);
+	}
 	vkDestroyPipelineLayout((*this->vkdevice), shaderdata.pipelineLayout, nullptr);
 	vkDestroyPipeline((*this->vkdevice), shaderdata.pipeline, nullptr);
 }
