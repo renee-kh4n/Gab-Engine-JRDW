@@ -23,7 +23,7 @@ struct ShaderMeta {
 		unsigned int set;
 		unsigned int binding;
 	};
-	std::vector<UboType> types;
+	std::unordered_map<std::string, UboType> types;
 	std::vector<TextureMeta> textures;
 	std::vector<UboMeta> ubos;
 };
