@@ -11,7 +11,7 @@
 
 namespace gbe {
 	namespace gfx {
-		struct UniformBufferObject {
+		struct TransformUBO {
 			gbe::Matrix4 model;
 			gbe::Matrix4 view;
 			gbe::Matrix4 proj;

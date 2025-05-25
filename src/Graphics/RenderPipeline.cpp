@@ -462,10 +462,14 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 
     VkPhysicalDeviceFeatures deviceFeatures = {};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
+    VkPhysicalDeviceShaderDrawParametersFeatures shader_draw_parameters_features = {};
+    shader_draw_parameters_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
+    shader_draw_parameters_features.pNext = nullptr;
+    shader_draw_parameters_features.shaderDrawParameters = VK_TRUE;
 
     VkDeviceCreateInfo deviceInfo = {
         VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,               // sType
-        nullptr,                                            // pNext
+        &shader_draw_parameters_features,                   // pNext
         0,                                                  // flags
         1,                                                  // queueCreateInfoCount
         &queueInfo,                                         // pQueueCreateInfos
@@ -805,45 +809,44 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
 
         for (const auto& drawcall : drawcallbatch)
         {
-            for (const auto& instance : drawcall->calls) {
-                auto const& transform = instance.second;
+            //USE SHADER
+            auto shaderasset = drawcall->get_material()->getShader();
+            const auto& currentshaderdata = shaderloader.GetAssetData(shaderasset);
+            vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipeline);
 
-                //USE SHADER
-                auto shaderasset = drawcall->m_material->getShader();
-                const auto& currentshaderdata = shaderloader.GetAssetData(shaderasset);
-                vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipeline);
+            VkViewport viewport{};
+            viewport.x = 0.0f;
+            viewport.y = 0.0f;
+            viewport.width = static_cast<float>(this->swapchainExtent.width);
+            viewport.height = static_cast<float>(this->swapchainExtent.height);
+            viewport.minDepth = 0.0f;
+            viewport.maxDepth = 1.0f;
+            vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
 
-                VkViewport viewport{};
-                viewport.x = 0.0f;
-                viewport.y = 0.0f;
-                viewport.width = static_cast<float>(this->swapchainExtent.width);
-                viewport.height = static_cast<float>(this->swapchainExtent.height);
-                viewport.minDepth = 0.0f;
-                viewport.maxDepth = 1.0f;
-                vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
+            VkRect2D scissor{};
+            scissor.offset = { 0, 0 };
+            scissor.extent = this->swapchainExtent;
+            vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
 
-                VkRect2D scissor{};
-                scissor.offset = { 0, 0 };
-                scissor.extent = this->swapchainExtent;
-                vkCmdSetScissor(currentCommandBuffer, 0, 1, &scissor);
+            //RENDER MESH
+            const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
 
-                //RENDER MESH
-                const auto& curmesh = this->meshloader.GetAssetData(drawcall->m_mesh);
-
-                UniformBufferObject ubo{};
-				ubo.model = transform;
-                ubo.proj = projmat;
+            for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
+                
+                TransformUBO ubo{};
+				ubo.proj = projmat;
                 ubo.view = viewmat;
                 ubo.proj[1][1] *= -1;
-                drawcall->SetBufferMemory(this->currentFrame, ubo);
+                drawcall->UpdateTransformBufferMemory(this->currentFrame, dc_i, ubo);
 
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
-                vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, 1, &drawcall->descriptorSets[currentFrame], 0, nullptr);
+                auto dset = drawcall->get_descriptorset(currentFrame, dc_i);
+                vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, 1, dset, 0, nullptr);
+                
                 vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
-
                 vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
             }
         }
@@ -904,11 +907,11 @@ gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, ass
 {
 	auto newdrawcall = new DrawCall(mesh, material, &shaderloader.GetAssetData(material->getShader()), this->MAX_FRAMES_IN_FLIGHT, &this->vkdevice, 0);
 
-	if (this->drawcalls.find(newdrawcall->order) == this->drawcalls.end()) {
-		this->drawcalls.insert_or_assign(newdrawcall->order, std::vector<DrawCall*>{ newdrawcall });
+	if (this->drawcalls.find(newdrawcall->get_order()) == this->drawcalls.end()) {
+		this->drawcalls.insert_or_assign(newdrawcall->get_order(), std::vector<DrawCall*>{ newdrawcall });
 	}
 	else {
-		this->drawcalls[newdrawcall->order].push_back(newdrawcall);
+		this->drawcalls[newdrawcall->get_order()].push_back(newdrawcall);
 	}
 
     return newdrawcall;

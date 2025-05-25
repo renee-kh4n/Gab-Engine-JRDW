@@ -23,13 +23,5 @@
             "name" : "outColor",
             "location" : 0
         }
-    ],
-    "textures" : [
-        {
-            "type" : "sampler2D",
-            "name" : "color_tex",
-            "set" : 2,
-            "binding" : 1
-        }
     ]
 }

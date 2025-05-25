@@ -77,9 +77,9 @@ namespace gbe {
 		//MATERIAL CACHING
 		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
 		test_mat->setOverride("color", Vector4(1, 1, 1, 1));
-		
-		//DRAWCALL CACHING
-		auto test_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, test_mat);
+
+		//DRAW CALL CACHING
+		auto new_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, test_mat);
 
 #pragma endregion
 #pragma region GUI Pipeline Setup
@@ -150,7 +150,7 @@ namespace gbe {
 				BoxCollider* platform_collider = new BoxCollider();
 				platform_collider->SetParent(platform);
 				platform_collider->Local().position.Set(Vector3(0, 0, 0));
-				RenderObject* platform_renderer = new RenderObject(test_drawcall);
+				RenderObject* platform_renderer = new RenderObject(new_drawcall);
 				platform_renderer->SetParent(platform_collider);
 				};
 
@@ -224,6 +224,7 @@ namespace gbe {
 
 #pragma region scene objects
 			create_platform(Vector3(0, -1, 0), Vector3(10, 1, 10));
+			create_platform(Vector3(0, 4, 4), Vector3(10, 1, 10));
 #pragma endregion
 
 			return game_root;

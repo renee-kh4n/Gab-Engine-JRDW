@@ -26,6 +26,7 @@ struct ShaderMeta {
 	std::unordered_map<std::string, UboType> types;
 	std::vector<TextureMeta> textures;
 	std::vector<UboMeta> ubos;
+
 };
 
 gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
@@ -61,6 +62,8 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	gbe::asset::serialization::gbeParser::PopulateClass(vertMeta, vertmetapath);
 	gbe::asset::serialization::gbeParser::PopulateClass(fragMeta, fragmetapath);
 
+
+
 	//============DESCRIPTOR LAYOUT SETUP============//
 	VkDescriptorSetLayout descriptorSetLayout;
 
@@ -74,6 +77,7 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	transform_ubo_Binding.stageFlags = VK_SHADER_STAGE_VERTEX_BIT;
 	transform_ubo_Binding.pImmutableSamplers = nullptr; // Optional
 
+	/*
 	//Color texture sampler binding
 	VkDescriptorSetLayoutBinding color_sampler_Binding{};
 	color_sampler_Binding.binding = 1;
@@ -81,9 +85,9 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	color_sampler_Binding.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
 	color_sampler_Binding.pImmutableSamplers = nullptr;
 	color_sampler_Binding.stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
-
+	*/
 	//COMPILE BINDINGS
-	std::array<VkDescriptorSetLayoutBinding, 2> bindings = { transform_ubo_Binding, color_sampler_Binding };
+	std::array<VkDescriptorSetLayoutBinding, 1> bindings = { transform_ubo_Binding };
 	
 	VkDescriptorSetLayoutCreateInfo layoutInfo{};
 	layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;

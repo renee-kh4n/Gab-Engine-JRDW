@@ -61,16 +61,6 @@
                     "matrix_stride" : 16
                 }
             ]
-        },
-        "_53" : {
-            "name" : "Global",
-            "members" : [
-                {
-                    "name" : "CameraPosition",
-                    "type" : "vec3",
-                    "offset" : 0
-                }
-            ]
         }
     },
     "inputs" : [
@@ -107,13 +97,6 @@
             "type" : "_17",
             "name" : "UniformBufferObject",
             "block_size" : 192,
-            "set" : 1,
-            "binding" : 0
-        },
-        {
-            "type" : "_53",
-            "name" : "Global",
-            "block_size" : 12,
             "set" : 0,
             "binding" : 0
         }

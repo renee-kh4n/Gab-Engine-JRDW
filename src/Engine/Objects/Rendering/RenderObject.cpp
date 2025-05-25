@@ -6,13 +6,12 @@ using namespace gbe::gfx;
 gbe::RenderObject::RenderObject(DrawCall* mDrawCall)
 {
 	this->mDrawCall = mDrawCall;
-	this->mDrawCall->calls.insert_or_assign(this, this->GetWorldMatrix());
-	to_update = &this->mDrawCall->calls[this];
+	to_update = this->mDrawCall->RegisterCall(this, this->GetWorldMatrix());
 }
 
 gbe::RenderObject::~RenderObject()
 {
-	this->mDrawCall->calls.erase(this);
+	this->mDrawCall->UnRegisterCall(this);
 }
 
 void gbe::RenderObject::InvokeEarlyUpdate()
