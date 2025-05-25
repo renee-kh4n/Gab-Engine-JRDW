@@ -6,8 +6,12 @@
 
 #include <vulkan/vulkan.h>
 #include "TextureLoader.h"
+
 #include <optional>
 #include <tuple>
+#include <iostream>
+#include <fstream>
+#include <sstream>
 
 namespace gbe {
 	namespace gfx {

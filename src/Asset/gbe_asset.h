@@ -11,3 +11,5 @@
 #include "AssetInjection/AssetSocket.h"
 #include "Assetloading/AssetLoader.h"
 #include "Assetloading/AssetDeserializer.h"
+
+#include "Parsing/gbeParser.h"

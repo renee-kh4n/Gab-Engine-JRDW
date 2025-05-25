@@ -1,12 +1,39 @@
 #include "ShaderLoader.h"
-#include <iostream>
-#include <fstream>
-#include <sstream>
+
+struct ShaderMeta {
+	struct TextureMeta {
+		std::string name;
+		std::string type;
+		unsigned int set;
+		unsigned int binding;
+	};
+	struct UboType {
+		struct UboTypeMember {
+			std::string name;
+			std::string type;
+		};
+
+		std::string name;
+		std::vector<UboTypeMember> members;
+	};
+	struct UboMeta {
+		std::string name;
+		std::string type;
+		unsigned int block_size;
+		unsigned int set;
+		unsigned int binding;
+	};
+	std::vector<UboType> types;
+	std::vector<TextureMeta> textures;
+	std::vector<UboMeta> ubos;
+};
 
 gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, const asset::data::ShaderImportData& importdata, asset::data::ShaderLoadData* data) {
 	//============READING============//
 	auto vertpath = asset->Get_asset_directory() + importdata.vert;
 	auto fragpath = asset->Get_asset_directory() + importdata.frag;
+	auto vertmetapath = asset->Get_asset_directory() + importdata.vert_meta;
+	auto fragmetapath = asset->Get_asset_directory() + importdata.frag_meta;
 
 	auto readfile = [](std::string path) {
 		std::ifstream file(path, std::ios::ate | std::ios::binary);
@@ -27,9 +54,13 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 
 	auto vertShaderCode = readfile(vertpath);
 	auto fragShaderCode = readfile(fragpath);
-
-
 	
+	ShaderMeta vertMeta;
+	ShaderMeta fragMeta;
+	
+	gbe::asset::serialization::gbeParser::PopulateClass(vertMeta, vertmetapath);
+	gbe::asset::serialization::gbeParser::PopulateClass(fragMeta, fragmetapath);
+
 	//============DESCRIPTOR LAYOUT SETUP============//
 	VkDescriptorSetLayout descriptorSetLayout;
 
