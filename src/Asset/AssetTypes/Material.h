@@ -19,17 +19,8 @@ namespace gbe {
 			};
 		}
 
-		enum MaterialOverrideType {
-			BOOL,
-			FLOAT,
-			VEC2,
-			VEC3,
-			VEC4,
-			MAT4
-		};
-
 		struct MaterialOverride {
-			MaterialOverrideType type;
+			asset::Shader::UniformFieldType type;
 
 			MaterialOverride();
 
@@ -64,7 +55,7 @@ namespace gbe {
 			template<>
 			void setOverride<bool>(const char* id, bool value) {
 				auto materialOverride = MaterialOverride();
-				materialOverride.type = MaterialOverrideType::BOOL;
+				materialOverride.type = Shader::UniformFieldType::BOOL;
 				materialOverride.value_bool = value;
 
 				overrides.insert_or_assign(id, materialOverride);
@@ -72,7 +63,7 @@ namespace gbe {
 			template<>
 			void setOverride<float>(const char* id, float value) {
 				auto materialOverride = MaterialOverride();
-				materialOverride.type = MaterialOverrideType::FLOAT;
+				materialOverride.type = Shader::UniformFieldType::FLOAT;
 				materialOverride.value_float = value;
 
 				overrides.insert_or_assign(id, materialOverride);
@@ -80,7 +71,7 @@ namespace gbe {
 			template<>
 			void setOverride<Vector2>(const char* id, Vector2 value) {
 				auto materialOverride = MaterialOverride();
-				materialOverride.type = MaterialOverrideType::VEC2;
+				materialOverride.type = Shader::UniformFieldType::VEC2;
 				materialOverride.value_vec2 = value;
 
 				overrides.insert_or_assign(id, materialOverride);
@@ -88,7 +79,7 @@ namespace gbe {
 			template<>
 			void setOverride<Vector3>(const char* id, Vector3 value) {
 				auto materialOverride = MaterialOverride();
-				materialOverride.type = MaterialOverrideType::VEC3;
+				materialOverride.type = Shader::UniformFieldType::VEC3;
 				materialOverride.value_vec3 = value;
 
 				overrides.insert_or_assign(id, materialOverride);
@@ -96,7 +87,7 @@ namespace gbe {
 			template<>
 			void setOverride<Vector4>(const char* id, Vector4 value) {
 				auto materialOverride = MaterialOverride();
-				materialOverride.type = MaterialOverrideType::VEC4;
+				materialOverride.type = Shader::UniformFieldType::VEC4;
 				materialOverride.value_vec4 = value;
 
 				overrides.insert_or_assign(id, materialOverride);
@@ -104,7 +95,7 @@ namespace gbe {
 			template<>
 			void setOverride<Matrix4>(const char* id, Matrix4 value) {
 				auto materialOverride = MaterialOverride();
-				materialOverride.type = MaterialOverrideType::MAT4;
+				materialOverride.type = Shader::UniformFieldType::MAT4;
 				materialOverride.value_mat4 = value;
 
 				overrides.insert_or_assign(id, materialOverride);

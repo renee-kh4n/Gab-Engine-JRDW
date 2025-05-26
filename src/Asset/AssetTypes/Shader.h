@@ -7,7 +7,6 @@
 
 namespace gbe {
 	namespace asset {
-
 		namespace data {
 			struct ShaderImportData {
 				std::string vert;
@@ -33,6 +32,17 @@ namespace gbe {
 
 		class Shader : public BaseAsset<Shader, data::ShaderImportData, data::ShaderLoadData> {
 		public:
+			enum UniformFieldType {
+				BOOL,
+				INT,
+				FLOAT,
+				VEC2,
+				VEC3,
+				VEC4,
+				MAT4,
+				TEXTURE,
+			};
+
 			Shader(std::string path);
 
 			//OVERRIDE FUNCTIONS

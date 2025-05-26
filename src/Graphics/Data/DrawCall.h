@@ -10,12 +10,19 @@ namespace gbe {
             struct CallInstance {
                 Matrix4 model;
 
-                std::vector<VkBuffer> uniformBuffers;
-                std::vector<VkDeviceMemory> uniformBuffersMemory;
-                std::vector<void*> uniformBuffersMapped;
+                struct UniformBlockBuffer {
+                    std::string block_name;
 
+                    std::vector<VkBuffer> uboPerFrame;
+                    std::vector<VkDeviceMemory> uboMemoryPerFrame;
+                    std::vector<void*> uboMappedPerFrame;
+                };
+
+				std::vector<UniformBlockBuffer> uniformBuffers;
                 VkDescriptorPool descriptorPool;
                 std::vector<VkDescriptorSet> descriptorSets;
+
+                bool GetBlock(std::string name, gbe::gfx::DrawCall::CallInstance::UniformBlockBuffer& out_block);
             };
 
         private:
@@ -46,14 +53,37 @@ namespace gbe {
             unsigned int get_order();
 
             void BindForRender(VkCommandBuffer curcmdbuffer, unsigned int frame, unsigned int objindex, TransformUBO ubo);
+            
+            template<typename T>
+            bool ApplyOverride(const T& valueref, std::string target, unsigned int frameindex, CallInstance& callinst) {
+                ShaderData::ShaderBlock blockinfo;
+                ShaderData::ShaderField fieldinfo;
 
-            Matrix4 get_callmatrix(unsigned int iter);
+                if (shaderdata->FindUniformField(target, fieldinfo, blockinfo) == false)
+                    return false;
+
+                CallInstance::UniformBlockBuffer blockbuffer;
+
+                if(callinst.GetBlock(blockinfo.name, blockbuffer) == false)
+					return false;
+
+                const auto& blockaddr = reinterpret_cast<char*>(blockbuffer.uboMappedPerFrame[frameindex]);
+                const auto& finaladdr = blockaddr + fieldinfo.offset;
+
+                if (sizeof(valueref) != fieldinfo.size)
+                    throw std::runtime_error("Data size mismatch. Can Result in unexpected behaviour.");
+
+                memcpy(finaladdr, &valueref, fieldinfo.size);
+
+                return true;
+            }
+
             VkDescriptorSet* get_descriptorset(unsigned int frame, unsigned int objindex);
             
             Matrix4* RegisterCall(void* instance_id, Matrix4 matrix);
             void UnRegisterCall(void* instance_id);
 
-            void UpdateGlobalUniforms(GlobalUniforms& ubo);
+            void UpdateUniforms(GlobalUniforms& ubo, unsigned int frameindex);
         };
     }
 }

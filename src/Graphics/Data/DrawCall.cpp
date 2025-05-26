@@ -22,9 +22,12 @@ namespace gbe {
 
             vkDestroyDescriptorPool(*this->vkdevice, callinst.descriptorPool, nullptr);
             
-            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-                vkDestroyBuffer(*this->vkdevice, callinst.uniformBuffers[i], nullptr);
-                vkFreeMemory(*this->vkdevice, callinst.uniformBuffersMemory[i], nullptr);
+            for (const auto& block : callinst.uniformBuffers)
+            {
+                for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+                    vkDestroyBuffer(*this->vkdevice, block.uboPerFrame[i], nullptr);
+                    vkFreeMemory(*this->vkdevice, block.uboMemoryPerFrame[i], nullptr);
+                }
             }
         }
     }
@@ -53,18 +56,6 @@ namespace gbe {
     {
     }
 
-    Matrix4 gfx::DrawCall::get_callmatrix(unsigned int iter)
-    {
-        auto it_call = this->calls.begin();
-
-        for (int iters = 0; iters < iter; iters++)
-        {
-            it_call++;
-        }
-
-        return it_call->second.model;
-    }
-
     VkDescriptorSet* gfx::DrawCall::get_descriptorset(unsigned int frame, unsigned int objindex)
     {
         auto it_call = this->calls.begin();
@@ -86,37 +77,59 @@ namespace gbe {
         CallInstance newinst{};
 
         //BUFFERS
-        VkDeviceSize bufferSize = sizeof(TransformUBO);
+        for (const auto& block : shaderdata->uniformblocks)
+        {
+			auto newblockbuffer = CallInstance::UniformBlockBuffer{};
+			newblockbuffer.block_name = block.name;
 
-        newinst.uniformBuffers.resize(MAX_FRAMES_IN_FLIGHT);
-        newinst.uniformBuffersMemory.resize(MAX_FRAMES_IN_FLIGHT);
-        newinst.uniformBuffersMapped.resize(MAX_FRAMES_IN_FLIGHT);
+			// Create uniform buffer for each block
+            VkDeviceSize bufferSize = block.block_size;
 
-        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-            RenderPipeline::createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, newinst.uniformBuffers[i], newinst.uniformBuffersMemory[i]);
+            newblockbuffer.uboPerFrame.resize(MAX_FRAMES_IN_FLIGHT);
+            newblockbuffer.uboMemoryPerFrame.resize(MAX_FRAMES_IN_FLIGHT);
+            newblockbuffer.uboMappedPerFrame.resize(MAX_FRAMES_IN_FLIGHT);
 
-            vkMapMemory(*this->vkdevice, newinst.uniformBuffersMemory[i], 0, bufferSize, 0, &newinst.uniformBuffersMapped[i]);
+            for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+                RenderPipeline::createBuffer(bufferSize, VK_BUFFER_USAGE_UNIFORM_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, newblockbuffer.uboPerFrame[i], newblockbuffer.uboMemoryPerFrame[i]);
+
+                vkMapMemory(*this->vkdevice, newblockbuffer.uboMemoryPerFrame[i], 0, bufferSize, 0, &newblockbuffer.uboMappedPerFrame[i]);
+            }
+
+			newinst.uniformBuffers.push_back(newblockbuffer);
         }
 
         //DESCRIPTOR POOL
-        std::array<VkDescriptorPoolSize, 2> poolSizes{};
-        poolSizes[0].type = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-        poolSizes[0].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-        poolSizes[1].type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-        poolSizes[1].descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+        std::vector<VkDescriptorPoolSize> poolSizes{};
+        for (const auto& pair : shaderdata->binding_sets)
+        {
+			const auto& setlist = pair.second;
+
+			for (const auto& binding : setlist)
+			{
+                poolSizes.push_back({
+                        .type = binding.descriptorType,
+                        .descriptorCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT)
+                    });
+			}
+        }
 
         VkDescriptorPoolCreateInfo poolInfo{};
         poolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
         poolInfo.poolSizeCount = static_cast<uint32_t>(poolSizes.size());
         poolInfo.pPoolSizes = poolSizes.data();
-        poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+        poolInfo.maxSets = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT * shaderdata->descriptorSetLayouts.size());
 
         if (vkCreateDescriptorPool(*this->vkdevice, &poolInfo, nullptr, &newinst.descriptorPool) != VK_SUCCESS) {
             throw std::runtime_error("failed to create descriptor pool!");
         }
 
         //DESCRIPTOR SETS
-        std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, shaderdata->descriptorSetLayout);
+        std::vector<VkDescriptorSetLayout> layouts{};
+        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+        {
+            layouts.append_range(shaderdata->descriptorSetLayouts);
+        }
+
         VkDescriptorSetAllocateInfo allocInfo{};
         allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
         allocInfo.descriptorPool = newinst.descriptorPool;
@@ -129,10 +142,19 @@ namespace gbe {
         }
 
         for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
-            VkDescriptorBufferInfo bufferInfo{};
-            bufferInfo.buffer = newinst.uniformBuffers[i];
-            bufferInfo.offset = 0;
-            bufferInfo.range = sizeof(TransformUBO);
+			std::vector<VkDescriptorBufferInfo> bufferInfos;
+
+            for (size_t b = 0; b < shaderdata->uniformblocks.size(); b++)
+            {
+                const auto& blockinfo = shaderdata->uniformblocks[b];
+
+                VkDescriptorBufferInfo bufferInfo{};
+                bufferInfo.buffer = newinst.uniformBuffers[b].uboPerFrame[i];
+                bufferInfo.offset = 0;
+                bufferInfo.range = blockinfo.block_size;
+
+				bufferInfos.push_back(bufferInfo);
+            }
 
             /*
             VkDescriptorImageInfo imageInfo{};
@@ -141,15 +163,22 @@ namespace gbe {
             imageInfo.sampler = textureSampler;
             */
 
-            std::array<VkWriteDescriptorSet, 1> descriptorWrites{};
+            std::vector<VkWriteDescriptorSet> descriptorWrites{};
 
-            descriptorWrites[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            descriptorWrites[0].dstSet = newinst.descriptorSets[i];
-            descriptorWrites[0].dstBinding = 0;
-            descriptorWrites[0].dstArrayElement = 0;
-            descriptorWrites[0].descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-            descriptorWrites[0].descriptorCount = 1;
-            descriptorWrites[0].pBufferInfo = &bufferInfo;
+            for (const auto& bufferinfo : bufferInfos)
+            {
+				VkWriteDescriptorSet descriptorWrite{};
+
+                descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                descriptorWrite.dstSet = newinst.descriptorSets[i];
+                descriptorWrite.dstBinding = 0;
+                descriptorWrite.dstArrayElement = 0;
+                descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                descriptorWrite.descriptorCount = 1;
+                descriptorWrite.pBufferInfo = &bufferinfo;
+
+				descriptorWrites.push_back(descriptorWrite);
+            }
 
             /*
             descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
@@ -179,28 +208,29 @@ namespace gbe {
         this->calls.erase(instance_id);
     }
 
-    void gbe::gfx::DrawCall::UpdateGlobalUniforms(GlobalUniforms& ubo)
+    void gbe::gfx::DrawCall::UpdateUniforms(GlobalUniforms& ubo, unsigned int frameindex)
     {
-        struct TransformUBO_INTERNAL {
-            glm::mat4 model;
-            glm::mat4 view;
-            glm::mat4 proj;
-        };
-
-        for (const auto& pair : this->calls)
+        for (auto& pair : this->calls)
         {
-            const auto& data = pair.second;
+            auto& callinstance = pair.second;
 
-            TransformUBO_INTERNAL ubo_translated = {
-                data.model,
-                ubo.view,
-                ubo.proj,
-            };
-
-            for (size_t frameindex = 0; frameindex < MAX_FRAMES_IN_FLIGHT; frameindex++)
-            {
-                memcpy(data.uniformBuffersMapped[frameindex], &ubo_translated, sizeof(ubo_translated));
-            }
+            ApplyOverride<Matrix4>(callinstance.model, "model", frameindex, callinstance);
+            ApplyOverride<Matrix4>(ubo.view, "view", frameindex, callinstance);
+            ApplyOverride<Matrix4>(ubo.proj, "proj", frameindex, callinstance);
         }
     }
+}
+
+bool gbe::gfx::DrawCall::CallInstance::GetBlock(std::string name, gbe::gfx::DrawCall::CallInstance::UniformBlockBuffer& out_block)
+{
+    for (auto& block: this->uniformBuffers)
+    {
+		if (block.block_name == name)
+		{
+            out_block = block;
+            return true;
+		}
+    }
+
+    return false;
 }

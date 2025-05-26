@@ -40,7 +40,7 @@
             ]
         },
         "_17" : {
-            "name" : "UniformBufferObject",
+            "name" : "Transform",
             "members" : [
                 {
                     "name" : "model",
@@ -95,7 +95,7 @@
     "ubos" : [
         {
             "type" : "_17",
-            "name" : "UniformBufferObject",
+            "name" : "Transform",
             "block_size" : 192,
             "set" : 0,
             "binding" : 0

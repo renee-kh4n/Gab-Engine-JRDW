@@ -836,7 +836,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
             ubo.proj = projmat;
             ubo.view = viewmat;
             ubo.proj[1][1] *= -1;
-            drawcall->UpdateGlobalUniforms(ubo);
+            drawcall->UpdateUniforms(ubo, currentFrame);
 
             for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
@@ -963,9 +963,6 @@ void gbe::RenderPipeline::CleanUp()
     }
     vkDestroyCommandPool(this->vkdevice, commandPool, nullptr);
     
-
-
-
 	for (auto it = drawcalls.begin(); it != drawcalls.end(); it++) {
 		const auto& drawcallbatch = it->second;
 
