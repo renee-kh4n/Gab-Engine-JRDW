@@ -95,6 +95,15 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 			else if (member.type == "mat4") {
 				field.type = gbe::asset::Shader::UniformFieldType::MAT4;
 			}
+			
+			//test if there are other fields with the same name
+			for (const auto& existing_field : uniformfields)
+			{
+				if (existing_field.name == field.name && existing_field.block == field.block) {
+					throw std::runtime_error("Duplicate uniform field found: " + field.name + " in block " + field.block);
+				}
+			}
+			
 			uniformfields.push_back(field);
 
 			prevfield = &uniformfields.back();
