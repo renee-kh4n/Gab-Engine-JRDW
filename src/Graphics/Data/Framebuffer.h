@@ -9,16 +9,14 @@ namespace gbe {
         class Framebuffer {
         public:
             Vector2Int dimensions;
-            unsigned int id;
-            unsigned int outputId;
-            unsigned int rbo;
+            unsigned int id = 0;
+            unsigned int outputId = 0;
+            unsigned int rbo = 0;
 
-            unsigned int quadVAO, quadVBO;
+            unsigned int quadVAO = 0, quadVBO = 0;
 
             Framebuffer(Vector2Int dimensions) {
                 this->dimensions = dimensions;
-
-                
             }
         };
     }

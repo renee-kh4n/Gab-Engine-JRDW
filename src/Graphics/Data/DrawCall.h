@@ -18,7 +18,14 @@ namespace gbe {
                     std::vector<void*> uboMappedPerFrame;
                 };
 
+                struct UniformTexture {
+					std::string texture_name;
+					VkImageView imageView;
+					VkSampler sampler;
+                };
+
 				std::vector<UniformBlockBuffer> uniformBuffers;
+				std::vector<UniformTexture> uniformTextures;
                 VkDescriptorPool descriptorPool;
                 std::vector<VkDescriptorSet> descriptorSets;
 

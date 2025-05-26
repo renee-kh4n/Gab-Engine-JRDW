@@ -67,6 +67,8 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 			ShaderData::ShaderField field{};
 			field.name = member.name;
 			field.block = ubo.name;
+			field.set = ubo.set;
+			field.binding = ubo.binding;
 			field.type = gbe::asset::Shader::UniformFieldType::MAT4; // Default to MAT4, can be changed later
 			field.offset = member.offset;
 
@@ -131,14 +133,11 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 		auto& bset = binding_sets[meta.set];
 		bset.push_back(color_sampler_Binding);
 
-		ShaderData::ShaderBlock block{};
-		block.binding = meta.binding;
-		block.set = meta.set;
-		block.name = meta.name;
-
 		ShaderData::ShaderField field{};
 		field.name = meta.name;
-		field.block = block.name;
+		field.block = ""; // Textures do not belong to a block
+		field.set = meta.set;
+		field.binding = meta.binding;
 		field.type = gbe::asset::Shader::UniformFieldType::TEXTURE; // Default to TEXTURE, can be changed later
 		field.offset = 0; // Offset is not applicable for textures, set to 0
 		uniformfields.push_back(field);
@@ -431,5 +430,17 @@ bool gbe::gfx::ShaderData::FindUniformField(std::string id, ShaderField& out_fie
 	}
 
 
+	return false;
+}
+
+bool gbe::gfx::ShaderData::FindUniformBlock(std::string id, ShaderBlock& out_block)
+{
+	for (const auto& block : this->uniformblocks)
+	{
+		if (block.name == id) {
+			out_block = block;
+			return true;
+		}
+	}
 	return false;
 }

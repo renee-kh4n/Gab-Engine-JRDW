@@ -384,7 +384,11 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     }
 
     //===================DEVICE SET UP===================//
-    const std::vector<const char*> deviceExtensionNames = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+    //EXTENSIONS
+    const std::vector<const char*> deviceExtensionNames = {
+        VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+        VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
+    };
 
     uint32_t physicalDeviceCount;
     vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, nullptr);
@@ -393,6 +397,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     }
     std::vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
     vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, physicalDevices.data());
+    //TEST DEVICE SUITABLE
     const auto isDeviceSuitable = [=](VkPhysicalDevice vkpdevice) {
         uint32_t extensionCount;
         vkEnumerateDeviceExtensionProperties(vkpdevice, nullptr, &extensionCount, nullptr);
@@ -460,16 +465,21 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
         &queuePriority,                             // pQueuePriorities
     };
 
+    //FEATURES SETUP
     VkPhysicalDeviceFeatures deviceFeatures = {};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
     VkPhysicalDeviceShaderDrawParametersFeatures shader_draw_parameters_features = {};
     shader_draw_parameters_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
     shader_draw_parameters_features.pNext = nullptr;
     shader_draw_parameters_features.shaderDrawParameters = VK_TRUE;
+	VkPhysicalDeviceDescriptorIndexingFeatures descriptor_indexing_features = {};
+	descriptor_indexing_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES;
+	descriptor_indexing_features.pNext = &shader_draw_parameters_features;
+	descriptor_indexing_features.descriptorBindingPartiallyBound = VK_TRUE;
 
     VkDeviceCreateInfo deviceInfo = {
         VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,               // sType
-        &shader_draw_parameters_features,                   // pNext
+        &descriptor_indexing_features,                   // pNext
         0,                                                  // flags
         1,                                                  // queueCreateInfoCount
         &queueInfo,                                         // pQueueCreateInfos

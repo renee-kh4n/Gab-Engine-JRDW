@@ -97,6 +97,19 @@ namespace gbe {
 
 			newinst.uniformBuffers.push_back(newblockbuffer);
         }
+        //Textures
+		for (const auto& field : shaderdata->uniformfields)
+		{
+			if (field.type == asset::Shader::UniformFieldType::TEXTURE)
+			{
+				CallInstance::UniformTexture newtexture{};
+				newtexture.texture_name = field.name;
+				// Leave image view and sampler for the texture default
+				newtexture.imageView;
+				newtexture.sampler;
+				newinst.uniformTextures.push_back(newtexture);
+			}
+		}
 
         //DESCRIPTOR POOL
         std::vector<VkDescriptorPoolSize> poolSizes{};
@@ -141,27 +154,38 @@ namespace gbe {
             throw std::runtime_error("failed to allocate descriptor sets!");
         }
 
-        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++) {
+        for (size_t f_i = 0; f_i < MAX_FRAMES_IN_FLIGHT; f_i++) {
 			std::vector<VkDescriptorBufferInfo> bufferInfos;
 
-            for (size_t b = 0; b < shaderdata->uniformblocks.size(); b++)
+            for (const auto& uniformblock : newinst.uniformBuffers)
             {
-                const auto& blockinfo = shaderdata->uniformblocks[b];
+                ShaderData::ShaderBlock blockinfo{};
+
+                bool found_block = shaderdata->FindUniformBlock(uniformblock.block_name, blockinfo);
+                if(!found_block)
+					throw std::runtime_error("Failed to find uniform block: " + uniformblock.block_name);
 
                 VkDescriptorBufferInfo bufferInfo{};
-                bufferInfo.buffer = newinst.uniformBuffers[b].uboPerFrame[i];
+                bufferInfo.buffer = uniformblock.uboPerFrame[f_i];
                 bufferInfo.offset = 0;
                 bufferInfo.range = blockinfo.block_size;
 
-				bufferInfos.push_back(bufferInfo);
+                bufferInfos.push_back(bufferInfo);
             }
 
-            /*
-            VkDescriptorImageInfo imageInfo{};
-            imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
-            imageInfo.imageView = textureImageView;
-            imageInfo.sampler = textureSampler;
-            */
+
+            std::vector<VkDescriptorImageInfo> imageInfos;
+
+            for (const auto& uniformtex : newinst.uniformTextures)
+            {
+                VkDescriptorImageInfo imageInfo{};
+
+                imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageInfo.imageView = uniformtex.imageView;
+                imageInfo.sampler = uniformtex.sampler;
+
+				imageInfos.push_back(imageInfo);
+            }
 
             std::vector<VkWriteDescriptorSet> descriptorWrites{};
 
@@ -170,7 +194,7 @@ namespace gbe {
 				VkWriteDescriptorSet descriptorWrite{};
 
                 descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                descriptorWrite.dstSet = newinst.descriptorSets[i];
+                descriptorWrite.dstSet = newinst.descriptorSets[f_i];
                 descriptorWrite.dstBinding = 0;
                 descriptorWrite.dstArrayElement = 0;
                 descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -180,15 +204,20 @@ namespace gbe {
 				descriptorWrites.push_back(descriptorWrite);
             }
 
-            /*
-            descriptorWrites[1].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-            descriptorWrites[1].dstSet = descriptorSets[i];
-            descriptorWrites[1].dstBinding = 1;
-            descriptorWrites[1].dstArrayElement = 0;
-            descriptorWrites[1].descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
-            descriptorWrites[1].descriptorCount = 1;
-            descriptorWrites[1].pImageInfo = &imageInfo;
-            */
+            for (const auto& imageinfo : imageInfos)
+            {
+                VkWriteDescriptorSet descriptorWrite{};
+
+                descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                descriptorWrite.dstSet = newinst.descriptorSets[f_i];
+                descriptorWrite.dstBinding = 1;
+                descriptorWrite.dstArrayElement = 0;
+                descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                descriptorWrite.descriptorCount = 1;
+                descriptorWrite.pImageInfo = &imageinfo;
+
+                descriptorWrites.push_back(descriptorWrite);
+            }
 
             vkUpdateDescriptorSets(*this->vkdevice, static_cast<uint32_t>(descriptorWrites.size()), descriptorWrites.data(), 0, nullptr);
         }

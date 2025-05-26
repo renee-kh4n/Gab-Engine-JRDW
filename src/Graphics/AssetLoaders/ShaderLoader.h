@@ -46,18 +46,20 @@ namespace gbe {
 
 		struct ShaderData {
 			struct ShaderBlock {
-				std::string name;
-				size_t block_size;
-				unsigned int set;
-				unsigned int binding;
+				std::string name = "";
+				size_t block_size = 0;
+				unsigned int set = 0;
+				unsigned int binding = 0;
 			};
 
 			struct ShaderField {
-				std::string name;
-				std::string block;
+				std::string name = "";
+				std::string block = "";
+				unsigned int set = 0;
+				unsigned int binding = 0;
 				asset::Shader::UniformFieldType type;
-				size_t offset; // Offset in bytes
-				size_t size; // Offset in bytes
+				size_t offset = 0; // Offset in bytes
+				size_t size = 0; // Offset in bytes
 			};
 
 			std::unordered_map<unsigned int, std::vector<VkDescriptorSetLayoutBinding>> binding_sets;
@@ -69,6 +71,7 @@ namespace gbe {
 			asset::Shader* asset;
 
 			bool FindUniformField(std::string id, ShaderField& out_field, ShaderBlock& out_block);
+			bool FindUniformBlock(std::string id, ShaderBlock& out_block);
 		};
 
 		class ShaderLoader : public asset::AssetLoader<asset::Shader, asset::data::ShaderImportData, asset::data::ShaderLoadData, ShaderData> {
