@@ -77,6 +77,7 @@ namespace gbe {
 		//MATERIAL CACHING
 		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
 		test_mat->setOverride("color", Vector4(1, 1, 1, 1));
+		test_mat->setOverride("colortex", ball_tex);
 
 		//DRAW CALL CACHING
 		auto new_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, test_mat);

@@ -100,6 +100,14 @@ namespace gbe {
 
 				overrides.insert_or_assign(id, materialOverride);
 			}
+			template<>
+			void setOverride<asset::Texture*>(const char* id, asset::Texture* value) {
+				auto materialOverride = MaterialTexture();
+				materialOverride.parameterName = id;
+				materialOverride.textureRef.Assign(value);
+
+				textureOverrides.push_back(materialOverride);
+			}
 		};
 	}
 }
