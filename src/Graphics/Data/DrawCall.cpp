@@ -105,8 +105,12 @@ namespace gbe {
 				CallInstance::UniformTexture newtexture{};
 				newtexture.texture_name = field.name;
 				// Leave image view and sampler for the texture default
-				newtexture.imageView;
-				newtexture.sampler;
+                auto defaultImage = TextureLoader::GetDefaultImage();
+				newtexture.imageView = defaultImage.textureImageView;
+				newtexture.sampler = defaultImage.textureSampler;
+
+
+
 				newinst.uniformTextures.push_back(newtexture);
 			}
 		}

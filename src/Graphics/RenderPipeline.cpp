@@ -468,6 +468,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     //FEATURES SETUP
     VkPhysicalDeviceFeatures deviceFeatures = {};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
+
     VkPhysicalDeviceShaderDrawParametersFeatures shader_draw_parameters_features = {};
     shader_draw_parameters_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
     shader_draw_parameters_features.pNext = nullptr;
@@ -548,14 +549,17 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 #pragma endregion
 
 	//Asset Loaders
-	this->textureloader.AssignSelfAsLoader();
-	this->textureloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
-	this->shaderloader.AssignSelfAsLoader();
+    this->shaderloader.AssignSelfAsLoader();
     this->shaderloader.PassDependencies(&this->vkdevice, &this->swapchainExtent, &this->renderPass);
-	this->meshloader.AssignSelfAsLoader();
+	
+    this->meshloader.AssignSelfAsLoader();
 	this->meshloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
-	this->materialloader.AssignSelfAsLoader();
+	
+    this->materialloader.AssignSelfAsLoader();
     this->materialloader.PassDependencies(&this->shaderloader);
+
+    this->textureloader.AssignSelfAsLoader();
+    this->textureloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
 }
 
 void gbe::RenderPipeline::querySwapChainSupport(VkPhysicalDevice pvkdevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR& capabilities, std::vector<VkSurfaceFormatKHR>& formats, std::vector<VkPresentModeKHR>& presentModes) {
@@ -805,7 +809,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
     renderPassBeginInfo.renderArea.offset = { 0, 0 };
     renderPassBeginInfo.renderArea.extent = this->swapchainExtent;
 
-    VkClearValue clearColor = { {{0.0f, 0.0f, 0.0f, 1.0f}} };
+    VkClearValue clearColor = { {{0.5f, 0.5f, 0.5f, 1.0f}} };
     renderPassBeginInfo.clearValueCount = 1;
     renderPassBeginInfo.pClearValues = &clearColor;
 

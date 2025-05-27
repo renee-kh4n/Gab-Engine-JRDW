@@ -20,10 +20,12 @@ namespace gbe {
 		private:
 			VkDevice* vkdevice;
 			VkPhysicalDevice* vkphysicaldevice;
+			TextureData defaultImage;
 		protected:
 			TextureData LoadAsset_(asset::Texture* asset, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* data) override;
 			void UnLoadAsset_(asset::Texture* asset, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* data) override;
 		public:
+			static TextureData& GetDefaultImage();
 			void PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice);
 		};
 	}
