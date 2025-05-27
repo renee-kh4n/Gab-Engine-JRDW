@@ -1,5 +1,6 @@
 #pragma once
 
+#include "../tiny_obj_loader.h"
 #include "Asset/gbe_asset.h"
 #include "Math/gbe_math.h"
 #include "../Data/Vertex.h"
