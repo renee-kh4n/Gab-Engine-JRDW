@@ -44,11 +44,14 @@ namespace gbe {
 
     gfx::DrawCall::CallInstance& gfx::DrawCall::get_call_instance(unsigned int index)
     {
-		if (index >= this->callcount)
-			throw std::out_of_range("DrawCall: Call instance index out of range");
-		auto it = this->calls.begin();
-		std::advance(it, index);
-		return it->second;
+        auto it_call = this->calls.begin();
+
+        for (int iters = 0; iters < index; iters++)
+        {
+            it_call++;
+        }
+
+        return it_call->second;
     }
 
     unsigned int gfx::DrawCall::get_call_count()
