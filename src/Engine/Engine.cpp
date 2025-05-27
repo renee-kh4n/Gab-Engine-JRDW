@@ -224,7 +224,7 @@ namespace gbe {
 #pragma endregion
 
 #pragma region scene objects
-			create_platform(Vector3(0, -1, 0), Vector3(10, 1, 10));
+			create_platform(Vector3(0, -1, -10), Vector3(10, 1, 10));
 			create_platform(Vector3(0, 4, 4), Vector3(10, 1, 10));
 #pragma endregion
 

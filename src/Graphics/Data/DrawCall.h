@@ -27,7 +27,7 @@ namespace gbe {
 				std::vector<UniformBlockBuffer> uniformBuffers;
 				std::vector<UniformTexture> uniformTextures;
                 VkDescriptorPool descriptorPool;
-                std::vector<VkDescriptorSet> descriptorSets;
+                std::vector<VkDescriptorSet> allocdescriptorSets;
 
                 bool GetBlock(std::string name, gbe::gfx::DrawCall::CallInstance::UniformBlockBuffer& out_block);
             };
@@ -45,10 +45,6 @@ namespace gbe {
 			ShaderData* shaderdata;
             unsigned int MAX_FRAMES_IN_FLIGHT = 2;
         public:
-            struct GlobalUniforms {
-                gbe::Matrix4 proj;
-                gbe::Matrix4 view;
-            };
 
             DrawCall(asset::Mesh* mesh, asset::Material* material, ShaderData* shaderdata, unsigned int MAX_FRAMES_IN_FLIGHT, VkDevice* vkdevice, int order);
             ~DrawCall();
@@ -56,11 +52,12 @@ namespace gbe {
             asset::Mesh* get_mesh();
             asset::Material* get_material();
 
+            CallInstance& get_call_instance(unsigned int index);
             unsigned int get_call_count();
             unsigned int get_order();
 
-            void BindForRender(VkCommandBuffer curcmdbuffer, unsigned int frame, unsigned int objindex, TransformUBO ubo);
-            
+            bool SyncMaterialData(unsigned int frameindex, CallInstance& callinst);
+
             template<typename T>
             bool ApplyOverride(const T& valueref, std::string target, unsigned int frameindex, CallInstance& callinst) {
                 ShaderData::ShaderBlock blockinfo;
@@ -85,12 +82,8 @@ namespace gbe {
                 return true;
             }
 
-            VkDescriptorSet* get_descriptorset(unsigned int frame, unsigned int objindex);
-            
             Matrix4* RegisterCall(void* instance_id, Matrix4 matrix);
             void UnRegisterCall(void* instance_id);
-
-            void UpdateUniforms(GlobalUniforms& ubo, unsigned int frameindex);
         };
     }
 }

@@ -20,4 +20,8 @@ namespace gbe {
 	MaterialOverride::MaterialOverride() {
 
 	}
+	
+	MaterialOverride::~MaterialOverride() {
+
+	}
 }

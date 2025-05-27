@@ -16,14 +16,15 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 	loaddata->dimensions = Vector2Int(tex_width, tex_height);
 
 	//VULKAN TEXTURE LOAD
-	VkDeviceSize imageSize = tex_width * tex_height * 4;
+	VkDeviceSize imageSize = tex_width * tex_height * colorchannels;
+	VkDeviceSize imageSizevk = tex_width * tex_height * (colorchannels + 1);
 
 	VkBuffer stagingBuffer;
 	VkDeviceMemory stagingBufferMemory;
-	RenderPipeline::createBuffer(imageSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+	RenderPipeline::createBuffer(imageSizevk, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
 	void* vkdata;
-	vkMapMemory(*this->vkdevice, stagingBufferMemory, 0, imageSize, 0, &vkdata);
+	vkMapMemory(*this->vkdevice, stagingBufferMemory, 0, imageSizevk, 0, &vkdata);
 	memcpy(vkdata, pixels, static_cast<size_t>(imageSize));
 	vkUnmapMemory(*this->vkdevice, stagingBufferMemory);
 
@@ -36,7 +37,7 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 	RenderPipeline::createImage(tex_width, tex_height, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
 
 	RenderPipeline::transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	RenderPipeline::copyBufferToImage(stagingBuffer, textureImage, static_cast<uint32_t>(tex_width), static_cast<uint32_t>(tex_height));
+	RenderPipeline::copyBufferToImage(stagingBuffer, textureImage, tex_width, tex_width);
 
 	RenderPipeline::transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 

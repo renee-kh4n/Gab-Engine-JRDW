@@ -844,19 +844,18 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
             const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
 
             //UPDATE GLOBAL UBO
-            DrawCall::GlobalUniforms ubo{};
-            ubo.proj = projmat;
-            ubo.view = viewmat;
-            ubo.proj[1][1] *= -1;
-            drawcall->UpdateUniforms(ubo, currentFrame);
-
             for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
+                auto& callinstance = drawcall->get_call_instance(dc_i);
+                
+				drawcall->ApplyOverride<Matrix4>(callinstance.model, "model", dc_i, callinstance);
+				drawcall->ApplyOverride<Matrix4>(projmat, "proj", dc_i, callinstance);
+				drawcall->ApplyOverride<Matrix4>(viewmat, "view", dc_i, callinstance);
+
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
-                auto dset = drawcall->get_descriptorset(currentFrame, dc_i);
-                vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, 1, dset, 0, nullptr);
+                vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, 1, &callinstance.allocdescriptorSets[currentFrame], 0, nullptr);
                 
                 vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
                 vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);

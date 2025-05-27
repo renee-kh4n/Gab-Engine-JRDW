@@ -42,6 +42,15 @@ namespace gbe {
         return this->m_material;
     }
 
+    gfx::DrawCall::CallInstance& gfx::DrawCall::get_call_instance(unsigned int index)
+    {
+		if (index >= this->callcount)
+			throw std::out_of_range("DrawCall: Call instance index out of range");
+		auto it = this->calls.begin();
+		std::advance(it, index);
+		return it->second;
+    }
+
     unsigned int gfx::DrawCall::get_call_count()
     {
         return this->callcount;
@@ -52,20 +61,23 @@ namespace gbe {
         return this->order;
     }
 
-    void gfx::DrawCall::BindForRender(VkCommandBuffer curcmdbuffer, unsigned int frame, unsigned int objindex, TransformUBO ubo)
+    bool gfx::DrawCall::SyncMaterialData(unsigned int frameindex, CallInstance& callinst)
     {
-    }
-
-    VkDescriptorSet* gfx::DrawCall::get_descriptorset(unsigned int frame, unsigned int objindex)
-    {
-        auto it_call = this->calls.begin();
-
-        for (int iters = 0; iters < objindex; iters++)
+        for (size_t m_i = 0; m_i < this->get_material()->getOverrideCount(); m_i++)
         {
-            it_call++;
+			std::string id;
+            const auto& overridedata = this->get_material()->getOverride(m_i, id);
+
+			if (overridedata.handled_change)
+				continue;
+
+            if (overridedata.type == asset::Shader::UniformFieldType::TEXTURE)
+            {
+
+            }
         }
 
-        return &it_call->second.descriptorSets[frame];
+        return true;
     }
 
     gbe::Matrix4* gfx::DrawCall::RegisterCall(void* instance_id, Matrix4 matrix)
@@ -109,8 +121,6 @@ namespace gbe {
 				newtexture.imageView = defaultImage.textureImageView;
 				newtexture.sampler = defaultImage.textureSampler;
 
-
-
 				newinst.uniformTextures.push_back(newtexture);
 			}
 		}
@@ -153,13 +163,13 @@ namespace gbe {
         allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
         allocInfo.pSetLayouts = layouts.data();
 
-        newinst.descriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-        if (vkAllocateDescriptorSets(*this->vkdevice, &allocInfo, newinst.descriptorSets.data()) != VK_SUCCESS) {
+        newinst.allocdescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
+        if (vkAllocateDescriptorSets(*this->vkdevice, &allocInfo, newinst.allocdescriptorSets.data()) != VK_SUCCESS) {
             throw std::runtime_error("failed to allocate descriptor sets!");
         }
 
         for (size_t f_i = 0; f_i < MAX_FRAMES_IN_FLIGHT; f_i++) {
-			std::vector<VkDescriptorBufferInfo> bufferInfos;
+            std::vector<VkWriteDescriptorSet> descriptorWrites{};
 
             for (const auto& uniformblock : newinst.uniformBuffers)
             {
@@ -174,11 +184,20 @@ namespace gbe {
                 bufferInfo.offset = 0;
                 bufferInfo.range = blockinfo.block_size;
 
-                bufferInfos.push_back(bufferInfo);
+                //CREATE THE WRITE DATA
+                VkWriteDescriptorSet descriptorWrite{};
+
+                descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                descriptorWrite.dstSet = newinst.allocdescriptorSets[f_i];
+                descriptorWrite.dstBinding = blockinfo.binding;
+                descriptorWrite.dstArrayElement = 0;
+                descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
+                descriptorWrite.descriptorCount = 1;
+                descriptorWrite.pBufferInfo = &bufferInfo;
+
+                descriptorWrites.push_back(descriptorWrite);
             }
 
-
-            std::vector<VkDescriptorImageInfo> imageInfos;
 
             for (const auto& uniformtex : newinst.uniformTextures)
             {
@@ -188,37 +207,20 @@ namespace gbe {
                 imageInfo.imageView = uniformtex.imageView;
                 imageInfo.sampler = uniformtex.sampler;
 
-				imageInfos.push_back(imageInfo);
-            }
-
-            std::vector<VkWriteDescriptorSet> descriptorWrites{};
-
-            for (const auto& bufferinfo : bufferInfos)
-            {
-				VkWriteDescriptorSet descriptorWrite{};
-
-                descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                descriptorWrite.dstSet = newinst.descriptorSets[f_i];
-                descriptorWrite.dstBinding = 0;
-                descriptorWrite.dstArrayElement = 0;
-                descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
-                descriptorWrite.descriptorCount = 1;
-                descriptorWrite.pBufferInfo = &bufferinfo;
-
-				descriptorWrites.push_back(descriptorWrite);
-            }
-
-            for (const auto& imageinfo : imageInfos)
-            {
+                //FIND THE BINDING INDEX
+                ShaderData::ShaderField fieldinfo;
+                ShaderData::ShaderBlock blockinfo;
+                shaderdata->FindUniformField(uniformtex.texture_name, fieldinfo, blockinfo);
+                //CREATE THE WRITE DATA
                 VkWriteDescriptorSet descriptorWrite{};
 
                 descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                descriptorWrite.dstSet = newinst.descriptorSets[f_i];
-                descriptorWrite.dstBinding = 1;
+                descriptorWrite.dstSet = newinst.allocdescriptorSets[f_i];
+                descriptorWrite.dstBinding = fieldinfo.binding;
                 descriptorWrite.dstArrayElement = 0;
                 descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
                 descriptorWrite.descriptorCount = 1;
-                descriptorWrite.pImageInfo = &imageinfo;
+                descriptorWrite.pImageInfo = &imageInfo;
 
                 descriptorWrites.push_back(descriptorWrite);
             }
@@ -239,18 +241,6 @@ namespace gbe {
             callcount--;
 
         this->calls.erase(instance_id);
-    }
-
-    void gbe::gfx::DrawCall::UpdateUniforms(GlobalUniforms& ubo, unsigned int frameindex)
-    {
-        for (auto& pair : this->calls)
-        {
-            auto& callinstance = pair.second;
-
-            ApplyOverride<Matrix4>(callinstance.model, "model", frameindex, callinstance);
-            ApplyOverride<Matrix4>(ubo.view, "view", frameindex, callinstance);
-            ApplyOverride<Matrix4>(ubo.proj, "proj", frameindex, callinstance);
-        }
     }
 }
 
