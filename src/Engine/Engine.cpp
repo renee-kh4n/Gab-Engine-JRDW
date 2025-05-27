@@ -55,12 +55,12 @@ namespace gbe {
 #pragma endregion
 #pragma region Audio Pipeline Setup
 		auto mAudioPipeline = new audio::AudioPipeline();
-		mAudioPipeline->Init();
+		//mAudioPipeline->Init();
 #pragma endregion
 #pragma region Asset Loading
 		//AUDIO CACHING
-		auto audio_ui_hover = new asset::Audio("DefaultAssets/Audio/bubble hover.aud.gbe");
-		auto audio_ui_click = new asset::Audio("DefaultAssets/Audio/uiclick.aud.gbe");
+		//auto audio_ui_hover = new asset::Audio("DefaultAssets/Audio/bubble hover.aud.gbe");
+		//auto audio_ui_click = new asset::Audio("DefaultAssets/Audio/uiclick.aud.gbe");
 
 		//SHADER CACHING
 		auto testShader = new asset::Shader("DefaultAssets/Shaders/test.shader.gbe");
@@ -118,10 +118,10 @@ namespace gbe {
 			main_canvas->AddRootChild(button);
 			button->Set_onClickAction([=]() {
 				onpress();
-				audio_ui_click->Play();
+				//audio_ui_click->Play();
 				});
 			button->Set_onHoverAction([=]() {
-				audio_ui_hover->Play();
+				//audio_ui_hover->Play();
 				});
 			};
 #pragma endregion

@@ -163,22 +163,11 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 
 		auto bindingcount = static_cast<uint32_t>(setlist.size());
 
-		std::vector<VkDescriptorBindingFlags> bindingFlags;
-		for (size_t i = 0; i < bindingcount; i++)
-		{
-			bindingFlags.push_back(VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT);
-		}
-
-		VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsCreateInfo = {};
-		bindingFlagsCreateInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO;
-		bindingFlagsCreateInfo.bindingCount = bindingcount;
-		bindingFlagsCreateInfo.pBindingFlags = bindingFlags.data();
-
 		VkDescriptorSetLayoutCreateInfo layoutInfo{};
 		layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
 		layoutInfo.bindingCount = bindingcount;
 		layoutInfo.pBindings = setlist.data();
-		layoutInfo.pNext = &bindingFlagsCreateInfo;
+		layoutInfo.pNext = nullptr;
 
 		VkDescriptorSetLayout newsetlayout;
 

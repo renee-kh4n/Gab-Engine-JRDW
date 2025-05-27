@@ -288,6 +288,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     if (enableValidationLayers) {
         allextensions.push_back(VK_EXT_DEBUG_UTILS_EXTENSION_NAME);
     }
+    //allextensions.push_back(VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
 
     //APP INFO
     VkApplicationInfo appInfo{};
@@ -387,9 +388,9 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     //EXTENSIONS
     const std::vector<const char*> deviceExtensionNames = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-        VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME
     };
 
+    bool founddevice = false;
     uint32_t physicalDeviceCount;
     vkEnumeratePhysicalDevices(vkInst, &physicalDeviceCount, nullptr);
     if (physicalDeviceCount == 0) {
@@ -429,11 +430,12 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     for (const auto& vkpdevice : physicalDevices) {
         if (isDeviceSuitable(vkpdevice)) {
             this->vkphysicalDevice = vkpdevice;
+            founddevice = true;
             break;
         }
     }
 
-    if (this->vkphysicalDevice == VK_NULL_HANDLE) {
+    if (founddevice == false) {
         throw std::runtime_error("failed to find a suitable GPU!");
     }
 
@@ -473,14 +475,10 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     shader_draw_parameters_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
     shader_draw_parameters_features.pNext = nullptr;
     shader_draw_parameters_features.shaderDrawParameters = VK_TRUE;
-	VkPhysicalDeviceDescriptorIndexingFeatures descriptor_indexing_features = {};
-	descriptor_indexing_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES;
-	descriptor_indexing_features.pNext = &shader_draw_parameters_features;
-	descriptor_indexing_features.descriptorBindingPartiallyBound = VK_TRUE;
 
     VkDeviceCreateInfo deviceInfo = {
         VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,               // sType
-        &descriptor_indexing_features,                   // pNext
+        &shader_draw_parameters_features,                   // pNext
         0,                                                  // flags
         1,                                                  // queueCreateInfoCount
         &queueInfo,                                         // pQueueCreateInfos
