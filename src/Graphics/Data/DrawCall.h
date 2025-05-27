@@ -34,6 +34,8 @@ namespace gbe {
 
         private:
             std::unordered_map<void*, CallInstance> calls;
+            std::unordered_map<std::string, std::vector<int>> overrideHandledList;
+
             unsigned int callcount = 0;
 
             int order;
@@ -56,10 +58,10 @@ namespace gbe {
             unsigned int get_call_count();
             unsigned int get_order();
 
-            bool SyncMaterialData(unsigned int frameindex, CallInstance& callinst);
+            bool SyncMaterialData(unsigned int frameindex);
 
             template<typename T>
-            bool ApplyOverride(const T& valueref, std::string target, unsigned int frameindex, CallInstance& callinst) {
+            bool ApplyOverride(const T valueref, std::string target, unsigned int frameindex, CallInstance& callinst) {
                 ShaderData::ShaderBlock blockinfo;
                 ShaderData::ShaderField fieldinfo;
 

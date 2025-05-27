@@ -107,7 +107,7 @@ namespace gbe {
 
 		void SetResolution(Vector2Int newresolution);
 		
-		void RenderFrame(Matrix4& viewmat, Matrix4& projmat, float& nearclip, float& farclip);
+		void RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& nearclip, float& farclip);
 
 		void CleanUp();
 	};

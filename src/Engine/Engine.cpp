@@ -68,7 +68,7 @@ namespace gbe {
 		//TEXTURE CACHING
 		//UI
 		//MODEL
-		//auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/basketball.img.gbe");
+		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
 
 		//MESH CACHING
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
@@ -76,8 +76,8 @@ namespace gbe {
 		
 		//MATERIAL CACHING
 		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
-		test_mat->setOverride("color", Vector4(1, 1, 1, 1));
-		//test_mat->setOverride("colortex", ball_tex);
+		//test_mat->setOverride("color", Vector4(1, 1, 1, 1));
+		test_mat->setOverride("colortex", ball_tex);
 
 		//DRAW CALL CACHING
 		auto new_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, test_mat);
@@ -142,7 +142,7 @@ namespace gbe {
 
 			//Spawn funcs
 
-			auto create_platform = [=](Vector3 pos, Vector3 scale) {
+			auto create_test = [=](Vector3 pos, Vector3 scale) {
 				RigidObject* platform = new RigidObject(true);
 				platform->SetParent(game_root);
 				platform->Local().position.Set(pos);
@@ -224,8 +224,8 @@ namespace gbe {
 #pragma endregion
 
 #pragma region scene objects
-			create_platform(Vector3(0, -1, -10), Vector3(10, 1, 10));
-			create_platform(Vector3(0, 4, 4), Vector3(10, 1, 10));
+			create_test(Vector3(5, 0, 10), Vector3(4, 4, 4));
+			create_test(Vector3(-5, 0, 10), Vector3(4, 4, 4));
 #pragma endregion
 
 			return game_root;

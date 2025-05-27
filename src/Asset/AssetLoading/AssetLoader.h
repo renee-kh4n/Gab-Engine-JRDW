@@ -58,9 +58,9 @@ namespace gbe {
 					};
 			}
 
-			TAssetRuntimeData& GetAssetData(TAsset* assetinstance) {
-				auto it = this->loaded_assets.find(assetinstance);
-				if (it != this->loaded_assets.end()) {
+			static TAssetRuntimeData& GetAssetData(TAsset* assetinstance) {
+				auto it = active_instance->loaded_assets.find(assetinstance);
+				if (it != active_instance->loaded_assets.end()) {
 					return it->second;
 				}
 				else {
@@ -68,8 +68,8 @@ namespace gbe {
 				}
 			}
 
-			TAsset* GetAsset(std::string asset_id) {
-				for (const auto& pair : this->loaded_assets) {
+			static TAsset* GetAsset(std::string asset_id) {
+				for (const auto& pair : active_instance->loaded_assets) {
 					if (pair.first->Get_assetId() == asset_id) {
 						return pair.first;
 					}

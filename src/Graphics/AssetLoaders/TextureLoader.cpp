@@ -11,13 +11,12 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 	int colorchannels;
 
 	stbi_set_flip_vertically_on_load(true);
-	pixels = stbi_load(pathstr.c_str(), &tex_width, &tex_height, &colorchannels, 0);
+	pixels = stbi_load(pathstr.c_str(), &tex_width, &tex_height, &colorchannels, 4);
 	loaddata->colorchannels = colorchannels;
 	loaddata->dimensions = Vector2Int(tex_width, tex_height);
 
 	//VULKAN TEXTURE LOAD
-	VkDeviceSize imageSize = tex_width * tex_height * colorchannels;
-	VkDeviceSize imageSizevk = tex_width * tex_height * (colorchannels + 1);
+	VkDeviceSize imageSizevk = tex_width * tex_height * 4;
 
 	VkBuffer stagingBuffer;
 	VkDeviceMemory stagingBufferMemory;
@@ -25,7 +24,7 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 
 	void* vkdata;
 	vkMapMemory(*this->vkdevice, stagingBufferMemory, 0, imageSizevk, 0, &vkdata);
-	memcpy(vkdata, pixels, static_cast<size_t>(imageSize));
+	memcpy(vkdata, pixels, static_cast<size_t>(imageSizevk));
 	vkUnmapMemory(*this->vkdevice, stagingBufferMemory);
 
 	stbi_image_free(pixels);

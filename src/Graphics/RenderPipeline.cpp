@@ -767,7 +767,7 @@ bool RenderPipeline::TryPushLight(gfx::Light* data, bool priority) {
     return true;
 }
 
-void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float& nearclip, float& farclip)
+void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& nearclip, float& farclip)
 {
 	//Syncronization
     vkWaitForFences(this->vkdevice, 1, &inFlightFences[currentFrame], VK_TRUE, UINT64_MAX);
@@ -842,14 +842,20 @@ void gbe::RenderPipeline::RenderFrame(Matrix4& viewmat, Matrix4& projmat, float&
 
             //RENDER MESH
             const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
+			
+            Matrix4 vulkanprojmat = projmat; //copy
+            vulkanprojmat[1][1] = -projmat[1][1]; //Flip Y axis for Vulkan
+
+            drawcall->SyncMaterialData(currentFrame);
 
             //UPDATE GLOBAL UBO
             for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
                 auto& callinstance = drawcall->get_call_instance(dc_i);
                 
-				drawcall->ApplyOverride<Matrix4>(callinstance.model, "model", dc_i, callinstance);
-				drawcall->ApplyOverride<Matrix4>(projmat, "proj", dc_i, callinstance);
-				drawcall->ApplyOverride<Matrix4>(viewmat, "view", dc_i, callinstance);
+				drawcall->ApplyOverride<Matrix4>(callinstance.model, "model", currentFrame, callinstance);
+				drawcall->ApplyOverride<Matrix4>(vulkanprojmat, "proj", currentFrame, callinstance);
+				drawcall->ApplyOverride<Matrix4>(viewmat, "view", currentFrame, callinstance);
+
 
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
                 VkDeviceSize offsets[] = { 0 };

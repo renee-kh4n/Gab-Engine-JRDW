@@ -64,15 +64,59 @@ namespace gbe {
         return this->order;
     }
 
-    bool gfx::DrawCall::SyncMaterialData(unsigned int frameindex, CallInstance& callinst)
+    bool gfx::DrawCall::SyncMaterialData(unsigned int frameindex)
     {
         for (size_t m_i = 0; m_i < this->get_material()->getOverrideCount(); m_i++)
         {
-			std::string id;
-            const auto& overridedata = this->get_material()->getOverride(m_i, id);
+            std::string id;
+            auto& overridedata = this->get_material()->getOverride(m_i, id);
 
-			if (overridedata.handled_change)
-				continue;
+            if (overridedata.handled_change == false)
+                overrideHandledList[id].clear();
+			else if (overrideHandledList[id].size() >= MAX_FRAMES_IN_FLIGHT)
+                continue;
+
+            //CONFIRM UNIFORM FIELD EXISTS
+            ShaderData::ShaderField fieldinfo;
+            ShaderData::ShaderBlock blockinfo;
+            bool found = shaderdata->FindUniformField(id, fieldinfo, blockinfo);
+            if (!found)
+                continue;
+
+            if (overridedata.type == asset::Shader::UniformFieldType::TEXTURE)
+            {
+                auto findtexturedata = TextureLoader::GetAssetData(overridedata.value_tex.Get_asset());
+
+                //CREATE NEW DESCRIPTOR WRITE
+                VkDescriptorImageInfo imageInfo{};
+
+                imageInfo.imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+                imageInfo.imageView = findtexturedata.textureImageView;
+                imageInfo.sampler = findtexturedata.textureSampler;
+
+                //CREATE THE WRITE DATA FOR EACH INSTANCE
+				for (const auto& callinstpair : this->calls)
+				{
+                    auto& callinst = callinstpair.second;
+
+                    VkWriteDescriptorSet descriptorWrite{};
+
+                    descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
+                    descriptorWrite.dstSet = callinst.allocdescriptorSets[frameindex];
+                    descriptorWrite.dstBinding = fieldinfo.binding;
+                    descriptorWrite.dstArrayElement = 0;
+                    descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
+                    descriptorWrite.descriptorCount = 1;
+                    descriptorWrite.pImageInfo = &imageInfo;
+
+                    vkUpdateDescriptorSets(*this->vkdevice, static_cast<uint32_t>(1), &descriptorWrite, 0, nullptr);
+				}
+                
+            }
+
+			overrideHandledList[id].push_back(frameindex);
+
+            overridedata.handled_change = true;
         }
 
         return true;
