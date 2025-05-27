@@ -70,11 +70,6 @@ namespace gbe {
 
 			if (overridedata.handled_change)
 				continue;
-
-            if (overridedata.type == asset::Shader::UniformFieldType::TEXTURE)
-            {
-
-            }
         }
 
         return true;
