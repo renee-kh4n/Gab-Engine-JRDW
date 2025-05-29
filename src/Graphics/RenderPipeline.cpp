@@ -973,6 +973,8 @@ void gbe::RenderPipeline::CreateDepthResources()
     createImage(this->resolution.x, this->resolution.y, depthformat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
     createImageView(depthImageView, depthImage, depthformat);
 
+
+
 }
 
 VkFormat gbe::RenderPipeline::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
