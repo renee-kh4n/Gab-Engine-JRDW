@@ -72,9 +72,16 @@ namespace gbe {
 		//Renderpass
 		VkRenderPass renderPass;
 		
+		//DEPTH PASS
+		VkImage depthImage;
+		VkDeviceMemory depthImageMemory;
+		VkImageView depthImageView;
+
 		void InitializePipelineObjects();
 		void RefreshPipelineObjects();
 		void CleanPipelineObjects();
+		void CreateDepthResources();
+		VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 		void querySwapChainSupport(VkPhysicalDevice pvkdevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR& capabilities, std::vector<VkSurfaceFormatKHR>& formats, std::vector<VkPresentModeKHR>& presentModes);
 
 		//COMMANDPOOL

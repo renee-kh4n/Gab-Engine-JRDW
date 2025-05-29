@@ -957,6 +957,41 @@ void gbe::RenderPipeline::CleanPipelineObjects() {
     vkDestroySwapchainKHR(vkdevice, swapChain, nullptr);
 }
 
+void gbe::RenderPipeline::CreateDepthResources()
+{
+    auto depthformat = findSupportedFormat(
+        { VK_FORMAT_D32_SFLOAT, VK_FORMAT_D32_SFLOAT_S8_UINT, VK_FORMAT_D24_UNORM_S8_UINT },
+        VK_IMAGE_TILING_OPTIMAL,
+        VK_FORMAT_FEATURE_DEPTH_STENCIL_ATTACHMENT_BIT
+    );
+
+    bool has_stencil = depthformat == VK_FORMAT_D32_SFLOAT_S8_UINT || depthformat == VK_FORMAT_D24_UNORM_S8_UINT;
+
+    if (!has_stencil)
+        throw std::runtime_error("No stencil component.");
+
+    createImage(this->resolution.x, this->resolution.y, depthformat, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, depthImage, depthImageMemory);
+    createImageView(depthImageView, depthImage, depthformat);
+
+}
+
+VkFormat gbe::RenderPipeline::findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features)
+{
+    for (VkFormat format : candidates) {
+        VkFormatProperties props;
+        vkGetPhysicalDeviceFormatProperties(this->vkphysicalDevice, format, &props);
+
+        if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) {
+            return format;
+        }
+        else if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) {
+            return format;
+        }
+    }
+
+    throw std::runtime_error("failed to find supported format!");
+}
+
 void gbe::RenderPipeline::CleanUp()
 {
     if (enableValidationLayers) {
