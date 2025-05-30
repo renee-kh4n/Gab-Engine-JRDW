@@ -5,18 +5,6 @@
             "mode" : "frag"
         }
     ],
-    "types" : {
-        "_20" : {
-            "name" : "Shading",
-            "members" : [
-                {
-                    "name" : "color",
-                    "type" : "vec4",
-                    "offset" : 0
-                }
-            ]
-        }
-    },
     "inputs" : [
         {
             "type" : "vec2",
@@ -42,15 +30,6 @@
             "name" : "colortex",
             "set" : 0,
             "binding" : 1
-        }
-    ],
-    "ubos" : [
-        {
-            "type" : "_20",
-            "name" : "Shading",
-            "block_size" : 16,
-            "set" : 0,
-            "binding" : 2
         }
     ]
 }
