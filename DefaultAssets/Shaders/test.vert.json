@@ -65,7 +65,7 @@
     },
     "inputs" : [
         {
-            "type" : "vec2",
+            "type" : "vec3",
             "name" : "inPosition",
             "location" : 0
         },

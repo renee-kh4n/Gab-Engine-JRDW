@@ -45,7 +45,7 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 
 	//CREATE IMAGE VIEW
 	VkImageView textureImageView;
-	RenderPipeline::createImageView(textureImageView, textureImage, VK_FORMAT_R8G8B8A8_SRGB);
+	RenderPipeline::createImageView(textureImageView, textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 
 	//SAMPLING
 	VkSampler textureSampler;
@@ -141,7 +141,7 @@ void gbe::gfx::TextureLoader::PassDependencies(VkDevice* vkdevice, VkPhysicalDev
 
 	//CREATE IMAGE VIEW
 	VkImageView textureImageView;
-	RenderPipeline::createImageView(textureImageView, textureImage, VK_FORMAT_R8G8B8A8_SRGB);
+	RenderPipeline::createImageView(textureImageView, textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_ASPECT_COLOR_BIT);
 
 	//SAMPLING
 	VkSampler textureSampler;

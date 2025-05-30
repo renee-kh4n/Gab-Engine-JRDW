@@ -79,6 +79,7 @@ namespace gbe {
 
 		void InitializePipelineObjects();
 		void RefreshPipelineObjects();
+		void InitializeFramebuffers();
 		void CleanPipelineObjects();
 		void CreateDepthResources();
 		VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
@@ -104,7 +105,7 @@ namespace gbe {
 		static void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 		static void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
 		static void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
-		static void createImageView(VkImageView& imageview, VkImage image, VkFormat format);
+		static void createImageView(VkImageView& imageview, VkImage image, VkFormat format, VkImageAspectFlags aspectflags);
 
 		RenderPipeline(gbe::Window*, Vector2Int);
 		DrawCall* RegisterDrawCall(asset::Mesh* mesh, asset::Material* material);

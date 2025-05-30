@@ -71,12 +71,12 @@ namespace gbe {
 		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
 
 		//MESH CACHING
-		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
+		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
 		//BY MATERIAL
 		
 		//MATERIAL CACHING
 		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
-		//test_mat->setOverride("color", Vector4(1, 1, 1, 1));
+		//test_mat->setOverride("color", Vector4(0, 1, 0, 1));
 		test_mat->setOverride("colortex", ball_tex);
 
 		//DRAW CALL CACHING
@@ -225,7 +225,7 @@ namespace gbe {
 
 #pragma region scene objects
 			create_test(Vector3(5, 0, 10), Vector3(4, 4, 4));
-			create_test(Vector3(-5, 0, 10), Vector3(4, 4, 4));
+			create_test(Vector3(-5, 0, 0), Vector3(4, 4, 4));
 #pragma endregion
 
 			return game_root;

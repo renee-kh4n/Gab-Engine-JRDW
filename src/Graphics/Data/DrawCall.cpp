@@ -110,8 +110,16 @@ namespace gbe {
                     descriptorWrite.pImageInfo = &imageInfo;
 
                     vkUpdateDescriptorSets(*this->vkdevice, static_cast<uint32_t>(1), &descriptorWrite, 0, nullptr);
-				}
-                
+				}   
+            }
+            else if (overridedata.type == asset::Shader::UniformFieldType::VEC4) {
+                //CREATE THE WRITE DATA FOR EACH INSTANCE
+                for (auto& callinstpair : this->calls)
+                {
+                    CallInstance& callinst = callinstpair.second;
+                    
+                    this->ApplyOverride<Vector4>(overridedata.value_vec4, id, frameindex, callinst);
+                }
             }
 
 			overrideHandledList[id].push_back(frameindex);

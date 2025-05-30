@@ -61,7 +61,7 @@ namespace gbe {
             bool SyncMaterialData(unsigned int frameindex);
 
             template<typename T>
-            bool ApplyOverride(const T valueref, std::string target, unsigned int frameindex, CallInstance& callinst) {
+            bool ApplyOverride(T valueref, std::string target, unsigned int frameindex, CallInstance& callinst) {
                 ShaderData::ShaderBlock blockinfo;
                 ShaderData::ShaderField fieldinfo;
 
