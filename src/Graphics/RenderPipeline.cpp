@@ -851,9 +851,9 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
 
             VkViewport viewport{};
             viewport.width = static_cast<float>(this->swapchainExtent.width);
-            viewport.height = -static_cast<float>(this->swapchainExtent.height);
+            viewport.height = static_cast<float>(this->swapchainExtent.height);
             viewport.x = 0.0f;
-            viewport.y = static_cast<float>(this->swapchainExtent.height);
+            viewport.y = 0.0f;
             viewport.minDepth = 0.0f;
             viewport.maxDepth = 1.0f;
             vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
@@ -866,7 +866,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
             //RENDER MESH
             const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
 			
-            //projmat[1][1] = -projmat[1][1]; //Flip Y axis for Vulkan
+            projmat[1][1] = -projmat[1][1]; //Flip Y axis for Vulkan
 
             drawcall->SyncMaterialData(currentFrame);
 
