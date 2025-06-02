@@ -9,12 +9,17 @@
         {
             "type" : "vec2",
             "name" : "fragTexCoord",
-            "location" : 1
+            "location" : 2
         },
         {
             "type" : "vec3",
             "name" : "fragColor",
             "location" : 0
+        },
+        {
+            "type" : "vec3",
+            "name" : "fragNormal",
+            "location" : 1
         }
     ],
     "outputs" : [

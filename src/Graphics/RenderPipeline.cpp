@@ -406,6 +406,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     //EXTENSIONS
     const std::vector<const char*> deviceExtensionNames = {
         VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+        VK_KHR_MAINTENANCE1_EXTENSION_NAME
     };
 
     bool founddevice = false;
@@ -849,10 +850,10 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
             vkCmdBindPipeline(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipeline);
 
             VkViewport viewport{};
-            viewport.x = 0.0f;
-            viewport.y = 0.0f;
             viewport.width = static_cast<float>(this->swapchainExtent.width);
-            viewport.height = static_cast<float>(this->swapchainExtent.height);
+            viewport.height = -static_cast<float>(this->swapchainExtent.height);
+            viewport.x = 0.0f;
+            viewport.y = static_cast<float>(this->swapchainExtent.height);
             viewport.minDepth = 0.0f;
             viewport.maxDepth = 1.0f;
             vkCmdSetViewport(currentCommandBuffer, 0, 1, &viewport);
@@ -865,8 +866,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
             //RENDER MESH
             const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
 			
-            Matrix4 vulkanprojmat = projmat; //copy
-            vulkanprojmat[1][1] = -projmat[1][1]; //Flip Y axis for Vulkan
+            //projmat[1][1] = -projmat[1][1]; //Flip Y axis for Vulkan
 
             drawcall->SyncMaterialData(currentFrame);
 
@@ -875,7 +875,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
                 auto& callinstance = drawcall->get_call_instance(dc_i);
                 
 				drawcall->ApplyOverride<Matrix4>(callinstance.model, "model", currentFrame, callinstance);
-				drawcall->ApplyOverride<Matrix4>(vulkanprojmat, "proj", currentFrame, callinstance);
+				drawcall->ApplyOverride<Matrix4>(projmat, "proj", currentFrame, callinstance);
 				drawcall->ApplyOverride<Matrix4>(viewmat, "view", currentFrame, callinstance);
 
 

@@ -76,7 +76,7 @@ namespace gbe {
 		
 		//MATERIAL CACHING
 		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
-		//test_mat->setOverride("color", Vector4(0, 1, 0, 1));
+		test_mat->setOverride("color", Vector4(0, 1, 0, 1));
 		test_mat->setOverride("colortex", ball_tex);
 
 		//DRAW CALL CACHING
@@ -153,6 +153,8 @@ namespace gbe {
 				platform_collider->Local().position.Set(Vector3(0, 0, 0));
 				RenderObject* platform_renderer = new RenderObject(new_drawcall);
 				platform_renderer->SetParent(platform_collider);
+
+				return platform;
 				};
 
 			//Global objects
@@ -224,8 +226,11 @@ namespace gbe {
 #pragma endregion
 
 #pragma region scene objects
-			create_test(Vector3(5, 0, 10), Vector3(4, 4, 4));
-			create_test(Vector3(-5, 0, 0), Vector3(4, 4, 4));
+			auto scalefactor = 2.0f;
+
+			create_test(Vector3(5, 0, 0), Vector3(scalefactor, scalefactor, scalefactor));
+			create_test(Vector3(-5, 0, 0), Vector3(scalefactor, scalefactor, scalefactor));
+			create_test(Vector3(0, 5, 0), Vector3(scalefactor, scalefactor, scalefactor));
 #pragma endregion
 
 			return game_root;

@@ -39,25 +39,30 @@
                 }
             ]
         },
-        "_17" : {
+        "_18" : {
             "name" : "Transform",
             "members" : [
                 {
+                    "name" : "color",
+                    "type" : "vec3",
+                    "offset" : 0
+                },
+                {
                     "name" : "model",
                     "type" : "mat4",
-                    "offset" : 0,
+                    "offset" : 16,
                     "matrix_stride" : 16
                 },
                 {
                     "name" : "view",
                     "type" : "mat4",
-                    "offset" : 64,
+                    "offset" : 80,
                     "matrix_stride" : 16
                 },
                 {
                     "name" : "proj",
                     "type" : "mat4",
-                    "offset" : 128,
+                    "offset" : 144,
                     "matrix_stride" : 16
                 }
             ]
@@ -70,14 +75,19 @@
             "location" : 0
         },
         {
-            "type" : "vec3",
-            "name" : "inColor",
-            "location" : 1
-        },
-        {
             "type" : "vec2",
             "name" : "inTexCoord",
             "location" : 2
+        },
+        {
+            "type" : "vec3",
+            "name" : "inNormal",
+            "location" : 1
+        },
+        {
+            "type" : "vec3",
+            "name" : "inColor",
+            "location" : 3
         }
     ],
     "outputs" : [
@@ -89,14 +99,19 @@
         {
             "type" : "vec2",
             "name" : "fragTexCoord",
+            "location" : 2
+        },
+        {
+            "type" : "vec3",
+            "name" : "fragNormal",
             "location" : 1
         }
     ],
     "ubos" : [
         {
-            "type" : "_17",
+            "type" : "_18",
             "name" : "Transform",
-            "block_size" : 192,
+            "block_size" : 208,
             "set" : 0,
             "binding" : 0
         }
