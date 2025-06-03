@@ -13,6 +13,10 @@ gbe::Vector4::Vector4() : glm::vec4(0)
 {
 }
 
+gbe::Vector4::Vector4(Vector3 vec3, float w) : glm::vec4(vec3.x, vec3.y, vec3.z, w) {
+	 
+}
+
 gbe::Vector4::Vector4(glm::vec4 glmvec) : glm::vec4(glmvec)
 {
 

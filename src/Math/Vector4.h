@@ -4,6 +4,8 @@
 #include <cmath>
 #include <vector>
 
+#include "Vector3.h"
+
 #include <glm/vec4.hpp>
 
 namespace gbe {
@@ -11,6 +13,7 @@ namespace gbe {
 		Vector4();
 		Vector4(float);
 		Vector4(float, float, float, float);
+		Vector4(Vector3, float);
 		Vector4(glm::vec4 glmvec);
 
 		const float* Get_Ptr();

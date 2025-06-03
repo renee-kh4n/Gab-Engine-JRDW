@@ -62,25 +62,23 @@ namespace gbe {
 		//auto audio_ui_hover = new asset::Audio("DefaultAssets/Audio/bubble hover.aud.gbe");
 		//auto audio_ui_click = new asset::Audio("DefaultAssets/Audio/uiclick.aud.gbe");
 
+
+		//MESH CACHING
+		auto test_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
+		
 		//SHADER CACHING
 		auto testShader = new asset::Shader("DefaultAssets/Shaders/test.shader.gbe");
 
 		//TEXTURE CACHING
-		//UI
-		//MODEL
-		auto ball_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
-
-		//MESH CACHING
-		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
-		//BY MATERIAL
+		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
 		
 		//MATERIAL CACHING
 		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
-		test_mat->setOverride("color", Vector4(0, 1, 0, 1));
-		test_mat->setOverride("colortex", ball_tex);
+		test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
+		test_mat->setOverride("colortex", test_tex);
 
 		//DRAW CALL CACHING
-		auto new_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, test_mat);
+		auto new_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
 
 #pragma endregion
 #pragma region GUI Pipeline Setup
