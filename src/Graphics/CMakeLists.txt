@@ -22,6 +22,7 @@ find_package(glad CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE glad::glad)
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_editor)
 
 find_package(Vulkan REQUIRED)
 if (Vulkan_FOUND)

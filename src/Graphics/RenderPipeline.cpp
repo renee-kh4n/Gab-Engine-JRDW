@@ -4,6 +4,8 @@
 
 #include "RenderPipeline.h"
 
+#include "Editor/gbe_editor.h"
+
 #ifdef NDEBUG
 const bool enableValidationLayers = false;
 #else
@@ -773,6 +775,11 @@ void gbe::RenderPipeline::InitializePipelineObjects() {
 #pragma endregion
 }
 
+void gbe::RenderPipeline::AssignEditor(Editor* _editor)
+{
+    this->editor = _editor;
+}
+
 void RenderPipeline::SetCameraShader(asset::Shader* camshader) {
 	
 }
@@ -902,7 +909,8 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
         }
     }
 
-
+    //EDITOR/GUI PASS
+    this->editor->RenderPass(currentCommandBuffer);
 
     vkCmdEndRenderPass(currentCommandBuffer);
 

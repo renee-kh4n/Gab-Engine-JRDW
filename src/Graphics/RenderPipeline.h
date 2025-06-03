@@ -29,6 +29,7 @@
 
 namespace gbe {
 	using namespace gfx;
+	class Editor;
 
 	class RenderPipeline {
 	private:
@@ -52,6 +53,7 @@ namespace gbe {
 		std::unordered_map<std::string, void*> PipelineVariables;
 
 		Window* window;
+		Editor* editor;
 
 		//VK Init
 		VkInstance vkInst;
@@ -115,6 +117,7 @@ namespace gbe {
 		DrawCall* RegisterDrawCall(asset::Mesh* mesh, asset::Material* material);
 		void* GetPipelineVariable(std::string id);
 
+		void AssignEditor(Editor* editor);
 		void SetCameraShader(asset::Shader* postprocess);
 		bool TryPushLight(gfx::Light* data, bool priority = false);
 
