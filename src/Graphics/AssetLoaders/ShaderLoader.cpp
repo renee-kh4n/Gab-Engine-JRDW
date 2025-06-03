@@ -355,36 +355,6 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 		throw std::runtime_error("failed to create graphics pipeline!");
 	}
 
-	//OVERRIDE FUNCTIONS
-	data->overridefunctions.SetOverride_bool = [=](const char* id, bool value) {
-
-		};
-	data->overridefunctions.SetOverride_int = [=](const char* id, int value) {
-
-		};
-	data->overridefunctions.SetOverride_float = [=](const char* id, float value) {
-
-		};
-	data->overridefunctions.SetOverride_Vector2 = [=](const char* id, Vector2 value) {
-
-		};
-	data->overridefunctions.SetOverride_Vector3 = [=](const char* id, Vector3 value) {
-
-		};
-	data->overridefunctions.SetOverride_Vector4 = [=](const char* id, Vector4 value) {
-
-		};
-	data->overridefunctions.SetOverride_Matrix4 = [=](const char* id, Matrix4 value) {
-
-		};
-	data->overridefunctions.SetOverride_Texture = [=](const char* id, asset::Texture* value) {
-
-		};
-	data->overridefunctions.SetOverride_TextureId = [=](const char* id, int texid) {
-		
-		};
-
-
 	//Cleanup
 	vkDestroyShaderModule((*this->vkdevice), vertShader, nullptr);
 	vkDestroyShaderModule((*this->vkdevice), fragShader, nullptr);

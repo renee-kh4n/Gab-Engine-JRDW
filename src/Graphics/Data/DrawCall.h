@@ -27,7 +27,7 @@ namespace gbe {
 				std::vector<UniformBlockBuffer> uniformBuffers;
 				std::vector<UniformTexture> uniformTextures;
                 VkDescriptorPool descriptorPool;
-                std::vector<VkDescriptorSet> allocdescriptorSets;
+                std::vector<std::vector<VkDescriptorSet>> allocdescriptorSets;
 
                 bool GetBlock(std::string name, gbe::gfx::DrawCall::CallInstance::UniformBlockBuffer& out_block);
             };

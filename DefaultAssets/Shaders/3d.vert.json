@@ -39,30 +39,25 @@
                 }
             ]
         },
-        "_18" : {
+        "_17" : {
             "name" : "Transform",
             "members" : [
                 {
-                    "name" : "color",
-                    "type" : "vec3",
-                    "offset" : 0
-                },
-                {
                     "name" : "model",
                     "type" : "mat4",
-                    "offset" : 16,
+                    "offset" : 0,
                     "matrix_stride" : 16
                 },
                 {
                     "name" : "view",
                     "type" : "mat4",
-                    "offset" : 80,
+                    "offset" : 64,
                     "matrix_stride" : 16
                 },
                 {
                     "name" : "proj",
                     "type" : "mat4",
-                    "offset" : 144,
+                    "offset" : 128,
                     "matrix_stride" : 16
                 }
             ]
@@ -92,27 +87,22 @@
     ],
     "outputs" : [
         {
-            "type" : "vec3",
-            "name" : "fragColor",
-            "location" : 0
-        },
-        {
             "type" : "vec2",
             "name" : "fragTexCoord",
-            "location" : 2
+            "location" : 1
         },
         {
             "type" : "vec3",
             "name" : "fragNormal",
-            "location" : 1
+            "location" : 0
         }
     ],
     "ubos" : [
         {
-            "type" : "_18",
+            "type" : "_17",
             "name" : "Transform",
-            "block_size" : 208,
-            "set" : 0,
+            "block_size" : 192,
+            "set" : 1,
             "binding" : 0
         }
     ]

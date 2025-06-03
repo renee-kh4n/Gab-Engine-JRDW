@@ -38,32 +38,44 @@ target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::S
 
 
 #SHADER COMPILATION
-set(SHADER_OUTPUT "")
-function(add_shader SRCPATH)
+
+set(COMPILED_SHADERS "")
+function(COMPILE_SHADER SRCPATH)
   add_custom_command(
     OUTPUT "${SRCPATH}.spv"
     MAIN_DEPENDENCY "${SRCPATH}"
     COMMAND "${PACKAGE_PREFIX_DIR}/tools/shaderc/glslc.exe" "${SRCPATH}" -o "${SRCPATH}.spv")
+  list(APPEND COMPILED_SHADERS "${SRCPATH}.spv")
+  set(COMPILED_SHADERS "${COMPILED_SHADERS}" PARENT_SCOPE)
+endfunction()
+
+set(REFLECT_FILES "")
+function(DECOMPILE_SHADER SRCPATH)
   add_custom_command(
     OUTPUT "${SRCPATH}.json"
-    MAIN_DEPENDENCY "${SRCPATH}"
+    MAIN_DEPENDENCY "${SRCPATH}.spv"
     COMMAND "${PACKAGE_PREFIX_DIR}/tools/spirv-cross/spirv-cross.exe" --output "${SRCPATH}.json" "${SRCPATH}.spv" --reflect)
-  list(APPEND SHADER_OUTPUT "${SRCPATH}.spv")
-  list(APPEND SHADER_OUTPUT "${SRCPATH}.json")
-  set(SHADER_OUTPUT "${SHADER_OUTPUT}" PARENT_SCOPE)
+  list(APPEND REFLECT_FILES "${SRCPATH}.json")
+  set(REFLECT_FILES "${REFLECT_FILES}" PARENT_SCOPE)
 endfunction()
 
 file(GLOB verts "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets/shaders/*.vert")
 foreach(shader ${verts})
-  add_shader(${shader})
+  COMPILE_SHADER(${shader})
+  DECOMPILE_SHADER(${shader})
 endforeach()
 file(GLOB frags "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets/shaders/*.frag")
 foreach(shader ${frags})
-  add_shader(${shader})
+  COMPILE_SHADER(${shader})
+  DECOMPILE_SHADER(${shader})
 endforeach()
+  
 
-add_custom_target(compile_shaders ALL DEPENDS ${SHADER_OUTPUT})
+add_custom_target(compile_shaders ALL DEPENDS ${COMPILED_SHADERS})
 add_dependencies(${PROJECT_NAME} compile_shaders)
+
+add_custom_target(decompile_shaders ALL DEPENDS ${REFLECT_FILES})
+add_dependencies(${PROJECT_NAME} decompile_shaders)
 
 message("[GABENGINE] COMPILED SHADERS: ${SHADER_OUTPUT}")
 

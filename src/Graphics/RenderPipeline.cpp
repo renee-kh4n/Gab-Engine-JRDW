@@ -899,8 +899,14 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
-                auto dallocset = &callinstance.allocdescriptorSets[currentFrame];
-                vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, 1, dallocset, 0, nullptr);
+                
+                std::vector<VkDescriptorSet> bindingsets;
+                for (auto& set: callinstance.allocdescriptorSets)
+                {
+                    bindingsets.push_back(set[currentFrame]);
+                }
+
+                vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, 1, bindingsets.data(), 0, nullptr);
                 
                 vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
                 vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);

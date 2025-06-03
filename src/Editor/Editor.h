@@ -13,8 +13,7 @@ namespace gbe {
 	private:
 		Window* mwindow;
 	public:
-		Editor();
-		void Init(RenderPipeline*, Window*);
+		Editor(RenderPipeline* renderpipeline, Window* window);
 		void PrepareFrame();
 		void DrawFrame();
 		void PresentFrame();

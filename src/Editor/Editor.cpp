@@ -2,11 +2,7 @@
 
 #include "Graphics/RenderPipeline.h"
 
-gbe::Editor::Editor()
-{
-}
-
-void gbe::Editor::Init(RenderPipeline* renderpipeline, Window* window)
+gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window)
 {
 	//GET ALL REQUIRED VARIABLES FROM RENDERPIPELINE
 	auto vkInst = static_cast<VkInstance*>(renderpipeline->GetPipelineVariable("VkInstance"));
@@ -40,7 +36,7 @@ void gbe::Editor::Init(RenderPipeline* renderpipeline, Window* window)
 	pool_info.maxSets = 1000;
 	pool_info.poolSizeCount = std::size(pool_sizes);
 	pool_info.pPoolSizes = pool_sizes;
-	
+
 	VkDescriptorPool imguiPool;
 	if (vkCreateDescriptorPool(*vkdevice, &pool_info, nullptr, &imguiPool) != VK_SUCCESS) {
 		throw std::runtime_error("Failed to init imgui");

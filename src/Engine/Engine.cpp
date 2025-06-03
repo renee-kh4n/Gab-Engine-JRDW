@@ -58,8 +58,7 @@ namespace gbe {
 		//mAudioPipeline->Init();
 #pragma endregion
 #pragma region Editor Setup
-		auto mEditor = new gbe::Editor();
-		mEditor->Init(mRenderPipeline, mWindow);
+		auto mEditor = new gbe::Editor(mRenderPipeline, mWindow);
 #pragma endregion
 #pragma region Asset Loading
 		//AUDIO CACHING
@@ -72,16 +71,17 @@ namespace gbe {
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
 		
 		//SHADER CACHING
-		auto testShader = new asset::Shader("DefaultAssets/Shaders/test.shader.gbe");
+		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
+		auto idShader = new asset::Shader("DefaultAssets/Shaders/id.shader.gbe");
 
 		//TEXTURE CACHING
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
 		
 		//MATERIAL CACHING
-		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
+		auto test_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 		test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
 		test_mat->setOverride("colortex", test_tex);
-		auto cube_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
+		auto cube_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 
 		//DRAW CALL CACHING
 		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);

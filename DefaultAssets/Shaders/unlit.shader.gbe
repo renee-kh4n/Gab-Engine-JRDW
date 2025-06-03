@@ -1,0 +1,7 @@
+{
+  "asset_id": "unlit",
+  "vert": "3d.vert.spv",
+  "vert_meta": "3d.vert.json",
+  "frag": "unlit.frag.spv",
+  "frag_meta": "unlit.frag.json"
+}

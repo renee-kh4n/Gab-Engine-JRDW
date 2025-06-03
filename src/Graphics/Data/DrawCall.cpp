@@ -102,7 +102,7 @@ namespace gbe {
                     VkWriteDescriptorSet descriptorWrite{};
 
                     descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                    descriptorWrite.dstSet = callinst.allocdescriptorSets[frameindex];
+                    descriptorWrite.dstSet = callinst.allocdescriptorSets[fieldinfo.set][frameindex];
                     descriptorWrite.dstBinding = fieldinfo.binding;
                     descriptorWrite.dstArrayElement = 0;
                     descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;
@@ -201,21 +201,25 @@ namespace gbe {
         }
 
         //DESCRIPTOR SETS
-        std::vector<VkDescriptorSetLayout> layouts{};
-        for (size_t i = 0; i < MAX_FRAMES_IN_FLIGHT; i++)
+        auto setcount = shaderdata->descriptorSetLayouts.size();
+        newinst.allocdescriptorSets.resize(setcount);
+
+        for (size_t set_i = 0; set_i < setcount; set_i++)
         {
-            layouts.append_range(shaderdata->descriptorSetLayouts);
-        }
+            auto& descriptorSetLayout = shaderdata->descriptorSetLayouts[set_i];
 
-        VkDescriptorSetAllocateInfo allocInfo{};
-        allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        allocInfo.descriptorPool = newinst.descriptorPool;
-        allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-        allocInfo.pSetLayouts = layouts.data();
+            std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
 
-        newinst.allocdescriptorSets.resize(MAX_FRAMES_IN_FLIGHT);
-        if (vkAllocateDescriptorSets(*this->vkdevice, &allocInfo, newinst.allocdescriptorSets.data()) != VK_SUCCESS) {
-            throw std::runtime_error("failed to allocate descriptor sets!");
+            VkDescriptorSetAllocateInfo allocInfo{};
+            allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+            allocInfo.descriptorPool = newinst.descriptorPool;
+            allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
+            allocInfo.pSetLayouts = layouts.data();
+
+            newinst.allocdescriptorSets[set_i].resize(MAX_FRAMES_IN_FLIGHT);
+            if (vkAllocateDescriptorSets(*this->vkdevice, &allocInfo, newinst.allocdescriptorSets[set_i].data()) != VK_SUCCESS) {
+                throw std::runtime_error("failed to allocate descriptor sets!");
+            }
         }
 
         for (size_t f_i = 0; f_i < MAX_FRAMES_IN_FLIGHT; f_i++) {
@@ -238,7 +242,7 @@ namespace gbe {
                 VkWriteDescriptorSet descriptorWrite{};
 
                 descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                descriptorWrite.dstSet = newinst.allocdescriptorSets[f_i];
+                descriptorWrite.dstSet = newinst.allocdescriptorSets[blockinfo.set][f_i];
                 descriptorWrite.dstBinding = blockinfo.binding;
                 descriptorWrite.dstArrayElement = 0;
                 descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER;
@@ -265,7 +269,7 @@ namespace gbe {
                 VkWriteDescriptorSet descriptorWrite{};
 
                 descriptorWrite.sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
-                descriptorWrite.dstSet = newinst.allocdescriptorSets[f_i];
+                descriptorWrite.dstSet = newinst.allocdescriptorSets[fieldinfo.set][f_i];
                 descriptorWrite.dstBinding = fieldinfo.binding;
                 descriptorWrite.dstArrayElement = 0;
                 descriptorWrite.descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER;

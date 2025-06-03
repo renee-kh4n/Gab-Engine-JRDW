@@ -9,17 +9,12 @@
         {
             "type" : "vec2",
             "name" : "fragTexCoord",
-            "location" : 2
-        },
-        {
-            "type" : "vec3",
-            "name" : "fragColor",
-            "location" : 0
+            "location" : 1
         },
         {
             "type" : "vec3",
             "name" : "fragNormal",
-            "location" : 1
+            "location" : 0
         }
     ],
     "outputs" : [
@@ -34,7 +29,7 @@
             "type" : "sampler2D",
             "name" : "colortex",
             "set" : 0,
-            "binding" : 1
+            "binding" : 2
         }
     ]
 }
