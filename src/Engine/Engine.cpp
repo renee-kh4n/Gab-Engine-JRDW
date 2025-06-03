@@ -73,6 +73,7 @@ namespace gbe {
 		//SHADER CACHING
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
 		auto idShader = new asset::Shader("DefaultAssets/Shaders/id.shader.gbe");
+		auto gridShader = new asset::Shader("DefaultAssets/Shaders/grid.shader.gbe");
 
 		//TEXTURE CACHING
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
@@ -81,7 +82,7 @@ namespace gbe {
 		auto test_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 		test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
 		test_mat->setOverride("colortex", test_tex);
-		auto cube_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
 
 		//DRAW CALL CACHING
 		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);

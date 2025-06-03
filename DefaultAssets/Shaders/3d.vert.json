@@ -102,7 +102,7 @@
             "type" : "_17",
             "name" : "Transform",
             "block_size" : 192,
-            "set" : 1,
+            "set" : 0,
             "binding" : 0
         }
     ]
