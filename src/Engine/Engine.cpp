@@ -57,6 +57,10 @@ namespace gbe {
 		auto mAudioPipeline = new audio::AudioPipeline();
 		//mAudioPipeline->Init();
 #pragma endregion
+#pragma region Editor Setup
+		auto mEditor = new gbe::Editor();
+		mEditor->Init(mRenderPipeline, mWindow);
+#pragma endregion
 #pragma region Asset Loading
 		//AUDIO CACHING
 		//auto audio_ui_hover = new asset::Audio("DefaultAssets/Audio/bubble hover.aud.gbe");
@@ -282,6 +286,12 @@ namespace gbe {
 			}
 
 			//Update Render pipeline
+			//EDITOR UPDATE
+			mEditor->PrepareFrame();
+			mEditor->DrawFrame();
+			//<----------MORE EDITOR FUNCTIONS GO HERE
+			mEditor->PresentFrame();
+			//ENGINE UPDATE
 			for (auto light : this->current_root->GetHandler<LightObject>()->object_list)
 			{
 				if (mRenderPipeline->TryPushLight(light->GetData(), false) == false) {

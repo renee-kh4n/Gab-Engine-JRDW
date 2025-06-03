@@ -18,7 +18,6 @@ set(CMAKE_TOOLCHAIN_FILE ${VCPKG_TOOLCHAIN_DIR})
 message("INCLUDING VCPKG AT: " "${CMAKE_TOOLCHAIN_FILE}")
 
 project ("gab-engine" LANGUAGES CXX)
-
 #SUBDIRECTORY LOADING
 add_subdirectory(src)
 
@@ -36,6 +35,7 @@ target_link_libraries(${PROJECT_NAME}
 )
 find_package(SDL2_mixer CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
+
 
 #SHADER COMPILATION
 set(SHADER_OUTPUT "")

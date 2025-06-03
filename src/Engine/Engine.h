@@ -1,6 +1,6 @@
 #pragma once
 
-#define GLM_ENABLE_EXPERIMENTAL
+#include "Editor/gbe_editor.h"
 #include "Graphics/gbe_graphics.h"
 #include "GUI/gbe_gui.h"
 #include "Math/gbe_math.h"

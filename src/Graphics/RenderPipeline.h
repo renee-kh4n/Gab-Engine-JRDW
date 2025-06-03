@@ -48,13 +48,17 @@ namespace gbe {
 		TextureLoader textureloader;
 		MaterialLoader materialloader;
 
-		//VK Init
+		//--------PIPELINE SPECIFIC VARIABLES--------//
+		std::unordered_map<std::string, void*> PipelineVariables;
+
 		Window* window;
+
+		//VK Init
 		VkInstance vkInst;
-		VkDebugUtilsMessengerEXT debugMessenger;
 		VkSurfaceKHR vksurface;
 		VkDevice vkdevice;
 		VkPhysicalDevice vkphysicalDevice;
+		VkDebugUtilsMessengerEXT debugMessenger;
 		uint32_t graphicsQueueIndex = UINT32_MAX;
 		uint32_t presentQueueIndex = UINT32_MAX;
 		VkQueue graphicsQueue;
@@ -109,6 +113,7 @@ namespace gbe {
 
 		RenderPipeline(gbe::Window*, Vector2Int);
 		DrawCall* RegisterDrawCall(asset::Mesh* mesh, asset::Material* material);
+		void* GetPipelineVariable(std::string id);
 
 		void SetCameraShader(asset::Shader* postprocess);
 		bool TryPushLight(gfx::Light* data, bool priority = false);

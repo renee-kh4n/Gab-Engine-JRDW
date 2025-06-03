@@ -18,6 +18,11 @@
       "name": "sdl2",
       "features": [ "vulkan" ]
     },
-    "spirv-cross"
+    "spirv-cross",
+    {
+      "name": "imgui",
+      "features": [ "vulkan-binding", "sdl2-binding" ]
+    }
+
   ]
 }

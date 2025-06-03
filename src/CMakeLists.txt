@@ -20,8 +20,8 @@ target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_gui)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_physics)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_window)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_audio)
-target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_engine)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_editor)
+target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_engine)
 
 
 get_target_property(LINKED_LIBS ${CURRENT_CMAKE_LIB} INTERFACE_LINK_LIBRARIES)

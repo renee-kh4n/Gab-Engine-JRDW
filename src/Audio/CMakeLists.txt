@@ -13,4 +13,6 @@ target_link_libraries(${CURRENT_CMAKE_LIB}
 find_package(SDL2_mixer CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC ${SDL2IMAGE_LIBRARIES})
 
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
+
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

@@ -1,6 +1,7 @@
-#define GLM_ENABLE_EXPERIMENTAL
+//PUT ODR DEFINES HERE AS THIS FILE IS THE FIRST FILE TO BE COMPILED IN THE RENDER PIPELINE
 #define TINYOBJLOADER_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
+
 #include "RenderPipeline.h"
 
 #ifdef NDEBUG
@@ -580,6 +581,15 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 
     this->textureloader.AssignSelfAsLoader();
     this->textureloader.PassDependencies(&this->vkdevice, &this->vkphysicalDevice);
+
+    //Assigning pipeline specific variables
+    this->PipelineVariables.insert_or_assign("VkInstance", &vkInst);
+    this->PipelineVariables.insert_or_assign("VkSurfaceKHR", &vksurface);
+    this->PipelineVariables.insert_or_assign("VkDevice", &vkdevice);
+    this->PipelineVariables.insert_or_assign("VkPhysicalDevice", &vkphysicalDevice);
+    this->PipelineVariables.insert_or_assign("VkRenderPass", &renderPass);
+    this->PipelineVariables.insert_or_assign("VkQueue_graphics", &graphicsQueue);
+    this->PipelineVariables.insert_or_assign("VkQueue_present", &presentQueue);
 }
 
 void gbe::RenderPipeline::querySwapChainSupport(VkPhysicalDevice pvkdevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR& capabilities, std::vector<VkSurfaceFormatKHR>& formats, std::vector<VkPresentModeKHR>& presentModes) {
@@ -891,6 +901,9 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
             }
         }
     }
+
+
+
     vkCmdEndRenderPass(currentCommandBuffer);
 
     if (vkEndCommandBuffer(currentCommandBuffer) != VK_SUCCESS) {
@@ -955,6 +968,15 @@ gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, ass
 	}
 
     return newdrawcall;
+}
+
+void* gbe::RenderPipeline::GetPipelineVariable(std::string id)
+{
+    if (this->PipelineVariables.find(id) == this->PipelineVariables.end()) {
+        throw std::runtime_error("Variable does not exist.");
+    }
+
+    return this->PipelineVariables.at(id);
 }
 
 void gbe::RenderPipeline::RefreshPipelineObjects() {

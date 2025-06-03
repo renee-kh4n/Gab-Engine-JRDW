@@ -5,6 +5,8 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Window.cpp"
  "WindowEvents.h" "gbe_window.h")
 
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
+
 find_package(SDL2 CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB}
     PRIVATE
