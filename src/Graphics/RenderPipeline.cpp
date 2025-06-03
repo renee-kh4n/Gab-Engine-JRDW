@@ -854,6 +854,8 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
     vkCmdBeginRenderPass(currentCommandBuffer, &renderPassBeginInfo, VK_SUBPASS_CONTENTS_INLINE);
 
     //Render an object
+    projmat[1][1] = -projmat[1][1]; //Flip Y axis for Vulkan
+
     for (const auto &pair : this->drawcalls)
     {
 		const auto& draworder = pair.first;
@@ -883,8 +885,6 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
             //RENDER MESH
             const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
 			
-            projmat[1][1] = -projmat[1][1]; //Flip Y axis for Vulkan
-
             drawcall->SyncMaterialData(currentFrame);
 
             //UPDATE GLOBAL UBO
@@ -894,7 +894,6 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
 				drawcall->ApplyOverride<Matrix4>(callinstance.model, "model", currentFrame, callinstance);
 				drawcall->ApplyOverride<Matrix4>(projmat, "proj", currentFrame, callinstance);
 				drawcall->ApplyOverride<Matrix4>(viewmat, "view", currentFrame, callinstance);
-
 
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
                 VkDeviceSize offsets[] = { 0 };

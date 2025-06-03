@@ -69,6 +69,7 @@ namespace gbe {
 
 		//MESH CACHING
 		auto test_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
+		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
 		
 		//SHADER CACHING
 		auto testShader = new asset::Shader("DefaultAssets/Shaders/test.shader.gbe");
@@ -80,9 +81,11 @@ namespace gbe {
 		auto test_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
 		test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
 		test_mat->setOverride("colortex", test_tex);
+		auto cube_mat = new asset::Material("DefaultAssets/Materials/test.mat.gbe");
 
 		//DRAW CALL CACHING
-		auto new_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
+		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
+		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
 
 #pragma endregion
 #pragma region GUI Pipeline Setup
@@ -144,20 +147,36 @@ namespace gbe {
 
 			//Spawn funcs
 
-			auto create_test = [=](Vector3 pos, Vector3 scale) {
-				RigidObject* platform = new RigidObject(true);
-				platform->SetParent(game_root);
-				platform->Local().position.Set(pos);
-				platform->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
-				platform->Local().scale.Set(scale);
+			auto create_test = [=](Vector3 pos, Vector3 scale, Vector3 renderscale) {
+				RigidObject* test = new RigidObject();
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+				test->Local().scale.Set(scale);
 				BoxCollider* platform_collider = new BoxCollider();
-				platform_collider->SetParent(platform);
+				platform_collider->SetParent(test);
 				platform_collider->Local().position.Set(Vector3(0, 0, 0));
-				RenderObject* platform_renderer = new RenderObject(new_drawcall);
+				RenderObject* platform_renderer = new RenderObject(test_drawcall);
+				platform_renderer->SetParent(platform_collider);
+				platform_renderer->Local().scale.Set(renderscale);
+
+				return test;
+				};
+
+			auto create_platform = [=](Vector3 pos, Vector3 scale) {
+				RigidObject* test = new RigidObject(true);
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+				test->Local().scale.Set(scale);
+				BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(test);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
 				platform_renderer->SetParent(platform_collider);
 
-				return platform;
-				};
+				return test;
+			};
 
 			//Global objects
 			//physics force setup
@@ -187,12 +206,6 @@ namespace gbe {
 
 			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
 			player_cam->SetParent(camera_controller);
-
-			player->SetParent(game_root);
-			player->Local().scale.Set(Vector3(1, 1, 1) * 0.8f);
-
-			auto player_collider = new SphereCollider();
-			player_collider->SetParent(player);
 
 			//ground check
 			auto groundcheck = [=]() {
@@ -228,11 +241,15 @@ namespace gbe {
 #pragma endregion
 
 #pragma region scene objects
-			auto scalefactor = 2.0f;
+			auto scalefactor = 1.0f;
+			auto rscalefactor = 2.0f;
+			auto scalevec = Vector3(scalefactor, scalefactor, scalefactor);
 
-			create_test(Vector3(5, 0, 0), Vector3(scalefactor, scalefactor, scalefactor));
-			create_test(Vector3(-5, 0, 0), Vector3(scalefactor, scalefactor, scalefactor));
-			create_test(Vector3(0, 5, 0), Vector3(scalefactor, scalefactor, scalefactor));
+			create_test(Vector3(5, 0, 0), scalevec, scalevec * rscalefactor);
+			create_test(Vector3(-5, 0, 0), scalevec, scalevec* rscalefactor);
+			create_test(Vector3(-1, 5, 0), scalevec, scalevec* rscalefactor);
+
+			create_platform(Vector3(0, -10, 0), Vector3(10, 1, 10));
 #pragma endregion
 
 			return game_root;
@@ -288,7 +305,7 @@ namespace gbe {
 			//Update Render pipeline
 			//EDITOR UPDATE
 			mEditor->PrepareFrame();
-			mEditor->DrawFrame();
+			//mEditor->DrawFrame();
 			//<----------MORE EDITOR FUNCTIONS GO HERE
 			mEditor->PresentFrame();
 			//ENGINE UPDATE
