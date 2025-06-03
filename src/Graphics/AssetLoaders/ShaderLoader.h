@@ -62,7 +62,7 @@ namespace gbe {
 				size_t size = 0; // Offset in bytes
 			};
 
-			std::unordered_map<unsigned int, std::vector<VkDescriptorSetLayoutBinding>> binding_sets;
+			std::vector<std::vector<VkDescriptorSetLayoutBinding>> binding_sets;
 			std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
 			std::vector<ShaderBlock> uniformblocks;
 			std::vector<ShaderField> uniformfields;

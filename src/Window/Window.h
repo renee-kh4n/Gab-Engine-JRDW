@@ -36,7 +36,9 @@ namespace gbe {
 
         std::queue<gbe::window::WindowEventType> event_queue;
 
-        bool centered_cursor = false;;
+        bool centered_cursor = false;
+
+        std::vector<std::function<void(void*)>> additionalEventProcessors;
     public:
         Window(Vector2Int dimentions);
         void* Get_implemented_window();
@@ -60,6 +62,8 @@ namespace gbe {
         void Set_cursorLock(bool);
 
         void* (*Get_procaddressfunc())(const char*);
+
+        void AddAdditionalEventProcessor(std::function<void(void*)> processor);
 
     };
 }

@@ -1,12 +1,16 @@
 #version 450
 //UBOS
+layout(set = 1, binding = 1) uniform Shading {
+    vec4 _color;
+} shading;
+
 layout(location = 0) in vec3 fragNormal;
 layout(location = 1) in vec2 fragTexCoord;
 
 layout(location = 0) out vec4 outColor;
 
 void main() {
-    vec2 size = vec2(20, 20);
+    vec2 size = vec2(15, 15);
 
     float total = floor(fragTexCoord.x * float(size.x)) +
                   floor(fragTexCoord.y * float(size.y));

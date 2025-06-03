@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Window/gbe_window.h"
+#include "Engine/Input/KeyDefines.h"
 
 #include <imgui.h>
 #include <imgui_impl_vulkan.h>
@@ -16,6 +17,7 @@ namespace gbe {
 		Editor(RenderPipeline* renderpipeline, Window* window);
 		void PrepareFrame();
 		void DrawFrame();
+		void ProcessRawWindowEvent(void* rawwindowevent);
 		void PresentFrame();
 		void RenderPass(VkCommandBuffer cmd);
 	};

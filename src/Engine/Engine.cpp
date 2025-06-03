@@ -59,6 +59,9 @@ namespace gbe {
 #pragma endregion
 #pragma region Editor Setup
 		auto mEditor = new gbe::Editor(mRenderPipeline, mWindow);
+		mWindow->AddAdditionalEventProcessor([mEditor](void* newevent) {
+			mEditor->ProcessRawWindowEvent(newevent);
+			});
 #pragma endregion
 #pragma region Asset Loading
 		//AUDIO CACHING
@@ -164,7 +167,7 @@ namespace gbe {
 				return test;
 				};
 
-			auto create_platform = [=](Vector3 pos, Vector3 scale) {
+			auto create_box = [=](Vector3 pos, Vector3 scale) {
 				RigidObject* test = new RigidObject(true);
 				test->SetParent(game_root);
 				test->Local().position.Set(pos);
@@ -242,15 +245,76 @@ namespace gbe {
 #pragma endregion
 
 #pragma region scene objects
-			auto scalefactor = 1.0f;
-			auto rscalefactor = 2.0f;
-			auto scalevec = Vector3(scalefactor, scalefactor, scalefactor);
+			Vector3 from(-20, 0, 0);
+			Vector3 to(100, 0, 0);
+			Vector3 up(0, 1, 0);
+			float height = 30;
+			float pillarInterval = 15;
+			float pillarThickness = 2.0f;
+			float wallThickness = 0.5f;
+			float beamInterval = 6;
+			float beamThickness = 1.8f;
+			float windowHeight = 3;
+			Vector3 windowSize(5, 4, 0.6f);
+			float roofHeight = 2.0f;
+			float roofThickness = 3.0f;
 
-			create_test(Vector3(5, 0, 0), scalevec, scalevec * rscalefactor);
-			create_test(Vector3(-5, 0, 0), scalevec, scalevec* rscalefactor);
-			create_test(Vector3(-1, 5, 0), scalevec, scalevec* rscalefactor);
+			//PCG FUNCTION
 
-			create_platform(Vector3(0, -10, 0), Vector3(10, 1, 10));
+			//STEP 1: CALCULATE VECTORS
+			Vector3 delta = to - from;
+			Vector3 stepdir = delta.Normalize();
+			Vector3 forward = stepdir.Cross(up).Normalize();
+			float abdistance = delta.Magnitude();
+			float halfheight = height * 0.5f;
+
+			//STEP 2: EXECUTE MAIN WALL SEGMENT LOOP
+			for (float x = 0; x < abdistance; x += pillarInterval)
+			{
+				//STEP 2.1: PILLAR PLACEMENT
+				Vector3 pillarpos = stepdir * x;
+				pillarpos += up * halfheight;
+				Vector3 pillarscale = Vector3(0.5f) * pillarThickness;
+				pillarscale.y = halfheight;
+
+				create_box(from + pillarpos, pillarscale);
+
+				//STEP 2.2: WALL SEGMENT PLACEMENT
+				Vector3 wallpos = stepdir * (x + (pillarInterval * 0.5f));
+				wallpos += up * halfheight;
+				Vector3 wallscale = Vector3(pillarInterval * 0.5f, halfheight, wallThickness * 0.5f);
+
+				create_box(from + wallpos, wallscale);
+
+				//STEP 2.3 BEAM PLACEMENT
+				for (float y = beamInterval; y < height; y+= beamInterval)
+				{
+					Vector3 beampos = stepdir * (x + (pillarInterval * 0.5f));
+					beampos += up * y;
+					Vector3 beamscale = Vector3(pillarInterval * 0.5f, beamThickness * 0.5f, beamThickness * 0.5f);
+
+					create_box(from + beampos, beamscale);
+				}
+
+				//STEP 2.4 WINDOW PLACEMENT
+				for (float y = 0; y + beamInterval < height; y += beamInterval)
+				{
+					Vector3 windowpos = stepdir * (x + (pillarInterval * 0.5f));
+					windowpos += up * (y + windowHeight + (windowSize.y * 0.5f));
+					windowpos += -forward * ((wallThickness * 0.5f) + (windowSize.z * 0.5f));
+					Vector3 windowscale = windowSize * 0.5f;
+
+					create_box(from + windowpos, windowscale);
+				}
+
+				//STEP 2.5 ROOF PLACEMENT
+				Vector3 roofpos = stepdir * (x + (pillarInterval * 0.5f));
+				roofpos += up * (height + (roofHeight * 0.5f));
+				Vector3 roofscale = Vector3(pillarInterval * 0.5f, roofHeight * 0.5f, roofThickness * 0.5f);
+
+				create_box(from + roofpos, roofscale);
+			}
+
 #pragma endregion
 
 			return game_root;
@@ -306,7 +370,7 @@ namespace gbe {
 			//Update Render pipeline
 			//EDITOR UPDATE
 			mEditor->PrepareFrame();
-			//mEditor->DrawFrame();
+			mEditor->DrawFrame();
 			//<----------MORE EDITOR FUNCTIONS GO HERE
 			mEditor->PresentFrame();
 			//ENGINE UPDATE

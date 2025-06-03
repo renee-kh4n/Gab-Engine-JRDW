@@ -74,6 +74,12 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window)
 		*/
 }
 
+void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent){
+	auto sdlevent = static_cast<SDL_Event*>(rawwindowevent);
+
+	ImGui_ImplSDL2_ProcessEvent(sdlevent);
+}
+
 void gbe::Editor::PrepareFrame()
 {
 	//imgui new frame

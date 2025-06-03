@@ -7,6 +7,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_window)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_engine)
 
 find_package(imgui CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE imgui::imgui)

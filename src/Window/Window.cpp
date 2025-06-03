@@ -97,6 +97,11 @@ namespace gbe {
                 if (symcode == SDLK_SPACE) this->keystates[gbe::Keys::SPACE] = false;
                 if (symcode == SDLK_ESCAPE) this->keystates[gbe::Keys::ESCAPE] = false;
             }
+
+            for (auto& eventprocessor : this->additionalEventProcessors)
+            {
+                eventprocessor(&sdlevent);
+            }
         }
 
         auto sdl_keyboardstates = SDL_GetKeyboardState(nullptr);
@@ -154,5 +159,9 @@ namespace gbe {
     void* (*Window::Get_procaddressfunc())(const char*)
     {
         return this->procaddressfunc;
+    }
+
+    void Window::AddAdditionalEventProcessor(std::function<void(void*)> processor) {
+        this->additionalEventProcessors.push_back(processor);
     }
 }

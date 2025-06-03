@@ -5,6 +5,18 @@
             "mode" : "frag"
         }
     ],
+    "types" : {
+        "_56" : {
+            "name" : "Shading",
+            "members" : [
+                {
+                    "name" : "_color",
+                    "type" : "vec4",
+                    "offset" : 0
+                }
+            ]
+        }
+    },
     "inputs" : [
         {
             "type" : "vec2",
@@ -22,6 +34,15 @@
             "type" : "vec4",
             "name" : "outColor",
             "location" : 0
+        }
+    ],
+    "ubos" : [
+        {
+            "type" : "_56",
+            "name" : "Shading",
+            "block_size" : 16,
+            "set" : 1,
+            "binding" : 1
         }
     ]
 }

@@ -177,11 +177,9 @@ namespace gbe {
 
         //DESCRIPTOR POOL
         std::vector<VkDescriptorPoolSize> poolSizes{};
-        for (const auto& pair : shaderdata->binding_sets)
+        for (const auto& set : shaderdata->binding_sets)
         {
-			const auto& setlist = pair.second;
-
-			for (const auto& binding : setlist)
+			for (const auto& binding : set)
 			{
                 poolSizes.push_back({
                         .type = binding.descriptorType,
@@ -208,13 +206,13 @@ namespace gbe {
         {
             auto& descriptorSetLayout = shaderdata->descriptorSetLayouts[set_i];
 
-            std::vector<VkDescriptorSetLayout> layouts(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
+            std::vector<VkDescriptorSetLayout> layoutsperframe(MAX_FRAMES_IN_FLIGHT, descriptorSetLayout);
 
             VkDescriptorSetAllocateInfo allocInfo{};
             allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
             allocInfo.descriptorPool = newinst.descriptorPool;
             allocInfo.descriptorSetCount = static_cast<uint32_t>(MAX_FRAMES_IN_FLIGHT);
-            allocInfo.pSetLayouts = layouts.data();
+            allocInfo.pSetLayouts = layoutsperframe.data();
 
             newinst.allocdescriptorSets[set_i].resize(MAX_FRAMES_IN_FLIGHT);
             if (vkAllocateDescriptorSets(*this->vkdevice, &allocInfo, newinst.allocdescriptorSets[set_i].data()) != VK_SUCCESS) {

@@ -37,7 +37,7 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	std::vector<VkDescriptorSetLayout> descriptorSetLayouts;
 
 	//BINDINGS
-	std::unordered_map<unsigned int, std::vector<VkDescriptorSetLayoutBinding>> binding_sets;
+	std::vector<std::vector<VkDescriptorSetLayoutBinding>> binding_sets;
 	std::vector<ShaderData::ShaderBlock> uniformblocks;
 	std::vector<ShaderData::ShaderField> uniformfields;
 
@@ -49,8 +49,11 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 		ubo_Binding.stageFlags = flags;
 		ubo_Binding.pImmutableSamplers = nullptr; // Optional
 
-		if (binding_sets.find(ubo.set) == binding_sets.end())
-			binding_sets.insert_or_assign(ubo.set, std::vector<VkDescriptorSetLayoutBinding>());
+		if (binding_sets.size() <= ubo.set)
+			for (size_t i = binding_sets.size(); i <= ubo.set; i++)
+			{
+				binding_sets.push_back({});
+			}
 
 		auto& bset = binding_sets[ubo.set];
 		bset.push_back(ubo_Binding);
@@ -127,8 +130,11 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 		color_sampler_Binding.pImmutableSamplers = nullptr;
 		color_sampler_Binding.stageFlags = flags;
 
-		if (binding_sets.find(meta.set) == binding_sets.end())
-			binding_sets.insert_or_assign(meta.set, std::vector<VkDescriptorSetLayoutBinding>());
+		if (binding_sets.size() <= meta.set)
+			for (size_t i = binding_sets.size(); i <= meta.set; i++)
+			{
+				binding_sets.push_back({});
+			}
 
 		auto& bset = binding_sets[meta.set];
 		bset.push_back(color_sampler_Binding);
@@ -156,17 +162,12 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 		AddTextureBinding(meta, VK_SHADER_STAGE_FRAGMENT_BIT);
 
 	//COMPILE BINDINGS
-	for (auto& pair : binding_sets)
+	for (auto& set : binding_sets)
 	{
-		auto& setindex = pair.first;
-		auto& setlist = pair.second;
-
-		auto bindingcount = static_cast<uint32_t>(setlist.size());
-
 		VkDescriptorSetLayoutCreateInfo layoutInfo{};
 		layoutInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO;
-		layoutInfo.bindingCount = bindingcount;
-		layoutInfo.pBindings = setlist.data();
+		layoutInfo.bindingCount = static_cast<uint32_t>(set.size());
+		layoutInfo.pBindings = set.data();
 		layoutInfo.pNext = nullptr;
 
 		VkDescriptorSetLayout newsetlayout;
@@ -175,12 +176,7 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 			throw std::runtime_error("failed to create descriptor set layout!");
 		}
 
-		for (size_t i = descriptorSetLayouts.size(); i <= setindex; i++)
-		{
-			descriptorSetLayouts.push_back({});
-		}
-
-		descriptorSetLayouts[setindex] = newsetlayout;
+		descriptorSetLayouts.push_back(newsetlayout);
 	}
 
 	
