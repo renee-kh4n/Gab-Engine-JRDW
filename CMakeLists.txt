@@ -37,26 +37,26 @@ find_package(SDL2_mixer CONFIG REQUIRED)
 target_link_libraries(${PROJECT_NAME} PRIVATE $<IF:$<TARGET_EXISTS:SDL2_mixer::SDL2_mixer>,SDL2_mixer::SDL2_mixer,SDL2_mixer::SDL2_mixer-static>)
 
 
-#SHADER COMPILATION
 
-set(COMPILED_SHADERS "")
+
+#SHADER COMPILATION
+set(SHADERS_FILES "")
 function(COMPILE_SHADER SRCPATH)
   add_custom_command(
     OUTPUT "${SRCPATH}.spv"
     MAIN_DEPENDENCY "${SRCPATH}"
     COMMAND "${PACKAGE_PREFIX_DIR}/tools/shaderc/glslc.exe" "${SRCPATH}" -o "${SRCPATH}.spv")
-  list(APPEND COMPILED_SHADERS "${SRCPATH}.spv")
-  set(COMPILED_SHADERS "${COMPILED_SHADERS}" PARENT_SCOPE)
+  list(APPEND SHADERS_FILES "${SRCPATH}.spv")
+  set(SHADERS_FILES "${SHADERS_FILES}" PARENT_SCOPE)
 endfunction()
 
-set(REFLECT_FILES "")
 function(DECOMPILE_SHADER SRCPATH)
   add_custom_command(
     OUTPUT "${SRCPATH}.json"
     MAIN_DEPENDENCY "${SRCPATH}.spv"
     COMMAND "${PACKAGE_PREFIX_DIR}/tools/spirv-cross/spirv-cross.exe" --output "${SRCPATH}.json" "${SRCPATH}.spv" --reflect)
-  list(APPEND REFLECT_FILES "${SRCPATH}.json")
-  set(REFLECT_FILES "${REFLECT_FILES}" PARENT_SCOPE)
+  list(APPEND SHADERS_FILES "${SRCPATH}.json")
+  set(SHADERS_FILES "${SHADERS_FILES}" PARENT_SCOPE)
 endfunction()
 
 file(GLOB verts "${CMAKE_CURRENT_LIST_DIR}/DefaultAssets/shaders/*.vert")
@@ -71,11 +71,8 @@ foreach(shader ${frags})
 endforeach()
   
 
-add_custom_target(compile_shaders ALL DEPENDS ${COMPILED_SHADERS})
+add_custom_target(compile_shaders ALL DEPENDS ${SHADERS_FILES})
 add_dependencies(${PROJECT_NAME} compile_shaders)
-
-add_custom_target(decompile_shaders ALL DEPENDS ${REFLECT_FILES})
-add_dependencies(${PROJECT_NAME} decompile_shaders)
 
 message("[GABENGINE] COMPILED SHADERS: ${SHADER_OUTPUT}")
 
@@ -85,6 +82,20 @@ add_custom_target(COPY_ASSETS_COMMAND
 )
 
 add_dependencies(${PROJECT_NAME} COPY_ASSETS_COMMAND)
+
+set(generatatedfile_i 0)
+foreach(generatedfile ${SHADERS_FILES})
+    set(TARGET_NAME DELETE_${generatatedfile_i})
+    add_custom_target(${TARGET_NAME}
+    COMMAND ${CMAKE_COMMAND} -E rm -f ${generatedfile}
+    )
+
+    add_dependencies(${TARGET_NAME} COPY_ASSETS_COMMAND)
+    add_dependencies(${PROJECT_NAME} ${TARGET_NAME})
+
+    MATH(EXPR generatatedfile_i "${generatatedfile_i}+1")
+    message("[GABENGINE] Queued to delete ${generatatedfile_i}: ${generatedfile}")
+endforeach()
 
 #COPY DLL TO BUILD
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD

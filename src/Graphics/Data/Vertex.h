@@ -12,6 +12,7 @@ namespace gbe {
             glm::vec3 normal;
             glm::vec3 color;
             glm::vec2 texCoord;
+            unsigned int obj_id;
 
             static VkVertexInputBindingDescription getBindingDescription();
             static std::vector<VkVertexInputAttributeDescription> getAttributeDescriptions();

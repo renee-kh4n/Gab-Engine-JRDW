@@ -82,6 +82,7 @@ namespace gbe {
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
 		
 		//MATERIAL CACHING
+		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
 		auto test_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 		test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
 		test_mat->setOverride("colortex", test_tex);

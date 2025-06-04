@@ -1,8 +1,5 @@
 #version 450
 //UBOS
-layout(set = 1, binding = 1) uniform Shading {
-    vec4 _color;
-} shading;
 
 layout(location = 0) in vec3 fragNormal;
 layout(location = 1) in vec2 fragTexCoord;

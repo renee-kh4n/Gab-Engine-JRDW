@@ -1,11 +1,5 @@
 #version 450
 
-//UBOS
-/*
-layout(binding = 1) uniform Shading {
-    vec4 color;
-} shading;
-*/
 //TEXTURES
 layout(binding = 2) uniform sampler2D colortex;
 
