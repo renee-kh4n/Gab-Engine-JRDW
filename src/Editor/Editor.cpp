@@ -83,6 +83,9 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 
 	ImGui_ImplSDL2_ProcessEvent(sdlevent);
 
+	//CHECK SHIFT CLICK
+	bool shift_click = false;
+
 	//CLICKED
 	if (sdlevent->type == SDL_MOUSEBUTTONDOWN) {
 		if (sdlevent->button.button == SDL_BUTTON_LEFT) {
@@ -91,25 +94,18 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 			auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
 			Vector3 camera_pos = current_camera->World().position.Get();
 
-			auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos()) - camera_pos;
-			std::cout << "Mouse clicked towards: " << mousedir.x << " : " << mousedir.y << " : " << mousedir.z << std::endl;
-			auto boxpos = camera_pos + (mousedir);
-			std::cout << "Camera at: " << camera_pos.x << " : " << camera_pos.y << " : " << camera_pos.z << std::endl;
-			std::cout << "Spawned obj at: " << boxpos.x << " : " << boxpos.y << " : " << boxpos.z << std::endl;
-
-			Vector3 ray_dir = mousedir * 10000.0f;
+			auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos());
 			
-			RenderObject* test = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
-			test->SetParent(enginecurroot);
-			test->SetWorldPosition(mousedir + camera_pos);
-			test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
-			test->Local().scale.Set(Vector3(0.2f, 0.2f, 0.2f));
+			Vector3 ray_dir = mousedir * 10000.0f;
 			
 			auto result = physics::Raycast(camera_pos, ray_dir);
 
 			if (result.result) {
-				//result.other->Local().position.Set(Vector3(0, 0, 0));
-				std::cout << "Moved some object." << std::endl;
+				if (!shift_click) {
+					this->selected.clear();
+				}
+
+				this->selected.push_back(result.other);
 			}
 		}
 	}
@@ -127,7 +123,7 @@ void gbe::Editor::PrepareFrame()
 void gbe::Editor::DrawFrame()
 {
 	//imgui commands
-	ImGui::ShowDemoWindow();
+	
 }
 
 void gbe::Editor::PresentFrame()

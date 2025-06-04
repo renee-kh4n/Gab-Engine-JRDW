@@ -21,10 +21,13 @@ namespace gbe {
 
     Vector3 Camera::ScreenToRay(Vector2 normalizedscreenpos)
     {
-        auto initialdir = Vector4(normalizedscreenpos.x, normalizedscreenpos.y, 1, 1) * glm::inverse(this->GetViewMat()) * glm::inverse(this->getproj());
-        auto finaldir = Vector3(initialdir.x, initialdir.y, initialdir.z);
+        auto inv_proj = glm::inverse(this->getproj());
+        auto inv_view = glm::inverse(this->GetViewMat());
+        auto initialdir = inv_view * inv_proj * Vector4(normalizedscreenpos.x, normalizedscreenpos.y, 1, 1);
+        Vector3 finaldir = Vector3(initialdir.x, initialdir.y, initialdir.z) * (1.0f / initialdir.w);
+        finaldir -= this->World().position.Get();
 
-        return finaldir;
+        return finaldir.Normalize();
     }
 
     PerspectiveCamera::PerspectiveCamera(Window* mWindow) : Camera(mWindow)
