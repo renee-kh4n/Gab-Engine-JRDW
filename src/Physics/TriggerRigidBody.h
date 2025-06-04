@@ -11,10 +11,12 @@
 
 
 namespace gbe {
+	class PhysicsObject;
+
 	namespace physics {
 		class TriggerRigidBody : public PhysicsBody {
 		public:
-			TriggerRigidBody();
+			TriggerRigidBody(PhysicsObject* object);
 
 			void Register(btDynamicsWorld* register_to) override;
 			void UnRegister() override;

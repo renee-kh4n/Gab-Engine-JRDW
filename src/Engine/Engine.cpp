@@ -1,3 +1,4 @@
+#include "Engine.h"
 
 #include "Engine.h"
 
@@ -31,6 +32,11 @@ namespace gbe {
 		return root_object;
 	}
 
+	Root* Engine::GetCurrentRoot()
+	{
+		return this->current_root;
+	}
+
 	void Engine::Run()
 	{
 		//WINDOW
@@ -58,16 +64,13 @@ namespace gbe {
 		//mAudioPipeline->Init();
 #pragma endregion
 #pragma region Editor Setup
-		auto mEditor = new gbe::Editor(mRenderPipeline, mWindow);
+		auto mEditor = new gbe::Editor(mRenderPipeline, mWindow, this);
 		mWindow->AddAdditionalEventProcessor([mEditor](void* newevent) {
 			mEditor->ProcessRawWindowEvent(newevent);
 			});
 #pragma endregion
 #pragma region Asset Loading
 		//AUDIO CACHING
-		//auto audio_ui_hover = new asset::Audio("DefaultAssets/Audio/bubble hover.aud.gbe");
-		//auto audio_ui_click = new asset::Audio("DefaultAssets/Audio/uiclick.aud.gbe");
-
 
 		//MESH CACHING
 		auto test_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
@@ -90,12 +93,8 @@ namespace gbe {
 
 		//DRAW CALL CACHING
 		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
-		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
+		auto cube_drawcall = mRenderPipeline->RegisterDefaultDrawCall(cube_mesh, cube_mat);
 
-#pragma endregion
-#pragma region GUI Pipeline Setup
-		//auto mGUIPipeline = new gbe::gui::gbuiPipeline(quad_mesh->VAO, mRenderPipeline->Get_mainbufferId(), uiShader);
-		//mGUIPipeline->Set_target_resolution(mWindow->Get_dimentions());
 #pragma endregion
 #pragma region Input
 		auto mInputSystem = new InputSystem();
@@ -109,42 +108,12 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
 #pragma endregion
-#pragma region Util functions
-		auto create_image_button = [=](asset::Texture* tex, gbe::gui::gb_canvas* main_canvas, Vector2 percent_pos, Vector2 half_extents, std::function<void()> onpress) {
-			gbe::gui::gb_image* start_image = new gbe::gui::gb_image();
-			start_image->Set_Image(tex);
-			start_image->bl_pivot = percent_pos;
-			start_image->bl_offset = -half_extents;
-			start_image->tr_pivot = start_image->bl_pivot;
-			start_image->tr_offset = -start_image->bl_offset;
-			main_canvas->AddRootChild(start_image);
-
-			gbe::gui::gb_button* button = new gbe::gui::gb_button(start_image);
-			button->bl_pivot = percent_pos;
-			button->bl_offset = -half_extents;
-			button->tr_pivot = button->bl_pivot;
-			button->tr_offset = -button->bl_offset;
-			button->normal_color = Vector4(0, 0, 0, 0);
-			button->hovered_color = Vector4(1, 1, 1, 1);
-			main_canvas->AddRootChild(button);
-			button->Set_onClickAction([=]() {
-				onpress();
-				//audio_ui_click->Play();
-				});
-			button->Set_onHoverAction([=]() {
-				//audio_ui_hover->Play();
-				});
-			};
-#pragma endregion
 #pragma region Root Loaders
 		//forward declared load functions
 		std::function<Root* ()> create_main_game;
 
 		create_main_game = [&]() {
 			auto game_root = this->CreateBlankRoot();
-			//SCENE GUI
-			gbe::gui::gb_canvas* maingame_canvas = new gbe::gui::gb_canvas(Vector2Int(800, 800));
-			//mGUIPipeline->SetActiveCanvas(maingame_canvas);
 
 #pragma region scene singletons
 			//forward declaration
@@ -152,7 +121,7 @@ namespace gbe {
 
 			//Spawn funcs
 
-			auto create_test = [=](Vector3 pos, Vector3 scale, Vector3 renderscale) {
+			auto create_test = [&](Vector3 pos, Vector3 scale, Vector3 renderscale) {
 				RigidObject* test = new RigidObject();
 				test->SetParent(game_root);
 				test->Local().position.Set(pos);
@@ -168,11 +137,11 @@ namespace gbe {
 				return test;
 				};
 
-			auto create_box = [=](Vector3 pos, Vector3 scale) {
+			auto create_box = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0,0,0))) {
 				RigidObject* test = new RigidObject(true);
 				test->SetParent(game_root);
 				test->Local().position.Set(pos);
-				test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+				test->Local().rotation.Set(rotation);
 				test->Local().scale.Set(scale);
 				BoxCollider* platform_collider = new BoxCollider();
 				platform_collider->SetParent(test);
@@ -212,21 +181,14 @@ namespace gbe {
 			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
 			player_cam->SetParent(camera_controller);
 
-			//ground check
-			auto groundcheck = [=]() {
-				auto floorcheck = physics::Raycast(player->World().position.Get(), Vector3(0, -1.5f, 0));
-				return floorcheck.result;
-				};
-
-			//Player Controller Logic
+			//================INPUT HANDLING================//
 			auto input_communicator = new GenericController();
 			input_communicator->SetParent(player_input);
 			//Left click customer
-			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([=](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
+			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([&](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
 				if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
 					return;
 
-				//mGUIPipeline->Click();
 				}));
 			//WASD customer
 			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
@@ -246,78 +208,18 @@ namespace gbe {
 #pragma endregion
 
 #pragma region scene objects
-			Vector3 from(-20, 0, 0);
-			Vector3 to(100, 0, 0);
-			Vector3 up(0, 1, 0);
-			float height = 20;
-			float pillarInterval = 13;
-			float pillarThickness = 2.5f;
-			float wallThickness = 0.5f;
-			float beamInterval = 9;
-			float beamThickness = 1.8f;
-			float windowHeight = 3;
-			Vector3 windowSize(2, 4, 0.6f);
-			float roofHeight = 2.0f;
-			float roofThickness = 3.0f;
+			
+			//CALL THE BUILDER
+			ext::AnimoBuilder::GenerationParams params{};
+			auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
 
-			//PCG FUNCTION
-
-			//STEP 1: CALCULATE VECTORS
-			Vector3 delta = to - from;
-			Vector3 stepdir = delta.Normalize();
-			Vector3 forward = stepdir.Cross(up).Normalize();
-			float abdistance = delta.Magnitude();
-			float halfheight = height * 0.5f;
-
-			//STEP 2: EXECUTE MAIN WALL SEGMENT LOOP
-			for (float x = 0; x < abdistance; x += pillarInterval)
+			//RENDER THE RESULT
+			for (auto& objdata : builder_result.meshes)
 			{
-				//STEP 2.1: PILLAR PLACEMENT
-				Vector3 pillarpos = stepdir * x;
-				pillarpos += up * halfheight;
-				Vector3 pillarscale = Vector3(0.5f) * pillarThickness;
-				pillarscale.y = halfheight;
-
-				create_box(from + pillarpos, pillarscale);
-
-				//STEP 2.2: WALL SEGMENT PLACEMENT
-				Vector3 wallpos = stepdir * (x + (pillarInterval * 0.5f));
-				wallpos += up * halfheight;
-				Vector3 wallscale = Vector3(pillarInterval * 0.5f, halfheight, wallThickness * 0.5f);
-
-				create_box(from + wallpos, wallscale);
-
-				//STEP 2.3 BEAM PLACEMENT
-				for (float y = beamInterval; y < height; y+= beamInterval)
-				{
-					Vector3 beampos = stepdir * (x + (pillarInterval * 0.5f));
-					beampos += up * y;
-					Vector3 beamscale = Vector3(pillarInterval * 0.5f, beamThickness * 0.5f, beamThickness * 0.5f);
-
-					create_box(from + beampos, beamscale);
-				}
-
-				//STEP 2.4 WINDOW PLACEMENT
-				for (float y = 0; y + beamInterval < height; y += beamInterval)
-				{
-					Vector3 windowpos = stepdir * (x + (pillarInterval * 0.5f));
-					windowpos += up * (y + windowHeight + (windowSize.y * 0.5f));
-					windowpos += -forward * ((wallThickness * 0.5f) + (windowSize.z * 0.5f));
-					Vector3 windowscale = windowSize * 0.5f;
-
-					create_box(from + windowpos, windowscale);
-				}
-
-				//STEP 2.5 ROOF PLACEMENT
-				Vector3 roofpos = stepdir * (x + (pillarInterval * 0.5f));
-				roofpos += up * (height + (roofHeight * 0.5f));
-				Vector3 roofscale = Vector3(pillarInterval * 0.5f, roofHeight * 0.5f, roofThickness * 0.5f);
-
-				create_box(from + roofpos, roofscale);
+				create_box(objdata.position, objdata.scale);
 			}
 
 #pragma endregion
-
 			return game_root;
 			};
 
@@ -357,8 +259,9 @@ namespace gbe {
 							});
 				}
 				}, mWindow);
+
 			//Update GUI system
-			auto bl_pivoted_mousepos = mWindow->GetMousePos();
+			auto bl_pivoted_mousepos = mWindow->GetMousePixelPos();
 			bl_pivoted_mousepos.y = mWindow->Get_dimentions().y - bl_pivoted_mousepos.y;
 			//mGUIPipeline->PassScreenSpaceMousePos(bl_pivoted_mousepos);
 

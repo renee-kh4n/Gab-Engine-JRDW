@@ -1,5 +1,8 @@
 ﻿set(CURRENT_CMAKE_LIB gbe_engine_src)
 
+set(GABENGINE_INCLUDE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PARENT_SCOPE)
+
+
 #SUBDIRECTORY LOADING
 add_subdirectory(Math)
 add_subdirectory(Asset)
@@ -10,6 +13,9 @@ add_subdirectory(Window)
 add_subdirectory(Audio)
 add_subdirectory(Engine)
 add_subdirectory(Editor)
+
+#EXTERNAL LIBRARIES
+add_subdirectory("Ext/AnimoBuilder")
 
 add_library(${CURRENT_CMAKE_LIB} INTERFACE)
 
@@ -22,6 +28,10 @@ target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_window)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_audio)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_editor)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_engine)
+
+#EXTERNAL LIBARIES
+target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_ext_animobuilder)
+
 
 
 get_target_property(LINKED_LIBS ${CURRENT_CMAKE_LIB} INTERFACE_LINK_LIBRARIES)

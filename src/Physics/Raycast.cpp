@@ -17,6 +17,6 @@ gbe::physics::Raycast::Raycast(PhysicsVector3 from, PhysicsVector3 dir)
 	
 	if (this->result) {
 		//this->intersection = (PhysicsVector3)Vector3::Lerp(from, to, closestResults.m_closestHitFraction);
-		this->other = nullptr;
+		this->other = PhysicsPipeline::GetRelatedBody(closestResults.m_collisionObject)->Get_wrapper();
 	}
 }

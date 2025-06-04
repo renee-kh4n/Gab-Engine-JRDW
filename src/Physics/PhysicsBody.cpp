@@ -1,7 +1,11 @@
 #include "PhysicsBody.h"
 
-gbe::physics::PhysicsBody::PhysicsBody()
+#include "Engine/Objects/Physics/PhysicsObject.h"
+
+gbe::physics::PhysicsBody::PhysicsBody(PhysicsObject* _related_engine_wrapper)
 {
+
+	this->related_engine_wrapper = _related_engine_wrapper;
 	this->base_data = nullptr;
 	this->world = nullptr;
 
@@ -35,6 +39,11 @@ void gbe::physics::PhysicsBody::PassTransformationMatrix(Matrix4& mat)
 
 btCollisionObject* gbe::physics::PhysicsBody::Get_wrapped_data() {
 	return this->base_data;
+}
+
+gbe::PhysicsObject* gbe::physics::PhysicsBody::Get_wrapper()
+{
+	return this->related_engine_wrapper;
 }
 
 void gbe::physics::PhysicsBody::Register(btDynamicsWorld* register_to)

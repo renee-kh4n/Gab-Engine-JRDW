@@ -58,7 +58,8 @@ namespace gbe {
         void InvokeWindowCallback(const std::string, void*);
 
         bool GetKeyState(unsigned int keyId);
-        Vector2Int GetMousePos();
+        Vector2Int GetMousePixelPos();
+        Vector2 GetMouseDecimalPos();
         void Set_cursorLock(bool);
 
         void* (*Get_procaddressfunc())(const char*);

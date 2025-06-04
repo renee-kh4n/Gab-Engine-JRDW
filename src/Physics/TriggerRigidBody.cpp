@@ -2,7 +2,7 @@
 #include <bullet/BulletCollision/CollisionDispatch/btGhostObject.h>
 #include "PhysicsPipeline.h"
 
-gbe::physics::TriggerRigidBody::TriggerRigidBody() {
+gbe::physics::TriggerRigidBody::TriggerRigidBody(PhysicsObject* object) : PhysicsBody(object) {
 	auto newdata = new btGhostObject();
 
 	newdata->setCollisionFlags(btCollisionObject::CF_NO_CONTACT_RESPONSE);

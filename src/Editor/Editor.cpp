@@ -1,9 +1,14 @@
 #include "Editor.h"
 
-#include "Graphics/RenderPipeline.h"
+#include "Graphics/gbe_graphics.h"
+#include "Engine/gbe_engine.h"
 
-gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window)
+gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine)
 {
+	this->mengine = engine;
+	this->mwindow = window;
+	this->mrenderpipeline = renderpipeline;
+
 	//GET ALL REQUIRED VARIABLES FROM RENDERPIPELINE
 	auto vkInst = static_cast<VkInstance*>(renderpipeline->GetPipelineVariable("VkInstance"));
 	auto vkdevice = static_cast<VkDevice*>(renderpipeline->GetPipelineVariable("VkDevice"));
@@ -11,7 +16,6 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window)
 	auto renderPass = static_cast<VkRenderPass*>(renderpipeline->GetPipelineVariable("VkRenderPass"));
 	auto graphicsqueue = static_cast<VkQueue*>(renderpipeline->GetPipelineVariable("VkQueue_graphics"));
 
-	this->mwindow = window;
 
 	//1: create descriptor pool for IMGUI
 	// the size of the pool is very oversize, but it's copied from imgui demo itself.
@@ -74,10 +78,41 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window)
 		*/
 }
 
-void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent){
+void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 	auto sdlevent = static_cast<SDL_Event*>(rawwindowevent);
 
 	ImGui_ImplSDL2_ProcessEvent(sdlevent);
+
+	//CLICKED
+	if (sdlevent->type == SDL_MOUSEBUTTONDOWN) {
+		if (sdlevent->button.button == SDL_BUTTON_LEFT) {
+			//PASS RAYCAST TO EDITOR FOR EDITOR CLICK MECHANICS
+			auto enginecurroot = this->mengine->GetCurrentRoot();
+			auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
+			Vector3 camera_pos = current_camera->World().position.Get();
+
+			auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos()) - camera_pos;
+			std::cout << "Mouse clicked towards: " << mousedir.x << " : " << mousedir.y << " : " << mousedir.z << std::endl;
+			auto boxpos = camera_pos + (mousedir);
+			std::cout << "Camera at: " << camera_pos.x << " : " << camera_pos.y << " : " << camera_pos.z << std::endl;
+			std::cout << "Spawned obj at: " << boxpos.x << " : " << boxpos.y << " : " << boxpos.z << std::endl;
+
+			Vector3 ray_dir = mousedir * 10000.0f;
+			
+			RenderObject* test = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
+			test->SetParent(enginecurroot);
+			test->SetWorldPosition(mousedir + camera_pos);
+			test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+			test->Local().scale.Set(Vector3(0.2f, 0.2f, 0.2f));
+			
+			auto result = physics::Raycast(camera_pos, ray_dir);
+
+			if (result.result) {
+				//result.other->Local().position.Set(Vector3(0, 0, 0));
+				std::cout << "Moved some object." << std::endl;
+			}
+		}
+	}
 }
 
 void gbe::Editor::PrepareFrame()

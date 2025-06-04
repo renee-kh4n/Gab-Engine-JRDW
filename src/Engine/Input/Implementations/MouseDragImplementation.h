@@ -16,7 +16,7 @@ namespace gbe {
                 auto key_state = target->GetKeyState(Trigger);
 
                 if (key_state) {
-                    auto new_pos = target->GetMousePos();
+                    auto new_pos = target->GetMousePixelPos();
 
                     if (this->mState.state == InputAction::State::END) {
                         this->mState.state = InputAction::State::START;

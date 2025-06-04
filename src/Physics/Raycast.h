@@ -4,11 +4,13 @@
 #include "PhysicsBody.h"
 
 namespace gbe {
+	class PhysicsObject;
+
 	namespace physics {
 		struct Raycast {
 		public:
 			bool result;
-			PhysicsBody* other;
+			PhysicsObject* other;
 			PhysicsVector3 intersection;
 
 			Raycast(PhysicsVector3 from, PhysicsVector3 dir);

@@ -1,4 +1,5 @@
 #include "Camera.h"
+#include "Camera.h"
 
 namespace gbe {
     using namespace gfx;
@@ -16,6 +17,14 @@ namespace gbe {
 
         auto this_pos = (glm::vec3)world.position.Get();
         return glm::lookAt(this_pos, (glm::vec3)world.GetForward() + this_pos, (glm::vec3)world.GetUp());
+    }
+
+    Vector3 Camera::ScreenToRay(Vector2 normalizedscreenpos)
+    {
+        auto initialdir = Vector4(normalizedscreenpos.x, normalizedscreenpos.y, 1, 1) * glm::inverse(this->GetViewMat()) * glm::inverse(this->getproj());
+        auto finaldir = Vector3(initialdir.x, initialdir.y, initialdir.z);
+
+        return finaldir;
     }
 
     PerspectiveCamera::PerspectiveCamera(Window* mWindow) : Camera(mWindow)

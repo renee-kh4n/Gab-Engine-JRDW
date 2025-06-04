@@ -11,7 +11,7 @@ namespace gbe {
 		{
 		private:
 			static PhysicsPipeline* Instance;
-			std::unordered_map<btCollisionObject*, PhysicsBody*> data_wrapper_dictionary;
+			std::unordered_map<const btCollisionObject*, PhysicsBody*> data_wrapper_dictionary;
 			std::function<void(float physicsdeltatime)> OnFixedUpdate_callback;
 
 			btDefaultCollisionConfiguration* collisionConfiguration;
@@ -32,7 +32,7 @@ namespace gbe {
 
 			btDiscreteDynamicsWorld* Get_world();
 
-			PhysicsBody* GetRelatedBody(btCollisionObject*);
+			static PhysicsBody* GetRelatedBody(const btCollisionObject*);
 		};
 	}
 }

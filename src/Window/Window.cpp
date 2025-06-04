@@ -145,10 +145,18 @@ namespace gbe {
     {
         return this->keystates[keyId];
     }
-    Vector2Int Window::GetMousePos()
+    Vector2Int Window::GetMousePixelPos()
     {
         SDL_GetMouseState(&this->mousePos.x, &this->mousePos.y);
         return this->mousePos;
+    }
+    Vector2 Window::GetMouseDecimalPos()
+    {
+        SDL_GetMouseState(&this->mousePos.x, &this->mousePos.y);
+        auto SDL_decimalpos = Vector2((float)this->mousePos.x / this->dimentions.x, (float)this->mousePos.y / this->dimentions.y);
+        auto normalized_decimalpos = Vector2(SDL_decimalpos.x * 2.0f - 1.0f, (1.0f - SDL_decimalpos.y) * 2.0f - 1.0f);
+
+        return normalized_decimalpos;
     }
     void Window::Set_cursorLock(bool locked) {
         SDL_ShowCursor(locked ? SDL_DISABLE : SDL_ENABLE);

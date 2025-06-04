@@ -983,6 +983,18 @@ gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, ass
     return newdrawcall;
 }
 
+DrawCall* gbe::RenderPipeline::RegisterDefaultDrawCall(asset::Mesh* mesh, asset::Material* material)
+{
+    this->default_drawcall = RegisterDrawCall(mesh, material);
+
+    return this->default_drawcall;
+}
+
+DrawCall* gbe::RenderPipeline::GetDefaultDrawCall()
+{
+    return this->default_drawcall;
+}
+
 void* gbe::RenderPipeline::GetPipelineVariable(std::string id)
 {
     if (this->PipelineVariables.find(id) == this->PipelineVariables.end()) {

@@ -70,10 +70,10 @@ btDiscreteDynamicsWorld* gbe::physics::PhysicsPipeline::Get_world()
 	return this->dynamicsWorld;
 }
 
-gbe::physics::PhysicsBody* gbe::physics::PhysicsPipeline::GetRelatedBody(btCollisionObject* key) {
-	auto enume = this->data_wrapper_dictionary.find(key);
+gbe::physics::PhysicsBody* gbe::physics::PhysicsPipeline::GetRelatedBody(const btCollisionObject* key) {
+	auto enume = Instance->data_wrapper_dictionary.find(key);
 
-	if (enume == this->data_wrapper_dictionary.end())
+	if (enume == Instance->data_wrapper_dictionary.end())
 		return nullptr;
 
 	return enume->second;

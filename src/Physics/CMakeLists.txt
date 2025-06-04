@@ -18,4 +18,7 @@ target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC ${BULLET_LIBRARIES})
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC gbe_math)
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC gbe_asset)
 
+#RECURSIVE
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_engine)
+
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

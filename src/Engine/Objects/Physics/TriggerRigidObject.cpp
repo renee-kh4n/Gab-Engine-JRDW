@@ -62,5 +62,5 @@ void gbe::TriggerRigidObject::InvokePhysicsUpdate(float deltatime)
 
 gbe::TriggerRigidObject::TriggerRigidObject()
 {
-	this->body = new physics::TriggerRigidBody();
+	this->body = new physics::TriggerRigidBody(this);
 }

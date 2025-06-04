@@ -12,7 +12,7 @@ namespace gbe {
 			// Inherited via ActionImplementation
 			virtual void UpdateState(Window* target)
 			{
-				auto new_pos = target->GetMousePos();
+				auto new_pos = target->GetMousePixelPos();
 				this->mState.delta = new_pos - old_mouse_pos;
 				old_mouse_pos = new_pos;
 

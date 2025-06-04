@@ -24,6 +24,7 @@ namespace gbe {
 
         Matrix4 GetViewMat();
         virtual Matrix4 getproj() = 0;
+        Vector3 ScreenToRay(Vector2 normalizedscreenpos);
     };
 
     struct OrthographicCamera : public Camera {

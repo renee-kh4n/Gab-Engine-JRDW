@@ -11,13 +11,15 @@
 #include "PhysicsBody.h"
 
 namespace gbe {
+	class PhysicsObject;
+
 	namespace physics {
 		class Rigidbody : public PhysicsBody{
 		private:
 			PhysicsVector3 continouus_forces_this_frame;
 			float mass;
 		public:
-			Rigidbody(bool is_static = false);
+			Rigidbody(PhysicsObject* object, bool is_static = false);
 
 			void Register(btDynamicsWorld* register_to) override;
 			void UnRegister() override;

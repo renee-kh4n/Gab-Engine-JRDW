@@ -8,6 +8,8 @@
 #include "ColliderData/ColliderData.h"
 
 namespace gbe {
+	class PhysicsObject;
+
 	namespace physics {
 		class PhysicsBody {
 		protected:
@@ -17,14 +19,18 @@ namespace gbe {
 			btCollisionObject* base_data;
 			btDefaultMotionState* motionstate;
 
+			PhysicsObject* related_engine_wrapper;
+
 			btCompoundShape* mMainShape;
-			PhysicsBody();
+			PhysicsBody(PhysicsObject* _related_engine_wrapper);
 		public:
 			void InjectCurrentTransformMatrix(Matrix4);
 			void PassTransformationData(Vector3&, Quaternion&);
 			void PassTransformationMatrix(Matrix4&);
 
 			btCollisionObject* Get_wrapped_data();
+			PhysicsObject* Get_wrapper();
+
 			virtual void Register(btDynamicsWorld* register_to);
 			virtual void UnRegister();
 

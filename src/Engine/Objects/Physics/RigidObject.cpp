@@ -4,7 +4,7 @@
 #include "RigidObject.h"
 
 gbe::RigidObject::RigidObject(bool is_static) {
-	this->body = new physics::Rigidbody(is_static);
+	this->body = new physics::Rigidbody(this, is_static);
 }
 
 gbe::RigidObject::~RigidObject()

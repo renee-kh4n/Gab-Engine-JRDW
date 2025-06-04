@@ -20,6 +20,9 @@
 #include "Objects/Controllers/TPCameraController.h"
 #include "Objects/Systems/ParticleSystem.h"
 
+//EXTERNALS
+#include "Ext/AnimoBuilder/AnimoBuilder.h"
+
 namespace gbe {
 	class Engine {
 	private:
@@ -30,6 +33,7 @@ namespace gbe {
 		Engine();
 		bool ChangeRoot(Root* newroot);
 		Root* CreateBlankRoot();
+		Root* GetCurrentRoot();
 		void Run();
 	};
 }

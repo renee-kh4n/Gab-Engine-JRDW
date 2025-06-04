@@ -1,20 +1,22 @@
 #pragma once
 
-#include "Window/gbe_window.h"
-#include "Engine/Input/KeyDefines.h"
-
 #include <imgui.h>
 #include <imgui_impl_vulkan.h>
 #include <imgui_impl_sdl2.h>
 
 namespace gbe {
 	class RenderPipeline;
+	class Engine;
+	class Window;
+
 
 	class Editor {
 	private:
 		Window* mwindow;
+		Engine* mengine;
+		RenderPipeline* mrenderpipeline;
 	public:
-		Editor(RenderPipeline* renderpipeline, Window* window);
+		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine);
 		void PrepareFrame();
 		void DrawFrame();
 		void ProcessRawWindowEvent(void* rawwindowevent);

@@ -2,7 +2,7 @@
 
 #include <glm/gtc/type_ptr.hpp>
 
-gbe::physics::Rigidbody::Rigidbody(bool is_static){
+gbe::physics::Rigidbody::Rigidbody(PhysicsObject* object, bool is_static) : PhysicsBody(object){
 	this->mass = 1.0f;
 
 	btScalar mass(is_static ? 0 : this->mass);

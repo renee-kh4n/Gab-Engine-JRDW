@@ -37,6 +37,7 @@ namespace gbe {
 
 		Vector2Int resolution;
 
+		DrawCall* default_drawcall;
 		std::map<int, std::vector<DrawCall*>> drawcalls;
 
 		std::list<gfx::Light*> lights_this_frame;
@@ -115,6 +116,8 @@ namespace gbe {
 
 		RenderPipeline(gbe::Window*, Vector2Int);
 		DrawCall* RegisterDrawCall(asset::Mesh* mesh, asset::Material* material);
+		DrawCall* RegisterDefaultDrawCall(asset::Mesh* mesh, asset::Material* material);
+		DrawCall* GetDefaultDrawCall();
 		void* GetPipelineVariable(std::string id);
 
 		void AssignEditor(Editor* editor);
