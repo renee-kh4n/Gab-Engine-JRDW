@@ -91,28 +91,106 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 		if (sdlevent->button.button == SDL_BUTTON_LEFT && !this->pointer_inUi) {
 
 			//RAYCAST MECHANICS
-			auto enginecurroot = this->mengine->GetCurrentRoot();
 			auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
 			Vector3 camera_pos = current_camera->World().position.Get();
 			auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos());
-			
+
 			//OBJECT SELECTION
 			Vector3 ray_dir = mousedir * 10000.0f;
 			auto result = physics::Raycast(camera_pos, ray_dir);
-			if (!shift_click) {
-				this->selected.clear();
-			}
 			if (result.result) {
-				this->selected.push_back(result.other);
+				//CHECK IF OTHER IS A GIZMO
+				for (auto& gizmoptr : gizmos)
+				{
+					if (result.other == (*gizmoptr)) {
+						held_gizmo = *gizmoptr;
+					}
+				}
 
-				//SPAWN GIZMO
+				if (held_gizmo != nullptr) {
+					this->original_selected_position = selected[0]->World().position.Get();
+					std::cout << "Holding Gizmo" << std::endl;
+				}
+				else {
+					if (!shift_click) { //CLEAR SELECTION IF NOT MULTISELECTING AND CLICKED SOMETHING ELSE
+						this->selected.clear();
+					}
 
+					this->selected.push_back(result.other);
+
+					//SPAWN GIZMO
+					if (this->f_gizmo == nullptr) {
+						auto newGizmo = new RigidObject(true);
+						newGizmo->SetParent(mengine->GetCurrentRoot());
+						newGizmo->Local().scale.Set(Vector3(0.2f, 0.2f, 1.0f));
+						BoxCollider* FGizmo_collider = new BoxCollider();
+						FGizmo_collider->SetParent(newGizmo);
+						FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
+						RenderObject* platform_renderer = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
+						platform_renderer->SetParent(FGizmo_collider);
+
+						this->f_gizmo = newGizmo;
+					}
+					if (this->r_gizmo == nullptr) {
+						auto newGizmo = new RigidObject(true);
+						newGizmo->SetParent(mengine->GetCurrentRoot());
+						newGizmo->Local().scale.Set(Vector3(1.0f, 0.2f, 0.2f));
+						BoxCollider* FGizmo_collider = new BoxCollider();
+						FGizmo_collider->SetParent(newGizmo);
+						FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
+						RenderObject* platform_renderer = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
+						platform_renderer->SetParent(FGizmo_collider);
+
+						this->r_gizmo = newGizmo;
+					}
+					if (this->u_gizmo == nullptr) {
+						auto newGizmo = new RigidObject(true);
+						newGizmo->SetParent(mengine->GetCurrentRoot());
+						newGizmo->Local().scale.Set(Vector3(0.2f, 1.0f, 0.2f));
+						BoxCollider* FGizmo_collider = new BoxCollider();
+						FGizmo_collider->SetParent(newGizmo);
+						FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
+						RenderObject* platform_renderer = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
+						platform_renderer->SetParent(FGizmo_collider);
+
+						this->u_gizmo = newGizmo;
+					}
+
+					this->selected_f = result.other->World().GetForward();
+					this->selected_r = result.other->World().GetRight();
+					this->selected_u = result.other->World().GetUp();
+
+					this->f_gizmo->Local().position.Set(result.other->World().position.Get() + this->selected_f);
+					this->r_gizmo->Local().position.Set(result.other->World().position.Get() + this->selected_r);
+					this->u_gizmo->Local().position.Set(result.other->World().position.Get() + this->selected_u);
+
+
+					for (auto& gizmoptr : this->gizmos)
+					{
+						(*gizmoptr)->Local().rotation.Set(result.other->World().rotation.Get());
+					}
+				}
+			}
+			else { //NOTHING WAS CLICKED
+				if (!shift_click) { //NOT MULTISELECTING
+					//CLEAR SELECTION IF NOT MULTISELECTING AND CLICKED NOTHING
+					this->selected.clear();
+
+					//DELETE GIZMO
+					for (auto& gizmoptr : this->gizmos)
+					{
+						if (*gizmoptr != nullptr) {
+							(*gizmoptr)->Destroy();
+							(*gizmoptr) = nullptr;
+						}
+					}
+				}
 			}
 		}
 	}
 	if (sdlevent->type == SDL_MOUSEBUTTONUP) {
 		if (sdlevent->button.button == SDL_BUTTON_LEFT) {
-			this->mouse_holding = false;
+			this->held_gizmo = nullptr;
 		}
 	}
 }
@@ -134,7 +212,31 @@ void gbe::Editor::PrepareFrame()
 void gbe::Editor::DrawFrame()
 {
 	//==============================EDITOR UPDATE==============================//
-	
+	if (held_gizmo != nullptr) {
+		//FIND POSITION TO TRANSFORM THE SELECTED OBJECT
+		//FIND DIRECTION
+		Vector3 transformDirection;
+		if (held_gizmo == f_gizmo)
+			transformDirection = this->selected_f;
+		if (held_gizmo == r_gizmo)
+			transformDirection = this->selected_r;
+		if (held_gizmo == u_gizmo)
+			transformDirection = this->selected_u;
+
+		auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
+		Vector3 camera_pos = current_camera->World().position.Get();
+		auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos());
+
+		// Find the closest point on the line segments
+		Vector3 closestPointOnTransformDir = Vector3::GetClosestPointOnLineGivenLine(original_selected_position, transformDirection, camera_pos, mousedir);
+
+		selected[0]->SetWorldPosition(closestPointOnTransformDir);
+
+		//UPDATE THE POSITION OF ALL GIZMOS
+		this->f_gizmo->Local().position.Set(closestPointOnTransformDir + this->selected_f);
+		this->r_gizmo->Local().position.Set(closestPointOnTransformDir + this->selected_r);
+		this->u_gizmo->Local().position.Set(closestPointOnTransformDir + this->selected_u);
+	}
 
 	//==============================IMGUI==============================//
 	//IMGUI OBJECT INSPECTOR

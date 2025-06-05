@@ -10,7 +10,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"ColliderData/SphereColliderData.cpp"
 	"ColliderData/ColliderData.cpp" 
 	"ColliderData/BoxColliderData.cpp"
- "Raycast.cpp" "ColliderData/MeshColliderData.cpp")
+ "Raycast.cpp" "ColliderData/MeshColliderData.cpp" "RaycastAll.cpp")
 
 find_package(Bullet CONFIG REQUIRED)
 target_link_libraries(${CURRENT_CMAKE_LIB} PUBLIC ${BULLET_LIBRARIES})

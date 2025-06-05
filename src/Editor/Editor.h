@@ -23,16 +23,23 @@ namespace gbe {
 		bool pointer_inUi;
 		bool keyboard_inUi;
 
-		bool mouse_holding;
-		Vector3 mouse_startdrag_dir;
-		Vector3 dragging_original_position;
-		float drag_depth;
-
-
 		//GIZMOS
-		PhysicsObject* f_gizmo;
-		PhysicsObject* r_gizmo;
-		PhysicsObject* u_gizmo;
+		Vector3 original_selected_position;
+		Vector3 selected_f;
+		Vector3 selected_r;
+		Vector3 selected_u;
+
+		PhysicsObject* f_gizmo = nullptr;
+		PhysicsObject* r_gizmo = nullptr;
+		PhysicsObject* u_gizmo = nullptr;
+
+		PhysicsObject* held_gizmo = nullptr;
+
+		std::array<PhysicsObject**, 3> gizmos = {
+			&f_gizmo,
+			&r_gizmo,
+			&u_gizmo
+		};
 	public:
 		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine);
 		void PrepareFrame();
