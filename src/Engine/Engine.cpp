@@ -219,7 +219,7 @@ namespace gbe {
 			ext::AnimoBuilder::GenerationParams params{};
 			auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
 
-			//RENDER THE RESULT
+			//BUILD THE RESULT
 			for (auto& objdata : builder_result.meshes)
 			{
 				create_box(objdata.position, objdata.scale);
@@ -246,7 +246,6 @@ namespace gbe {
 			{
 				if (windoweventtype == gbe::window::WindowEventType::RESIZE) {
 					auto newdimensions = mWindow->Get_dimentions();
-					//mGUIPipeline->Set_target_resolution(newdimensions);
 					mRenderPipeline->SetResolution(newdimensions);
 				}
 			}
@@ -267,9 +266,6 @@ namespace gbe {
 				}, mWindow);
 
 			//Update GUI system
-			auto bl_pivoted_mousepos = mWindow->GetMousePixelPos();
-			bl_pivoted_mousepos.y = mWindow->Get_dimentions().y - bl_pivoted_mousepos.y;
-			//mGUIPipeline->PassScreenSpaceMousePos(bl_pivoted_mousepos);
 
 			//Early update
 			for (auto updatable : this->current_root->GetHandler<EarlyUpdate>()->object_list)

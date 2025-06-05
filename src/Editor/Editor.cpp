@@ -88,25 +88,31 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 
 	//CLICKED
 	if (sdlevent->type == SDL_MOUSEBUTTONDOWN) {
-		if (sdlevent->button.button == SDL_BUTTON_LEFT) {
-			//PASS RAYCAST TO EDITOR FOR EDITOR CLICK MECHANICS
+		if (sdlevent->button.button == SDL_BUTTON_LEFT && !this->pointer_inUi) {
+
+			//RAYCAST MECHANICS
 			auto enginecurroot = this->mengine->GetCurrentRoot();
 			auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
 			Vector3 camera_pos = current_camera->World().position.Get();
-
 			auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos());
 			
+			//OBJECT SELECTION
 			Vector3 ray_dir = mousedir * 10000.0f;
-			
 			auto result = physics::Raycast(camera_pos, ray_dir);
-
-			if (result.result) {
-				if (!shift_click) {
-					this->selected.clear();
-				}
-
-				this->selected.push_back(result.other);
+			if (!shift_click) {
+				this->selected.clear();
 			}
+			if (result.result) {
+				this->selected.push_back(result.other);
+
+				//SPAWN GIZMO
+
+			}
+		}
+	}
+	if (sdlevent->type == SDL_MOUSEBUTTONUP) {
+		if (sdlevent->button.button == SDL_BUTTON_LEFT) {
+			this->mouse_holding = false;
 		}
 	}
 }
@@ -118,12 +124,75 @@ void gbe::Editor::PrepareFrame()
 	ImGui_ImplSDL2_NewFrame();
 
 	ImGui::NewFrame();
+
+	auto& ui_io = ImGui::GetIO();
+
+	this->pointer_inUi = ui_io.WantCaptureMouse;
+	this->keyboard_inUi = ui_io.WantCaptureKeyboard;
 }
 
 void gbe::Editor::DrawFrame()
 {
-	//imgui commands
+	//==============================EDITOR UPDATE==============================//
 	
+
+	//==============================IMGUI==============================//
+	//IMGUI OBJECT INSPECTOR
+	if (!ImGui::Begin("Inspector")) {
+		ImGui::End();
+
+		return;
+	}
+
+	const float label_width_base = ImGui::GetFontSize() * 12;               // Some amount of width for label, based on font size.
+	const float label_width_max = ImGui::GetContentRegionAvail().x * 0.40f; // ...but always leave some room for framed widgets.
+	const float label_width = label_width_base < label_width_max ? label_width_base : label_width_max;
+	ImGui::PushItemWidth(-label_width);                                     // Right-align: framed items will leave 'label_width' available for the label.
+
+	if (ImGui::BeginMenuBar())
+	{
+		if (ImGui::BeginMenu("Menu"))
+		{
+
+			ImGui::EndMenu();
+		}
+
+		ImGui::EndMenuBar();
+	}
+
+	//TRANSFORM INSPECTOR
+	if (this->selected.size() > 0)
+	{
+		//FOR ONLY ONE
+
+		Vector3 refpos = this->selected[0]->Local().position.Get();
+		Vector3 refrot = this->selected[0]->Local().rotation.Get().ToEuler();
+		Vector3 refscale = this->selected[0]->Local().position.Get();
+
+		if (ImGui::CollapsingHeader("Transform"))
+		{
+			ImGui::SeparatorText("Position");
+
+			ImGui::InputFloat("X", &refpos.x);
+			ImGui::InputFloat("Y", &refpos.y);
+			ImGui::InputFloat("Z", &refpos.z);
+
+			ImGui::SeparatorText("Rotation");
+
+			ImGui::InputFloat("X", &refrot.x);
+			ImGui::InputFloat("Y", &refrot.y);
+			ImGui::InputFloat("Z", &refrot.z);
+
+			ImGui::SeparatorText("Scale");
+
+			ImGui::InputFloat("X", &refscale.x);
+			ImGui::InputFloat("Y", &refscale.y);
+			ImGui::InputFloat("Z", &refscale.z);
+		}
+	}
+
+	ImGui::PopItemWidth();
+	ImGui::End();
 }
 
 void gbe::Editor::PresentFrame()

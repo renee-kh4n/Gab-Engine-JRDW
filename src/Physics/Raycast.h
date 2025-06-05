@@ -12,6 +12,7 @@ namespace gbe {
 			bool result;
 			PhysicsObject* other;
 			PhysicsVector3 intersection;
+			float distance;
 
 			Raycast(PhysicsVector3 from, PhysicsVector3 dir);
 		};

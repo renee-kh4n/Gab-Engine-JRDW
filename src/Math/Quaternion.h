@@ -17,5 +17,7 @@ namespace gbe {
 		static Quaternion Euler(Vector3);
 
 		operator glm::quat() const;
+
+		Vector3 ToEuler();
 	};
 }

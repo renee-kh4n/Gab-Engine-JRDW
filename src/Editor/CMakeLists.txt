@@ -2,7 +2,7 @@ set(CURRENT_CMAKE_LIB gbe_editor)
 
 #SUBDIRECTORY LOADING
 add_library(${CURRENT_CMAKE_LIB} STATIC
-	"Editor.cpp")
+	"Editor.cpp" "Gui/EditorGui.h")
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)

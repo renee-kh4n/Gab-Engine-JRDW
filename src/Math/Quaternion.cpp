@@ -29,6 +29,10 @@ gbe::Quaternion gbe::Quaternion::Euler(Vector3 euler)
 	return glm::quat(Vector3(glm::radians(euler.x), glm::radians(euler.y), glm::radians(euler.z)));;
 }
 
+gbe::Vector3 gbe::Quaternion::ToEuler() {
+	return Vector3(glm::eulerAngles(*this));
+}
+
 gbe::Quaternion::operator glm::quat() const
 {
 	return (glm::quat)*this;

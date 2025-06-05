@@ -19,6 +19,20 @@ namespace gbe {
 		RenderPipeline* mrenderpipeline;
 
 		std::vector<gbe::Object*> selected;
+
+		bool pointer_inUi;
+		bool keyboard_inUi;
+
+		bool mouse_holding;
+		Vector3 mouse_startdrag_dir;
+		Vector3 dragging_original_position;
+		float drag_depth;
+
+
+		//GIZMOS
+		PhysicsObject* f_gizmo;
+		PhysicsObject* r_gizmo;
+		PhysicsObject* u_gizmo;
 	public:
 		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine);
 		void PrepareFrame();
