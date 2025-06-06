@@ -52,6 +52,8 @@ namespace gbe {
 		//RenderPipeline setup
 		auto mRenderPipeline = new RenderPipeline(mWindow, mWindow->Get_dimentions());
 #pragma endregion
+		//GLOBAL RUNTIME COMPONENTS
+		auto mTime = new Time();
 #pragma region Physics Pipeline Setup
 		auto mPhysicsPipeline = new physics::PhysicsPipeline();
 		mPhysicsPipeline->Init();
@@ -70,7 +72,7 @@ namespace gbe {
 		//mAudioPipeline->Init();
 #pragma endregion
 #pragma region Editor Setup
-		auto mEditor = new gbe::Editor(mRenderPipeline, mWindow, this);
+		auto mEditor = new gbe::Editor(mRenderPipeline, mWindow, this, mTime);
 		mWindow->AddAdditionalEventProcessor([mEditor](void* newevent) {
 			mEditor->ProcessRawWindowEvent(newevent);
 			});
@@ -93,7 +95,7 @@ namespace gbe {
 		//MATERIAL CACHING
 		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
 		auto test_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
-		test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
+		//test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
 		test_mat->setOverride("colortex", test_tex);
 		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
 
@@ -222,8 +224,44 @@ namespace gbe {
 			//BUILD THE RESULT
 			for (auto& objdata : builder_result.meshes)
 			{
-				create_box(objdata.position, objdata.scale);
+				//create_box(objdata.position, objdata.scale);
 			}
+
+			//GDENG03 GAME TIME HO
+			std::vector<RigidObject*> cubes;
+
+			for (int x = -5; x < 5; x++)
+			{
+				for (int y = -5; y < 5; y++)
+				{
+					auto depth = (x + y) % 3;
+
+					auto ho_cube = create_box(Vector3(x, y, 5 + depth), Vector3(0.5f, 0.5f, 0.5f));
+					cubes.push_back(ho_cube);
+				}
+			}
+
+			float* ho_time = new float();
+
+			auto animator = new GenericObject([cubes, ho_time, test_mat](GenericObject* self, float deltatime) {
+				Vector3 from_rot = Vector3(0, 0, 0);
+				Vector3 to_rot = Vector3(0, 180, 180);
+				float animation_time = 0.5f;
+				(*ho_time) += deltatime;
+				auto anim_t = (*ho_time) * animation_time;
+
+				int coeffienct_counter = 0;
+				for (auto const& cube : cubes)
+				{
+					coeffienct_counter++;
+					float coefficient = ((coeffienct_counter % 4) - 2) * 0.5f;
+					if (coefficient == 0)
+						coefficient = 1;
+
+					cube->Local().rotation.Set(Quaternion::Euler(Vector3::Lerp(from_rot, to_rot, anim_t * coefficient)));
+				}
+			});
+			animator->SetParent(game_root);
 
 #pragma endregion
 			return game_root;
@@ -233,9 +271,7 @@ namespace gbe {
 		auto initial_root = create_main_game();
 		this->current_root = initial_root;
 #pragma region MAIN LOOP
-		//GLOBAL RUNTIME COMPONENTS
-		auto mTime = new Time();
-
+		
 		/// MAIN GAME LOOP
 		while (!mWindow->ShouldClose())
 		{

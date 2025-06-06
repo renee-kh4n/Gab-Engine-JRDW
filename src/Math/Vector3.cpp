@@ -67,13 +67,6 @@ const float* gbe::Vector3::Get_Ptr() {
 
 const gbe::Vector3 gbe::Vector3::zero = gbe::Vector3(0, 0, 0);
 
-gbe::Vector3 Lerp(gbe::Vector3& a, gbe::Vector3& b, float t) {
-	auto d = b - a;
-	d *= t;
-	auto tv = a + d;
-	return tv;
-}
-
 const gbe::Vector3 RandomWithin(gbe::Vector3& a, gbe::Vector3& b) {
 	gbe::Vector3 d = b - a;
 	auto rand_01 = []() {

@@ -17,6 +17,7 @@ namespace gbe {
 		Window* mwindow;
 		Engine* mengine;
 		RenderPipeline* mrenderpipeline;
+		Time* mtime;
 
 		std::vector<gbe::Object*> selected;
 
@@ -41,7 +42,7 @@ namespace gbe {
 			&u_gizmo
 		};
 	public:
-		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine);
+		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime);
 		void PrepareFrame();
 		void DrawFrame();
 		void ProcessRawWindowEvent(void* rawwindowevent);

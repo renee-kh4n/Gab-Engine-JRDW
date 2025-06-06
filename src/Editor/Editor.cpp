@@ -3,11 +3,12 @@
 #include "Graphics/gbe_graphics.h"
 #include "Engine/gbe_engine.h"
 
-gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine)
+gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime)
 {
 	this->mengine = engine;
 	this->mwindow = window;
 	this->mrenderpipeline = renderpipeline;
+	this->mtime = _mtime;
 
 	//GET ALL REQUIRED VARIABLES FROM RENDERPIPELINE
 	auto vkInst = static_cast<VkInstance*>(renderpipeline->GetPipelineVariable("VkInstance"));
@@ -261,6 +262,8 @@ void gbe::Editor::DrawFrame()
 
 		ImGui::EndMenuBar();
 	}
+
+	ImGui::InputDouble("GAME TIME: ", &mtime->scale);
 
 	//TRANSFORM INSPECTOR
 	if (this->selected.size() > 0)
