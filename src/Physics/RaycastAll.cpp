@@ -16,13 +16,10 @@ gbe::physics::RaycastAll::RaycastAll(PhysicsVector3 from, PhysicsVector3 dir)
 	this->result = allResults.hasHit();
 	
 	if (this->result) {
-		for (const auto& other : allResults.m_collisionObjects)
-		{
+		//LOOP AND TURN INTO AN ARRAY
 
-		}
-
-		this->others = PhysicsPipeline::GetRelatedBody(closestResults.m_collisionObject)->Get_wrapper();
-		this->intersection = closestResults.m_hitPointWorld;
+		//this->others = PhysicsPipeline::GetRelatedBody(closestResults.m_collisionObject)->Get_wrapper();
+		//this->intersection = closestResults.m_hitPointWorld;
 		Vector3 delta = from - this->intersection;
 		this->distance = delta.Magnitude();
 	}
