@@ -135,6 +135,14 @@ namespace gbe {
         bool exists = this->calls.find(instance_id) != this->calls.end();
         if(!exists)
             callcount++;
+        
+        //FORCE UPDATE OVERRIDES
+        for (size_t m_i = 0; m_i < this->get_material()->getOverrideCount(); m_i++)
+        {
+            std::string id;
+            auto& overridedata = this->get_material()->getOverride(m_i, id);
+			overridedata.handled_change = false; // Reset handled change for new call
+        }
 
         CallInstance newinst{};
 

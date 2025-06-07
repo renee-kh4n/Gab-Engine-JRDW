@@ -24,7 +24,14 @@ namespace gbe {
 		bool pointer_inUi;
 		bool keyboard_inUi;
 
+		//GIZMO CACHE
+		asset::Mesh* gizmo_arrow_mesh;
+		DrawCall* gizmo_arrow_drawcall_r;
+		DrawCall* gizmo_arrow_drawcall_g;
+		DrawCall* gizmo_arrow_drawcall_b;
+
 		//GIZMOS
+		float gizmo_offset_distance = 1.0f;
 		Vector3 original_selected_position;
 		Vector3 selected_f;
 		Vector3 selected_r;
@@ -42,11 +49,14 @@ namespace gbe {
 			&u_gizmo
 		};
 	public:
+		
+
 		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime);
 		void PrepareFrame();
 		void DrawFrame();
 		void ProcessRawWindowEvent(void* rawwindowevent);
 		void PresentFrame();
 		void RenderPass(VkCommandBuffer cmd);
+		void CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcall, Vector3 rotation, Vector3 direction);
 	};
 }

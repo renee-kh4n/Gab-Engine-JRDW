@@ -95,13 +95,13 @@ namespace gbe {
 		//MATERIAL CACHING
 		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
 		auto test_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
-		//test_mat->setOverride("color", Vector4(Vector3(1, 2, 1).Normalize(), 1.0f));
+		test_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
 		test_mat->setOverride("colortex", test_tex);
 		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
 
 		//DRAW CALL CACHING
 		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
-		auto cube_drawcall = mRenderPipeline->RegisterDefaultDrawCall(cube_mesh, cube_mat);
+		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
 
 #pragma endregion
 #pragma region Input
@@ -155,7 +155,7 @@ namespace gbe {
 				platform_collider->SetParent(test);
 				platform_collider->Local().position.Set(Vector3(0, 0, 0));
 				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
-				platform_renderer->SetParent(platform_collider);
+				platform_renderer->SetParent(test);
 
 				return test;
 			};
@@ -221,47 +221,11 @@ namespace gbe {
 			ext::AnimoBuilder::GenerationParams params{};
 			auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
 
-			//BUILD THE RESULT
+			//SPAWN THE RESULT
 			for (auto& objdata : builder_result.meshes)
 			{
-				//create_box(objdata.position, objdata.scale);
+				create_box(objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
 			}
-
-			//GDENG03 GAME TIME HO
-			std::vector<RigidObject*> cubes;
-
-			for (int x = -5; x < 5; x++)
-			{
-				for (int y = -5; y < 5; y++)
-				{
-					auto depth = (x + y) % 3;
-
-					auto ho_cube = create_box(Vector3(x, y, 5 + depth), Vector3(0.5f, 0.5f, 0.5f));
-					cubes.push_back(ho_cube);
-				}
-			}
-
-			float* ho_time = new float();
-
-			auto animator = new GenericObject([cubes, ho_time, test_mat](GenericObject* self, float deltatime) {
-				Vector3 from_rot = Vector3(0, 0, 0);
-				Vector3 to_rot = Vector3(0, 180, 180);
-				float animation_time = 0.5f;
-				(*ho_time) += deltatime;
-				auto anim_t = (*ho_time) * animation_time;
-
-				int coeffienct_counter = 0;
-				for (auto const& cube : cubes)
-				{
-					coeffienct_counter++;
-					float coefficient = ((coeffienct_counter % 4) - 2) * 0.5f;
-					if (coefficient == 0)
-						coefficient = 1;
-
-					cube->Local().rotation.Set(Quaternion::Euler(Vector3::Lerp(from_rot, to_rot, anim_t * coefficient)));
-				}
-			});
-			animator->SetParent(game_root);
 
 #pragma endregion
 			return game_root;

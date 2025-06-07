@@ -77,6 +77,41 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engi
 		ImGui_ImplVulkan_Shutdown();
 		});
 		*/
+
+	//CREATE THE GIZMO OBJECTS
+	auto gizmoshader = new asset::Shader("DefaultAssets/Shaders/gizmo.shader.gbe");
+	this->gizmo_arrow_mesh = new asset::Mesh("DefaultAssets/3D/arrow.obj.gbe");
+
+	auto mat_r = new asset::Material("DefaultAssets/Materials/gizmo.mat.gbe");
+	auto mat_g = new asset::Material("DefaultAssets/Materials/gizmo.mat.gbe");
+	auto mat_b = new asset::Material("DefaultAssets/Materials/gizmo.mat.gbe");
+	mat_r->setOverride("color", Vector4(1, 0, 0, 1.0f));
+	mat_g->setOverride("color", Vector4(0, 1, 0, 1.0f));
+	mat_b->setOverride("color", Vector4(0, 0, 1, 1.0f));
+	this->gizmo_arrow_drawcall_r = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_r);
+	this->gizmo_arrow_drawcall_g = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_g);
+	this->gizmo_arrow_drawcall_b = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_b);
+}
+
+void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcall, Vector3 rotation, Vector3 direction) {
+	if (out_g == nullptr) {
+		auto newGizmo = new RigidObject(true);
+		newGizmo->SetParent(mengine->GetCurrentRoot());
+		newGizmo->Local().scale.Set(Vector3(0.1f, 0.1f, (gizmo_offset_distance * 2.0f)));
+		BoxCollider* FGizmo_collider = new BoxCollider();
+		FGizmo_collider->SetParent(newGizmo);
+		FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
+		RenderObject* platform_renderer = new RenderObject(drawcall);
+		platform_renderer->SetParent(newGizmo);
+
+		out_g = newGizmo;
+	}
+
+	//SELECTED SPECIFIC THINGS
+	auto rot = Quaternion::Euler(rotation);
+	out_g->Local().position.Set(this->selected[0]->World().position.Get());
+	out_g->Local().rotation.Set(this->selected[0]->World().rotation.Get() * rot);
+	out_g->TranslateWorld(direction * gizmo_offset_distance);
 }
 
 void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
@@ -118,58 +153,15 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 					}
 
 					this->selected.push_back(result.other);
-
-					//SPAWN GIZMO
-					if (this->f_gizmo == nullptr) {
-						auto newGizmo = new RigidObject(true);
-						newGizmo->SetParent(mengine->GetCurrentRoot());
-						newGizmo->Local().scale.Set(Vector3(0.2f, 0.2f, 1.0f));
-						BoxCollider* FGizmo_collider = new BoxCollider();
-						FGizmo_collider->SetParent(newGizmo);
-						FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
-						RenderObject* platform_renderer = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
-						platform_renderer->SetParent(FGizmo_collider);
-
-						this->f_gizmo = newGizmo;
-					}
-					if (this->r_gizmo == nullptr) {
-						auto newGizmo = new RigidObject(true);
-						newGizmo->SetParent(mengine->GetCurrentRoot());
-						newGizmo->Local().scale.Set(Vector3(1.0f, 0.2f, 0.2f));
-						BoxCollider* FGizmo_collider = new BoxCollider();
-						FGizmo_collider->SetParent(newGizmo);
-						FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
-						RenderObject* platform_renderer = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
-						platform_renderer->SetParent(FGizmo_collider);
-
-						this->r_gizmo = newGizmo;
-					}
-					if (this->u_gizmo == nullptr) {
-						auto newGizmo = new RigidObject(true);
-						newGizmo->SetParent(mengine->GetCurrentRoot());
-						newGizmo->Local().scale.Set(Vector3(0.2f, 1.0f, 0.2f));
-						BoxCollider* FGizmo_collider = new BoxCollider();
-						FGizmo_collider->SetParent(newGizmo);
-						FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
-						RenderObject* platform_renderer = new RenderObject(mrenderpipeline->GetDefaultDrawCall());
-						platform_renderer->SetParent(FGizmo_collider);
-
-						this->u_gizmo = newGizmo;
-					}
-
 					this->selected_f = result.other->World().GetForward();
 					this->selected_r = result.other->World().GetRight();
 					this->selected_u = result.other->World().GetUp();
 
-					this->f_gizmo->Local().position.Set(result.other->World().position.Get() + this->selected_f);
-					this->r_gizmo->Local().position.Set(result.other->World().position.Get() + this->selected_r);
-					this->u_gizmo->Local().position.Set(result.other->World().position.Get() + this->selected_u);
+					//SPAWN GIZMO
+					this->CreateGizmoArrow(this->f_gizmo, this->gizmo_arrow_drawcall_b, Vector3(0, 180, 0), this->selected_f);
+					this->CreateGizmoArrow(this->r_gizmo, this->gizmo_arrow_drawcall_r, Vector3(0, -90, 0), this->selected_r);
+					this->CreateGizmoArrow(this->u_gizmo, this->gizmo_arrow_drawcall_g, Vector3(90, 0, 0), this->selected_u);
 
-
-					for (auto& gizmoptr : this->gizmos)
-					{
-						(*gizmoptr)->Local().rotation.Set(result.other->World().rotation.Get());
-					}
 				}
 			}
 			else { //NOTHING WAS CLICKED
@@ -234,9 +226,9 @@ void gbe::Editor::DrawFrame()
 		selected[0]->SetWorldPosition(closestPointOnTransformDir);
 
 		//UPDATE THE POSITION OF ALL GIZMOS
-		this->f_gizmo->Local().position.Set(closestPointOnTransformDir + this->selected_f);
-		this->r_gizmo->Local().position.Set(closestPointOnTransformDir + this->selected_r);
-		this->u_gizmo->Local().position.Set(closestPointOnTransformDir + this->selected_u);
+		this->f_gizmo->Local().position.Set(closestPointOnTransformDir + (gizmo_offset_distance * this->selected_f));
+		this->r_gizmo->Local().position.Set(closestPointOnTransformDir + (gizmo_offset_distance * this->selected_r));
+		this->u_gizmo->Local().position.Set(closestPointOnTransformDir + (gizmo_offset_distance * this->selected_u));
 	}
 
 	//==============================IMGUI==============================//

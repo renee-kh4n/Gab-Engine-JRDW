@@ -863,6 +863,9 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
 
         for (const auto& drawcall : drawcallbatch)
         {
+            //SYNC FIRST
+            drawcall->SyncMaterialData(currentFrame);
+
             //USE SHADER
             auto shaderasset = drawcall->get_material()->getShader();
             const auto& currentshaderdata = shaderloader.GetAssetData(shaderasset);
@@ -885,8 +888,6 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
             //RENDER MESH
             const auto& curmesh = this->meshloader.GetAssetData(drawcall->get_mesh());
 			
-            drawcall->SyncMaterialData(currentFrame);
-
             //UPDATE GLOBAL UBO
             for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
                 auto& callinstance = drawcall->get_call_instance(dc_i);
