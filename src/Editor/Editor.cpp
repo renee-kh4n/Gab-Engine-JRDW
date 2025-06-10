@@ -109,7 +109,6 @@ void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcal
 
 	//SELECTED SPECIFIC THINGS
 	auto rot = Quaternion::Euler(rotation);
-	out_g->Local().position.Set(this->selected[0]->World().position.Get());
 	out_g->Local().rotation.Set(this->selected[0]->World().rotation.Get() * rot);
 	out_g->TranslateWorld(direction * gizmo_offset_distance);
 }
@@ -162,6 +161,7 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 					this->CreateGizmoArrow(this->r_gizmo, this->gizmo_arrow_drawcall_r, Vector3(0, -90, 0), this->selected_r);
 					this->CreateGizmoArrow(this->u_gizmo, this->gizmo_arrow_drawcall_g, Vector3(90, 0, 0), this->selected_u);
 
+					this->current_selected_position = this->selected[0]->World().position.Get();
 				}
 			}
 			else { //NOTHING WAS CLICKED
@@ -205,30 +205,38 @@ void gbe::Editor::PrepareFrame()
 void gbe::Editor::DrawFrame()
 {
 	//==============================EDITOR UPDATE==============================//
-	if (held_gizmo != nullptr) {
-		//FIND POSITION TO TRANSFORM THE SELECTED OBJECT
-		//FIND DIRECTION
-		Vector3 transformDirection;
-		if (held_gizmo == f_gizmo)
-			transformDirection = this->selected_f;
-		if (held_gizmo == r_gizmo)
-			transformDirection = this->selected_r;
-		if (held_gizmo == u_gizmo)
-			transformDirection = this->selected_u;
-
+	if (selected.size() > 0) {
 		auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
 		Vector3 camera_pos = current_camera->World().position.Get();
 		auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos());
 
-		// Find the closest point on the line segments
-		Vector3 closestPointOnTransformDir = Vector3::GetClosestPointOnLineGivenLine(original_selected_position, transformDirection, camera_pos, mousedir);
+		if (held_gizmo != nullptr) {
+			//FIND POSITION TO TRANSFORM THE SELECTED OBJECT
+			//FIND DIRECTION
+			Vector3 transformDirection;
+			if (held_gizmo == f_gizmo)
+				transformDirection = this->selected_f;
+			if (held_gizmo == r_gizmo)
+				transformDirection = this->selected_r;
+			if (held_gizmo == u_gizmo)
+				transformDirection = this->selected_u;
 
-		selected[0]->SetWorldPosition(closestPointOnTransformDir);
+			// Find the closest point on the line segments
+			this->current_selected_position = Vector3::GetClosestPointOnLineGivenLine(original_selected_position, transformDirection, camera_pos, mousedir);
+
+			selected[0]->SetWorldPosition(this->current_selected_position);
+		}
+
+
+		Vector3 cam_toselected = this->current_selected_position - camera_pos;
+		cam_toselected = cam_toselected.Normalize();
+
+		Vector3 finalgizmopos = camera_pos + (cam_toselected * this->gizmo_fixed_depth);
 
 		//UPDATE THE POSITION OF ALL GIZMOS
-		this->f_gizmo->Local().position.Set(closestPointOnTransformDir + (gizmo_offset_distance * this->selected_f));
-		this->r_gizmo->Local().position.Set(closestPointOnTransformDir + (gizmo_offset_distance * this->selected_r));
-		this->u_gizmo->Local().position.Set(closestPointOnTransformDir + (gizmo_offset_distance * this->selected_u));
+		this->f_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_f));
+		this->r_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_r));
+		this->u_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_u));
 	}
 
 	//==============================IMGUI==============================//

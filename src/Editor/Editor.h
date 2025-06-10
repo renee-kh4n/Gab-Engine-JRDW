@@ -26,12 +26,16 @@ namespace gbe {
 
 		//GIZMO CACHE
 		asset::Mesh* gizmo_arrow_mesh;
+		asset::Mesh* gizmo_cube_mesh;
 		DrawCall* gizmo_arrow_drawcall_r;
 		DrawCall* gizmo_arrow_drawcall_g;
 		DrawCall* gizmo_arrow_drawcall_b;
+		DrawCall* gizmo_cube_drawcall;
 
 		//GIZMOS
+		float gizmo_fixed_depth = 10.0f;
 		float gizmo_offset_distance = 1.0f;
+		Vector3 current_selected_position;
 		Vector3 original_selected_position;
 		Vector3 selected_f;
 		Vector3 selected_r;
@@ -48,6 +52,8 @@ namespace gbe {
 			&r_gizmo,
 			&u_gizmo
 		};
+
+		std::vector<RenderObject*> gizmo_cubes;
 	public:
 		
 

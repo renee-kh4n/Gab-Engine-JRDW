@@ -19,6 +19,18 @@ namespace gbe {
         return glm::lookAt(this_pos, (glm::vec3)world.GetForward() + this_pos, (glm::vec3)world.GetUp());
     }
 
+    Vector2 Camera::WorldToScreen(Vector3 worldpos) {
+        auto inv_proj = glm::inverse(this->getproj());
+        auto inv_view = glm::inverse(this->GetViewMat());
+        auto initial_pos = inv_proj * inv_view * Vector4(worldpos, 1.0f);
+        auto final_pos = Vector3(initial_pos.x, -initial_pos.y, initial_pos.z) * (1.0f / initial_pos.w);
+
+        //final_pos.x *= (0.5f / static_cast<float>(this->mWindow->Get_dimentions().x));
+        //final_pos.y *= (0.5f / static_cast<float>(this->mWindow->Get_dimentions().y));
+
+        return Vector2(final_pos);
+    }
+
     Vector3 Camera::ScreenToRay(Vector2 normalizedscreenpos)
     {
         auto inv_proj = glm::inverse(this->getproj());
