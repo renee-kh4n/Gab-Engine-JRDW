@@ -21,6 +21,7 @@ void gbe::Root::OnEnterHierarchy(Object* newChild)
 	{
 		handler->TryAdd(newChild);
 	}
+	newChild->SetRoot(this);
 }
 
 void gbe::Root::OnExitHierarchy(Object* newChild)

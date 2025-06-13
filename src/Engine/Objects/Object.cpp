@@ -1,7 +1,10 @@
 #include "Object.h"
+#include "Root.h"
 
 #define _USE_MATH_DEFINES
 #include <math.h>
+
+#include "Editor/gbe_editor.h"
 
 void gbe::Object::MatToTrans(Transform* target, Matrix4 mat)
 {
@@ -57,6 +60,17 @@ gbe::Object::Object()
 
 	OnLocalTransformationChange(TransformChangeType::ALL);
 	OnExternalTransformationChange(TransformChangeType::ALL, this->parent_matrix);
+
+	//INSPECTOR DATA
+	inspectorData = new editor::InspectorData();
+
+	auto pos_field = new editor::InspectorVec3();
+	pos_field->name = "Position";
+	pos_field->x = &this->local.position.Get().x;
+	pos_field->y = &this->local.position.Get().y;
+	pos_field->z = &this->local.position.Get().z;
+
+	inspectorData->fields.push_back(pos_field);
 }
 
 gbe::Object::~Object(){
@@ -195,6 +209,11 @@ gbe::Object* gbe::Object::GetChildAt(size_t i)
 size_t gbe::Object::GetChildCount()
 {
 	return this->children.size();
+}
+
+gbe::editor::InspectorData* gbe::Object::GetInspectorData()
+{
+	return this->inspectorData;
 }
 
 void gbe::Object::Destroy()

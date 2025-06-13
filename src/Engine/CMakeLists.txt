@@ -20,6 +20,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Controllers/FlyingCameraControl.cpp"
 	"Objects/Controllers/OrbitalControl.cpp"
 	"Objects/Controllers/GenericController.cpp"
+	"Objects/Controllers/TPCameraController.cpp"
 	
 	
 	"Objects/Input/InputPlayer.cpp"
@@ -37,8 +38,13 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Objects/Physics/Collider/BoxCollider.cpp"
 	"Objects/Physics/PhysicsObject.cpp"
 	"Objects/Physics/TriggerRigidObject.cpp"
+	"Objects/Physics/Collider/MeshCollider.cpp"
 
- "Objects/GenericObject.cpp" "Objects/Controllers/TPCameraController.cpp" "Objects/Systems/ParticleSystem.cpp" "Objects/Physics/Collider/MeshCollider.cpp" "Input/Implementations/MouseDeltaImplementation.h")
+	"Objects/GenericObject.cpp"
+
+	"Objects/Systems/ParticleSystem.cpp"
+	"Objects/Systems/Cinematics/CinematicSystem.cpp"
+)
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)

@@ -6,6 +6,8 @@
 
 #include "Engine/gbe_engine.h"
 
+#include "Gui/InspectorData.h"
+
 namespace gbe {
 	class RenderPipeline;
 	class Engine;

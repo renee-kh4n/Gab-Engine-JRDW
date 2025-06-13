@@ -83,6 +83,7 @@ namespace gbe {
 		//MESH CACHING
 		auto test_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
+		auto plane_mesh = new asset::Mesh("DefaultAssets/3D/plane.obj.gbe");
 		
 		//SHADER CACHING
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
@@ -102,6 +103,7 @@ namespace gbe {
 		//DRAW CALL CACHING
 		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
 		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
+		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, cube_mat);
 
 #pragma endregion
 #pragma region Input
@@ -159,6 +161,21 @@ namespace gbe {
 
 				return test;
 			};
+
+			auto create_plane = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+				RigidObject* test = new RigidObject(true);
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(rotation);
+				test->Local().scale.Set(scale);
+				BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(test);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+				RenderObject* platform_renderer = new RenderObject(plane_drawcall);
+				platform_renderer->SetParent(test);
+
+				return test;
+				};
 
 			//Global objects
 			//physics force setup
@@ -226,6 +243,11 @@ namespace gbe {
 			{
 				create_box(objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
 			}
+
+			//CINEMACHINE
+			auto cinematic_system_holder = create_box(Vector3(0, 0, -10), Vector3(3, 3, 3));
+			auto cinematic_system = new CinematicSystem();
+			cinematic_system->SetParent(cinematic_system_holder);
 
 #pragma endregion
 			return game_root;

@@ -1,15 +1,22 @@
 #pragma once
 
+#include "Engine/Component/Transform.h"
+#include "Engine/Component/TransformChangeType.h"
+
 #include <glm/gtx/matrix_decompose.hpp>
 #include <glm/gtx/quaternion.hpp>
 
 #include <list>
 #include <functional>
+
 #include "Math/gbe_math.h"
-#include "Engine/Component/Transform.h"
-#include "Engine/Component/TransformChangeType.h"
 
 namespace gbe {
+	class Root;
+
+	namespace editor {
+		struct InspectorData;
+	}
 
 	class Object {
 	private:
@@ -24,10 +31,13 @@ namespace gbe {
 		
 		Matrix4 parent_matrix;
 	protected:
+		Root* root;
 		Object* parent;
 		virtual Object* Copy_self();
 		virtual void OnLocalTransformationChange(TransformChangeType changetype);
 		virtual void OnExternalTransformationChange(TransformChangeType changetype, Matrix4 newparentmatrix);
+
+		editor::InspectorData* inspectorData;
 	public:
 		Object();
 		virtual ~Object();
@@ -47,8 +57,13 @@ namespace gbe {
 		Object* GetChildAt(size_t i);
 		size_t GetChildCount();
 
+		editor::InspectorData* GetInspectorData();
+
 		void Destroy();
 		bool get_isDestroyed();
+		inline void SetRoot(Root* newroot) {
+			this->root = newroot;
+		}
 
 		void CallRecursively(std::function<void(Object*)> action);
 	};

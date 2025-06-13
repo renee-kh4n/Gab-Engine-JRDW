@@ -16,6 +16,10 @@ namespace gbe {
 		static Quaternion LookAtRotation(Vector3 forward, Vector3 Up);
 		static Quaternion Euler(Vector3);
 
+		inline static Quaternion Lerp(Quaternion a, Quaternion b, float t) {
+			return glm::lerp(a, b, t);
+		}
+
 		operator glm::quat() const;
 
 		Vector3 ToEuler();
