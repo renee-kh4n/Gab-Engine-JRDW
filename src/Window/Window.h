@@ -43,7 +43,6 @@ namespace gbe {
     public:
         Window(Vector2Int dimentions);
         void* Get_implemented_window();
-        Set_implemented_renderer(void* renderer);
 
         bool PollEvents(gbe::window::WindowEventType& event_type);
 

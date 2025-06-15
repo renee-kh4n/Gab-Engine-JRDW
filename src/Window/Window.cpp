@@ -6,11 +6,6 @@ namespace gbe {
         return this->implemented_window;
     }
 
-    Window::Set_implemented_renderer(void* renderer)
-    {
-		this->implemented_renderer = static_cast<SDL_Renderer*>(renderer);
-    }
-
     gbe::Window::Window(Vector2Int dimentions)
     {
         this->dimentions = dimentions; 

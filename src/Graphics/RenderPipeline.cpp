@@ -243,7 +243,7 @@ void gbe::RenderPipeline::copyImageToBuffer(VkImage image, VkBuffer buffer, uint
     vkCmdCopyImageToBuffer(
         commandBuffer,
         image,
-        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+        VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR,
         buffer,
         1,
         &region
@@ -705,7 +705,7 @@ void gbe::RenderPipeline::InitializePipelineObjects() {
     swapchainInfo.imageColorSpace = this->chosenSurfaceFormat.colorSpace;
     swapchainInfo.imageExtent = this->swapchainExtent;
     swapchainInfo.imageArrayLayers = 1;
-    swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    swapchainInfo.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT;
 
     uint32_t queueFamilyIndices[] = { graphicsQueueIndex, presentQueueIndex };
 
@@ -1009,7 +1009,7 @@ char* gbe::RenderPipeline::ScreenShot() {
 
     VkBuffer stagingBuffer;
     VkDeviceMemory stagingBufferMemory;
-    this->createBuffer(imageSizevk, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+    this->createBuffer(imageSizevk, VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
 
     this->copyImageToBuffer(this->swapChainImages[currentFrame], stagingBuffer, resolution.x, resolution.y);
 
@@ -1025,6 +1025,8 @@ char* gbe::RenderPipeline::ScreenShot() {
 
     // 6. Unmap the staging buffer
     vkUnmapMemory(this->vkdevice, stagingBufferMemory);
+
+    return static_cast<char*>(data);
 }
 
 gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, asset::Material* material)

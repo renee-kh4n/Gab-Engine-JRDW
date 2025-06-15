@@ -5,7 +5,6 @@
 #include "Graphics/gbe_graphics.h"
 #include "Engine/gbe_engine.h"
 
-#include "libavcodec/"
 
 gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime)
 {
@@ -121,6 +120,13 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 	auto sdlevent = static_cast<SDL_Event*>(rawwindowevent);
 
 	ImGui_ImplSDL2_ProcessEvent(sdlevent);
+
+	//CHECK SCREENSHOT BUTTON
+	if (sdlevent->type == SDL_KEYDOWN) {
+		if (sdlevent->key.keysym.sym == SDLK_p) {
+			this->mrenderpipeline->ScreenShot();
+		}
+	}
 
 	//CHECK SHIFT CLICK
 	bool shift_click = false;
@@ -334,15 +340,7 @@ void gbe::Editor::DrawFrame()
 void gbe::Editor::PresentFrame()
 {
 	//BEFORE YOU DRAW THE EDITOR, IMPLEMENT THE SCREEN RECORDING
-	// 1. Capture frame
-	SDL_Surface* surface = SDL_CreateRGBSurface(0, 640, 480, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-	SDL_RenderReadPixels(mwindow., NULL, SDL_PIXELFORMAT_ARGB8888, surface->pixels, surface->pitch);
-
-	// 2. Encode and Write
-	// Assuming 'encode_frame' and 'write_frame' are defined elsewhere
-	// encode_frame(surface, ...); // Encode the frame using FFmpeg
-	// write_frame(...); // Write the encoded data to file
-	SDL_FreeSurface(surface);
+	
 
 	//AFTER RECORDING, DO THE RENDER
 	ImGui::Render();
