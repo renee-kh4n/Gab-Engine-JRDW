@@ -24,6 +24,7 @@ namespace gbe {
     class Window {
     private:
         SDL_Window* implemented_window;
+        SDL_Renderer* implemented_renderer;
         SDL_GLContext context;
         Vector2Int mousePos;
         Vector2Int dimentions;
