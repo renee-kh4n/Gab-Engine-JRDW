@@ -218,6 +218,40 @@ void gbe::RenderPipeline::copyBufferToImage(VkBuffer buffer, VkImage image, uint
     endSingleTimeCommands(commandBuffer);
 }
 
+void gbe::RenderPipeline::copyImageToBuffer(VkImage image, VkBuffer buffer, uint32_t width, uint32_t height)
+{
+    VkCommandBuffer commandBuffer;
+    beginSingleTimeCommands(commandBuffer);
+
+    VkBufferImageCopy region{};
+    region.bufferOffset = 0;
+    region.bufferRowLength = 0;
+    region.bufferImageHeight = 0;
+
+    region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    region.imageSubresource.mipLevel = 0;
+    region.imageSubresource.baseArrayLayer = 0;
+    region.imageSubresource.layerCount = 1;
+
+    region.imageOffset = { 0, 0, 0 };
+    region.imageExtent = {
+        width,
+        height,
+        1
+    };
+
+    vkCmdCopyImageToBuffer(
+        commandBuffer,
+        image,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+        buffer,
+        1,
+        &region
+    );
+
+    endSingleTimeCommands(commandBuffer);
+}
+
 void gbe::RenderPipeline::createImageView(VkImageView& imageview, VkImage image, VkFormat format, VkImageAspectFlags aspectflags)
 {
     VkImageViewCreateInfo viewInfo{};
@@ -297,8 +331,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
 
 #pragma region SDL x VULKAN init
     auto implemented_window = static_cast<SDL_Window*>(window->Get_implemented_window());
-
-
+    
     //EXTENSIONS
     uint32_t SDLextensionCount;
     const char** SDLextensionNames = 0;
@@ -968,6 +1001,30 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
     }
 
     this->currentFrame = (this->currentFrame + 1) % this->MAX_FRAMES_IN_FLIGHT;
+}
+
+char* gbe::RenderPipeline::ScreenShot() {
+    //VULKAN TEXTURE LOAD
+    VkDeviceSize imageSizevk = this->resolution.x * this->resolution.y * 4;
+
+    VkBuffer stagingBuffer;
+    VkDeviceMemory stagingBufferMemory;
+    this->createBuffer(imageSizevk, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+
+    this->copyImageToBuffer(this->swapChainImages[currentFrame], stagingBuffer, resolution.x, resolution.y);
+
+    // 4. Map the staging buffer
+    void* data;
+    vkMapMemory(this->vkdevice, stagingBufferMemory, 0, imageSizevk, 0, &data);
+
+    // 5. Save the data to a file
+    std::ofstream file("screenshot.ppm", std::ios::binary);
+    file << "P6\n" << swapchainExtent.width << " " << swapchainExtent.height << "\n255\n";
+    file.write((char*)data, static_cast<size_t>(imageSizevk));
+    file.close();
+
+    // 6. Unmap the staging buffer
+    vkUnmapMemory(this->vkdevice, stagingBufferMemory);
 }
 
 gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, asset::Material* material)
