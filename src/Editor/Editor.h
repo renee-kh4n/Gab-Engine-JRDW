@@ -26,6 +26,10 @@ namespace gbe {
 		bool pointer_inUi;
 		bool keyboard_inUi;
 
+		//RECORDING
+		bool is_recording = false;
+
+
 		//GIZMO CACHE
 		asset::Mesh* gizmo_arrow_mesh;
 		asset::Mesh* gizmo_cube_mesh;

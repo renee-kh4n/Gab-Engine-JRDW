@@ -21,7 +21,7 @@ namespace gbe {
 			if (this->orbital_rotation.y > 70)
 				this->orbital_rotation.y = 70;
 
-			this->Local().rotation.Set(Quaternion::Euler(Vector3(orbital_rotation.y, orbital_rotation.x, 0)));
+			this->mCam->Local().rotation.Set(Quaternion::Euler(Vector3(orbital_rotation.y, orbital_rotation.x, 0)));
 		});
 
 		this->inputreceivers.push_back(mouserightdrag);
@@ -31,8 +31,8 @@ namespace gbe {
 				return;
 
 			auto sensitivity = 0.2f;
-			this->Local().position.Set(this->Local().position.Get() + (this->Local().GetUp() * (value->delta.y * sensitivity)));
-			this->Local().position.Set(this->Local().position.Get() + (this->Local().GetRight() * (value->delta.x * sensitivity)));
+			this->mCam->Local().position.Set(this->mCam->Local().position.Get() + (this->mCam->Local().GetUp() * (value->delta.y * sensitivity)));
+			this->mCam->Local().position.Set(this->mCam->Local().position.Get() + (this->mCam->Local().GetRight() * (value->delta.x * sensitivity)));
 		});
 
 		this->inputreceivers.push_back(mousemiddledrag);
@@ -41,11 +41,17 @@ namespace gbe {
 			if (value->state != InputAction::State::START)
 				return;
 
-			auto delta = this->World().GetForward() * (value->delta.y * 1.f);
-			this->Local().position.Set(this->Local().position.Get() + delta);
+			auto delta = this->mCam->World().GetForward() * (value->delta.y * 1.f);
+			this->mCam->Local().position.Set(this->mCam->Local().position.Get() + delta);
 			});
 
 		this->inputreceivers.push_back(mousescroll);
 		
+	}
+
+	void FlyingCameraControl::OnEnterHierarchy(Object* other) {
+		ControllerBase::OnEnterHierarchy(other);
+
+		this->mCam = dynamic_cast<Camera*>(other);
 	}
 }

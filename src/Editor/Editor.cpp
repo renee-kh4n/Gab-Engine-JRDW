@@ -5,6 +5,8 @@
 #include "Graphics/gbe_graphics.h"
 #include "Engine/gbe_engine.h"
 
+#include "libavcodec/"
+
 gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime)
 {
 	this->mengine = engine;
@@ -331,6 +333,18 @@ void gbe::Editor::DrawFrame()
 
 void gbe::Editor::PresentFrame()
 {
+	//BEFORE YOU DRAW THE EDITOR, IMPLEMENT THE SCREEN RECORDING
+	// 1. Capture frame
+	SDL_Surface* surface = SDL_CreateRGBSurface(0, 640, 480, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+	SDL_RenderReadPixels(mwindow., NULL, SDL_PIXELFORMAT_ARGB8888, surface->pixels, surface->pitch);
+
+	// 2. Encode and Write
+	// Assuming 'encode_frame' and 'write_frame' are defined elsewhere
+	// encode_frame(surface, ...); // Encode the frame using FFmpeg
+	// write_frame(...); // Write the encoded data to file
+	SDL_FreeSurface(surface);
+
+	//AFTER RECORDING, DO THE RENDER
 	ImGui::Render();
 }
 

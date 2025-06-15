@@ -36,8 +36,10 @@ void gbe::Object::OnLocalTransformationChange(TransformChangeType changetype)
 
 	MatToTrans(&this->world, worldmat);
 
-	if (isnan(this->local.GetMatrix()[0][0]))
-		throw "NAN transform";
+	if (isnan(this->local.GetMatrix()[0][0])) {
+		std::cout << "NAN transform" << std::endl;
+		this->MatToTrans(&this->local, Matrix4(1.0f));
+	}
 }
 
 void gbe::Object::OnExternalTransformationChange(TransformChangeType changetype, Matrix4 newparentmatrix)

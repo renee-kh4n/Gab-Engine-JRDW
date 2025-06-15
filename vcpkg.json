@@ -22,6 +22,10 @@
     {
       "name": "imgui",
       "features": [ "vulkan-binding", "sdl2-binding" ]
+    },
+    {
+      "name": "ffmpeg",
+      "features": [ "sdl2" ]
     }
 
   ]
