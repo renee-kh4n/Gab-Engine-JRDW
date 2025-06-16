@@ -94,6 +94,16 @@ namespace gbe {
 		void CreateDepthResources();
 		VkFormat findSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features);
 		void querySwapChainSupport(VkPhysicalDevice pvkdevice, VkSurfaceKHR surface, VkSurfaceCapabilitiesKHR& capabilities, std::vector<VkSurfaceFormatKHR>& formats, std::vector<VkPresentModeKHR>& presentModes);
+		void insertImageMemoryBarrier(
+			VkCommandBuffer cmdbuffer,
+			VkImage image,
+			VkAccessFlags srcAccessMask,
+			VkAccessFlags dstAccessMask,
+			VkImageLayout oldImageLayout,
+			VkImageLayout newImageLayout,
+			VkPipelineStageFlags srcStageMask,
+			VkPipelineStageFlags dstStageMask,
+			VkImageSubresourceRange subresourceRange);
 
 		//COMMANDPOOL
 		const int MAX_FRAMES_IN_FLIGHT = 2;
@@ -115,7 +125,7 @@ namespace gbe {
 		static void createImage(uint32_t width, uint32_t height, VkFormat format, VkImageTiling tiling, VkImageUsageFlags usage, VkMemoryPropertyFlags properties, VkImage& image, VkDeviceMemory& imageMemory);
 		static void transitionImageLayout(VkImage image, VkFormat format, VkImageLayout oldLayout, VkImageLayout newLayout);
 		static void copyBufferToImage(VkBuffer buffer, VkImage image, uint32_t width, uint32_t height);
-		static void copyImageToBuffer(VkImage image, VkBuffer buffer, uint32_t width, uint32_t height);
+		static void copyImageToBuffer(VkImage image, VkFormat imageformat, VkImageLayout imagelayout, VkBuffer buffer, uint32_t width, uint32_t height);
 		static void createImageView(VkImageView& imageview, VkImage image, VkFormat format, VkImageAspectFlags aspectflags);
 
 		RenderPipeline(gbe::Window*, Vector2Int);
@@ -131,7 +141,7 @@ namespace gbe {
 		void SetResolution(Vector2Int newresolution);
 		
 		void RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& nearclip, float& farclip);
-		char* ScreenShot();
+		const char* ScreenShot(bool write_file = false);
 
 		void CleanUp();
 	};

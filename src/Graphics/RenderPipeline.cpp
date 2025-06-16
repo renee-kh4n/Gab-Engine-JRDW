@@ -166,6 +166,20 @@ void gbe::RenderPipeline::transitionImageLayout(VkImage image, VkFormat format, 
         sourceStage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
         destinationStage = VK_PIPELINE_STAGE_EARLY_FRAGMENT_TESTS_BIT;
     }
+    else if (oldLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR && newLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL) {
+        barrier.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+
+        sourceStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    }
+    else if (oldLayout == VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL && newLayout == VK_IMAGE_LAYOUT_PRESENT_SRC_KHR) {
+        barrier.srcAccessMask = VK_ACCESS_MEMORY_READ_BIT;
+        barrier.dstAccessMask = VK_ACCESS_TRANSFER_READ_BIT;
+
+        sourceStage = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+        destinationStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
+    }
     else {
         throw std::invalid_argument("unsupported layout transition!");
     }
@@ -218,7 +232,7 @@ void gbe::RenderPipeline::copyBufferToImage(VkBuffer buffer, VkImage image, uint
     endSingleTimeCommands(commandBuffer);
 }
 
-void gbe::RenderPipeline::copyImageToBuffer(VkImage image, VkBuffer buffer, uint32_t width, uint32_t height)
+void gbe::RenderPipeline::copyImageToBuffer(VkImage image, VkFormat imageformat, VkImageLayout imagelayout, VkBuffer buffer, uint32_t width, uint32_t height)
 {
     VkCommandBuffer commandBuffer;
     beginSingleTimeCommands(commandBuffer);
@@ -240,14 +254,18 @@ void gbe::RenderPipeline::copyImageToBuffer(VkImage image, VkBuffer buffer, uint
         1
     };
 
+    transitionImageLayout(image, imageformat, imagelayout, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL);
+
     vkCmdCopyImageToBuffer(
         commandBuffer,
         image,
-        VK_IMAGE_LAYOUT_SHARED_PRESENT_KHR,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
         buffer,
         1,
         &region
     );
+
+    //transitionImageLayout(image, imageformat, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL, imagelayout);
 
     endSingleTimeCommands(commandBuffer);
 }
@@ -647,6 +665,31 @@ void gbe::RenderPipeline::querySwapChainSupport(VkPhysicalDevice pvkdevice, VkSu
     }
 }
 
+void gbe::RenderPipeline::insertImageMemoryBarrier(VkCommandBuffer cmdbuffer, VkImage image, VkAccessFlags srcAccessMask, VkAccessFlags dstAccessMask, VkImageLayout oldImageLayout, VkImageLayout newImageLayout, VkPipelineStageFlags srcStageMask, VkPipelineStageFlags dstStageMask, VkImageSubresourceRange subresourceRange)
+{
+    VkImageMemoryBarrier imageMemoryBarrier{};
+    imageMemoryBarrier.sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER;
+
+    imageMemoryBarrier.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+    imageMemoryBarrier.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED;
+
+    imageMemoryBarrier.srcAccessMask = srcAccessMask;
+    imageMemoryBarrier.dstAccessMask = dstAccessMask;
+    imageMemoryBarrier.oldLayout = oldImageLayout;
+    imageMemoryBarrier.newLayout = newImageLayout;
+    imageMemoryBarrier.image = image;
+    imageMemoryBarrier.subresourceRange = subresourceRange;
+
+    vkCmdPipelineBarrier(
+        cmdbuffer,
+        srcStageMask,
+        dstStageMask,
+        0,
+        0, nullptr,
+        0, nullptr,
+        1, &imageMemoryBarrier);
+}
+
 void gbe::RenderPipeline::InitializePipelineObjects() {
 
 #pragma region swapchain init
@@ -924,24 +967,24 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
             //UPDATE GLOBAL UBO
             for (int dc_i = 0; dc_i < drawcall->get_call_count(); dc_i++) {
                 auto& callinstance = drawcall->get_call_instance(dc_i);
-                
-				drawcall->ApplyOverride<Matrix4>(callinstance.model, "model", currentFrame, callinstance);
-				drawcall->ApplyOverride<Matrix4>(projmat, "proj", currentFrame, callinstance);
-				drawcall->ApplyOverride<Matrix4>(viewmat, "view", currentFrame, callinstance);
+
+                drawcall->ApplyOverride<Matrix4>(callinstance.model, "model", currentFrame, callinstance);
+                drawcall->ApplyOverride<Matrix4>(projmat, "proj", currentFrame, callinstance);
+                drawcall->ApplyOverride<Matrix4>(viewmat, "view", currentFrame, callinstance);
 
                 VkBuffer vertexBuffers[] = { curmesh.vertexBuffer };
                 VkDeviceSize offsets[] = { 0 };
                 vkCmdBindVertexBuffers(currentCommandBuffer, 0, 1, vertexBuffers, offsets);
 
-                
+
                 std::vector<VkDescriptorSet> bindingsets;
-                for (auto& set: callinstance.allocdescriptorSets)
+                for (auto& set : callinstance.allocdescriptorSets)
                 {
                     bindingsets.push_back(set[currentFrame]);
                 }
 
                 vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, bindingsets.size(), bindingsets.data(), 0, nullptr);
-                
+
                 vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
                 vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
             }
@@ -1003,30 +1046,178 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
     this->currentFrame = (this->currentFrame + 1) % this->MAX_FRAMES_IN_FLIGHT;
 }
 
-char* gbe::RenderPipeline::ScreenShot() {
-    //VULKAN TEXTURE LOAD
-    VkDeviceSize imageSizevk = this->resolution.x * this->resolution.y * 4;
+const char* gbe::RenderPipeline::ScreenShot(bool write_file) {
+    // Source for the copy is the last rendered swapchain image
+    VkImage srcImage = swapChainImages[currentFrame];
 
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
-    this->createBuffer(imageSizevk, VK_BUFFER_USAGE_TRANSFER_DST_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, stagingBuffer, stagingBufferMemory);
+    // Create the linear tiled destination image to copy to and to read the memory from
+    VkImageCreateInfo imageCreateCI{};
+	imageCreateCI.sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO;
+    imageCreateCI.imageType = VK_IMAGE_TYPE_2D;
+    // Note that vkCmdBlitImage (if supported) will also do format conversions if the swapchain color format would differ
+    imageCreateCI.format = VK_FORMAT_R8G8B8A8_UNORM;
+    imageCreateCI.extent.width = this->resolution.x;
+    imageCreateCI.extent.height = this->resolution.y;
+    imageCreateCI.extent.depth = 1;
+    imageCreateCI.arrayLayers = 1;
+    imageCreateCI.mipLevels = 1;
+    imageCreateCI.initialLayout = VK_IMAGE_LAYOUT_UNDEFINED;
+    imageCreateCI.samples = VK_SAMPLE_COUNT_1_BIT;
+    imageCreateCI.tiling = VK_IMAGE_TILING_LINEAR;
+    imageCreateCI.usage = VK_IMAGE_USAGE_TRANSFER_DST_BIT;
+    // Create the image
+    VkImage dstImage;
+    if (vkCreateImage(this->vkdevice, &imageCreateCI, nullptr, &dstImage) != VK_SUCCESS){
+		throw new std::runtime_error("failed to create image for screenshot!");
+    }
+    // Create memory to back up the image
+    VkMemoryRequirements memRequirements{};
+    VkMemoryAllocateInfo memAllocInfo{};
+	memAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
+    VkDeviceMemory dstImageMemory;
+    vkGetImageMemoryRequirements(this->vkdevice, dstImage, &memRequirements);
+    memAllocInfo.allocationSize = memRequirements.size;
+    // Memory must be host visible to copy from
+    memAllocInfo.memoryTypeIndex = this->findMemoryType(memRequirements.memoryTypeBits, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT);
+	if (vkAllocateMemory(this->vkdevice, &memAllocInfo, nullptr, &dstImageMemory) != VK_SUCCESS) {
+		throw std::runtime_error("failed to allocate memory for screenshot image!");
+	}
+    if (vkBindImageMemory(this->vkdevice, dstImage, dstImageMemory, 0) != VK_SUCCESS) {
+        throw std::runtime_error("failed to bind image memory for screenshot image!");
+    }
 
-    this->copyImageToBuffer(this->swapChainImages[currentFrame], stagingBuffer, resolution.x, resolution.y);
+    // Do the actual blit from the swapchain image to our host visible destination image
+    VkCommandBuffer copyCmd;
+	beginSingleTimeCommands(copyCmd);
 
-    // 4. Map the staging buffer
-    void* data;
-    vkMapMemory(this->vkdevice, stagingBufferMemory, 0, imageSizevk, 0, &data);
+    // Transition destination image to transfer destination layout
+    this->insertImageMemoryBarrier(
+        copyCmd,
+        dstImage,
+        0,
+        VK_ACCESS_TRANSFER_WRITE_BIT,
+        VK_IMAGE_LAYOUT_UNDEFINED,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 });
 
-    // 5. Save the data to a file
-    std::ofstream file("screenshot.ppm", std::ios::binary);
-    file << "P6\n" << swapchainExtent.width << " " << swapchainExtent.height << "\n255\n";
-    file.write((char*)data, static_cast<size_t>(imageSizevk));
-    file.close();
+    // Transition swapchain image from present to transfer source layout
+    this->insertImageMemoryBarrier(
+        copyCmd,
+        srcImage,
+        VK_ACCESS_MEMORY_READ_BIT,
+        VK_ACCESS_TRANSFER_READ_BIT,
+        VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 });
 
-    // 6. Unmap the staging buffer
-    vkUnmapMemory(this->vkdevice, stagingBufferMemory);
+    
+    // Otherwise use image copy (requires us to manually flip components)
+    VkImageCopy imageCopyRegion{};
+    imageCopyRegion.srcSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    imageCopyRegion.srcSubresource.layerCount = 1;
+    imageCopyRegion.dstSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+    imageCopyRegion.dstSubresource.layerCount = 1;
+    imageCopyRegion.extent.width = this->resolution.x;
+    imageCopyRegion.extent.height = this->resolution.y;
+    imageCopyRegion.extent.depth = 1;
 
-    return static_cast<char*>(data);
+    // Issue the copy command
+    vkCmdCopyImage(
+        copyCmd,
+        srcImage, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+        dstImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        1,
+        &imageCopyRegion);
+
+    // Transition destination image to general layout, which is the required layout for mapping the image memory later on
+    this->insertImageMemoryBarrier(
+        copyCmd,
+        dstImage,
+        VK_ACCESS_TRANSFER_WRITE_BIT,
+        VK_ACCESS_MEMORY_READ_BIT,
+        VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
+        VK_IMAGE_LAYOUT_GENERAL,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 });
+
+    // Transition back the swap chain image after the blit is done
+    this->insertImageMemoryBarrier(
+        copyCmd,
+        srcImage,
+        VK_ACCESS_TRANSFER_READ_BIT,
+        VK_ACCESS_MEMORY_READ_BIT,
+        VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+        VK_IMAGE_LAYOUT_PRESENT_SRC_KHR,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VK_PIPELINE_STAGE_TRANSFER_BIT,
+        VkImageSubresourceRange{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 1, 0, 1 });
+
+    endSingleTimeCommands(copyCmd);
+
+    // Get layout of the image (including row pitch)
+    VkImageSubresource subResource{ VK_IMAGE_ASPECT_COLOR_BIT, 0, 0 };
+    VkSubresourceLayout subResourceLayout;
+    vkGetImageSubresourceLayout(this->vkdevice, dstImage, &subResource, &subResourceLayout);
+
+    // Map image memory so we can start copying from it
+    const char* data;
+    vkMapMemory(this->vkdevice, dstImageMemory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
+    data += subResourceLayout.offset;
+
+    std::ofstream* file = nullptr;
+
+    if (write_file) {
+        file = new std::ofstream("ss.ppm", std::ios::out | std::ios::binary);
+    }
+
+    // ppm header
+    if (write_file)
+        (*file) << "P6\n" << this->resolution.x << "\n" << this->resolution.y << "\n" << 255 << "\n";
+
+    // If source is BGR (destination is always RGB) and we can't use blit (which does automatic conversion), we'll have to manually swizzle color components
+    bool colorSwizzle = false;
+    // Check if source is BGR
+    // Note: Not complete, only contains most common and basic BGR surface formats for demonstration purposes
+    
+    std::vector<VkFormat> formatsBGR = { VK_FORMAT_B8G8R8A8_SRGB, VK_FORMAT_B8G8R8A8_UNORM, VK_FORMAT_B8G8R8A8_SNORM };
+    colorSwizzle = (std::find(formatsBGR.begin(), formatsBGR.end(), chosenSurfaceFormat.format) != formatsBGR.end());
+    
+
+    if (write_file) {
+        // ppm binary pixel data
+        for (uint32_t y = 0; y < this->resolution.y; y++)
+        {
+            unsigned int* row = (unsigned int*)data;
+            for (uint32_t x = 0; x < this->resolution.x; x++)
+            {
+                if (colorSwizzle)
+                {
+                    file->write((char*)row + 2, 1);
+                    file->write((char*)row + 1, 1);
+                    file->write((char*)row, 1);
+                }
+                else
+                {
+                    file->write((char*)row, 3);
+                }
+                row++;
+            }
+            data += subResourceLayout.rowPitch;
+        }
+        file->close();
+    }
+
+    // Clean up resources
+    vkUnmapMemory(this->vkdevice, dstImageMemory);
+    vkFreeMemory(this->vkdevice, dstImageMemory, nullptr);
+    vkDestroyImage(this->vkdevice, dstImage, nullptr);
+
+    return data;
 }
 
 gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, asset::Material* material)
