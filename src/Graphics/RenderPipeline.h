@@ -12,6 +12,7 @@
 #include <set>
 #include <string>
 
+#include <sstream>
 #include <functional>
 
 #include "Math/gbe_math.h"
@@ -26,6 +27,10 @@
 #include "AssetLoaders/MeshLoader.h"
 #include "AssetLoaders/MaterialLoader.h"
 #include "Window/gbe_window.h"
+
+namespace cv {
+	class Mat;
+}
 
 namespace gbe {
 	using namespace gfx;
@@ -69,6 +74,9 @@ namespace gbe {
 
 		//CAPTURING
 		VkImage* mostrecent_screenshot = nullptr;
+		//RECORDING
+		bool recording = false;
+		std::vector<cv::Mat> video_frames;
 
 		//SWAPCHAINS
 		VkSwapchainKHR swapChain;
@@ -115,6 +123,7 @@ namespace gbe {
 		std::vector<VkSemaphore> renderFinishedSemaphores;
 		std::vector<VkFence> inFlightFences;
 		
+
 	public:
 		static RenderPipeline* Get_Instance();
 		static void beginSingleTimeCommands(VkCommandBuffer& buffer);
@@ -141,7 +150,10 @@ namespace gbe {
 		void SetResolution(Vector2Int newresolution);
 		
 		void RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& nearclip, float& farclip);
-		const char* ScreenShot(bool write_file = false);
+		std::vector<unsigned char> ScreenShot(bool write_file = false);
+		void StartRecording();
+		void StopRecording();
+		void ToggleRecording();
 
 		void CleanUp();
 	};

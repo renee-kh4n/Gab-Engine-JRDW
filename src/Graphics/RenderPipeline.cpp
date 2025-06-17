@@ -4,6 +4,8 @@
 
 #include "RenderPipeline.h"
 
+#include <opencv2/opencv.hpp>
+
 #include "Editor/gbe_editor.h"
 
 #ifdef NDEBUG
@@ -991,6 +993,21 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
         }
     }
 
+    //RECORDING
+    if (recording) {
+        const auto frame_data = this->ScreenShot();
+
+        // Decode the image from the buffer into a cv::Mat
+        cv::Mat image = cv::imdecode(frame_data, cv::IMREAD_COLOR);
+
+        // Check if the image was successfully decoded
+        if (image.empty()) {
+            std::runtime_error("Failed to decode image!");
+        }
+
+        video_frames.push_back(image);
+    }
+
     //EDITOR/GUI PASS
     this->editor->RenderPass(currentCommandBuffer);
 
@@ -1046,7 +1063,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
     this->currentFrame = (this->currentFrame + 1) % this->MAX_FRAMES_IN_FLIGHT;
 }
 
-const char* gbe::RenderPipeline::ScreenShot(bool write_file) {
+std::vector<unsigned char> gbe::RenderPipeline::ScreenShot(bool write_file) {
     // Source for the copy is the last rendered swapchain image
     VkImage srcImage = swapChainImages[currentFrame];
 
@@ -1169,15 +1186,10 @@ const char* gbe::RenderPipeline::ScreenShot(bool write_file) {
     vkMapMemory(this->vkdevice, dstImageMemory, 0, VK_WHOLE_SIZE, 0, (void**)&data);
     data += subResourceLayout.offset;
 
-    std::ofstream* file = nullptr;
-
-    if (write_file) {
-        file = new std::ofstream("ss.ppm", std::ios::out | std::ios::binary);
-    }
+    std::stringstream s_out = std::stringstream();
 
     // ppm header
-    if (write_file)
-        (*file) << "P6\n" << this->resolution.x << "\n" << this->resolution.y << "\n" << 255 << "\n";
+    s_out << "P6\n" << this->resolution.x << "\n" << this->resolution.y << "\n" << 255 << "\n";
 
     // If source is BGR (destination is always RGB) and we can't use blit (which does automatic conversion), we'll have to manually swizzle color components
     bool colorSwizzle = false;
@@ -1188,36 +1200,65 @@ const char* gbe::RenderPipeline::ScreenShot(bool write_file) {
     colorSwizzle = (std::find(formatsBGR.begin(), formatsBGR.end(), chosenSurfaceFormat.format) != formatsBGR.end());
     
 
-    if (write_file) {
         // ppm binary pixel data
-        for (uint32_t y = 0; y < this->resolution.y; y++)
+    for (uint32_t y = 0; y < this->resolution.y; y++)
+    {
+        unsigned int* row = (unsigned int*)data;
+        for (uint32_t x = 0; x < this->resolution.x; x++)
         {
-            unsigned int* row = (unsigned int*)data;
-            for (uint32_t x = 0; x < this->resolution.x; x++)
+            if (colorSwizzle)
             {
-                if (colorSwizzle)
-                {
-                    file->write((char*)row + 2, 1);
-                    file->write((char*)row + 1, 1);
-                    file->write((char*)row, 1);
-                }
-                else
-                {
-                    file->write((char*)row, 3);
-                }
-                row++;
+                s_out.write((char*)row + 2, 1);
+                s_out.write((char*)row + 1, 1);
+                s_out.write((char*)row, 1);
             }
-            data += subResourceLayout.rowPitch;
+            else
+            {
+                s_out.write((char*)row, 3);
+            }
+            row++;
         }
-        file->close();
+        data += subResourceLayout.rowPitch;
     }
+
+    auto out_string = s_out.str();
+    auto out_data = std::vector<unsigned char>(out_string.begin(), out_string.end());
 
     // Clean up resources
     vkUnmapMemory(this->vkdevice, dstImageMemory);
     vkFreeMemory(this->vkdevice, dstImageMemory, nullptr);
     vkDestroyImage(this->vkdevice, dstImage, nullptr);
 
-    return data;
+    if (write_file) {
+        auto file = std::ofstream("ss.ppm", std::ios::out | std::ios::binary);
+        file << out_string;
+        file.close();
+    }
+
+    return out_data;
+}
+
+void gbe::RenderPipeline::StartRecording()
+{
+    this->recording = true;
+}
+
+void gbe::RenderPipeline::StopRecording()
+{
+    //Export File
+    if (this->recording) {
+
+    }
+
+    this->recording = false;
+}
+
+void gbe::RenderPipeline::ToggleRecording()
+{
+    if (this->recording)
+        this->StopRecording();
+    else
+        this->StartRecording();
 }
 
 gbe::gfx::DrawCall* gbe::RenderPipeline::RegisterDrawCall(asset::Mesh* mesh, asset::Material* material)

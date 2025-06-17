@@ -1,32 +1,28 @@
 {
-  "dependencies": [
-    "vcpkg-cmake-config",
-    "vcpkg-cmake",
-    "sdl2",
-    "sdl2-image",
-    "sdl2-mixer",
-    "glm",
-    "glad",
-    "stb",
-    "bullet3",
-    "openal-soft",
-    "glaze",
-    "vulkan-sdk-components",
-    "vulkan-validationlayers",
-    "vk-bootstrap",
-    {
-      "name": "sdl2",
-      "features": [ "vulkan" ]
-    },
-    "spirv-cross",
-    {
-      "name": "imgui",
-      "features": [ "vulkan-binding", "sdl2-binding" ]
-    },
-    {
-      "name": "ffmpeg",
-      "features": [ "sdl2" ]
-    }
-
-  ]
+    "dependencies": [
+        "vcpkg-cmake-config",
+        "vcpkg-cmake",
+        "sdl2",
+        "sdl2-image",
+        "sdl2-mixer",
+        "glm",
+        "glad",
+        "stb",
+        "bullet3",
+        "openal-soft",
+        "glaze",
+        "vulkan-sdk-components",
+        "vulkan-validationlayers",
+        "vk-bootstrap",
+        {
+            "name": "sdl2",
+            "features": [ "vulkan" ]
+        },
+        "spirv-cross",
+        {
+            "name": "imgui",
+            "features": [ "vulkan-binding", "sdl2-binding" ]
+        },
+        "opencv2"
+    ]
 }

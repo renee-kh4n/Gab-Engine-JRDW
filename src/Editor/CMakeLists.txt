@@ -23,9 +23,4 @@ else()
 	message(FATAL_ERROR "[GABENGINE] VULKAN NOT FOUND")
 endif()
 
-find_package(FFMPEG REQUIRED)
-target_include_directories(${CURRENT_CMAKE_LIB} PRIVATE ${FFMPEG_INCLUDE_DIRS})
-target_link_directories(${CURRENT_CMAKE_LIB} PRIVATE ${FFMPEG_LIBRARY_DIRS})
-target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE ${FFMPEG_LIBRARIES})
-
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})

@@ -35,4 +35,14 @@ else()
 	message(FATAL_ERROR "[GABENGINE] VULKAN NOT FOUND")
 endif()
 
+IF (WIN32)
+	set(OpenCV_DIR "${VCPKG_INSTALLED_DIR}/x64-windows/share/opencv2")
+	message("[GABENGINE WIN32] FOUND: ${OpenCV_DIR}")
+ELSE()
+# set stuff for other systems
+ENDIF()
+
+find_package(OpenCV REQUIRED)
+target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE opencv_core opencv_highgui)
+
 message("[GABENGINE] LOADED: " ${CMAKE_CURRENT_SOURCE_DIR})
