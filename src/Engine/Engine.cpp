@@ -238,7 +238,7 @@ namespace gbe {
 			ext::AnimoBuilder::GenerationParams params{};
 			auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
 
-			//SPAWN THE RESULT
+			//READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES
 			for (auto& objdata : builder_result.meshes)
 			{
 				create_box(objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));

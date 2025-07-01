@@ -8,6 +8,7 @@
 namespace gbe {
 	namespace ext {
 		namespace AnimoBuilder {
+			//INPUT PARAMETERS
 			struct GenerationParams {
 				Vector3 from = Vector3(-20, 0, 0);
 				Vector3 to = Vector3(100, 0, 0);
@@ -23,12 +24,14 @@ namespace gbe {
 				float roofHeight = 2.0f;
 				float roofThickness = 3.0f;
 			};
+			//OUTPUT MESH
 			struct SubMesh {
 				std::string type;
 				Vector3 position;
 				Vector3 scale;
 				Quaternion rotation;
 			};
+			//OUTPUT DATA
 			struct GenerationResult {
 				std::vector<SubMesh> meshes;
 			};
