@@ -55,7 +55,7 @@ void gbe::CinematicSystem::SpawnNode()
 	this->path.push_back({
 			.position = newGizmo->World().position.Get(),
 			.rotation = newGizmo->World().rotation.Get(),
-			.duration = 1.0f
+			.duration = 5.0f
 		});
 }
 

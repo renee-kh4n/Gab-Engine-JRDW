@@ -124,8 +124,7 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 	//CHECK SCREENSHOT BUTTON
 	if (sdlevent->type == SDL_KEYDOWN) {
 		if (sdlevent->key.keysym.sym == SDLK_p) {
-			this->mrenderpipeline->StopRecording();
-			this->mrenderpipeline->StartRecording();
+			this->mrenderpipeline->ToggleRecording();
 		}
 	}
 

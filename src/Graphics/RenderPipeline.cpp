@@ -5,6 +5,7 @@
 #include "RenderPipeline.h"
 
 #include <opencv2/opencv.hpp>
+#include <opencv2/highgui.hpp>
 
 #include "Editor/gbe_editor.h"
 
@@ -1247,7 +1248,29 @@ void gbe::RenderPipeline::StopRecording()
 {
     //Export File
     if (this->recording) {
+        std::string codecstr = "avc1";
+        const unsigned int codec = (((((codecstr[3] << 8) | codecstr[2]) << 8) | codecstr[1]) << 8) | codecstr[0];
+        std::string outputFileName = "latest_recording.mp4";
+        double fps = 24.0;
+        cv::Size frameSize(this->resolution.x, this->resolution.y);
 
+        // Initialize VideoWriter
+        cv::VideoWriter outputVideo;
+        outputVideo.open(outputFileName, codec, fps, frameSize, true);
+
+        // Write frames to video
+        for (const auto& frame : this->video_frames) {
+            // Create a destination Mat for the flipped image
+            cv::Mat mirrored_image;
+
+            cv::flip(frame, mirrored_image, 0);
+            outputVideo.write(mirrored_image);
+        }
+
+        // Release the VideoWriter
+        outputVideo.release();
+
+        std::cout << "Video saved successfully to " << outputFileName << std::endl;
     }
 
     this->recording = false;
