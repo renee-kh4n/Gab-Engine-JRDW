@@ -12,9 +12,9 @@ gbe::ext::AnimoBuilder::GenerationResult gbe::ext::AnimoBuilder::AnimoBuilder::G
 {
 	GenerationResult res{};
 
-	auto add_cube = [&](Vector3 position, Vector3 scale) {
+	auto add = [&](std::string type, Vector3 position, Vector3 scale) {
 		res.meshes.push_back({
-			.type = "cube",
+			.type = type,
 			.position = position,
 			.scale = scale,
 			.rotation = Quaternion::Euler(Vector3(0,0,0))
@@ -39,14 +39,21 @@ gbe::ext::AnimoBuilder::GenerationResult gbe::ext::AnimoBuilder::AnimoBuilder::G
 		Vector3 pillarscale = Vector3(0.5f) * params.pillarThickness;
 		pillarscale.y = halfheight;
 
-		add_cube(params.from + pillarpos, pillarscale);
+		add("pillar", params.from + pillarpos, pillarscale);
 
-		//STEP 2.2: WALL SEGMENT PLACEMENT
+		//STEP 2.2.1: WALL SEGMENT PLACEMENT
 		Vector3 wallpos = stepdir * (x + (params.pillarInterval * 0.5f));
 		wallpos += params.up * halfheight;
 		Vector3 wallscale = Vector3(params.pillarInterval * 0.5f, halfheight, params.wallThickness * 0.5f);
 
-		add_cube(params.from + wallpos, wallscale);
+		add("wall", params.from + wallpos, wallscale);
+
+		//STEP 2.2.2: BASE SEGMENT PLACEMENT
+		Vector3 basepos = stepdir * (x + (params.pillarInterval * 0.5f));
+		basepos -= params.up * (params.base_height * 0.5f);
+		Vector3 basescale = Vector3(params.pillarInterval * 0.5f, (params.base_height * 0.5f), params.base_width * 0.5f);
+
+		add("base", params.from + basepos, basescale);
 
 		//STEP 2.3 BEAM PLACEMENT
 		for (float y = params.beamInterval; y < params.height; y += params.beamInterval)
@@ -55,7 +62,7 @@ gbe::ext::AnimoBuilder::GenerationResult gbe::ext::AnimoBuilder::AnimoBuilder::G
 			beampos += params.up * y;
 			Vector3 beamscale = Vector3(params.pillarInterval * 0.5f, params.beamThickness * 0.5f, params.beamThickness * 0.5f);
 
-			add_cube(params.from + beampos, beamscale);
+			add("beam", params.from + beampos, beamscale);
 		}
 
 		//STEP 2.4 WINDOW PLACEMENT
@@ -66,7 +73,7 @@ gbe::ext::AnimoBuilder::GenerationResult gbe::ext::AnimoBuilder::AnimoBuilder::G
 			windowpos += -forward * ((params.wallThickness * 0.5f) + (params.windowSize.z * 0.5f));
 			Vector3 windowscale = params.windowSize * 0.5f;
 
-			add_cube(params.from + windowpos, windowscale);
+			add("window", params.from + windowpos, windowscale);
 		}
 
 		//STEP 2.5 ROOF PLACEMENT
@@ -74,7 +81,7 @@ gbe::ext::AnimoBuilder::GenerationResult gbe::ext::AnimoBuilder::AnimoBuilder::G
 		roofpos += params.up * (params.height + (params.roofHeight * 0.5f));
 		Vector3 roofscale = Vector3(params.pillarInterval * 0.5f, params.roofHeight * 0.5f, params.roofThickness * 0.5f);
 
-		add_cube(params.from + roofpos, roofscale);
+		add("roof", params.from + roofpos, roofscale);
 	}
 
 	return res;

@@ -105,6 +105,18 @@ namespace gbe {
 		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
 		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, cube_mat);
 
+		//MESH AND DRAWCALLS FOR ANIMOBUILDER
+		auto beam_m = new asset::Mesh("DefaultAssets/3D/beam.obj.gbe");
+		auto beam_dc = mRenderPipeline->RegisterDrawCall(beam_m, cube_mat);
+		auto roof_m = new asset::Mesh("DefaultAssets/3D/roof.obj.gbe");
+		auto roof_dc = mRenderPipeline->RegisterDrawCall(roof_m, cube_mat);
+		auto window_m = new asset::Mesh("DefaultAssets/3D/window.obj.gbe");
+		auto window_dc = mRenderPipeline->RegisterDrawCall(window_m, cube_mat);
+		auto pillar_m = new asset::Mesh("DefaultAssets/3D/pillar.obj.gbe");
+		auto pillar_dc = mRenderPipeline->RegisterDrawCall(pillar_m, cube_mat);
+		auto wall_m = new asset::Mesh("DefaultAssets/3D/wall.obj.gbe");
+		auto wall_dc = mRenderPipeline->RegisterDrawCall(wall_m, cube_mat);
+
 #pragma endregion
 #pragma region Input
 		auto mInputSystem = new InputSystem();
@@ -146,6 +158,21 @@ namespace gbe {
 
 				return test;
 				};
+
+			auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+				RigidObject* test = new RigidObject(true);
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(rotation);
+				test->Local().scale.Set(scale);
+				BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(test);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+				RenderObject* platform_renderer = new RenderObject(drawcall);
+				platform_renderer->SetParent(test);
+
+				return test;
+			};
 
 			auto create_box = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0,0,0))) {
 				RigidObject* test = new RigidObject(true);
@@ -241,13 +268,26 @@ namespace gbe {
 			//READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES
 			for (auto& objdata : builder_result.meshes)
 			{
-				create_box(objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+				if (objdata.type == "base")
+					create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+				else if(objdata.type == "wall")
+					create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+				else if (objdata.type == "beam")
+					create_mesh(beam_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+				else if (objdata.type == "roof")
+					create_mesh(roof_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+				else if (objdata.type == "window")
+					create_mesh(window_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+				else if (objdata.type == "pillar")
+					create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
 			}
 
+			/*
 			//CINEMACHINE
 			auto cinematic_system_holder = create_box(Vector3(0, 0, -10), Vector3(3, 3, 3));
 			auto cinematic_system = new CinematicSystem();
 			cinematic_system->SetParent(cinematic_system_holder);
+			*/
 
 #pragma endregion
 			return game_root;

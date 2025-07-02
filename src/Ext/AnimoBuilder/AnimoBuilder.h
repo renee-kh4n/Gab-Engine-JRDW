@@ -13,15 +13,17 @@ namespace gbe {
 				Vector3 from = Vector3(-20, 0, 0);
 				Vector3 to = Vector3(100, 0, 0);
 				Vector3 up = Vector3(0, 1, 0);
+				float base_height = 12;
+				float base_width = 6;
 				float height = 20;
-				float pillarInterval = 13;
+				float pillarInterval = 16;
 				float pillarThickness = 2.5f;
 				float wallThickness = 0.5f;
 				float beamInterval = 9;
 				float beamThickness = 1.8f;
 				float windowHeight = 3;
-				Vector3 windowSize = Vector3(2, 4, 0.6f);
-				float roofHeight = 2.0f;
+				Vector3 windowSize = Vector3(2.5, 4.5, 0.6f);
+				float roofHeight = 5.f;
 				float roofThickness = 3.0f;
 			};
 			//OUTPUT MESH
