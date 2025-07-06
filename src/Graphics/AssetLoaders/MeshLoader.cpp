@@ -47,6 +47,8 @@ gbe::gfx::MeshData gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh * asset, const a
         }
     }
 
+    //VULKAN MESH SETUP vvvvvvvvvvv
+
     //VERTEX BUFFER
     VkBuffer vertexBuffer;
     VkDeviceMemory vertexBufferMemory;

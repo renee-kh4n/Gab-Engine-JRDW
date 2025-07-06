@@ -13,6 +13,7 @@ add_subdirectory(Window)
 add_subdirectory(Audio)
 add_subdirectory(Engine)
 add_subdirectory(Editor)
+add_subdirectory(Network)
 
 #EXTERNAL LIBRARIES
 add_subdirectory("Ext/AnimoBuilder")
@@ -28,10 +29,10 @@ target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_window)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_audio)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_editor)
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_engine)
+target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_network)
 
 #EXTERNAL LIBARIES
 target_link_libraries(${CURRENT_CMAKE_LIB} INTERFACE gbe_ext_animobuilder)
-
 
 
 get_target_property(LINKED_LIBS ${CURRENT_CMAKE_LIB} INTERFACE_LINK_LIBRARIES)

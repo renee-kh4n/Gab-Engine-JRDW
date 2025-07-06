@@ -99,6 +99,7 @@ namespace gbe {
 		test_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
 		test_mat->setOverride("colortex", test_tex);
 		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
+		cube_mat->setOverride("colortex", test_tex);
 
 		//DRAW CALL CACHING
 		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
@@ -130,6 +131,8 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
 #pragma endregion
+
+
 #pragma region Root Loaders
 		//forward declared load functions
 		std::function<Root* ()> create_main_game;
@@ -180,9 +183,11 @@ namespace gbe {
 				test->Local().position.Set(pos);
 				test->Local().rotation.Set(rotation);
 				test->Local().scale.Set(scale);
+
 				BoxCollider* platform_collider = new BoxCollider();
 				platform_collider->SetParent(test);
 				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+
 				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
 				platform_renderer->SetParent(test);
 
@@ -248,9 +253,9 @@ namespace gbe {
 				}));
 			//Spacebar customer
 			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
-				if (value->state != KeyPress<Keys::SPACE>::START)
-					return;
+
 				}));
+
 			//ESCAPE Customer
 			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
 				if (value->state != KeyPress<Keys::ESCAPE>::START)
