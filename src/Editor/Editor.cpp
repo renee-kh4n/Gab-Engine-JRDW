@@ -250,91 +250,12 @@ void gbe::Editor::DrawFrame()
 	}
 
 	//==============================IMGUI==============================//
-	//IMGUI OBJECT INSPECTOR
-	if (!ImGui::Begin("Inspector")) {
-		ImGui::End();
+	this->creditswindow.Draw();
 
-		return;
-	}
-
-	const float label_width_base = ImGui::GetFontSize() * 12;               // Some amount of width for label, based on font size.
-	const float label_width_max = ImGui::GetContentRegionAvail().x * 0.40f; // ...but always leave some room for framed widgets.
-	const float label_width = label_width_base < label_width_max ? label_width_base : label_width_max;
-	ImGui::PushItemWidth(-label_width);                                     // Right-align: framed items will leave 'label_width' available for the label.
-
-	if (ImGui::BeginMenuBar())
-	{
-		if (ImGui::BeginMenu("Menu"))
-		{
-
-			ImGui::EndMenu();
-		}
-
-		ImGui::EndMenuBar();
-	}
-
-	ImGui::InputDouble("GAME TIME SCALE: ", &mtime->scale);
-
-	//OBJECT INSPECTOR
-	if (this->selected.size() > 0)
-	{
-		//FOR ONLY ONE
-		auto inspectordata = this->selected[0]->GetInspectorData();
-
-		//DRAW THE BUILT IN INSPECTORS PER OBJECT
-		auto sel_parent = this->selected[0]->GetParent();
-		if (sel_parent != nullptr) {
-			std::string button_label = "Select Parent ";
-			button_label += "[";
-			button_label += typeid(*sel_parent).name();
-			button_label += "]";
-
-			if (ImGui::Button(button_label.c_str())) {
-				this->selected[0] = sel_parent;
-			}
-		}
-
-		//DRAW THE CUSTOM INSPECTORS
-		for (auto& field : inspectordata->fields)
-		{
-			if (field->fieldtype == editor::InspectorField::VECTOR3) {
-				auto vec3field = static_cast<editor::InspectorVec3*>(field);
-
-				ImGui::SeparatorText(vec3field->name.c_str());
-
-				ImGui::InputFloat("X", vec3field->x);
-				ImGui::InputFloat("Y", vec3field->y);
-				ImGui::InputFloat("Z", vec3field->z);
-			}
-
-			if (field->fieldtype == editor::InspectorField::FUNCTION) {
-				auto buttonfield = static_cast<editor::InspectorButton*>(field);
-				if (ImGui::Button(buttonfield->name.c_str())) {
-					buttonfield->onpress();
-				}
-			}
-		}
-
-		//DRAW THE CHILDREN SELECTOR
-		ImGui::SeparatorText("CHILDREN");
-		for (size_t i = 0; i < this->selected[0]->GetChildCount(); i++)
-		{
-			auto child = this->selected[0]->GetChildAt(i);
-
-			std::string button_label = "";
-			button_label += "[";
-			button_label += std::to_string(i);
-			button_label += "] : ";
-			button_label += typeid(*child).name();
-
-			if (ImGui::Button(button_label.c_str())) {
-				this->selected[0] = child;
-			}
-		}
-	}
-
-	ImGui::PopItemWidth();
-	ImGui::End();
+	this->inspectorwindow.mtime = this->mtime;
+	this->inspectorwindow.selected = &this->selected;
+	this->inspectorwindow.Draw();
+	this->colorpickerwindow.Draw();
 }
 
 void gbe::Editor::PresentFrame()

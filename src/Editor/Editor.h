@@ -7,6 +7,9 @@
 #include "Engine/gbe_engine.h"
 
 #include "Gui/InspectorData.h"
+#include "Gui/CreditsWindow.h"
+#include "Gui/ColorpickerWindow.h"
+#include "Gui/InspectorWindow.h"
 
 namespace gbe {
 	class RenderPipeline;
@@ -60,6 +63,11 @@ namespace gbe {
 		};
 
 		std::vector<RenderObject*> gizmo_cubes;
+
+		//WINDOWS
+		editor::CreditsWindow creditswindow;
+		editor::ColorpickerWindow colorpickerwindow;
+		editor::InspectorWindow inspectorwindow;
 	public:
 		
 
