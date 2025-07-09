@@ -95,14 +95,15 @@ namespace gbe {
 		
 		//MATERIAL CACHING
 		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
-		auto test_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
-		test_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
-		test_mat->setOverride("colortex", test_tex);
-		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
+		auto grid_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
+		grid_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
+		grid_mat->setOverride("colortex", test_tex);
+		auto cube_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		cube_mat->setOverride("colortex", test_tex);
 
 		//DRAW CALL CACHING
-		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
-		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
+		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, grid_mat);
+		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, grid_mat);
 		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, cube_mat);
 
 		//MESH AND DRAWCALLS FOR ANIMOBUILDER
@@ -281,6 +282,8 @@ namespace gbe {
 				else if (objdata.type == "pillar")
 					create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
 			}
+
+			const auto frame_data = RenderPipeline::Get_Instance()->ScreenShot(true);
 
 			/*
 			//CINEMACHINE

@@ -65,9 +65,9 @@ namespace gbe {
 		std::vector<RenderObject*> gizmo_cubes;
 
 		//WINDOWS
-		editor::CreditsWindow creditswindow;
-		editor::ColorpickerWindow colorpickerwindow;
-		editor::InspectorWindow inspectorwindow;
+		editor::CreditsWindow* creditswindow;
+		editor::ColorpickerWindow* colorpickerwindow;
+		editor::InspectorWindow* inspectorwindow;
 	public:
 		
 

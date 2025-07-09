@@ -374,12 +374,6 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
     appInfo.apiVersion = VK_API_VERSION_1_0;
     
-    //VALIDATION LAYERS
-    //VULKAN LAYER FINDING
-    auto validationlayerspath = std::filesystem::current_path() / "vcpkg_installed" / "x64-windows" / "bin";
-    std::string vkvalidationenvpath = "VK_ADD_LAYER_PATH=" + validationlayerspath.string();
-    int putenvresult = _putenv(vkvalidationenvpath.c_str());
-
     bool validationlayerssupported = true;
 
     const std::vector<const char*> validationLayers = {

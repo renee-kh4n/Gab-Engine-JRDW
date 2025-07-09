@@ -2,6 +2,8 @@
 
 #include "../RenderPipeline.h"
 
+std::function<VkDescriptorSet(VkSampler, VkImageView)> gbe::gfx::TextureLoader::Ui_Callback;
+
 gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* target, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* loaddata) {
 	std::string pathstr = target->Get_asset_directory() + importdata.filename;
 
@@ -34,14 +36,6 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 	VkDeviceMemory textureImageMemory;
 
 	RenderPipeline::createImage(tex_width, tex_height, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_TILING_OPTIMAL, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT, textureImage, textureImageMemory);
-
-	RenderPipeline::transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
-	RenderPipeline::copyBufferToImage(stagingBuffer, textureImage, tex_width, tex_width);
-
-	RenderPipeline::transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-
-	vkDestroyBuffer(*this->vkdevice, stagingBuffer, nullptr);
-	vkFreeMemory(*this->vkdevice, stagingBufferMemory, nullptr);
 
 	//CREATE IMAGE VIEW
 	VkImageView textureImageView;
@@ -76,11 +70,26 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 		throw std::runtime_error("failed to create texture sampler!");
 	}
 
+	//DO UI LOADING HERE
+	VkDescriptorSet tex_DS = nullptr;
+
+	if(importdata.type == "UI")
+		tex_DS = TextureLoader::Ui_Callback(textureSampler, textureImageView);
+
+	RenderPipeline::transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
+	RenderPipeline::copyBufferToImage(stagingBuffer, textureImage, tex_width, tex_height);
+
+	RenderPipeline::transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+
+	vkDestroyBuffer(*this->vkdevice, stagingBuffer, nullptr);
+	vkFreeMemory(*this->vkdevice, stagingBufferMemory, nullptr);
+
 	return TextureData{
+		textureImageView,
 		textureImage,
 		textureImageMemory,
-		textureImageView,
-		textureSampler
+		textureSampler,
+		tex_DS
 	};
 }
 void gbe::gfx::TextureLoader::UnLoadAsset_(gbe::asset::Texture* target, const asset::data::TextureImportData& importdata, asset::data::TextureLoadData* data) {
@@ -96,6 +105,10 @@ void gbe::gfx::TextureLoader::UnLoadAsset_(gbe::asset::Texture* target, const as
 gbe::gfx::TextureData& gbe::gfx::TextureLoader::GetDefaultImage()
 {
 	return static_cast<TextureLoader*>(active_instance)->defaultImage;
+}
+
+const void gbe::gfx::TextureLoader::Set_Ui_Callback(std::function<VkDescriptorSet(VkSampler, VkImageView)> func) {
+	gbe::gfx::TextureLoader::Ui_Callback = func;
 }
 
 void gbe::gfx::TextureLoader::PassDependencies(VkDevice* vkdevice, VkPhysicalDevice* vkphysicaldevice)
@@ -160,9 +173,9 @@ void gbe::gfx::TextureLoader::PassDependencies(VkDevice* vkdevice, VkPhysicalDev
 	}
 
 	this->defaultImage = TextureData{
+		textureImageView,
 		textureImage,
 		textureImageMemory,
-		textureImageView,
-		textureSampler
+		textureSampler,
 	};
 }

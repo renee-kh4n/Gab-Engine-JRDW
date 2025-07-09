@@ -50,6 +50,9 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engi
 		throw std::runtime_error("Failed to init imgui");
 	}
 
+	TextureLoader::Set_Ui_Callback([](VkSampler sampler, VkImageView imgview) {
+		return ImGui_ImplVulkan_AddTexture(sampler, imgview, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			});
 
 	// 2: initialize imgui library
 
@@ -94,6 +97,10 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engi
 	this->gizmo_arrow_drawcall_r = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_r);
 	this->gizmo_arrow_drawcall_g = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_g);
 	this->gizmo_arrow_drawcall_b = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_b);
+
+	this->colorpickerwindow = new gbe::editor::ColorpickerWindow();
+	this->creditswindow = new gbe::editor::CreditsWindow();
+	this->inspectorwindow = new gbe::editor::InspectorWindow();
 }
 
 void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcall, Vector3 rotation, Vector3 direction) {
@@ -250,12 +257,12 @@ void gbe::Editor::DrawFrame()
 	}
 
 	//==============================IMGUI==============================//
-	this->creditswindow.Draw();
+	this->creditswindow->Draw();
 
-	this->inspectorwindow.mtime = this->mtime;
-	this->inspectorwindow.selected = &this->selected;
-	this->inspectorwindow.Draw();
-	this->colorpickerwindow.Draw();
+	this->inspectorwindow->mtime = this->mtime;
+	this->inspectorwindow->selected = &this->selected;
+	this->inspectorwindow->Draw();
+	this->colorpickerwindow->Draw();
 }
 
 void gbe::Editor::PresentFrame()
