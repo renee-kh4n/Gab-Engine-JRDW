@@ -50,6 +50,9 @@ namespace gbe {
 			bool Get_destroy_queued() {
 				return this->destroy_queued;
 			}
+			const TLoadData Get_load_data() {
+				return this->load_data;
+			}
 		};
 	}
 }

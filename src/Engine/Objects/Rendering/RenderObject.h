@@ -17,5 +17,9 @@ namespace gbe {
 
 		// Inherited via EarlyUpdate
 		virtual void InvokeEarlyUpdate() override;
+
+		inline gfx::DrawCall* Get_DrawCall() {
+			return this->mDrawCall;
+		}
 	};
 }
