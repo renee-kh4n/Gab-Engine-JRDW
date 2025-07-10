@@ -23,4 +23,5 @@
 #include "ObjectFunctions/PhysicsUpdate.h"
 #include "ObjectHandlers/ObjectHandler.h"
 #include "ObjectHandlers/PhysicsHandler.h"
+#include "ObjectHandlers/ColliderHandler.h"
 #include "Objects/Objects.h"

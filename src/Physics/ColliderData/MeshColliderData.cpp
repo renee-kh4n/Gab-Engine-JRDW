@@ -1,6 +1,6 @@
 #include "MeshColliderData.h"
 
-gbe::physics::MeshColliderData::MeshColliderData(std::vector<std::vector<Vector3>> tris)
+gbe::physics::MeshColliderData::MeshColliderData(std::vector<std::vector<Vector3>> tris, Collider* related_engine_wrapper) : ColliderData(related_engine_wrapper)
 {
 	btTriangleMesh* trimesh = new btTriangleMesh();
 

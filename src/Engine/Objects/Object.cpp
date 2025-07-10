@@ -65,18 +65,13 @@ gbe::Object::Object()
 
 	//INSPECTOR DATA
 	inspectorData = new editor::InspectorData();
-
-	auto pos_field = new editor::InspectorVec3();
-	pos_field->name = "Position";
-	pos_field->x = &this->local.position.Get().x;
-	pos_field->y = &this->local.position.Get().y;
-	pos_field->z = &this->local.position.Get().z;
-
-	inspectorData->fields.push_back(pos_field);
 }
 
 gbe::Object::~Object(){
-	this->SetParent(nullptr);
+	for (const auto& child : this->children)
+	{
+		delete child;
+	}
 }
 
 gbe::Object* gbe::Object::Copy()
@@ -156,19 +151,7 @@ void gbe::Object::OnEnterHierarchy(Object* newChild)
 
 void gbe::Object::OnExitHierarchy(Object* newChild)
 {
-	auto propagate_upwards = [this](Object* message) {
-		Object* current = this->parent;
-
-		while (current != nullptr)
-		{
-			current->OnExitHierarchy(message);
-			current = current->parent;
-		}
-	};
-
-	newChild->CallRecursively([propagate_upwards](Object* child) {
-		propagate_upwards(child);
-	});
+	
 }
 
 gbe::Object* gbe::Object::GetParent()
@@ -179,7 +162,20 @@ gbe::Object* gbe::Object::GetParent()
 void gbe::Object::SetParent(Object* newParent)
 {
 	if (parent != nullptr) {
-		parent->OnExitHierarchy(this);
+		auto propagate_upwards = [this](Object* message) {
+			Object* current = this->parent;
+
+			while (current != nullptr)
+			{
+				current->OnExitHierarchy(message);
+				current = current->parent;
+			}
+			};
+
+		this->CallRecursively([propagate_upwards](Object* child) {
+			propagate_upwards(child);
+			});
+
 		parent->children.remove_if([this](Object* child) {return child == this; });
 
 		this->parent_matrix = Matrix4(1.0f);
@@ -221,10 +217,6 @@ gbe::editor::InspectorData* gbe::Object::GetInspectorData()
 void gbe::Object::Destroy()
 {
 	this->isDestroyQueued = true;
-
-	for (auto child : this->children) {
-		child->Destroy();
-	}
 }
 
 bool gbe::Object::get_isDestroyed()

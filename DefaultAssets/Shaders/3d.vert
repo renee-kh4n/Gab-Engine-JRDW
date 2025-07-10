@@ -15,12 +15,12 @@ layout(location = 3) in vec3 inColor;
 
 layout(location = 0) out vec3 fragNormal;
 layout(location = 1) out vec2 fragTexCoord;
-layout(location = 3) out vec4 uboColor;
+layout(location = 3) out vec4 vertColor;
 
 void main() {
     gl_Position = transform.proj * transform.view * transform.model * vec4(inPosition, 1.0);
 
     fragTexCoord = inTexCoord;
     fragNormal = inNormal;
-    uboColor = transform.color;
+    vertColor = transform.color;
 }

@@ -13,7 +13,7 @@ gbe::MeshCollider::MeshCollider(asset::Mesh* mesh)
 		newtris.push_back({ tri[0],tri[1], tri[2] });
 	}
 
-	this->mData = new physics::MeshColliderData(newtris);
+	this->mData = new physics::MeshColliderData(newtris, this);
 }
 
 gbe::physics::ColliderData* gbe::MeshCollider::GetColliderData()

@@ -7,7 +7,7 @@ namespace gbe {
 		private:
 			btSphereShape mShape;
 		public:
-			SphereColliderData();
+			SphereColliderData(Collider* related_engine_wrapper);
 			virtual btCollisionShape* GetShape() override;
 		};
 	}

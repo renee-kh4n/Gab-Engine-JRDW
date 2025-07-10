@@ -16,12 +16,12 @@ gbe::gfx::MeshData gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh * asset, const a
         throw std::runtime_error(warn + err);
     }
 
-    std::vector<Vertex> vertices = {};
+    std::vector<asset::data::Vertex> vertices = {};
     std::vector<uint16_t> indices = {};
 
     for (const auto& shape : shapes) {
         for (const auto& index : shape.mesh.indices) {
-            Vertex vertex{};
+            asset::data::Vertex vertex{};
 
             vertex.pos = {
                 attrib.vertices[3 * index.vertex_index + 0],
@@ -95,10 +95,11 @@ gbe::gfx::MeshData gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh * asset, const a
     std::vector<void*> uniformBuffersMapped;
 
     //COMMITTING
+    loaddata->indices = indices;
+    loaddata->vertices = vertices;
 
     return MeshData{
-        vertices,
-        indices,
+        loaddata,
         vertexBuffer,
         vertexBufferMemory,
         indexBuffer,

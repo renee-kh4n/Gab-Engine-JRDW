@@ -28,20 +28,22 @@ namespace gbe {
 
 		bool pointer_inUi;
 		bool keyboard_inUi;
+		bool keyboard_shifting = false;
 
 		//RECORDING
 		bool is_recording = false;
 
 
-		//GIZMO CACHE
+		//GIZMO BOX CACHE
+		asset::Mesh* gizmo_box_mesh;
+		DrawCall* gizmo_box_drawcall;
+		//GIZMO ARROW CACHE
 		asset::Mesh* gizmo_arrow_mesh;
-		asset::Mesh* gizmo_cube_mesh;
 		DrawCall* gizmo_arrow_drawcall_r;
 		DrawCall* gizmo_arrow_drawcall_g;
 		DrawCall* gizmo_arrow_drawcall_b;
-		DrawCall* gizmo_cube_drawcall;
 
-		//GIZMOS
+		//ARROW GIZMOS
 		float gizmo_fixed_depth = 10.0f;
 		float gizmo_offset_distance = 1.0f;
 		Vector3 current_selected_position;
@@ -56,21 +58,20 @@ namespace gbe {
 
 		PhysicsObject* held_gizmo = nullptr;
 
-		std::array<PhysicsObject**, 3> gizmos = {
+		//BOX GIZMOS
+		std::unordered_map<gbe::Object*, RenderObject*> gizmo_boxes;
+
+		std::array<PhysicsObject**, 3> gizmo_arrows = {
 			&f_gizmo,
 			&r_gizmo,
 			&u_gizmo
 		};
-
-		std::vector<RenderObject*> gizmo_cubes;
 
 		//WINDOWS
 		editor::CreditsWindow* creditswindow;
 		editor::ColorpickerWindow* colorpickerwindow;
 		editor::InspectorWindow* inspectorwindow;
 	public:
-		
-
 		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime);
 		void PrepareFrame();
 		void DrawFrame();
@@ -78,5 +79,6 @@ namespace gbe {
 		void PresentFrame();
 		void RenderPass(VkCommandBuffer cmd);
 		void CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcall, Vector3 rotation, Vector3 direction);
+		void CreateGizmoBox(gbe::Collider* boxed, gbe::Object* rootboxed);
 	};
 }

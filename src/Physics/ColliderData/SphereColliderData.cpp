@@ -1,6 +1,6 @@
 #include "SphereColliderData.h"
 
-gbe::physics::SphereColliderData::SphereColliderData() : mShape(1)
+gbe::physics::SphereColliderData::SphereColliderData(Collider* related_engine_wrapper) : ColliderData(related_engine_wrapper), mShape(1)
 {
 
 }

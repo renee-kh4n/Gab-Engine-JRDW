@@ -27,6 +27,7 @@ namespace gbe {
 	{
 		auto root_object = new Root();
 		root_object->RegisterHandler(new PhysicsHandler(physics::PhysicsPipeline::Get_Instance()));
+		root_object->RegisterHandler(new ColliderHandler(physics::PhysicsPipeline::Get_Instance()));
 		root_object->RegisterHandler(new ObjectHandler<gbe::LightObject>());
 		root_object->RegisterHandler(new ObjectHandler<gbe::Camera>());
 		root_object->RegisterHandler(new ObjectHandler<PhysicsUpdate>());
@@ -89,6 +90,7 @@ namespace gbe {
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
 		auto idShader = new asset::Shader("DefaultAssets/Shaders/id.shader.gbe");
 		auto gridShader = new asset::Shader("DefaultAssets/Shaders/grid.shader.gbe");
+		auto wireShader = new asset::Shader("DefaultAssets/Shaders/wireframe.shader.gbe");
 
 		//TEXTURE CACHING
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
@@ -96,9 +98,10 @@ namespace gbe {
 		//MATERIAL CACHING
 		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
 		auto grid_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
+		auto wire_mat = new asset::Material("DefaultAssets/Materials/wireframe.mat.gbe");
 		grid_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
 		grid_mat->setOverride("colortex", test_tex);
-		auto cube_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
 		cube_mat->setOverride("colortex", test_tex);
 
 		//DRAW CALL CACHING
@@ -283,13 +286,13 @@ namespace gbe {
 					create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
 			}
 
-			const auto frame_data = RenderPipeline::Get_Instance()->ScreenShot(true);
+			//const auto frame_data = RenderPipeline::Get_Instance()->ScreenShot(true);
 
 			/*
 			//CINEMACHINE
-			auto cinematic_system_holder = create_box(Vector3(0, 0, -10), Vector3(3, 3, 3));
-			auto cinematic_system = new CinematicSystem();
-			cinematic_system->SetParent(cinematic_system_holder);
+				auto cinematic_system_holder = create_box(Vector3(0, 0, -10), Vector3(3, 3, 3));
+				auto cinematic_system = new CinematicSystem();
+				cinematic_system->SetParent(cinematic_system_holder);
 			*/
 
 #pragma endregion
@@ -415,17 +418,22 @@ namespace gbe {
 			}
 
 			//Delete all queued for deletions
-			std::list<Object*> toDelete;
+			std::list<Object*> toDeleteRoots;
 
-			this->current_root->CallRecursively([&toDelete](Object* object) {
+			this->current_root->CallRecursively([&toDeleteRoots](Object* object) {
 				if (object->get_isDestroyed()) {
-					toDelete.push_back(object);
+					toDeleteRoots.push_back(object);
 				}
 				});
 
-			for (auto deletee : toDelete)
+			for (auto rootdeletee : toDeleteRoots)
 			{
-				delete deletee;
+				rootdeletee->SetParent(nullptr);
+			}
+			
+			for (auto rootdeletee : toDeleteRoots)
+			{
+				delete rootdeletee;
 			}
 
 			if (this->queued_rootchange != nullptr) {

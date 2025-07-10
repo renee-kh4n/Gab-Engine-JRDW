@@ -12,7 +12,7 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"AssetLoaders/ShaderLoader.cpp"
 	"AssetLoaders/MeshLoader.cpp"
 	"AssetLoaders/MaterialLoader.cpp"
-	"Data/Vertex.cpp")
+	)
 
 
 find_package(Stb REQUIRED)

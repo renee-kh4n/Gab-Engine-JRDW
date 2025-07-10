@@ -1,9 +1,8 @@
 {
-  "asset_id": "gizmo",
+  "asset_id": "wireframe",
   "vert": "3d.vert.spv",
   "vert_meta": "3d.vert.json",
   "frag": "gizmo.frag.spv",
   "frag_meta": "gizmo.frag.json",
-
-  "ignore_depth": "true",
+  "wireframe": "true"
 }

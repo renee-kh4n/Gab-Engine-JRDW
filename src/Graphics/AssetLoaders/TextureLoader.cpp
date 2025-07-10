@@ -76,6 +76,8 @@ gbe::gfx::TextureData gbe::gfx::TextureLoader::LoadAsset_(gbe::asset::Texture* t
 	if(importdata.type == "UI")
 		tex_DS = TextureLoader::Ui_Callback(textureSampler, textureImageView);
 
+
+	//Map memory
 	RenderPipeline::transitionImageLayout(textureImage, VK_FORMAT_R8G8B8A8_SRGB, VK_IMAGE_LAYOUT_UNDEFINED, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL);
 	RenderPipeline::copyBufferToImage(stagingBuffer, textureImage, tex_width, tex_height);
 
