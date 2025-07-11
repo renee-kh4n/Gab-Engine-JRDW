@@ -9,6 +9,11 @@ namespace gbe {
 	namespace editor {
 		class ModelExport {
 			std::vector<gbe::Object*> selected;
+
+			struct export_subobject {
+				std::vector<asset::data::Vertex> export_vertices;
+				std::vector<std::vector<uint16_t>> export_faces;
+			};
 		public:
 			ModelExport(std::vector<gbe::Object*> selected);
 

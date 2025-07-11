@@ -1226,7 +1226,7 @@ std::vector<unsigned char> gbe::RenderPipeline::ScreenShot(bool write_file) {
     vkDestroyImage(this->vkdevice, dstImage, nullptr);
 
     if (write_file) {
-        auto file = std::ofstream("ss.ppm", std::ios::out | std::ios::binary);
+        auto file = std::ofstream("out/ss.ppm", std::ios::out | std::ios::binary);
         file << out_string;
         file.close();
     }

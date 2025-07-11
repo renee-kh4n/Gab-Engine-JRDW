@@ -20,6 +20,7 @@ namespace gbe {
 			struct MeshLoadData {
 				std::vector<Vertex> vertices;
 				std::vector<uint16_t> indices;
+				std::vector<std::vector<uint16_t>> faces;
 			};
 		}
 

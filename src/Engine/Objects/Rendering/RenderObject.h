@@ -11,8 +11,9 @@ namespace gbe {
 		//Rendering stuff
 		gfx::DrawCall* mDrawCall;
 		Matrix4* to_update;
+		const bool editor = false;
 	public:
-		RenderObject(gfx::DrawCall* mDrawCall);
+		RenderObject(gfx::DrawCall* mDrawCall, bool editor = false);
 		virtual ~RenderObject();
 
 		// Inherited via EarlyUpdate
@@ -20,6 +21,10 @@ namespace gbe {
 
 		inline gfx::DrawCall* Get_DrawCall() {
 			return this->mDrawCall;
+		}
+
+		bool is_editor() {
+			return this->editor;
 		}
 	};
 }

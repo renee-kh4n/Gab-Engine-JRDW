@@ -1,5 +1,7 @@
 #include "InspectorWindow.h"
 
+#include "../Utility/ModelExport.h"
+
 void gbe::editor::InspectorWindow::DrawSelf() {
 	ImGui::InputDouble("GAME TIME SCALE: ", &mtime->scale);
 
@@ -75,6 +77,14 @@ void gbe::editor::InspectorWindow::DrawSelf() {
 	}
 	else {
 		ImGui::Text("Multi-inspect not supported yet.");
+
+		if (ImGui::Button("Merge and export selected.")) {
+			ModelExport modelexporter(*selected);
+
+			modelexporter.Export("merged.obj");
+
+			std::cout << "Wrote merged mesh file.";
+		}
 	}
 }
 

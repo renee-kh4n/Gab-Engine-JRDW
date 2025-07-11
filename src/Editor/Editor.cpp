@@ -123,7 +123,7 @@ void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcal
 		BoxCollider* FGizmo_collider = new BoxCollider();
 		FGizmo_collider->SetParent(newGizmo);
 		FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
-		RenderObject* platform_renderer = new RenderObject(drawcall);
+		RenderObject* platform_renderer = new RenderObject(drawcall, true);
 		platform_renderer->SetParent(newGizmo);
 
 		out_g = newGizmo;
@@ -137,7 +137,7 @@ void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcal
 
 void gbe::Editor::CreateGizmoBox(gbe::Collider* boxed, gbe::Object* rootboxed)
 {
-	RenderObject* box_renderer = new RenderObject(this->gizmo_box_drawcall);
+	RenderObject* box_renderer = new RenderObject(this->gizmo_box_drawcall, true);
 	box_renderer->SetParent(boxed);
 
 	gizmo_boxes.insert_or_assign(rootboxed, box_renderer);

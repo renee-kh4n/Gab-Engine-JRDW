@@ -85,7 +85,7 @@ namespace gbe {
 		auto test_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
 		auto plane_mesh = new asset::Mesh("DefaultAssets/3D/plane.obj.gbe");
-		
+
 		//SHADER CACHING
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
 		auto idShader = new asset::Shader("DefaultAssets/Shaders/id.shader.gbe");
@@ -94,9 +94,12 @@ namespace gbe {
 
 		//TEXTURE CACHING
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
-		
+		auto logo_tex = new asset::Texture("DefaultAssets/Tex/UI/logo.img.gbe");
+
 		//MATERIAL CACHING
 		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
+		auto icon_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		icon_mat->setOverride("colortex", logo_tex);
 		auto grid_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
 		auto wire_mat = new asset::Material("DefaultAssets/Materials/wireframe.mat.gbe");
 		grid_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
@@ -107,7 +110,7 @@ namespace gbe {
 		//DRAW CALL CACHING
 		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, grid_mat);
 		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, grid_mat);
-		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, cube_mat);
+		auto gizmo_3d_icon_plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, icon_mat);
 
 		//MESH AND DRAWCALLS FOR ANIMOBUILDER
 		auto beam_m = new asset::Mesh("DefaultAssets/3D/beam.obj.gbe");
@@ -135,175 +138,198 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
 #pragma endregion
 #pragma region Root Loaders
-		//forward declared load functions
-		std::function<Root* ()> create_main_game;
 
-		create_main_game = [&]() {
-			auto game_root = this->CreateBlankRoot();
+		auto game_root = this->CreateBlankRoot();
 
 #pragma region scene singletons
-			//forward declaration
-			auto player = new RigidObject();
+		//forward declaration
+		auto player = new RigidObject();
 
-			//Spawn funcs
+		//Spawn funcs
 
-			auto create_test = [&](Vector3 pos, Vector3 scale, Vector3 renderscale) {
-				RigidObject* test = new RigidObject();
-				test->SetParent(game_root);
-				test->Local().position.Set(pos);
-				test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
-				test->Local().scale.Set(scale);
-				BoxCollider* platform_collider = new BoxCollider();
-				platform_collider->SetParent(test);
-				platform_collider->Local().position.Set(Vector3(0, 0, 0));
-				RenderObject* platform_renderer = new RenderObject(test_drawcall);
-				platform_renderer->SetParent(platform_collider);
-				platform_renderer->Local().scale.Set(renderscale);
+		auto create_test = [&](Vector3 pos, Vector3 scale, Vector3 renderscale) {
+			RigidObject* test = new RigidObject();
+			test->SetParent(game_root);
+			test->Local().position.Set(pos);
+			test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+			test->Local().scale.Set(scale);
+			BoxCollider* platform_collider = new BoxCollider();
+			platform_collider->SetParent(test);
+			platform_collider->Local().position.Set(Vector3(0, 0, 0));
+			RenderObject* platform_renderer = new RenderObject(test_drawcall);
+			platform_renderer->SetParent(platform_collider);
+			platform_renderer->Local().scale.Set(renderscale);
 
-				return test;
-				};
-
-			auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-				RigidObject* test = new RigidObject(true);
-				test->SetParent(game_root);
-				test->Local().position.Set(pos);
-				test->Local().rotation.Set(rotation);
-				test->Local().scale.Set(scale);
-				BoxCollider* platform_collider = new BoxCollider();
-				platform_collider->SetParent(test);
-				platform_collider->Local().position.Set(Vector3(0, 0, 0));
-				RenderObject* platform_renderer = new RenderObject(drawcall);
-				platform_renderer->SetParent(test);
-
-				return test;
+			return test;
 			};
 
-			auto create_box = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0,0,0))) {
-				RigidObject* test = new RigidObject(true);
-				test->SetParent(game_root);
-				test->Local().position.Set(pos);
-				test->Local().rotation.Set(rotation);
-				test->Local().scale.Set(scale);
-				BoxCollider* platform_collider = new BoxCollider();
-				platform_collider->SetParent(test);
-				platform_collider->Local().position.Set(Vector3(0, 0, 0));
-				RenderObject* platform_renderer = new RenderObject(cube_drawcall);
-				platform_renderer->SetParent(test);
+		auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+			RigidObject* test = new RigidObject(true);
+			test->SetParent(game_root);
+			test->Local().position.Set(pos);
+			test->Local().rotation.Set(rotation);
+			test->Local().scale.Set(scale);
+			BoxCollider* platform_collider = new BoxCollider();
+			platform_collider->SetParent(test);
+			platform_collider->Local().position.Set(Vector3(0, 0, 0));
+			RenderObject* platform_renderer = new RenderObject(drawcall);
+			platform_renderer->SetParent(test);
 
-				return test;
+			return test;
 			};
 
-			auto create_plane = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-				RigidObject* test = new RigidObject(true);
-				test->SetParent(game_root);
-				test->Local().position.Set(pos);
-				test->Local().rotation.Set(rotation);
-				test->Local().scale.Set(scale);
-				BoxCollider* platform_collider = new BoxCollider();
-				platform_collider->SetParent(test);
-				platform_collider->Local().position.Set(Vector3(0, 0, 0));
-				RenderObject* platform_renderer = new RenderObject(plane_drawcall);
-				platform_renderer->SetParent(test);
+		auto create_box = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+			RigidObject* test = new RigidObject(true);
+			test->SetParent(game_root);
+			test->Local().position.Set(pos);
+			test->Local().rotation.Set(rotation);
+			test->Local().scale.Set(scale);
+			BoxCollider* platform_collider = new BoxCollider();
+			platform_collider->SetParent(test);
+			platform_collider->Local().position.Set(Vector3(0, 0, 0));
+			RenderObject* platform_renderer = new RenderObject(cube_drawcall);
+			platform_renderer->SetParent(test);
 
-				return test;
-				};
+			return test;
+			};
 
-			//Global objects
-			//physics force setup
-			auto gravity_volume = new ForceVolume();
-			gravity_volume->shape = ForceVolume::GLOBAL;
-			gravity_volume->mode = ForceVolume::DIRECTIONAL;
-			gravity_volume->vector = Vector3(0.f, -12, 0.f);
-			gravity_volume->forceMode = ForceVolume::VELOCITY;
-			gravity_volume->SetParent(game_root);
+		auto create_plane = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+			RigidObject* test = new RigidObject(true);
+			test->SetParent(game_root);
+			test->Local().position.Set(pos);
+			test->Local().rotation.Set(rotation);
+			test->Local().scale.Set(scale);
+			BoxCollider* platform_collider = new BoxCollider();
+			platform_collider->SetParent(test);
+			platform_collider->Local().position.Set(Vector3(0, 0, 0));
+			RenderObject* platform_renderer = new RenderObject(gizmo_3d_icon_plane_drawcall);
+			platform_renderer->SetParent(test);
 
-			//light
-			auto directional_light = new DirectionalLight();
-			directional_light->Set_Color(Vector3(1, 1, 1));
-			directional_light->Set_Intensity(1);
-			directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(80, 90, 0)));
-			directional_light->SetParent(game_root);
-			directional_light->Set_ShadowmapResolutions(2160);
+			return test;
+			};
 
-			//Player and Camera setup
-			auto f_speed = 100.0f;
-			auto f_jump = 180.0f;
+		//Global objects
+		//physics force setup
+		auto gravity_volume = new ForceVolume();
+		gravity_volume->shape = ForceVolume::GLOBAL;
+		gravity_volume->mode = ForceVolume::DIRECTIONAL;
+		gravity_volume->vector = Vector3(0.f, -12, 0.f);
+		gravity_volume->forceMode = ForceVolume::VELOCITY;
+		gravity_volume->SetParent(game_root);
 
-			auto player_input = new InputPlayer(player_name);
-			player_input->SetParent(game_root);
-			auto camera_controller = new FlyingCameraControl();
-			camera_controller->SetParent(player_input);
+		//light
+		auto directional_light = new DirectionalLight();
+		directional_light->Set_Color(Vector3(1, 1, 1));
+		directional_light->Set_Intensity(1);
+		directional_light->Local().rotation.Set(Quaternion::Euler(Vector3(80, 90, 0)));
+		directional_light->SetParent(game_root);
+		directional_light->Set_ShadowmapResolutions(2160);
 
-			PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
-			player_cam->SetParent(camera_controller);
+		//Player and Camera setup
+		auto f_speed = 100.0f;
+		auto f_jump = 180.0f;
 
-			//================INPUT HANDLING================//
-			auto input_communicator = new GenericController();
-			input_communicator->SetParent(player_input);
-			//Left click customer
-			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([&](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
-				if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
-					return;
+		auto player_input = new InputPlayer(player_name);
+		player_input->SetParent(game_root);
+		auto camera_controller = new FlyingCameraControl();
+		camera_controller->SetParent(player_input);
 
-				}));
-			//WASD customer
-			input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
+		PerspectiveCamera* player_cam = new PerspectiveCamera(mWindow);
+		player_cam->SetParent(camera_controller);
 
-				}));
-			//Spacebar customer
-			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
-				if (value->state != KeyPress<Keys::SPACE>::START)
-					return;
-				}));
-			//ESCAPE Customer
-			input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
-				if (value->state != KeyPress<Keys::ESCAPE>::START)
-					return;
+		//================INPUT HANDLING================//
+		auto input_communicator = new GenericController();
+		input_communicator->SetParent(player_input);
+		//Left click customer
+		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([&](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
+			if (value->state != KeyPress<Keys::MOUSE_LEFT>::START)
+				return;
 
-				}));
+			}));
+		//WASD customer
+		input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
+
+			}));
+		//Spacebar customer
+		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
+			if (value->state != KeyPress<Keys::SPACE>::START)
+				return;
+
+			auto merged_mesh = new asset::Mesh("out/merged.obj.gbe");
+			auto merged_dc = mRenderPipeline->RegisterDrawCall(merged_mesh, cube_mat);
+
+			auto current_camera = this->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
+			Vector3 camera_pos = current_camera->World().position.Get();
+			auto mousedir = current_camera->ScreenToRay(Vector2(0, 0));
+
+			create_mesh(merged_dc, camera_pos + (mousedir * 20.0f), Vector3(1, 1, 1), Quaternion::Euler(Vector3::zero));
+
+			}));
+		//ESCAPE Customer
+		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
+			if (value->state != KeyPress<Keys::ESCAPE>::START)
+				return;
+
+			}));
 #pragma endregion
 
 #pragma region scene objects
-			
-			//CALL THE BUILDER
-			ext::AnimoBuilder::GenerationParams params{};
-			auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
 
-			//READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES
-			for (auto& objdata : builder_result.meshes)
-			{
-				if (objdata.type == "base")
-					create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if(objdata.type == "wall")
-					create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "beam")
-					create_mesh(beam_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "roof")
-					create_mesh(roof_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "window")
-					create_mesh(window_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "pillar")
-					create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-			}
+		//GIZMO 3D ICON
+		RigidObject* gizmo_3dicon_base = new RigidObject(true);
+		gizmo_3dicon_base->SetParent(game_root);
+		gizmo_3dicon_base->Local().position.Set(Vector3(1, -1, -20));
+		BoxCollider* platform_collider = new BoxCollider();
+		platform_collider->SetParent(gizmo_3dicon_base);
+		platform_collider->Local().position.Set(Vector3(0, 0, 0));
 
-			//const auto frame_data = RenderPipeline::Get_Instance()->ScreenShot(true);
-
-			/*
-			//CINEMACHINE
-				auto cinematic_system_holder = create_box(Vector3(0, 0, -10), Vector3(3, 3, 3));
-				auto cinematic_system = new CinematicSystem();
-				cinematic_system->SetParent(cinematic_system_holder);
-			*/
-
-#pragma endregion
-			return game_root;
-			};
-
-#pragma endregion
-		auto initial_root = create_main_game();
-		this->current_root = initial_root;
-#pragma region MAIN LOOP
+		auto gizmo_3dicon = new GenericObject([=](GenericObject* self, float time) {
+			auto current_camera = this->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
+			Vector3 camera_pos = current_camera->World().position.Get();
+			Vector3 to_cam = camera_pos - self->World().position.Get();
+			self->Local().rotation.Set(Quaternion::LookAtRotation(-to_cam.Normalize(), Vector3(0, 1, 0)));
+			});
+		gizmo_3dicon->SetParent(gizmo_3dicon_base);
+		RenderObject* platform_renderer = new RenderObject(gizmo_3d_icon_plane_drawcall);
+		platform_renderer->SetParent(gizmo_3dicon);
 		
+
+		//CALL THE BUILDER
+		ext::AnimoBuilder::GenerationParams params{};
+		auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
+
+		//READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES
+		for (auto& objdata : builder_result.meshes)
+		{
+			if (objdata.type == "base")
+				create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			else if (objdata.type == "wall")
+				create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			else if (objdata.type == "beam")
+				create_mesh(beam_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			else if (objdata.type == "roof")
+				create_mesh(roof_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			else if (objdata.type == "window")
+				create_mesh(window_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			else if (objdata.type == "pillar")
+				create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+		}
+
+		//const auto frame_data = RenderPipeline::Get_Instance()->ScreenShot(true);
+
+		/*
+		//CINEMACHINE
+			auto cinematic_system_holder = create_box(Vector3(0, 0, -10), Vector3(3, 3, 3));
+			auto cinematic_system = new CinematicSystem();
+			cinematic_system->SetParent(cinematic_system_holder);
+		*/
+
+#pragma endregion
+
+#pragma endregion
+		this->current_root = game_root;
+#pragma region MAIN LOOP
+
 		/// MAIN GAME LOOP
 		while (!mWindow->ShouldClose())
 		{
@@ -430,7 +456,7 @@ namespace gbe {
 			{
 				rootdeletee->SetParent(nullptr);
 			}
-			
+
 			for (auto rootdeletee : toDeleteRoots)
 			{
 				delete rootdeletee;
