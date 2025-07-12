@@ -28,3 +28,4 @@ vcpkg-manifest-install.log
 *.cmake
 CMakeCache.txt
 **/CMakeFiles
+/doxygen
