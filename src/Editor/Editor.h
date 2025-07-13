@@ -68,8 +68,6 @@ namespace gbe {
 		};
 
 		//WINDOWS
-		editor::CreditsWindow* creditswindow;
-		editor::ColorpickerWindow* colorpickerwindow;
 		editor::InspectorWindow* inspectorwindow;
 	public:
 		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime);

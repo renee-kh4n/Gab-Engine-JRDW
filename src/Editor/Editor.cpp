@@ -86,8 +86,6 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engi
 
 	//UI SCREENS
 
-	this->colorpickerwindow = new gbe::editor::ColorpickerWindow();
-	this->creditswindow = new gbe::editor::CreditsWindow();
 	this->inspectorwindow = new gbe::editor::InspectorWindow();
 
 	//CREATE THE GIZMO ARROW ASSETS
@@ -329,12 +327,9 @@ void gbe::Editor::DrawFrame()
 	}
 
 	//==============================IMGUI==============================//
-	this->creditswindow->Draw();
-
 	this->inspectorwindow->mtime = this->mtime;
 	this->inspectorwindow->selected = &this->selected;
 	this->inspectorwindow->Draw();
-	this->colorpickerwindow->Draw();
 }
 
 void gbe::Editor::PresentFrame()
