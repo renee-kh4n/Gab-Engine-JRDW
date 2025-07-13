@@ -16,15 +16,15 @@ namespace gbe {
 				float base_height = 12;
 				float base_width = 6;
 				float height = 20;
-				float pillarInterval = 16;
-				float pillarThickness = 2.5f;
-				float wallThickness = 0.5f;
+				float pillarInterval = 20;
+				float pillarThickness = 20;
+				float wallThickness = 20;
 				float beamInterval = 9;
-				float beamThickness = 1.8f;
+				float beamThickness = 20;
 				float windowHeight = 3;
 				Vector3 windowSize = Vector3(2.5, 4.5, 0.6f);
-				float roofHeight = 5.f;
-				float roofThickness = 3.0f;
+				float roofHeight = 20;
+				float roofThickness = 20;
 			};
 			//OUTPUT MESH
 			struct SubMesh {

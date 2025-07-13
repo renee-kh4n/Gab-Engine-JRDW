@@ -81,9 +81,7 @@ namespace gbe {
 		//AUDIO CACHING
 
 		//MESH CACHING
-		auto test_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
-		auto plane_mesh = new asset::Mesh("DefaultAssets/3D/plane.obj.gbe");
 		
 		//SHADER CACHING
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
@@ -94,20 +92,14 @@ namespace gbe {
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
 		
 		//MATERIAL CACHING
-		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
-		auto test_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
-		test_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
-		test_mat->setOverride("colortex", test_tex);
 		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
 		cube_mat->setOverride("colortex", test_tex);
 
 		//DRAW CALL CACHING
-		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, test_mat);
 		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
-		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, cube_mat);
 
 		//MESH AND DRAWCALLS FOR ANIMOBUILDER
-		auto beam_m = new asset::Mesh("DefaultAssets/3D/beam.obj.gbe");
+		/*auto beam_m = new asset::Mesh("DefaultAssets/3D/beam.obj.gbe");
 		auto beam_dc = mRenderPipeline->RegisterDrawCall(beam_m, cube_mat);
 		auto roof_m = new asset::Mesh("DefaultAssets/3D/roof.obj.gbe");
 		auto roof_dc = mRenderPipeline->RegisterDrawCall(roof_m, cube_mat);
@@ -116,7 +108,7 @@ namespace gbe {
 		auto pillar_m = new asset::Mesh("DefaultAssets/3D/pillar.obj.gbe");
 		auto pillar_dc = mRenderPipeline->RegisterDrawCall(pillar_m, cube_mat);
 		auto wall_m = new asset::Mesh("DefaultAssets/3D/wall.obj.gbe");
-		auto wall_dc = mRenderPipeline->RegisterDrawCall(wall_m, cube_mat);
+		auto wall_dc = mRenderPipeline->RegisterDrawCall(wall_m, cube_mat);*/
 
 #pragma endregion
 #pragma region Input
@@ -146,7 +138,7 @@ namespace gbe {
 
 			//Spawn funcs
 
-			auto create_test = [&](Vector3 pos, Vector3 scale, Vector3 renderscale) {
+			/*auto create_test = [&](Vector3 pos, Vector3 scale, Vector3 renderscale) {
 				RigidObject* test = new RigidObject();
 				test->SetParent(game_root);
 				test->Local().position.Set(pos);
@@ -160,7 +152,7 @@ namespace gbe {
 				platform_renderer->Local().scale.Set(renderscale);
 
 				return test;
-				};
+				};*/
 
 			auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
 				RigidObject* test = new RigidObject(true);
@@ -194,7 +186,7 @@ namespace gbe {
 				return test;
 			};
 
-			auto create_plane = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+			/*auto create_plane = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
 				RigidObject* test = new RigidObject(true);
 				test->SetParent(game_root);
 				test->Local().position.Set(pos);
@@ -207,7 +199,7 @@ namespace gbe {
 				platform_renderer->SetParent(test);
 
 				return test;
-				};
+				};*/
 
 			//Global objects
 			//physics force setup
@@ -270,22 +262,23 @@ namespace gbe {
 			ext::AnimoBuilder::GenerationParams params{};
 			auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
 
-			//READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES
+			////READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES
 			for (auto& objdata : builder_result.meshes)
-			{
-				if (objdata.type == "base")
-					create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if(objdata.type == "wall")
-					create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "beam")
-					create_mesh(beam_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "roof")
-					create_mesh(roof_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "window")
-					create_mesh(window_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-				else if (objdata.type == "pillar")
-					create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
-			}
+				create_mesh(cube_drawcall, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//{
+			//	if (objdata.type == "base")
+			//		create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if(objdata.type == "wall")
+			//		create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "beam")
+			//		create_mesh(beam_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "roof")
+			//		create_mesh(roof_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "window")
+			//		create_mesh(window_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "pillar")
+			//		create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//}
 
 			/*
 			//CINEMACHINE
