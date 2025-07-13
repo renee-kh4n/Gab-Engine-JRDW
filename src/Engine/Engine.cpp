@@ -82,10 +82,9 @@ namespace gbe {
 		//AUDIO CACHING
 
 		//MESH CACHING
-		auto test_mesh = new asset::Mesh("DefaultAssets/3D/test.obj.gbe");
-		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
 		auto plane_mesh = new asset::Mesh("DefaultAssets/3D/plane.obj.gbe");
-
+		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
+		
 		//SHADER CACHING
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
 		auto idShader = new asset::Shader("DefaultAssets/Shaders/id.shader.gbe");
@@ -94,26 +93,22 @@ namespace gbe {
 
 		//TEXTURE CACHING
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
-		auto logo_tex = new asset::Texture("DefaultAssets/Tex/UI/logo.img.gbe");
-
+		auto image_tex = new asset::Texture("DefaultAssets/Tex/UI/table1.img.gbe");
+		
 		//MATERIAL CACHING
-		auto id_mat = new asset::Material("DefaultAssets/Materials/id.mat.gbe");
-		auto icon_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
-		icon_mat->setOverride("colortex", logo_tex);
-		auto grid_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
-		auto wire_mat = new asset::Material("DefaultAssets/Materials/wireframe.mat.gbe");
-		grid_mat->setOverride("color", Vector4(0.3, 1, 0.3, 1.0f));
-		grid_mat->setOverride("colortex", test_tex);
-		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
+		auto cube_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 		cube_mat->setOverride("colortex", test_tex);
 
+		auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
+
 		//DRAW CALL CACHING
-		auto test_drawcall = mRenderPipeline->RegisterDrawCall(test_mesh, grid_mat);
-		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, grid_mat);
-		auto gizmo_3d_icon_plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, icon_mat);
+		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
+		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
+		
 
 		//MESH AND DRAWCALLS FOR ANIMOBUILDER
-		auto beam_m = new asset::Mesh("DefaultAssets/3D/beam.obj.gbe");
+		/*auto beam_m = new asset::Mesh("DefaultAssets/3D/beam.obj.gbe");
 		auto beam_dc = mRenderPipeline->RegisterDrawCall(beam_m, cube_mat);
 		auto roof_m = new asset::Mesh("DefaultAssets/3D/roof.obj.gbe");
 		auto roof_dc = mRenderPipeline->RegisterDrawCall(roof_m, cube_mat);
@@ -122,7 +117,7 @@ namespace gbe {
 		auto pillar_m = new asset::Mesh("DefaultAssets/3D/pillar.obj.gbe");
 		auto pillar_dc = mRenderPipeline->RegisterDrawCall(pillar_m, cube_mat);
 		auto wall_m = new asset::Mesh("DefaultAssets/3D/wall.obj.gbe");
-		auto wall_dc = mRenderPipeline->RegisterDrawCall(wall_m, cube_mat);
+		auto wall_dc = mRenderPipeline->RegisterDrawCall(wall_m, cube_mat);*/
 
 #pragma endregion
 #pragma region Input
@@ -147,20 +142,35 @@ namespace gbe {
 
 		//Spawn funcs
 
-		auto create_test = [&](Vector3 pos, Vector3 scale, Vector3 renderscale) {
-			RigidObject* test = new RigidObject();
-			test->SetParent(game_root);
-			test->Local().position.Set(pos);
-			test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
-			test->Local().scale.Set(scale);
-			BoxCollider* platform_collider = new BoxCollider();
-			platform_collider->SetParent(test);
-			platform_collider->Local().position.Set(Vector3(0, 0, 0));
-			RenderObject* platform_renderer = new RenderObject(test_drawcall);
-			platform_renderer->SetParent(platform_collider);
-			platform_renderer->Local().scale.Set(renderscale);
+			/*auto create_test = [&](Vector3 pos, Vector3 scale, Vector3 renderscale) {
+				RigidObject* test = new RigidObject();
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(Quaternion::Euler(Vector3(0, 0, 0)));
+				test->Local().scale.Set(scale);
+				BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(test);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+				RenderObject* platform_renderer = new RenderObject(test_drawcall);
+				platform_renderer->SetParent(platform_collider);
+				platform_renderer->Local().scale.Set(renderscale);
 
-			return test;
+				return test;
+				};*/
+
+			auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+				RigidObject* test = new RigidObject(true);
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(rotation);
+				test->Local().scale.Set(scale);
+				BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(test);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+				RenderObject* platform_renderer = new RenderObject(drawcall);
+				platform_renderer->SetParent(test);
+
+				return test;
 			};
 
 		auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
@@ -178,20 +188,20 @@ namespace gbe {
 			return test;
 			};
 
-		auto create_box = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-			RigidObject* test = new RigidObject(true);
-			test->SetParent(game_root);
-			test->Local().position.Set(pos);
-			test->Local().rotation.Set(rotation);
-			test->Local().scale.Set(scale);
-			BoxCollider* platform_collider = new BoxCollider();
-			platform_collider->SetParent(test);
-			platform_collider->Local().position.Set(Vector3(0, 0, 0));
-			RenderObject* platform_renderer = new RenderObject(cube_drawcall);
-			platform_renderer->SetParent(test);
+			/*auto create_plane = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+				RigidObject* test = new RigidObject(true);
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(rotation);
+				test->Local().scale.Set(scale);
+				BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(test);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
+				RenderObject* platform_renderer = new RenderObject(plane_drawcall);
+				platform_renderer->SetParent(test);
 
-			return test;
-			};
+				return test;
+				};*/
 
 		auto create_plane = [&](Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
 			RigidObject* test = new RigidObject(true);
@@ -276,12 +286,35 @@ namespace gbe {
 #pragma region scene objects
 
 		//GIZMO 3D ICON
-		RigidObject* gizmo_3dicon_base = new RigidObject(true);
-		gizmo_3dicon_base->SetParent(game_root);
-		gizmo_3dicon_base->Local().position.Set(Vector3(1, -1, -20));
-		BoxCollider* platform_collider = new BoxCollider();
-		platform_collider->SetParent(gizmo_3dicon_base);
-		platform_collider->Local().position.Set(Vector3(0, 0, 0));
+		// RigidObject* gizmo_3dicon_base = new RigidObject(true);
+		// gizmo_3dicon_base->SetParent(game_root);
+		// gizmo_3dicon_base->Local().position.Set(Vector3(1, -1, -20));
+		// BoxCollider* platform_collider = new BoxCollider();
+		// platform_collider->SetParent(gizmo_3dicon_base);
+		// platform_collider->Local().position.Set(Vector3(0, 0, 0));
+			
+			//CALL THE BUILDER
+			//ext::AnimoBuilder::GenerationParams params{};
+			//auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
+
+			////READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES //Vector3(x, y, z)
+			create_mesh(plane_drawcall, Vector3(0, 0, 0), Vector3(12, 9, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+			create_mesh(cube_drawcall, Vector3(0, -10, 0), Vector3(12, 9, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+
+			//{
+			//	if (objdata.type == "base")
+			//		create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if(objdata.type == "wall")
+			//		create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "beam")
+			//		create_mesh(beam_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "roof")
+			//		create_mesh(roof_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "window")
+			//		create_mesh(window_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//	else if (objdata.type == "pillar")
+			//		create_mesh(pillar_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			//}
 
 		auto gizmo_3dicon = new GenericObject([=](GenericObject* self, float time) {
 			auto current_camera = this->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
