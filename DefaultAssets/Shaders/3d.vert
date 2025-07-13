@@ -1,7 +1,7 @@
 #version 450
 
 
-layout(set = 1, binding = 0) uniform Transform {
+layout(set = 0, binding = 0) uniform Transform {
     vec4 color;
     mat4 model;
     mat4 view;

@@ -81,6 +81,7 @@ namespace gbe {
 		//AUDIO CACHING
 
 		//MESH CACHING
+		auto plane_mesh = new asset::Mesh("DefaultAssets/3D/plane.obj.gbe");
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
 		
 		//SHADER CACHING
@@ -90,13 +91,19 @@ namespace gbe {
 
 		//TEXTURE CACHING
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
+		auto image_tex = new asset::Texture("DefaultAssets/Tex/UI/table1.img.gbe");
 		
 		//MATERIAL CACHING
-		auto cube_mat = new asset::Material("DefaultAssets/Materials/grid.mat.gbe");
+		auto cube_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 		cube_mat->setOverride("colortex", test_tex);
+
+		auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
 
 		//DRAW CALL CACHING
 		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
+		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
+		
 
 		//MESH AND DRAWCALLS FOR ANIMOBUILDER
 		/*auto beam_m = new asset::Mesh("DefaultAssets/3D/beam.obj.gbe");
@@ -259,12 +266,13 @@ namespace gbe {
 #pragma region scene objects
 			
 			//CALL THE BUILDER
-			ext::AnimoBuilder::GenerationParams params{};
-			auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
+			//ext::AnimoBuilder::GenerationParams params{};
+			//auto builder_result = ext::AnimoBuilder::AnimoBuilder::Generate(params);
 
-			////READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES
-			for (auto& objdata : builder_result.meshes)
-				create_mesh(cube_drawcall, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));
+			////READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES //Vector3(x, y, z)
+			create_mesh(plane_drawcall, Vector3(0, 0, 0), Vector3(12, 9, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+			create_mesh(cube_drawcall, Vector3(0, -10, 0), Vector3(12, 9, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+
 			//{
 			//	if (objdata.type == "base")
 			//		create_mesh(wall_dc, objdata.position, objdata.scale, Quaternion::Euler(Vector3(0, 0, 0)));

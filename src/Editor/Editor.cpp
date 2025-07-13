@@ -250,12 +250,12 @@ void gbe::Editor::DrawFrame()
 	}
 
 	//==============================IMGUI==============================//
-	this->creditswindow.Draw();
+	//this->creditswindow.Draw();
 
 	this->inspectorwindow.mtime = this->mtime;
 	this->inspectorwindow.selected = &this->selected;
 	this->inspectorwindow.Draw();
-	this->colorpickerwindow.Draw();
+	//this->colorpickerwindow.Draw();
 }
 
 void gbe::Editor::PresentFrame()
