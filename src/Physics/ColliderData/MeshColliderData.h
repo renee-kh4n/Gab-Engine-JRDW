@@ -11,7 +11,7 @@ namespace gbe {
 		private:
 			btCollisionShape* trimeshShape;
 		public:
-			MeshColliderData(std::vector<std::vector<Vector3>>);
+			MeshColliderData(std::vector<std::vector<Vector3>>, Collider* related_engine_wrapper);
 			virtual btCollisionShape* GetShape() override;
 		};
 	}

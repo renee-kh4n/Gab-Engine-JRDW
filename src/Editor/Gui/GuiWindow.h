@@ -16,7 +16,7 @@ namespace gbe {
 			virtual void DrawSelf() = 0;
 			virtual std::string GetWindowId() = 0;
 		private:
-			void ext_Begin();
+			bool ext_Begin();
 			void ext_End();
 		};
 	}

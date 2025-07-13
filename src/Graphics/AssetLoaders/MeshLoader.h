@@ -3,7 +3,6 @@
 #include "../tiny_obj_loader.h"
 #include "Asset/gbe_asset.h"
 #include "Math/gbe_math.h"
-#include "../Data/Vertex.h"
 
 #include <vulkan/vulkan.h>
 #include "TextureLoader.h"
@@ -19,8 +18,8 @@ namespace gbe {
 		};
 
 		struct MeshData {
-			std::vector<Vertex> vertices;
-			std::vector<uint16_t> indices;
+			asset::data::MeshLoadData* loaddata;
+
 			VkBuffer vertexBuffer;
 			VkDeviceMemory vertexBufferMemory;
 			VkBuffer indexBuffer;

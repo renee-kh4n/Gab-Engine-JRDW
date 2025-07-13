@@ -1,4 +1,5 @@
 #version 450
+
 //UBOS
 
 layout(location = 0) in vec3 fragNormal;

@@ -40,7 +40,7 @@ bool gbe::physics::PhysicsPipeline::Init()
 
 void gbe::physics::PhysicsPipeline::Tick(double delta)
 {
-	for (auto& val : this->data_wrapper_dictionary)
+	for (auto& val : this->body_wrapper_dictionary)
 	{
 		val.second->Pre_Tick_function(delta);
 	}
@@ -50,14 +50,24 @@ void gbe::physics::PhysicsPipeline::Tick(double delta)
 
 void gbe::physics::PhysicsPipeline::RegisterBody(gbe::physics::PhysicsBody* body)
 {
-	data_wrapper_dictionary.insert_or_assign(body->Get_wrapped_data(), body);
+	body_wrapper_dictionary.insert_or_assign(body->Get_wrapped_data(), body);
 	body->Register(this->dynamicsWorld);
 }
 
 void gbe::physics::PhysicsPipeline::UnRegisterBody(PhysicsBody* body)
 {
-	data_wrapper_dictionary.erase(body->Get_wrapped_data());
+	body_wrapper_dictionary.erase(body->Get_wrapped_data());
 	body->UnRegister();
+}
+
+void gbe::physics::PhysicsPipeline::RegisterCollider(gbe::physics::ColliderData* col)
+{
+	collider_wrapper_dictionary.insert_or_assign(col->GetShape(), col);
+}
+
+void gbe::physics::PhysicsPipeline::UnRegisterCollider(gbe::physics::ColliderData* col)
+{
+	collider_wrapper_dictionary.erase(col->GetShape());
 }
 
 void gbe::physics::PhysicsPipeline::Set_OnFixedUpdate_callback(std::function<void(float physicsdeltatime)> newfunc)
@@ -71,9 +81,18 @@ btDiscreteDynamicsWorld* gbe::physics::PhysicsPipeline::Get_world()
 }
 
 gbe::physics::PhysicsBody* gbe::physics::PhysicsPipeline::GetRelatedBody(const btCollisionObject* key) {
-	auto enume = Instance->data_wrapper_dictionary.find(key);
+	auto enume = Instance->body_wrapper_dictionary.find(key);
 
-	if (enume == Instance->data_wrapper_dictionary.end())
+	if (enume == Instance->body_wrapper_dictionary.end())
+		return nullptr;
+
+	return enume->second;
+}
+
+gbe::physics::ColliderData* gbe::physics::PhysicsPipeline::GetRelatedCollider(const btCollisionShape* key) {
+	auto enume = Instance->collider_wrapper_dictionary.find(key);
+
+	if (enume == Instance->collider_wrapper_dictionary.end())
 		return nullptr;
 
 	return enume->second;

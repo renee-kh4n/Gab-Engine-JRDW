@@ -8,7 +8,7 @@ namespace gbe {
 		private:
 			btBoxShape mShape;
 		public:
-			BoxColliderData();
+			BoxColliderData(Collider* related_engine_wrapper);
 			virtual btCollisionShape* GetShape() override;
 		};
 	}

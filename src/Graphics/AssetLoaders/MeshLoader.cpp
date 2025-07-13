@@ -16,12 +16,13 @@ gbe::gfx::MeshData gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh * asset, const a
         throw std::runtime_error(warn + err);
     }
 
-    std::vector<Vertex> vertices = {};
+    std::vector<asset::data::Vertex> vertices = {};
     std::vector<uint16_t> indices = {};
+    std::vector<std::vector<uint16_t>> faces = {};
 
     for (const auto& shape : shapes) {
         for (const auto& index : shape.mesh.indices) {
-            Vertex vertex{};
+            asset::data::Vertex vertex{};
 
             vertex.pos = {
                 attrib.vertices[3 * index.vertex_index + 0],
@@ -45,6 +46,22 @@ gbe::gfx::MeshData gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh * asset, const a
             vertices.push_back(vertex);
             indices.push_back(indices.size());
         }
+
+        size_t index_counter = 0;
+        for (const auto& faceverts : shape.mesh.num_face_vertices)
+        {
+            std::vector<uint16_t> cur_face = {};
+
+            for (size_t f = 0; f < faceverts; f++)
+            {
+                cur_face.push_back(indices[index_counter]);
+
+                index_counter++;
+            }
+
+            faces.push_back(cur_face);
+        }
+
     }
 
     //VULKAN MESH SETUP vvvvvvvvvvv
@@ -97,10 +114,12 @@ gbe::gfx::MeshData gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh * asset, const a
     std::vector<void*> uniformBuffersMapped;
 
     //COMMITTING
+    loaddata->indices = indices;
+    loaddata->vertices = vertices;
+    loaddata->faces = faces;
 
     return MeshData{
-        vertices,
-        indices,
+        loaddata,
         vertexBuffer,
         vertexBufferMemory,
         indexBuffer,

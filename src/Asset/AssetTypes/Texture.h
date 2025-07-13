@@ -10,6 +10,7 @@ namespace gbe {
 			struct TextureImportData
 			{
 				std::string filename;
+				std::string type;
 			};
 			struct TextureLoadData {
 				Vector2Int dimensions;

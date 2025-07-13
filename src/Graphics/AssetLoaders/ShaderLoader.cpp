@@ -215,8 +215,37 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	VkPipelineVertexInputStateCreateInfo vertexInputInfo{};
 	vertexInputInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO;
 	
-	auto bindingDescription = Vertex::getBindingDescription();
-	auto attributeDescriptions = Vertex::getAttributeDescriptions();
+	VkVertexInputBindingDescription bindingDescription{};
+	bindingDescription.binding = 0;
+	bindingDescription.stride = sizeof(asset::data::Vertex);
+	bindingDescription.inputRate = VK_VERTEX_INPUT_RATE_VERTEX;
+
+	std::vector<VkVertexInputAttributeDescription> attributeDescriptions;
+
+	attributeDescriptions.push_back({
+		.location = 0,
+		.binding = 0,
+		.format = VK_FORMAT_R32G32B32_SFLOAT,
+		.offset = offsetof(asset::data::Vertex, pos)
+		});
+	attributeDescriptions.push_back({
+		.location = 1,
+		.binding = 0,
+		.format = VK_FORMAT_R32G32B32_SFLOAT,
+		.offset = offsetof(asset::data::Vertex, normal),
+		});
+	attributeDescriptions.push_back({
+		.location = 2,
+		.binding = 0,
+		.format = VK_FORMAT_R32G32_SFLOAT,
+		.offset = offsetof(asset::data::Vertex, texCoord),
+		});
+	attributeDescriptions.push_back({
+		.location = 3,
+		.binding = 0,
+		.format = VK_FORMAT_R32G32B32_SFLOAT,
+		.offset = offsetof(asset::data::Vertex, color),
+		});
 
 	vertexInputInfo.vertexBindingDescriptionCount = 1;
 	vertexInputInfo.vertexAttributeDescriptionCount = static_cast<uint32_t>(attributeDescriptions.size());
@@ -254,7 +283,11 @@ gbe::gfx::ShaderData gbe::gfx::ShaderLoader::LoadAsset_(asset::Shader* asset, co
 	rasterizer.sType = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_CREATE_INFO;
 	rasterizer.depthClampEnable = VK_FALSE;
 	rasterizer.rasterizerDiscardEnable = VK_FALSE;
-	rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
+	//WIREFRAME DECIDER
+	if(importdata.wireframe == "true")
+		rasterizer.polygonMode = VK_POLYGON_MODE_LINE;
+	else
+		rasterizer.polygonMode = VK_POLYGON_MODE_FILL;
 	rasterizer.lineWidth = 1.0f;
 	rasterizer.cullMode = VK_CULL_MODE_BACK_BIT;
 	rasterizer.frontFace = VK_FRONT_FACE_COUNTER_CLOCKWISE;

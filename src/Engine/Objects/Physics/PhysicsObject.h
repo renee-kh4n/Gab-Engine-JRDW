@@ -23,5 +23,7 @@ namespace gbe {
 
 		void Set_lookup_func(std::function<PhysicsObject* (physics::PhysicsBody*)>*);
 		physics::PhysicsBody* Get_data();
+
+		const std::list<Collider*> Get_colliders();
 	};
 }

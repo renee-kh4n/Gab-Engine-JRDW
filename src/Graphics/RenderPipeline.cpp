@@ -372,12 +372,6 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     appInfo.engineVersion = VK_MAKE_VERSION(1, 0, 0);
     appInfo.apiVersion = VK_API_VERSION_1_0;
     
-    //VALIDATION LAYERS
-    //VULKAN LAYER FINDING
-    auto validationlayerspath = std::filesystem::current_path() / "vcpkg_installed" / "x64-windows" / "bin";
-    std::string vkvalidationenvpath = "VK_ADD_LAYER_PATH=" + validationlayerspath.string();
-    int putenvresult = _putenv(vkvalidationenvpath.c_str());
-
     bool validationlayerssupported = true;
 
     const std::vector<const char*> validationLayers = {
@@ -544,6 +538,7 @@ gbe::RenderPipeline::RenderPipeline(gbe::Window* window, Vector2Int dimensions)
     //FEATURES SETUP
     VkPhysicalDeviceFeatures deviceFeatures = {};
     deviceFeatures.samplerAnisotropy = VK_TRUE;
+    deviceFeatures.fillModeNonSolid = VK_TRUE;
 
     VkPhysicalDeviceShaderDrawParametersFeatures shader_draw_parameters_features = {};
     shader_draw_parameters_features.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SHADER_DRAW_PARAMETERS_FEATURES;
@@ -987,7 +982,7 @@ void gbe::RenderPipeline::RenderFrame(Matrix4 viewmat, Matrix4 projmat, float& n
                 vkCmdBindDescriptorSets(currentCommandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, currentshaderdata.pipelineLayout, 0, bindingsets.size(), bindingsets.data(), 0, nullptr);
 
                 vkCmdBindIndexBuffer(currentCommandBuffer, curmesh.indexBuffer, 0, VK_INDEX_TYPE_UINT16);
-                vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.indices.size()), 1, 0, 0, 0);
+                vkCmdDrawIndexed(currentCommandBuffer, static_cast<uint32_t>(curmesh.loaddata->indices.size()), 1, 0, 0, 0);
             }
         }
     }
@@ -1229,7 +1224,7 @@ std::vector<unsigned char> gbe::RenderPipeline::ScreenShot(bool write_file) {
     vkDestroyImage(this->vkdevice, dstImage, nullptr);
 
     if (write_file) {
-        auto file = std::ofstream("ss.ppm", std::ios::out | std::ios::binary);
+        auto file = std::ofstream("out/ss.ppm", std::ios::out | std::ios::binary);
         file << out_string;
         file.close();
     }

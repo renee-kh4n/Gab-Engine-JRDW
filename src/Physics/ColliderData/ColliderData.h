@@ -5,6 +5,8 @@
 #include "../PhysicsDatatypes.h"
 
 namespace gbe {
+	class Collider;
+
 	namespace physics {
 		class Rigidbody;
 
@@ -15,8 +17,10 @@ namespace gbe {
 
 			btTransform transform;
 
+		protected:
+			Collider* related_engine_wrapper;
 		public:
-			ColliderData();
+			ColliderData(Collider* related_engine_wrapper);
 
 			Matrix4& GetLocalMatrix();
 			btTransform& GetInternalTransform();
@@ -25,6 +29,8 @@ namespace gbe {
 			void UpdateScale(PhysicsVector3);
 
 			virtual btCollisionShape* GetShape() = 0;
+
+			Collider* Get_wrapper();
 		};
 	}
 }

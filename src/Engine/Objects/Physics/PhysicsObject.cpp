@@ -32,6 +32,10 @@ gbe::physics::PhysicsBody* gbe::PhysicsObject::Get_data()
 	return this->body;
 }
 
+const std::list<gbe::Collider*> gbe::PhysicsObject::Get_colliders() {
+	return this->colliders;
+}
+
 void gbe::PhysicsObject::OnEnterHierarchy(Object* newChild)
 {
 	Object::OnEnterHierarchy(newChild);

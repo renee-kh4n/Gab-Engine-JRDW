@@ -1,10 +1,15 @@
 #include "InspectorWindow.h"
 
+#include "../Utility/ModelExport.h"
+
 void gbe::editor::InspectorWindow::DrawSelf() {
 	ImGui::InputDouble("GAME TIME SCALE: ", &mtime->scale);
 
 	//OBJECT INSPECTOR
-	if ((*this->selected).size() > 0)
+	if ((*this->selected).size() == 0) {
+		ImGui::Text("Nothing Selected.");
+	}
+	else if ((*this->selected).size() == 1)
 	{
 		//FOR ONLY ONE
 		auto inspectordata = (*this->selected)[0]->GetInspectorData();
@@ -21,6 +26,16 @@ void gbe::editor::InspectorWindow::DrawSelf() {
 				(*this->selected)[0] = sel_parent;
 			}
 		}
+
+		ImGui::SeparatorText("Transform:");
+
+		Vector3 position_gui_wrap = (*this->selected)[0]->Local().position.Get();
+
+		ImGui::InputFloat("X", &position_gui_wrap.x);
+		ImGui::InputFloat("Y", &position_gui_wrap.y);
+		ImGui::InputFloat("Z", &position_gui_wrap.z);
+
+		(*this->selected)[0]->Local().position.Set(position_gui_wrap);
 
 		//DRAW THE CUSTOM INSPECTORS
 		for (auto& field : inspectordata->fields)
@@ -58,6 +73,17 @@ void gbe::editor::InspectorWindow::DrawSelf() {
 			if (ImGui::Button(button_label.c_str())) {
 				(*this->selected)[0] = child;
 			}
+		}
+	}
+	else {
+		ImGui::Text("Multi-inspect not supported yet.");
+
+		if (ImGui::Button("Merge and export selected.")) {
+			ModelExport modelexporter(*selected);
+
+			modelexporter.Export("merged.obj");
+
+			std::cout << "Wrote merged mesh file.";
 		}
 	}
 }

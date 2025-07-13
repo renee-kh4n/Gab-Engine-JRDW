@@ -3,7 +3,7 @@
 
 using namespace gbe::gfx;
 
-gbe::RenderObject::RenderObject(DrawCall* mDrawCall)
+gbe::RenderObject::RenderObject(DrawCall* mDrawCall, bool editor) : editor(editor)
 {
 	this->mDrawCall = mDrawCall;
 	to_update = this->mDrawCall->RegisterCall(this, this->GetWorldMatrix());

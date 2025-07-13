@@ -2,8 +2,8 @@
 
 #include "../Rigidbody.h"
 
-gbe::physics::ColliderData::ColliderData() {
-	
+gbe::physics::ColliderData::ColliderData(Collider* related_engine_wrapper) {
+	this->related_engine_wrapper = related_engine_wrapper;
 }
 
 gbe::Matrix4& gbe::physics::ColliderData::GetLocalMatrix() {
@@ -23,4 +23,8 @@ void gbe::physics::ColliderData::UpdateLocalTransformation(Matrix4 mat) {
 void gbe::physics::ColliderData::UpdateScale(PhysicsVector3 vec) {
 	this->scale = vec;
 	this->GetShape()->setLocalScaling(vec);
+}
+
+gbe::Collider* gbe::physics::ColliderData::Get_wrapper() {
+	return this->related_engine_wrapper;
 }

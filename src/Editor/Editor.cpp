@@ -50,6 +50,9 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engi
 		throw std::runtime_error("Failed to init imgui");
 	}
 
+	TextureLoader::Set_Ui_Callback([](VkSampler sampler, VkImageView imgview) {
+		return ImGui_ImplVulkan_AddTexture(sampler, imgview, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+			});
 
 	// 2: initialize imgui library
 
@@ -81,9 +84,16 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engi
 		});
 		*/
 
-	//CREATE THE GIZMO OBJECTS
-	auto gizmoshader = new asset::Shader("DefaultAssets/Shaders/gizmo.shader.gbe");
+	//UI SCREENS
+
+	this->colorpickerwindow = new gbe::editor::ColorpickerWindow();
+	this->creditswindow = new gbe::editor::CreditsWindow();
+	this->inspectorwindow = new gbe::editor::InspectorWindow();
+
+	//CREATE THE GIZMO ARROW ASSETS
 	this->gizmo_arrow_mesh = new asset::Mesh("DefaultAssets/3D/arrow.obj.gbe");
+	
+	auto gizmoshader = new asset::Shader("DefaultAssets/Shaders/gizmo.shader.gbe");
 
 	auto mat_r = new asset::Material("DefaultAssets/Materials/gizmo.mat.gbe");
 	auto mat_g = new asset::Material("DefaultAssets/Materials/gizmo.mat.gbe");
@@ -94,6 +104,15 @@ gbe::Editor::Editor(RenderPipeline* renderpipeline, Window* window, Engine* engi
 	this->gizmo_arrow_drawcall_r = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_r);
 	this->gizmo_arrow_drawcall_g = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_g);
 	this->gizmo_arrow_drawcall_b = this->mrenderpipeline->RegisterDrawCall(this->gizmo_arrow_mesh, mat_b);
+
+	//CREATE GIZMO BOX ASSETS
+	this->gizmo_box_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
+
+	auto wireshader = new asset::Shader("DefaultAssets/Shaders/wireframe.shader.gbe");
+
+	auto mat_wire = new asset::Material("DefaultAssets/Materials/wireframe.mat.gbe");
+	mat_wire->setOverride("color", Vector4(1, 1, 0, 1.0f));
+	this->gizmo_box_drawcall = this->mrenderpipeline->RegisterDrawCall(this->gizmo_box_mesh, mat_wire);
 }
 
 void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcall, Vector3 rotation, Vector3 direction) {
@@ -104,7 +123,7 @@ void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcal
 		BoxCollider* FGizmo_collider = new BoxCollider();
 		FGizmo_collider->SetParent(newGizmo);
 		FGizmo_collider->Local().position.Set(Vector3(0, 0, 0));
-		RenderObject* platform_renderer = new RenderObject(drawcall);
+		RenderObject* platform_renderer = new RenderObject(drawcall, true);
 		platform_renderer->SetParent(newGizmo);
 
 		out_g = newGizmo;
@@ -114,6 +133,14 @@ void gbe::Editor::CreateGizmoArrow(gbe::PhysicsObject*& out_g, DrawCall* drawcal
 	auto rot = Quaternion::Euler(rotation);
 	out_g->Local().rotation.Set(this->selected[0]->World().rotation.Get() * rot);
 	out_g->TranslateWorld(direction * gizmo_offset_distance);
+}
+
+void gbe::Editor::CreateGizmoBox(gbe::Collider* boxed, gbe::Object* rootboxed)
+{
+	RenderObject* box_renderer = new RenderObject(this->gizmo_box_drawcall, true);
+	box_renderer->SetParent(boxed);
+
+	gizmo_boxes.insert_or_assign(rootboxed, box_renderer);
 }
 
 void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
@@ -129,7 +156,14 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 	}
 
 	//CHECK SHIFT CLICK
-	bool shift_click = false;
+	if (sdlevent->key.keysym.sym == SDLK_LSHIFT) {
+		if (sdlevent->type == SDL_KEYDOWN) {
+			this->keyboard_shifting = true;
+		}
+		else if (sdlevent->type == SDL_KEYUP) {
+			this->keyboard_shifting = false;
+		}
+	}
 
 	//CLICKED
 	if (sdlevent->type == SDL_MOUSEBUTTONDOWN) {
@@ -145,7 +179,7 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 			auto result = physics::Raycast(camera_pos, ray_dir);
 			if (result.result) {
 				//CHECK IF OTHER IS A GIZMO
-				for (auto& gizmoptr : gizmos)
+				for (auto& gizmoptr : gizmo_arrows)
 				{
 					if (result.other == (*gizmoptr)) {
 						held_gizmo = *gizmoptr;
@@ -157,36 +191,82 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 					std::cout << "Holding Gizmo" << std::endl;
 				}
 				else {
-					if (!shift_click) { //CLEAR SELECTION IF NOT MULTISELECTING AND CLICKED SOMETHING ELSE
+					bool deselection = false;
+
+					if (this->keyboard_shifting) {
+						auto it = std::find(this->selected.begin(), this->selected.end(), result.other);
+
+						// DESELECT IF FOUND
+						if (it != this->selected.end()) {
+							this->selected.erase(it);
+
+							this->gizmo_boxes[result.other]->Destroy();
+							this->gizmo_boxes.erase(result.other);
+
+							deselection = true;
+						}
+					}
+					else { //CLEAR SELECTION IF NOT MULTISELECTING AND CLICKED SOMETHING ELSE
 						this->selected.clear();
+
+						//CLEAR BOXES
+						for (auto& gizmoptr : this->gizmo_boxes)
+						{
+							gizmoptr.second->Destroy();
+						}
+						this->gizmo_boxes.clear();
 					}
 
-					this->selected.push_back(result.other);
-					this->selected_f = result.other->World().GetForward();
-					this->selected_r = result.other->World().GetRight();
-					this->selected_u = result.other->World().GetUp();
+					if (!deselection) {
+						//SELECT AND BOX
+						this->selected.push_back(result.other);
+						CreateGizmoBox(result.collider, result.other);
+					}
 
-					//SPAWN GIZMO
-					this->CreateGizmoArrow(this->f_gizmo, this->gizmo_arrow_drawcall_b, Vector3(0, 180, 0), this->selected_f);
-					this->CreateGizmoArrow(this->r_gizmo, this->gizmo_arrow_drawcall_r, Vector3(0, -90, 0), this->selected_r);
-					this->CreateGizmoArrow(this->u_gizmo, this->gizmo_arrow_drawcall_g, Vector3(90, 0, 0), this->selected_u);
+					if (this->selected.size() == 1) {
+						this->selected_f = this->selected[0]->World().GetForward();
+						this->selected_r = this->selected[0]->World().GetRight();
+						this->selected_u = this->selected[0]->World().GetUp();
 
-					this->current_selected_position = this->selected[0]->World().position.Get();
+						//SPAWN GIZMO
+						this->CreateGizmoArrow(this->f_gizmo, this->gizmo_arrow_drawcall_b, Vector3(0, 180, 0), this->selected_f);
+						this->CreateGizmoArrow(this->r_gizmo, this->gizmo_arrow_drawcall_r, Vector3(0, -90, 0), this->selected_r);
+						this->CreateGizmoArrow(this->u_gizmo, this->gizmo_arrow_drawcall_g, Vector3(90, 0, 0), this->selected_u);
+
+						this->current_selected_position = this->selected[0]->World().position.Get();
+					}
+					else {
+						//DELETE GIZMO
+						for (auto& gizmoptr : this->gizmo_arrows)
+						{
+							if (*gizmoptr != nullptr) {
+								(*gizmoptr)->Destroy();
+								(*gizmoptr) = nullptr;
+							}
+						}
+					}
 				}
 			}
 			else { //NOTHING WAS CLICKED
-				if (!shift_click) { //NOT MULTISELECTING
+				if (!this->keyboard_shifting) { //NOT MULTISELECTING
 					//CLEAR SELECTION IF NOT MULTISELECTING AND CLICKED NOTHING
 					this->selected.clear();
 
-					//DELETE GIZMO
-					for (auto& gizmoptr : this->gizmos)
+					//DELETE GIZMOS
+					for (auto& gizmoptr : this->gizmo_arrows)
 					{
 						if (*gizmoptr != nullptr) {
 							(*gizmoptr)->Destroy();
 							(*gizmoptr) = nullptr;
 						}
 					}
+
+					//CLEAR BOXES
+					for (auto& gizmoptr : this->gizmo_boxes)
+					{
+						gizmoptr.second->Destroy();
+					}
+					this->gizmo_boxes.clear();
 				}
 			}
 		}
@@ -215,7 +295,7 @@ void gbe::Editor::PrepareFrame()
 void gbe::Editor::DrawFrame()
 {
 	//==============================EDITOR UPDATE==============================//
-	if (selected.size() > 0) {
+	if (selected.size() == 1) {
 		auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
 		Vector3 camera_pos = current_camera->World().position.Get();
 		auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos());
@@ -237,7 +317,6 @@ void gbe::Editor::DrawFrame()
 			selected[0]->SetWorldPosition(this->current_selected_position);
 		}
 
-
 		Vector3 cam_toselected = this->current_selected_position - camera_pos;
 		cam_toselected = cam_toselected.Normalize();
 
@@ -250,12 +329,12 @@ void gbe::Editor::DrawFrame()
 	}
 
 	//==============================IMGUI==============================//
-	this->creditswindow.Draw();
+	this->creditswindow->Draw();
 
-	this->inspectorwindow.mtime = this->mtime;
-	this->inspectorwindow.selected = &this->selected;
-	this->inspectorwindow.Draw();
-	this->colorpickerwindow.Draw();
+	this->inspectorwindow->mtime = this->mtime;
+	this->inspectorwindow->selected = &this->selected;
+	this->inspectorwindow->Draw();
+	this->colorpickerwindow->Draw();
 }
 
 void gbe::Editor::PresentFrame()

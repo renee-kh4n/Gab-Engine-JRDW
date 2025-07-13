@@ -3,5 +3,5 @@
   "vert": "3d.vert.spv",
   "vert_meta": "3d.vert.json",
   "frag": "grid.frag.spv",
-  "frag_meta": "grid.frag.json"
+  "frag_meta": "grid.frag.json",
 }
