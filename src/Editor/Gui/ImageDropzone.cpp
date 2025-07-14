@@ -71,8 +71,10 @@ void gbe::editor::ImageDropzone::handleFileDialogueResult() {
 				// Ensure the directory exists
 				fs::create_directories(gbeFile.parent_path());
 
-				std::ofstream txtOut(gbeFile, std::ios::trunc); // wipe contents
-				if (!txtOut) {
+				std::ofstream txtOut; 
+				txtOut.open(gbeFile);
+				//std::ofstream txtOut(gbeFile, std::ios::trunc); // wipe contents
+				if (!txtOut.is_open()) {
 					std::cerr << "Failed to open file: " << gbeFile << "\n";
 					throw std::runtime_error("Cannot open gbe file!");
 				}
@@ -90,6 +92,8 @@ void gbe::editor::ImageDropzone::handleFileDialogueResult() {
 				  "asset_id": "input",
 				  "filename": "{src.filename}"
 				})";*/
+
+				std::cout << "Wrote to: " << gbeFile << "\n";
 
 			}
 			catch (const fs::filesystem_error& e)

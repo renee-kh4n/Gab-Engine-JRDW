@@ -46,6 +46,8 @@ namespace gbe {
 
 	void Engine::Run()
 	{
+
+		bool isBgLoaded = false;
 		//WINDOW
 		Window* mWindow = new Window(Vector2Int(1280, 720));
 
@@ -201,6 +203,22 @@ namespace gbe {
 			create_mesh(merged_dc, camera_pos + (mousedir * 20.0f), Vector3(1, 1, 1), Quaternion::Euler(Vector3::zero));
 
 			}));*/
+
+			//Letter S to spawn BG
+		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::S>>([=](KeyPress<Keys::S>* value, bool changed) {
+			if (value->state != KeyPress<Keys::S>::START)
+				return;
+			if (isBgLoaded) {
+				auto image_tex = new asset::Texture("DefaultAssets/Tex/UI/input.img.gbe");
+				auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+				bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
+				auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
+				create_mesh(plane_drawcall, Vector3(0, -1, 0), Vector3(80, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+			}
+	
+
+			}));
+
 
 		//ESCAPE Customer
 		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
