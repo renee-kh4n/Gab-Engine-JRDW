@@ -85,6 +85,7 @@ namespace gbe {
 		//MESH CACHING
 		auto plane_mesh = new asset::Mesh("DefaultAssets/3D/plane.obj.gbe");
 		auto cube_mesh = new asset::Mesh("DefaultAssets/3D/cube.obj.gbe");
+		auto table_mesh = new asset::Mesh("DefaultAssets/3D/table.obj.gbe"); // 3D table mesh
 
 		//SHADER CACHING
 		auto unlitShader = new asset::Shader("DefaultAssets/Shaders/unlit.shader.gbe");
@@ -103,15 +104,21 @@ namespace gbe {
 			// Table 1 (Background)
 		auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 		bg_mat->setOverride("colortex", table1_tex); // "colortex" should match that of unlit.frag
-
 			// Table 1 Hashmap
 		auto hm_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 		hm_mat->setOverride("colortex", table1_hm_tex);
+
+			// 3D Table 
+		auto table_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		table_mat->setOverride("colortex", table1_tex); // uses the same texture as the background (table1)
+
+		
 
 		//DRAW CALL CACHING
 		auto cube_drawcall = mRenderPipeline->RegisterDrawCall(cube_mesh, cube_mat);
 		auto bg_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
 		auto hm_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, hm_mat);
+		auto table_drawcall = mRenderPipeline->RegisterDrawCall(table_mesh, table_mat); // 3D table
 
 #pragma endregion
 #pragma region Input
@@ -223,12 +230,15 @@ namespace gbe {
 		// //Vector3(x, y, z) 
 		// //create_mesh(draw_call, position, scale, rotation)
 			// Cube
-		create_mesh(cube_drawcall, Vector3(0, 0, 38), Vector3(10, 10, 10), Quaternion::Euler(Vector3(0, 0, 0)));
-			// Table 1 BG
-		create_mesh(bg_drawcall, Vector3(0, 0, 40), Vector3(110, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
-			// Table 1 HM
-		create_mesh(hm_drawcall, Vector3(0, 0, 41), Vector3(110, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+		create_mesh(cube_drawcall, Vector3(0, -20, 49), Vector3(10, 10, 10), Quaternion::Euler(Vector3(0, 0, 0)));
+			// Table 1 Object
+		create_mesh(table_drawcall, Vector3(0, -30, 50), Vector3(20, 20, 20), Quaternion::Euler(Vector3(0, 0, 0)));
 
+			// Table 1 BG
+		//create_mesh(bg_drawcall, Vector3(0, 0, 40), Vector3(110, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+			// Table 1 HM
+		//create_mesh(hm_drawcall, Vector3(0, 0, 41), Vector3(110, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+	
 
 		//const auto frame_data = RenderPipeline::Get_Instance()->ScreenShot(true);
 

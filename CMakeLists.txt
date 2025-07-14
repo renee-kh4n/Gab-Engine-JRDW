@@ -1,5 +1,5 @@
 ﻿#PER MACHINE SYSTEM VARIABLES
-set(VCPKG_TOOLCHAIN_DIR "C:/Program Files/Microsoft Visual Studio/2022/Community/VC/vcpkg/scripts/buildsystems/vcpkg.cmake")
+set(VCPKG_TOOLCHAIN_DIR "C:/Program Files/Microsoft Visual Studio/2022/Professional/VC/vcpkg/scripts/buildsystems/vcpkg.cmake")
 
 # CMakeList.txt : Top-level CMake project file, do global configuration
 # and include sub-projects here.
