@@ -64,6 +64,33 @@ void gbe::editor::ImageDropzone::handleFileDialogueResult() {
 					fs::copy_options::overwrite_existing);
 				// TODO: engine‑side code to register / hot‑reload `dest`
 				std::cout << "Image copied to: " << dest << '\n';
+
+				// write to DefaultAssets/Tex/UI/input.img.gbe
+				const fs::path gbeFile = "Gab-Engine-JRDW/DefaultAssets/Tex/UI/input.img.gbe";
+			
+				// Ensure the directory exists
+				fs::create_directories(gbeFile.parent_path());
+
+				std::ofstream txtOut(gbeFile, std::ios::trunc); // wipe contents
+				if (!txtOut) {
+					std::cerr << "Failed to open file: " << gbeFile << "\n";
+					throw std::runtime_error("Cannot open gbe file!");
+				}
+				std::cout << "Writing to: " << gbeFile << "\n";
+
+				txtOut << "{ \n"
+					<< "\"asset_type\": \"texture\",\n"
+					<< "\"asset_id\": \"input\",\n"
+					<< "\"filename\": \"" << src.filename() << "\"\n"
+					<< "}";
+
+				txtOut.close();
+			/*	txtOut << R"({
+				  "asset_type": "texture",
+				  "asset_id": "input",
+				  "filename": "{src.filename}"
+				})";*/
+
 			}
 			catch (const fs::filesystem_error& e)
 			{

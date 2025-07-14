@@ -93,7 +93,7 @@ namespace gbe {
 
 		//TEXTURE CACHING
 		auto test_tex = new asset::Texture("DefaultAssets/Tex/Maps/Model/test.img.gbe");
-		auto image_tex = new asset::Texture("DefaultAssets/Tex/UI/table1.img.gbe");
+		auto image_tex = new asset::Texture("DefaultAssets/Tex/UI/input.img.gbe"); //
 
 		//MATERIAL CACHING
 		auto cube_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
