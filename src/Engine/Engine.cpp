@@ -213,7 +213,8 @@ namespace gbe {
 
 
 		////READ THE XML RESULT AND USE EXTERNALLY-LOADED MESHES 
-		// //Vector3(x, y, z) //create_mesh(draw_call, position, scale, rotation?)
+		// //Vector3(x, y, z) 
+		// //create_mesh(draw_call, position, scale, rotation)
 		create_mesh(plane_drawcall, Vector3(0, 0, 0), Vector3(80, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
 		create_mesh(cube_drawcall, Vector3(0, 0, -1), Vector3(10, 10, 10), Quaternion::Euler(Vector3(0, 0, 0)));
 
