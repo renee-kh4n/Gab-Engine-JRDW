@@ -187,7 +187,7 @@ namespace gbe {
 
 			}));
 		//Spacebar customer
-		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
+		/*input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
 			if (value->state != KeyPress<Keys::SPACE>::START)
 				return;
 
@@ -200,7 +200,8 @@ namespace gbe {
 
 			create_mesh(merged_dc, camera_pos + (mousedir * 20.0f), Vector3(1, 1, 1), Quaternion::Euler(Vector3::zero));
 
-			}));
+			}));*/
+
 		//ESCAPE Customer
 		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
 			if (value->state != KeyPress<Keys::ESCAPE>::START)
