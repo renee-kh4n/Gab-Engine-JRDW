@@ -144,7 +144,6 @@ namespace gbe {
 		//forward declaration
 		auto player = new RigidObject();
 
-		///
 		auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
 			RigidObject* background = new RigidObject(true);
 			background->SetParent(game_root);
@@ -157,9 +156,26 @@ namespace gbe {
 			RenderObject* platform_renderer = new RenderObject(drawcall);
 			platform_renderer->SetParent(background);
 
-			return background;
-			};
+			return test;
+		};
 
+		auto create_table_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+			RigidObject* test = new RigidObject(true);
+			test->SetParent(game_root);
+			test->Local().position.Set(pos);
+			test->Local().rotation.Set(rotation);
+			test->Local().scale.Set(scale);
+			/*BoxCollider* platform_collider = new BoxCollider();
+			platform_collider->SetParent(test);
+			platform_collider->Local().position.Set(Vector3(0, 0, 0));*/
+			RenderObject* platform_renderer = new RenderObject(drawcall);
+			platform_renderer->SetParent(test);
+
+			// set as non-selectable
+			// test->setNonSelectable(true);
+
+			return test;
+		};
 
 		//Global objects
 		//physics force setup
@@ -258,7 +274,7 @@ namespace gbe {
 			// Cube
 		create_mesh(cube_drawcall, Vector3(0, -20, 49), Vector3(10, 10, 10), Quaternion::Euler(Vector3(0, 0, 0)));
 			// Table 1 Object
-		create_mesh(table_drawcall, Vector3(0, -30, 50), Vector3(20, 20, 20), Quaternion::Euler(Vector3(0, 0, 0)));
+		create_table_mesh(table_drawcall, Vector3(0, -30, 50), Vector3(20, 20, 20), Quaternion::Euler(Vector3(0, 0, 0)));
 
 			// Table 1 BG
 		//create_mesh(bg_drawcall, Vector3(0, 0, 40), Vector3(110, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));

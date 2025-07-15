@@ -21,6 +21,7 @@ namespace gbe {
 	class Object {
 	private:
 		bool isDestroyQueued = false;
+		bool nonSelectable = false;
 
 		std::list<Object*> children;
 
@@ -66,5 +67,9 @@ namespace gbe {
 		}
 
 		void CallRecursively(std::function<void(Object*)> action);
+
+		// SETTER and GETTER for private nonSelectable var
+		void setNonSelectable(bool value) { nonSelectable = value; }
+		bool getNonSelectable() const { return nonSelectable; }
 	};
 }
