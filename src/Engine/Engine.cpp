@@ -130,20 +130,20 @@ namespace gbe {
 		//forward declaration
 		auto player = new RigidObject();
 
-
+		///
 		auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-			RigidObject* test = new RigidObject(true);
-			test->SetParent(game_root);
-			test->Local().position.Set(pos);
-			test->Local().rotation.Set(rotation);
-			test->Local().scale.Set(scale);
+			RigidObject* background = new RigidObject(true);
+			background->SetParent(game_root);
+			background->Local().position.Set(pos);
+			background->Local().rotation.Set(rotation);
+			background->Local().scale.Set(scale);
 			BoxCollider* platform_collider = new BoxCollider();
-			platform_collider->SetParent(test);
+			platform_collider->SetParent(background);
 			platform_collider->Local().position.Set(Vector3(0, 0, 0));
 			RenderObject* platform_renderer = new RenderObject(drawcall);
-			platform_renderer->SetParent(test);
+			platform_renderer->SetParent(background);
 
-			return test;
+			return background;
 			};
 
 
