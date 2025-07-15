@@ -46,6 +46,7 @@ gbe::physics::Raycast::Raycast(PhysicsVector3 from, PhysicsVector3 dir)
 		this->other = relatedbody->Get_wrapper();
 		this->collider = relatedcollider->Get_wrapper();
 		this->intersection = closestResults.m_hitPointWorld;
+		this->normal = closestResults.m_hitNormalWorld;
 		Vector3 delta = from - this->intersection;
 		this->distance = delta.Magnitude();
 	}

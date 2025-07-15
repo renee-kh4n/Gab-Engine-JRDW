@@ -28,6 +28,7 @@ namespace gbe {
 			PhysicsObject* other;
 			Collider* collider;
 			PhysicsVector3 intersection;
+			PhysicsVector3 normal;
 			float distance;
 
 			Raycast(PhysicsVector3 from, PhysicsVector3 dir);
