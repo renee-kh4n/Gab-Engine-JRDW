@@ -212,7 +212,7 @@ namespace gbe {
 
 			std::cout << "S Pressed" << std::endl; //??
 			try {
-				auto image_tex = new asset::Texture("/input.img.gbe"); // out/ ? (does not work) or out/build/x64-debug?
+				auto image_tex = new asset::Texture("input.img.gbe"); // out/ ? (does not work) or out/build/x64-debug?
 				auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 				bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
 				auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);

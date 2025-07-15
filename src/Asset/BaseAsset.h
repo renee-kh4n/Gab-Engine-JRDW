@@ -36,8 +36,12 @@ namespace gbe {
 
 				while (this->asset_directory.back() != '/')
 				{
+					std::cout << "directory  " << asset_directory.back() << std::endl;
 					std::cout << "directory size: " << asset_directory.size() << std::endl;
-					this->asset_directory.pop_back();
+					if (asset_directory.size() > 0 && asset_directory.back() != '\0') {
+						this->asset_directory.pop_back();
+					}
+					
 				}
 				
 				AssetLoader_base<TFinal, TImportData, TLoadData>::LoadAsset(static_cast<TFinal*>(this), this->import_data, &this->load_data);
