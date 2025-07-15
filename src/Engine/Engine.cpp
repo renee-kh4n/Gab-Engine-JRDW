@@ -156,7 +156,7 @@ namespace gbe {
 			RenderObject* platform_renderer = new RenderObject(drawcall);
 			platform_renderer->SetParent(background);
 
-			return test;
+			return background;
 		};
 
 		auto create_table_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
