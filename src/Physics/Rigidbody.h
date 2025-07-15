@@ -14,7 +14,7 @@ namespace gbe {
 	class PhysicsObject;
 
 	namespace physics {
-		class Rigidbody : public PhysicsBody{
+		class Rigidbody : public PhysicsBody{ // tells the editor calculate the physics for this // no rigid body, no colliders (groups colliders together)
 		private:
 			PhysicsVector3 continouus_forces_this_frame;
 			float mass;
