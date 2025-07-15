@@ -175,7 +175,9 @@ void gbe::Editor::ProcessRawWindowEvent(void* rawwindowevent) {
 			//OBJECT SELECTION
 			Vector3 ray_dir = mousedir * 10000.0f;
 			auto result = physics::Raycast(camera_pos, ray_dir);
-			if (result.result) {
+			// if nonSelectable = true, don't select the object
+			if (result.result && !(result.other && result.other->getNonSelectable())) { // checks if the hit object is non-selectable
+			// if (result.result) {
 				//CHECK IF OTHER IS A GIZMO
 				for (auto& gizmoptr : gizmo_arrows)
 				{
