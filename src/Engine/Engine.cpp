@@ -117,6 +117,7 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
 		mInputSystem->RegisterActionListener(player_name, new MouseDeltaImplementation());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::SPACE>());
+		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::S>());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::ESCAPE>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
@@ -205,17 +206,23 @@ namespace gbe {
 			}));*/
 
 			//Letter S to spawn BG
-		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::S>>([=](KeyPress<Keys::S>* value, bool changed) {
-			if (value->state != KeyPress<Keys::S>::START)
+		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ENTER>>([=](KeyPress<Keys::ENTER>* value, bool changed) {
+			if (value->state != KeyPress<Keys::ENTER>::START)
 				return;
-			if (isBgLoaded) {
-				auto image_tex = new asset::Texture("DefaultAssets/Tex/UI/input.img.gbe");
+
+			std::cout << "S Pressed" << std::endl; //??
+			try {
+				auto image_tex = new asset::Texture("input.img.gbe"); // out/ ? (does not work) or out/build/x64-debug?
 				auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
 				bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
 				auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
 				create_mesh(plane_drawcall, Vector3(0, -1, 0), Vector3(80, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+
+			} catch (...) {
+				std::cerr << "Texture load failed" << std::endl;
+				return;
+
 			}
-	
 
 			}));
 
