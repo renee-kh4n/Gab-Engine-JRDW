@@ -20,49 +20,66 @@ gbe::gfx::MeshData gbe::gfx::MeshLoader::LoadAsset_(asset::Mesh * asset, const a
     std::vector<uint16_t> indices = {};
     std::vector<std::vector<uint16_t>> faces = {};
 
-    for (const auto& shape : shapes) {
-        for (const auto& index : shape.mesh.indices) {
-            asset::data::Vertex vertex{};
+    // Loop over shapes
+    for (size_t s = 0; s < shapes.size(); s++) {
+        // Loop over faces(polygon)
+        size_t index_offset = 0;
+        for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+            size_t fv = size_t(shapes[s].mesh.num_face_vertices[f]);
 
-            vertex.pos = {
-                attrib.vertices[3 * index.vertex_index + 0],
-                attrib.vertices[3 * index.vertex_index + 1],
-                attrib.vertices[3 * index.vertex_index + 2]
-            };
-
-            vertex.texCoord = {
-                attrib.texcoords[2 * index.texcoord_index + 0],
-                attrib.texcoords[2 * index.texcoord_index + 1]
-            };
-
-            vertex.normal = {
-                attrib.normals[3 * index.normal_index + 0],
-                attrib.normals[3 * index.normal_index + 1],
-                attrib.normals[3 * index.normal_index + 2]
-            };
-
-            vertex.color = { 1.0f, 1.0f, 1.0f };
-
-            vertices.push_back(vertex);
-            indices.push_back(indices.size());
-        }
-
-        size_t index_counter = 0;
-        for (const auto& faceverts : shape.mesh.num_face_vertices)
-        {
             std::vector<uint16_t> cur_face = {};
 
-            for (size_t f = 0; f < faceverts; f++)
-            {
-                cur_face.push_back(indices[index_counter]);
+            // Loop over vertices in the face.
+            for (size_t v = 0; v < fv; v++) {
+                // access to vertex
+                tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
 
-                index_counter++;
+                tinyobj::real_t vx = attrib.vertices[3 * size_t(idx.vertex_index) + 0];
+                tinyobj::real_t vy = attrib.vertices[3 * size_t(idx.vertex_index) + 1];
+                tinyobj::real_t vz = attrib.vertices[3 * size_t(idx.vertex_index) + 2];
+
+                // Check if `normal_index` is zero or positive. negative = no normal data
+                tinyobj::real_t nx = 0;
+                tinyobj::real_t ny = 0;
+                tinyobj::real_t nz = 0;
+                if (idx.normal_index >= 0) {
+                    nx = attrib.normals[3 * size_t(idx.normal_index) + 0];
+                    ny = attrib.normals[3 * size_t(idx.normal_index) + 1];
+                    nz = attrib.normals[3 * size_t(idx.normal_index) + 2];
+                }
+
+                // Check if `texcoord_index` is zero or positive. negative = no texcoord data
+                tinyobj::real_t tx = 0;
+                tinyobj::real_t ty = 0;
+                if (idx.texcoord_index >= 0) {
+                    tx = attrib.texcoords[2 * size_t(idx.texcoord_index) + 0];
+                    ty = attrib.texcoords[2 * size_t(idx.texcoord_index) + 1];
+                }
+                // Optional: vertex colors
+                // tinyobj::real_t red   = attrib.colors[3*size_t(idx.vertex_index)+0];
+                // tinyobj::real_t green = attrib.colors[3*size_t(idx.vertex_index)+1];
+                // tinyobj::real_t blue  = attrib.colors[3*size_t(idx.vertex_index)+2];
+
+                asset::data::Vertex vertex{
+                .pos = {vx, vy, vz},
+                .normal = {nx, ny, nz},
+                .color = {1, 1, 1},
+                .texCoord = {tx, ty},
+                };
+                vertices.push_back(vertex);
+                cur_face.push_back(indices.size());
+                indices.push_back(indices.size());
             }
+            index_offset += fv;
 
+            // per-face material
+            shapes[s].mesh.material_ids[f];
+
+            //Commit
             faces.push_back(cur_face);
         }
-
     }
+
 
     //VULKAN MESH SETUP vvvvvvvvvvv
 

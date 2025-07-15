@@ -295,6 +295,7 @@ void gbe::Editor::PrepareFrame()
 
 void gbe::Editor::DrawFrame()
 {
+	bool gizmosDestoyed = false;
 	//==============================EDITOR UPDATE==============================//
 	if (selected.size() == 1) {
 		auto current_camera = this->mengine->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
@@ -302,6 +303,7 @@ void gbe::Editor::DrawFrame()
 		auto mousedir = current_camera->ScreenToRay(mwindow->GetMouseDecimalPos());
 
 		if (held_gizmo != nullptr) {
+			
 			//FIND POSITION TO TRANSFORM THE SELECTED OBJECT
 			//FIND DIRECTION
 			Vector3 transformDirection;
@@ -315,18 +317,55 @@ void gbe::Editor::DrawFrame()
 			// Find the closest point on the line segments
 			this->current_selected_position = Vector3::GetClosestPointOnLineGivenLine(original_selected_position, transformDirection, camera_pos, mousedir);
 
+			auto prevPos = selected[0]->World().position.Get();
+
 			selected[0]->SetWorldPosition(this->current_selected_position);
+
+			//=============only when currently holding a gizmo======================//
+			TriggerRigidObject* curr_obj = dynamic_cast<TriggerRigidObject*>(selected[0]);
+
+
+			if (curr_obj != nullptr) {
+				//CLEAR SELECTION IF NOT MULTISELECTING AND CLICKED NOTHING
+				std::cout << curr_obj->GetTriggerRigidbody()->Get_numInside() << std::endl;
+
+				if (curr_obj->GetTriggerRigidbody()->Get_numInside() > 1000000) {
+					auto other = curr_obj->GetTriggerRigidbody()->Get_inside(0);
+					selected[0]->SetWorldPosition(prevPos);
+					this->selected.clear();
+					gizmosDestoyed = true;
+					//DELETE GIZMOS
+					for (auto& gizmoptr : this->gizmo_arrows)
+					{
+						if (*gizmoptr != nullptr) {
+							(*gizmoptr)->Destroy();
+							(*gizmoptr) = nullptr;
+						}
+					}
+
+					//CLEAR BOXES
+					for (auto& gizmoptr : this->gizmo_boxes)
+					{
+						gizmoptr.second->Destroy();
+					}
+					this->gizmo_boxes.clear();
+				}
+			}
 		}
+
+
 
 		Vector3 cam_toselected = this->current_selected_position - camera_pos;
 		cam_toselected = cam_toselected.Normalize();
 
-		Vector3 finalgizmopos = camera_pos + (cam_toselected * this->gizmo_fixed_depth);
+		if (!gizmosDestoyed) {
+			Vector3 finalgizmopos = camera_pos + (cam_toselected * this->gizmo_fixed_depth);
 
-		//UPDATE THE POSITION OF ALL GIZMOS
-		this->f_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_f));
-		this->r_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_r));
-		this->u_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_u));
+			//UPDATE THE POSITION OF ALL GIZMOS
+			this->f_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_f));
+			this->r_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_r));
+			this->u_gizmo->Local().position.Set(finalgizmopos + (gizmo_offset_distance * this->selected_u));
+		}
 	}
 
 	//==============================IMGUI==============================//
@@ -334,6 +373,8 @@ void gbe::Editor::DrawFrame()
 	this->inspectorwindow->selected = &this->selected;
 	this->inspectorwindow->Draw();
 	this->imageDropzone->Draw();
+
+
 }
 
 void gbe::Editor::PresentFrame()

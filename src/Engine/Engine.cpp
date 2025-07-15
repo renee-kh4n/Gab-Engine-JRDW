@@ -145,37 +145,37 @@ namespace gbe {
 		auto player = new RigidObject();
 
 		///
-		auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-			RigidObject* background = new RigidObject(true); 
-			background->SetParent(game_root); // set parent directly in the root (everything in the root are rendered)
-			background->Local().position.Set(pos);
-			background->Local().rotation.Set(rotation);
-			background->Local().scale.Set(scale);
-			MeshCollider* platform_collider = new MeshCollider(drawcall->get_mesh());
-			platform_collider->SetParent(background); // parent to the background which is already in the root
+		auto create_mesh_box = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+			TriggerRigidObject* cube = new TriggerRigidObject(); 
+			cube->SetParent(game_root); // set parent directly in the root (everything in the root are rendered)
+			cube->Local().position.Set(pos);
+			cube->Local().rotation.Set(rotation);
+			cube->Local().scale.Set(scale);
+			BoxCollider* platform_collider = new BoxCollider();
+			platform_collider->SetParent(cube); // parent to the background which is already in the root
 			platform_collider->Local().position.Set(Vector3(0, 0, 0));
 			RenderObject* platform_renderer = new RenderObject(drawcall);
-			platform_renderer->SetParent(background);
-
-			return background;
-			};
+			platform_renderer->SetParent(cube);
+		
+			return cube;
+		};
 
 			auto create_table_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-				RigidObject* test = new RigidObject(true);
-				test->SetParent(game_root);
-				test->Local().position.Set(pos);
-				test->Local().rotation.Set(rotation);
-				test->Local().scale.Set(scale);
-				/*BoxCollider* platform_collider = new BoxCollider();
-				platform_collider->SetParent(test);
-				platform_collider->Local().position.Set(Vector3(0, 0, 0));*/
+				RigidObject* background = new RigidObject(true);
+				background->SetParent(game_root);
+				background->Local().position.Set(pos);
+				background->Local().rotation.Set(rotation);
+				background->Local().scale.Set(scale);
+				MeshCollider* platform_collider = new MeshCollider(drawcall->get_mesh());
+				platform_collider->SetParent(background); // parent to the background which is already in the root
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));
 				RenderObject* platform_renderer = new RenderObject(drawcall);
-				platform_renderer->SetParent(test);
+				platform_renderer->SetParent(background);
 
 				// set as non-selectable
-				// test->setNonSelectable(true);
+				background->setNonSelectable(true);
 
-				return test;
+				return background;
 			};
 
 
@@ -238,25 +238,25 @@ namespace gbe {
 			}));*/
 
 			//Letter S to spawn BG
-		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::S>>([=](KeyPress<Keys::S>* value, bool changed) {
-			if (value->state != KeyPress<Keys::S>::START)
-				return;
+		//input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::S>>([=](KeyPress<Keys::S>* value, bool changed) {
+		//	if (value->state != KeyPress<Keys::S>::START)
+		//		return;
 
-			std::cout << "S Pressed" << std::endl; //??
-			try {
-				auto image_tex = new asset::Texture("/input.img.gbe"); // out/ ? (does not work) or out/build/x64-debug?
-				auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
-				bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
-				auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
-				create_mesh(plane_drawcall, Vector3(0, -1, 0), Vector3(80, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+		//	std::cout << "S Pressed" << std::endl; //??
+		//	try {
+		//		auto image_tex = new asset::Texture("/input.img.gbe"); // out/ ? (does not work) or out/build/x64-debug?
+		//		auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+		//		bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
+		//		auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
+		//		create_mesh(plane_drawcall, Vector3(0, -1, 0), Vector3(80, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
 
-			} catch (...) {
-				std::cerr << "Texture load failed" << std::endl;
-				return;
+		//	} catch (...) {
+		//		std::cerr << "Texture load failed" << std::endl;
+		//		return;
 
-			}
+		//	}
 
-			}));
+		//	}));
 
 
 		//ESCAPE Customer
@@ -274,10 +274,9 @@ namespace gbe {
 		// //Vector3(x, y, z) 
 		// //create_mesh(draw_call, position, scale, rotation)
 			// Cube
-		create_mesh(cube_drawcall, Vector3(0, -20, 49), Vector3(10, 10, 10), Quaternion::Euler(Vector3(0, 0, 0)));
+		create_mesh_box(cube_drawcall, Vector3(0, -10, 49), Vector3(5, 5, 5), Quaternion::Euler(Vector3(0, 0, 0)));
 			// Table 1 Object
 		create_table_mesh(table_drawcall, Vector3(0, -30, 50), Vector3(20, 20, 20), Quaternion::Euler(Vector3(0, 0, 0)));
-
 			// Table 1 BG
 		//create_mesh(bg_drawcall, Vector3(0, 0, 40), Vector3(110, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
 			// Table 1 HM
