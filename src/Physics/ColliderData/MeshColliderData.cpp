@@ -8,11 +8,8 @@ gbe::physics::MeshColliderData::MeshColliderData(std::vector<std::vector<Vector3
 	{
 		trimesh->addTriangle((PhysicsVector3)tri[0], (PhysicsVector3)tri[1], (PhysicsVector3)tri[2]);
 	}
-	
-	btTransform	trans;
-	trans.setIdentity();
 
-	this->trimeshShape = new btBvhTriangleMeshShape( trimesh, false );
+	this->trimeshShape = new btBvhTriangleMeshShape(trimesh, true);
 }
 
 btCollisionShape* gbe::physics::MeshColliderData::GetShape()

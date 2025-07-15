@@ -46,6 +46,8 @@ namespace gbe {
 
 	void Engine::Run()
 	{
+
+		bool isBgLoaded = false;
 		//WINDOW
 		Window* mWindow = new Window(Vector2Int(1280, 720));
 
@@ -129,6 +131,7 @@ namespace gbe {
 		mInputSystem->RegisterActionListener(player_name, new MouseScrollImplementation());
 		mInputSystem->RegisterActionListener(player_name, new MouseDeltaImplementation());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::SPACE>());
+		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::S>());
 		mInputSystem->RegisterActionListener(player_name, new KeyPressImplementation<Keys::ESCAPE>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_RIGHT>());
 		mInputSystem->RegisterActionListener(player_name, new MouseDragImplementation<Keys::MOUSE_MIDDLE>());
@@ -140,18 +143,18 @@ namespace gbe {
 #pragma region scene singletons
 		//forward declaration
 		auto player = new RigidObject();
-		
+
 		auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-			RigidObject* test = new RigidObject(true);
-			test->SetParent(game_root);
-			test->Local().position.Set(pos);
-			test->Local().rotation.Set(rotation);
-			test->Local().scale.Set(scale);
+			RigidObject* background = new RigidObject(true);
+			background->SetParent(game_root);
+			background->Local().position.Set(pos);
+			background->Local().rotation.Set(rotation);
+			background->Local().scale.Set(scale);
 			BoxCollider* platform_collider = new BoxCollider();
-			platform_collider->SetParent(test);
+			platform_collider->SetParent(background);
 			platform_collider->Local().position.Set(Vector3(0, 0, 0));
 			RenderObject* platform_renderer = new RenderObject(drawcall);
-			platform_renderer->SetParent(test);
+			platform_renderer->SetParent(background);
 
 			return test;
 		};
@@ -173,7 +176,6 @@ namespace gbe {
 
 			return test;
 		};
-
 
 		//Global objects
 		//physics force setup
@@ -218,7 +220,7 @@ namespace gbe {
 
 			}));
 		//Spacebar customer
-		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
+		/*input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::SPACE>>([=](KeyPress<Keys::SPACE>* value, bool changed) {
 			if (value->state != KeyPress<Keys::SPACE>::START)
 				return;
 
@@ -231,7 +233,30 @@ namespace gbe {
 
 			create_mesh(merged_dc, camera_pos + (mousedir * 20.0f), Vector3(1, 1, 1), Quaternion::Euler(Vector3::zero));
 
+			}));*/
+
+			//Letter S to spawn BG
+		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::S>>([=](KeyPress<Keys::S>* value, bool changed) {
+			if (value->state != KeyPress<Keys::S>::START)
+				return;
+
+			std::cout << "S Pressed" << std::endl; //??
+			try {
+				auto image_tex = new asset::Texture("/input.img.gbe"); // out/ ? (does not work) or out/build/x64-debug?
+				auto bg_mat = new asset::Material("DefaultAssets/Materials/unlit.mat.gbe");
+				bg_mat->setOverride("colortex", image_tex); // "colortex" should match that of unlit.frag
+				auto plane_drawcall = mRenderPipeline->RegisterDrawCall(plane_mesh, bg_mat);
+				create_mesh(plane_drawcall, Vector3(0, -1, 0), Vector3(80, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
+
+			} catch (...) {
+				std::cerr << "Texture load failed" << std::endl;
+				return;
+
+			}
+
 			}));
+
+
 		//ESCAPE Customer
 		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ESCAPE>>([=](KeyPress<Keys::ESCAPE>* value, bool changed) {
 			if (value->state != KeyPress<Keys::ESCAPE>::START)

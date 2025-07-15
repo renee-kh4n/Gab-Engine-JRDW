@@ -6,7 +6,11 @@ add_library(${CURRENT_CMAKE_LIB} STATIC
 	"Gui/InspectorWindow.cpp"
 	"Gui/CreditsWindow.cpp"
 	"Gui/GuiWindow.cpp"
-	 "Gui/ColorpickerWindow.cpp" "Utility/ModelExport.cpp")
+	 "Gui/ColorpickerWindow.cpp" "Utility/ModelExport.cpp"
+
+	 #for image Dropzone
+	"Gui/ImageDropzone.cpp"
+	"Gui/ImGuiFileDialog/ImGuiFileDialog.cpp") 
 
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_math)
 target_link_libraries(${CURRENT_CMAKE_LIB} PRIVATE gbe_graphics)

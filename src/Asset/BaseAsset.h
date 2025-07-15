@@ -36,6 +36,7 @@ namespace gbe {
 
 				while (this->asset_directory.back() != '/')
 				{
+					std::cout << "directory size: " << asset_directory.size() << std::endl;
 					this->asset_directory.pop_back();
 				}
 				

@@ -10,6 +10,7 @@
 #include "Gui/CreditsWindow.h"
 #include "Gui/ColorpickerWindow.h"
 #include "Gui/InspectorWindow.h"
+#include "Gui/ImageDropzone.h"
 
 namespace gbe {
 	class RenderPipeline;
@@ -69,6 +70,7 @@ namespace gbe {
 
 		//WINDOWS
 		editor::InspectorWindow* inspectorwindow;
+		editor::ImageDropzone* imageDropzone;
 	public:
 		Editor(RenderPipeline* renderpipeline, Window* window, Engine* engine, Time* _mtime);
 		void PrepareFrame();
