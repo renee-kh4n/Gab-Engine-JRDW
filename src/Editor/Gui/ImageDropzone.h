@@ -18,7 +18,7 @@ namespace gbe {
 		private:
 			void openFileDialogue();
 			void handleFileDialogueResult();
-			const std::filesystem::path bgImageDir = std::filesystem::path("/Gab-Engine-JRDW/DefaultAssets/Tex/UI");
+			const std::filesystem::path bgImageDir = std::filesystem::current_path();
 			
 		
 		};

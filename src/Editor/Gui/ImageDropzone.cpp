@@ -2,9 +2,11 @@
 
 #include "../Utility/ModelExport.h"
 
+
+#include <sstream>
+#include <ostream>
 #include <filesystem>
 
-namespace fs = std::filesystem;
 
 void gbe::editor::ImageDropzone::DrawSelf() {
 	bool toggle = false;
@@ -51,52 +53,41 @@ void gbe::editor::ImageDropzone::handleFileDialogueResult() {
 
 		if (ImGuiFileDialog::Instance()->IsOk()) {
 			// 1. Path chosen by the user
-			fs::path src = ImGuiFileDialog::Instance()->GetFilePathName();
+			std::filesystem::path src = ImGuiFileDialog::Instance()->GetFilePathName();
 
 			// 2. Ensure destination folder exists
-			fs::create_directories(bgImageDir);
+			std::filesystem::create_directories(bgImageDir);
 
 			// 3. Compose dest path (preserve filename)
-			fs::path dest = bgImageDir / src.filename();
+			std::filesystem::path dest = bgImageDir / src.filename();
 			try
 			{
-				fs::copy_file(src, dest,
-					fs::copy_options::overwrite_existing);
+				std::filesystem::copy_file(src, dest, std::filesystem::copy_options::overwrite_existing);
 				// TODO: engine‑side code to register / hot‑reload `dest`
 				std::cout << "Image copied to: " << dest << '\n';
 
-				// write to DefaultAssets/Tex/UI/input.img.gbe
-				const fs::path gbeFile = "Gab-Engine-JRDW/DefaultAssets/Tex/UI/input.img.gbe";
-			
-				// Ensure the directory exists
-				fs::create_directories(gbeFile.parent_path());
+				namespace fs = std::filesystem;
 
-				std::ofstream txtOut; 
-				txtOut.open(gbeFile);
-				//std::ofstream txtOut(gbeFile, std::ios::trunc); // wipe contents
-				if (!txtOut.is_open()) {
-					std::cerr << "Failed to open file: " << gbeFile << "\n";
-					throw std::runtime_error("Cannot open gbe file!");
-				}
-				std::cout << "Writing to: " << gbeFile << "\n";
+				fs::path assetRoot = fs::current_path();
+				fs::create_directories(assetRoot);          // make the whole chain
 
-				txtOut << "{ \n"
+				fs::path gbeFile = assetRoot / "input.img.gbe";
+				std::ofstream out(gbeFile, std::ios::binary | std::ios::trunc);
+				if (!out) throw std::runtime_error("Cannot open " + gbeFile.string());
+
+				std::stringstream out_string;
+				out_string << "{ \n"
 					<< "\"asset_type\": \"texture\",\n"
 					<< "\"asset_id\": \"input\",\n"
 					<< "\"filename\": \"" << src.filename() << "\"\n"
 					<< "}";
-
-				txtOut.close();
-			/*	txtOut << R"({
-				  "asset_type": "texture",
-				  "asset_id": "input",
-				  "filename": "{src.filename}"
-				})";*/
-
-				std::cout << "Wrote to: " << gbeFile << "\n";
+				out << out_string.str();                   
+				// destructor flushes+closes
+				out.close();
+				std::cout << "Descriptor written to: " << fs::absolute(gbeFile) << '\n';
 
 			}
-			catch (const fs::filesystem_error& e)
+			catch (const std::filesystem::filesystem_error& e)
 			{
 				std::cerr << "Copy failed: " << e.what() << '\n';
 			}
