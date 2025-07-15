@@ -258,7 +258,7 @@ namespace gbe {
 			// Cube
 		create_mesh(cube_drawcall, Vector3(0, -20, 49), Vector3(10, 10, 10), Quaternion::Euler(Vector3(0, 0, 0)));
 			// Table 1 Object
-		create_mesh(table_drawcall, Vector3(0, -30, 50), Vector3(20, 20, 20), Quaternion::Euler(Vector3(0, 0, 0)));
+		create_table_mesh(table_drawcall, Vector3(0, -30, 50), Vector3(20, 20, 20), Quaternion::Euler(Vector3(0, 0, 0)));
 
 			// Table 1 BG
 		//create_mesh(bg_drawcall, Vector3(0, 0, 40), Vector3(110, 60, 1), Quaternion::Euler(Vector3(0, 180, 0)));
