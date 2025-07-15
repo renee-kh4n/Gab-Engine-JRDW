@@ -206,8 +206,8 @@ namespace gbe {
 			}));*/
 
 			//Letter S to spawn BG
-		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::ENTER>>([=](KeyPress<Keys::ENTER>* value, bool changed) {
-			if (value->state != KeyPress<Keys::ENTER>::START)
+		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::S>>([=](KeyPress<Keys::S>* value, bool changed) {
+			if (value->state != KeyPress<Keys::S>::START)
 				return;
 
 			std::cout << "S Pressed" << std::endl; //??
