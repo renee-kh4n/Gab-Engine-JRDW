@@ -146,13 +146,13 @@ namespace gbe {
 
 		///
 		auto create_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-			RigidObject* background = new RigidObject(true);
-			background->SetParent(game_root);
+			RigidObject* background = new RigidObject(true); 
+			background->SetParent(game_root); // set parent directly in the root (everything in the root are rendered)
 			background->Local().position.Set(pos);
 			background->Local().rotation.Set(rotation);
 			background->Local().scale.Set(scale);
-			BoxCollider* platform_collider = new BoxCollider();
-			platform_collider->SetParent(background);
+			MeshCollider* platform_collider = new MeshCollider(drawcall->get_mesh());
+			platform_collider->SetParent(background); // parent to the background which is already in the root
 			platform_collider->Local().position.Set(Vector3(0, 0, 0));
 			RenderObject* platform_renderer = new RenderObject(drawcall);
 			platform_renderer->SetParent(background);
