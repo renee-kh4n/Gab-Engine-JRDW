@@ -160,6 +160,24 @@ namespace gbe {
 			return background;
 			};
 
+			auto create_table_mesh = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
+				RigidObject* test = new RigidObject(true);
+				test->SetParent(game_root);
+				test->Local().position.Set(pos);
+				test->Local().rotation.Set(rotation);
+				test->Local().scale.Set(scale);
+				/*BoxCollider* platform_collider = new BoxCollider();
+				platform_collider->SetParent(test);
+				platform_collider->Local().position.Set(Vector3(0, 0, 0));*/
+				RenderObject* platform_renderer = new RenderObject(drawcall);
+				platform_renderer->SetParent(test);
+
+				// set as non-selectable
+				// test->setNonSelectable(true);
+
+				return test;
+			};
+
 
 		//Global objects
 		//physics force setup
