@@ -146,7 +146,7 @@ namespace gbe {
 
 		///
 		auto create_mesh_box = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-			TriggerRigidObject* cube = new TriggerRigidObject(); 
+			RigidObject* cube = new RigidObject(); 
 			cube->SetParent(game_root); // set parent directly in the root (everything in the root are rendered)
 			cube->Local().position.Set(pos);
 			cube->Local().rotation.Set(rotation);
