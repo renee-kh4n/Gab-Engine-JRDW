@@ -329,7 +329,7 @@ void gbe::Editor::DrawFrame()
 				//CLEAR SELECTION IF NOT MULTISELECTING AND CLICKED NOTHING
 				std::cout << curr_obj->GetTriggerRigidbody()->Get_numInside() << std::endl;
 
-				if (curr_obj->GetTriggerRigidbody()->Get_numInside() > 1000000) {
+				if (curr_obj->GetTriggerRigidbody()->Get_numInside() > 0) {
 					auto other = curr_obj->GetTriggerRigidbody()->Get_inside(0);
 					selected[0]->SetWorldPosition(prevPos);
 					this->selected.clear();

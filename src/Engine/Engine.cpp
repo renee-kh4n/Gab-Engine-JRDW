@@ -146,7 +146,7 @@ namespace gbe {
 
 		///
 		auto create_mesh_box = [&](gfx::DrawCall* drawcall, Vector3 pos, Vector3 scale, Quaternion rotation = Quaternion::Euler(Vector3(0, 0, 0))) {
-			RigidObject* cube = new RigidObject(); 
+			TriggerRigidObject* cube = new TriggerRigidObject();
 			cube->SetParent(game_root); // set parent directly in the root (everything in the root are rendered)
 			cube->Local().position.Set(pos);
 			cube->Local().rotation.Set(rotation);
@@ -213,51 +213,51 @@ namespace gbe {
 		input_communicator->SetParent(player_input);
 		//Left click customer
 		bool destroyed_cube = false;
-		input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([&](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
-			
-			if ((value->state == KeyPress<Keys::MOUSE_LEFT>::START || value->state == KeyPress<Keys::MOUSE_LEFT>::END) && changed) {
-		
-			//RAYCAST MECHANICS
-			auto current_camera = this->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
-			Vector3 camera_pos = current_camera->World().position.Get();
-			auto mousedir = current_camera->ScreenToRay(mWindow->GetMouseDecimalPos());
+		//input_communicator->AddCustomer(new InputCustomer<KeyPress<Keys::MOUSE_LEFT>>([&](KeyPress<Keys::MOUSE_LEFT>* value, bool changed) {
+		//	
+		//	if ((value->state == KeyPress<Keys::MOUSE_LEFT>::START || value->state == KeyPress<Keys::MOUSE_LEFT>::END) && changed) {
+		//
+		//	//RAYCAST MECHANICS
+		//	auto current_camera = this->GetCurrentRoot()->GetHandler<Camera>()->object_list.front();
+		//	Vector3 camera_pos = current_camera->World().position.Get();
+		//	auto mousedir = current_camera->ScreenToRay(mWindow->GetMouseDecimalPos());
 
-			//OBJECT SELECTION
-			Vector3 ray_dir = mousedir * 10000.0f;
-			auto result = physics::Raycast(camera_pos, ray_dir);
-			
-			if (result.result) {
-				bool hasMeshCollider = false;
-				result.other->CallRecursively([&](Object* child) {
-					MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(child);
-					if (meshCollider != nullptr) {
-						hasMeshCollider = true;
-					}
+		//	//OBJECT SELECTION
+		//	Vector3 ray_dir = mousedir * 10000.0f;
+		//	auto result = physics::Raycast(camera_pos, ray_dir);
+		//	
+		//	if (result.result) {
+		//		bool hasMeshCollider = false;
+		//		result.other->CallRecursively([&](Object* child) {
+		//			MeshCollider* meshCollider = dynamic_cast<MeshCollider*>(child);
+		//			if (meshCollider != nullptr) {
+		//				hasMeshCollider = true;
+		//			}
 
 
-					});
+		//			});
 
-				if (hasMeshCollider == false) {
+		//		if (hasMeshCollider == false) {
 
-					if (value->state == KeyPress<Keys::MOUSE_LEFT>::START) {
-						result.other->Destroy();
-						destroyed_cube = true;
-					}
-				}
-				else if(value->state == KeyPress<Keys::MOUSE_LEFT>::START || destroyed_cube == true) {
+		//			if (value->state == KeyPress<Keys::MOUSE_LEFT>::START) {
+		//				result.other->Destroy();
+		//				destroyed_cube = true;
+		//			}
+		//		}
+		//		else if(value->state == KeyPress<Keys::MOUSE_LEFT>::START || destroyed_cube == true) {
 
-					Vector3 finalpos = result.intersection;
-					auto box_size = 5.0f;
-					finalpos += result.normal * box_size; // result.normal * scale
+		//			Vector3 finalpos = result.intersection;
+		//			auto box_size = 5.0f;
+		//			finalpos += result.normal * box_size; // result.normal * scale
 
-					destroyed_cube = false;
-					auto obj = create_mesh_box(cube_drawcall, finalpos, Vector3(box_size));
-					obj->setNonSelectable(true);
+		//			destroyed_cube = false;
+		//			auto obj = create_mesh_box(cube_drawcall, finalpos, Vector3(box_size));
+		//			obj->setNonSelectable(true);
 
-				}
-			}
-			}
-			}));
+		//		}
+		//	}
+		//	}
+		//	}));
 		//WASD customer
 		input_communicator->AddCustomer(new InputCustomer<WasdDelta>([=](WasdDelta* value, bool changed) {
 
@@ -315,7 +315,7 @@ namespace gbe {
 		// //Vector3(x, y, z) 
 		// //create_mesh(draw_call, position, scale, rotation)
 			// Cube
-		//create_mesh_box(cube_drawcall, Vector3(0, -10, 49), Vector3(5, 5, 5), Quaternion::Euler(Vector3(0, 0, 0)));
+		create_mesh_box(cube_drawcall, Vector3(0, -10, 49), Vector3(5, 5, 5), Quaternion::Euler(Vector3(0, 0, 0)));
 			// Table 1 Object
 		create_table_mesh(table_drawcall, Vector3(0, -30, 50), Vector3(20, 20, 20), Quaternion::Euler(Vector3(0, 0, 0)));
 			// Table 1 BG
